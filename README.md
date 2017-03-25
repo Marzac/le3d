@@ -1,7 +1,8 @@
 # le3d  
 LightEngine 3D  
-A straightforward 3D software engine for real-time graphics.  
-This engine has been thought to be a minimal and clear implementation of a simplified fixed pipeline.  
+A straightforward C++ 3D software engine for real-time graphics.  
+The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
+Code has been designed for resource constrained platforms.
 
 Source code / examples / documentation  
 Copyright (c) 2015 - 2017 Frédéric Meslin  
@@ -12,10 +13,10 @@ fred@fredslab.net, @marzacdev
 
 This is open source software released under the MIT License, please refer to LICENCE file for more information.  
 
-Supported platforms (backend):  
+Supported platforms (by backend):  
 - Windows (XP / 7 / 8 and 10)  
 
-#Specifications  
+# Specifications  
 The renderer provides:  
 - 3D clipping  
 - 2D clipping  
@@ -32,12 +33,12 @@ The backend (only Windows platforms supported):
 - Handle windows  
 - Handle joysticks  
 
-#Limitations  
+# Limitations  
 - No perspective correction  
 - No Z-buffer  
 - No lightmaps  
 - No shaders ...  
 
-#Comparison  
+# Comparison  
 It renders graphics very much like a Sony Playstation one  
 
