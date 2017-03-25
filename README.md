@@ -1,5 +1,5 @@
 # le3d  
-LightEngine 3D  
+** LightEngine 3D **  
 A straightforward C++ 3D software engine for real-time graphics.  
 The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
 Code has been designed for resource constrained platforms.
@@ -7,7 +7,7 @@ Code has been designed for resource constrained platforms.
 Source code / examples / documentation  
 Copyright (c) 2015 - 2017 Frédéric Meslin  
 
-Fred's Lab  
+** Fred's Lab **  
 http://fredslab.net  
 fred@fredslab.net, @marzacdev  
 
@@ -40,5 +40,5 @@ The backend (only Windows platforms supported):
 - No shaders ...  
 
 # Comparison  
-It renders graphics very much like a Sony Playstation one  
+It renders graphics very much like a Sony Playstation one.  
 
