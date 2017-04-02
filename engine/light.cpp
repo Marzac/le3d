@@ -123,7 +123,7 @@ inline void LeLight::shineDirectional(LeMesh * mesh)
 
 // Calculate the light
 	for (int j = 0; j < mesh->noTriangles; j++) {
-		float p = mesh->normals[j].dot(rp);
+		float p = -rp.dot(mesh->normals[j]);
 		if (p > 0.0f) macColor(0xFFFFFF, color, p, mesh->shades[j]);
 	}
 }
