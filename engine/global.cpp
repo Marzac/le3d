@@ -32,7 +32,6 @@
 
 #include "global.h"
 #include <strings.h>
-#include <stdalign.h>
 #include <malloc.h>
 
 /*****************************************************************************/
