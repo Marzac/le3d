@@ -53,18 +53,13 @@ public:
 	LeBitmap frame;
 
 private:
-	typedef struct {
-		int32_t x[2];
-		int32_t u[2];
-		int32_t v[2];
-	}ScanStr;
+	void topTriangle(int vt, int vm1, int vm2);
+	void bottomTriangle(int vm1, int vm2, int vb);
+	void fillFlatTex(int y, int x1, int x2, int u1, int u2, int v1, int v2);
+	void fillFlatTexAlpha(int y, int x1, int x2, int u1, int u2, int v1, int v2);
 
-	void calcScans(int vt, int vb, int side);
-	void fillScansFlatTex(int t, int b);
-	void fillScansFlatTexAlpha(int t, int b);
-
-	ScanStr * scansAlloc;
-	ScanStr * scans;
+	void cv4(const float * in, int32_t * out);
+	void cv4s(const float * in, int32_t * out, float s);
 
 	uint32_t color;
 	uint32_t * texPixels;
