@@ -236,10 +236,10 @@ void LeBitmap::allocate(int tx, int ty)
 
 void LeBitmap::deallocate()
 {
+	if (data) delete[] (uint32_t *)data;
 	tx = ty = 0;
 	txP2 = tyP2 = 0;
 	flags = 0;
-	if (data) delete (uint32_t *) data;
 	allocated = false;
 }
 
