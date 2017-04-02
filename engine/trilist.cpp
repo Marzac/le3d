@@ -65,6 +65,7 @@ void TriList::allocate(int noTriangles)
 
 void TriList::zSort()
 {
+	if (!noValid) return;
 	zMergeSort(srcIndices, dstIndices, noValid);
 }
 

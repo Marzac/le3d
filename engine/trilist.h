@@ -39,11 +39,11 @@
 /*****************************************************************************/
 struct Triangle
 {
-	float xs[3];
-	float ys[3];
-	float zs[3];
-	float us[3];
-	float vs[3];
+	float xs[4];
+	float ys[4];
+	float zs[4];
+	float us[4];
+	float vs[4];
 	float vd;
 	uint32_t color;
 	int tex;
