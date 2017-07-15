@@ -78,10 +78,13 @@ LeRenderer::~LeRenderer()
 /*****************************************************************************/
 void LeRenderer::render(LeMesh * mesh)
 {
-// Check memory space
+// Check vertex memory space
 	if (mesh->noVertexes > usedVerlist->noAllocated) return;
-	int remTriangles = usedTrilist->noAllocated - usedTrilist->noUsed;
-	if (mesh->noTriangles > remTriangles) return;
+	usedVerlist->noUsed = 0;
+
+// Check triangle memory space
+	int freeTriangles = usedTrilist->noAllocated - usedTrilist->noUsed;
+	if (mesh->noTriangles > freeTriangles) return;
 
 // Assign the color source
 	if (mesh->shades) colors = mesh->shades;
@@ -97,7 +100,7 @@ void LeRenderer::render(LeMesh * mesh)
 
 // Pointer for extra triangles
 	extra = noTris;
-	extraMax = usedTrilist->noAllocated - usedTrilist->noUsed;
+	extraMax = freeTriangles;
 
 // Clip and project
 	noTris = clip3D(triRender, id2, id1, noTris, viewFrontPlan);
@@ -119,7 +122,6 @@ void LeRenderer::render(LeMesh * mesh)
 
 void LeRenderer::flush()
 {
-	usedVerlist->noUsed = 0;
 	usedTrilist->noUsed = 0;
 	usedTrilist->noValid = 0;
 }

@@ -43,7 +43,9 @@ LeTriList::LeTriList() :
 	allocate(LE_TRILIST_MAX);
 }
 
-LeTriList::LeTriList(int noTriangles)
+LeTriList::LeTriList(int noTriangles) :
+	srcIndices(NULL), dstIndices(NULL),
+	noAllocated(0), noUsed(0), noValid(0)
 {
 	allocate(noTriangles);
 }

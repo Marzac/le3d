@@ -50,6 +50,10 @@ LeRasterizer::LeRasterizer(int width, int height) :
 	texMaskU(0), texMaskV(0),
 	background(0)
 {
+	memset(xs, 0, sizeof(int32_t) * 4);
+	memset(ys, 0, sizeof(int32_t) * 4);
+	memset(us, 0, sizeof(int32_t) * 4);
+	memset(vs, 0, sizeof(int32_t) * 4);
 	frame.allocate(width, height + 2);
 	frame.data = ((uint32_t *) frame.data) + frame.tx;
 	frame.ty -= 2;
@@ -119,7 +123,7 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 	// Compute the mean point
 		tri->ys[vb] = ceilf(tri->ys[vb]);
 		float dy = tri->ys[vb] - tri->ys[vt];
-		if (dy <= 0.0f) return;
+		if (dy <= 0.0f) continue;
 		float n = (tri->ys[vm1] - tri->ys[vt]) / dy;
 		tri->xs[3] = (tri->xs[vb] - tri->xs[vt]) * n + tri->xs[vt];
 		tri->ys[3] = tri->ys[vm1];

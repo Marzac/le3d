@@ -36,6 +36,7 @@
 #include "global.h"
 #include "config.h"
 
+#include <string.h>
 #include <math.h>
 
 /*****************************************************************************/

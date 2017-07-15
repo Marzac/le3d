@@ -42,7 +42,8 @@ LeVerList::LeVerList() :
 	allocate(LE_VERLIST_MAX);
 }
 
-LeVerList::LeVerList(int noVertexes)
+LeVerList::LeVerList(int noVertexes) :
+	noAllocated(0), noUsed(0)
 {
 	allocate(noVertexes);
 }
