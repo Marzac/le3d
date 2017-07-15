@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -34,10 +34,11 @@
 #define GEOMETRY_H
 
 #include "global.h"
+#include "config.h"
 
 #ifndef LE_USE_SIMD
 	#error LE_USE_SIMD undefined.
-	#error Use LE_USE_SIMD to enable or disable SIMD acceleration for vectors.
+	#error Use LE_USE_SIMD to enable or disable SIMD acceleration for vectors calculation.
 #else
 	#if LE_USE_SIMD
 		#include "geometry_simd.h"

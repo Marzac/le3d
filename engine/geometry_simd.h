@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -34,114 +34,115 @@
 #define LE_GEOMETRY_SIMD_H
 
 #include "global.h"
+#include "config.h"
 
 #include <math.h>
 
 /*****************************************************************************/
 typedef float V4SF __attribute__ ((vector_size (16)));
-struct __attribute__ ((aligned (16))) Vertex
+struct __attribute__ ((aligned (16))) LeVertex
 {
 	union {
 		V4SF vf;
 		struct {float x, y, z, w;};
 	};
 
-	Vertex()
+	LeVertex()
 	{
 		V4SF vi = {0.0f, 0.0f, 0.0f, 1.0f};
 		vf = vi;
 	}
 
-	Vertex(float px, float py, float pz)
+	LeVertex(float px, float py, float pz)
 	{
 		V4SF vi = {px, py, pz, 1.0f};
 		vf = vi;
 	}
 
-	Vertex(float px, float py, float pz, float pw)
+	LeVertex(float px, float py, float pz, float pw)
 	{
 		V4SF vi = {px, py, pz, pw};
 		vf = vi;
 	}
 
-	static Vertex spherical(float azi, float inc, float dist)
+	static LeVertex spherical(float azi, float inc, float dist)
 	{
-		Vertex r;
+		LeVertex r;
 		r.x = cosf(azi) * cosf(inc) * dist;
 		r.y = sinf(inc) * dist;
 		r.z = -sinf(azi) * cosf(inc) * dist;
 		return r;
 	}
 
-	Vertex operator + (Vertex v) const
+	LeVertex operator + (LeVertex v) const
 	{
-		Vertex r;
+		LeVertex r;
 		r.vf = vf + v.vf;
 		return r;
 	}
 
-	Vertex operator += (Vertex v)
+	LeVertex operator += (LeVertex v)
 	{
 		vf += v.vf;
 		return *this;
 	}
 
-	Vertex operator - (Vertex v) const
+	LeVertex operator - (LeVertex v) const
 	{
-		Vertex r;
+		LeVertex r;
 		r.vf = vf - v.vf;
 		return r;
 	}
 
-	Vertex operator - () const
+	LeVertex operator - () const
 	{
-		Vertex r;
+		LeVertex r;
 		r.vf = - vf;
 		return r;
 	}
 
-	Vertex operator -= (Vertex v)
+	LeVertex operator -= (LeVertex v)
 	{
 		vf -= v.vf;
 		return *this;
 	}
 
-	Vertex operator * (Vertex v) const
+	LeVertex operator * (LeVertex v) const
 	{
-		Vertex r;
+		LeVertex r;
 		r.vf = vf * v.vf;
 		return r;
 	}
 
-	Vertex operator / (Vertex v) const
+	LeVertex operator / (LeVertex v) const
 	{
-		Vertex r;
+		LeVertex r;
 		r.vf = vf / v.vf;
 		return r;
 	}
 
-	Vertex operator * (float v) const
+	LeVertex operator * (float v) const
 	{
-		Vertex r;
+		LeVertex r;
 		V4SF vs = {v, v, v, v};
 		r.vf = vf * vs;
 		return r;
 	}
 
-	Vertex operator *= (Vertex v)
+	LeVertex operator *= (LeVertex v)
 	{
 		vf *= v.vf;
 		return *this;
 	}
 
-	Vertex operator *= (float v)
+	LeVertex operator *= (float v)
 	{
 		V4SF vs = {v, v, v, v};
 		vf *= vs;
 		return *this;
 	}
 
-	bool operator == (Vertex v)
+	bool operator == (LeVertex v)
 	{
 		return x == v.x &&
 			   y == v.y &&
@@ -149,25 +150,25 @@ struct __attribute__ ((aligned (16))) Vertex
 	}
 
 
-	float dot(Vertex v) const
+	float dot(LeVertex v) const
 	{
-		Vertex d;
+		LeVertex d;
 		d.vf = vf * v.vf;
 		return d.x + d.y + d.z;
 	}
 
-	Vertex cross(Vertex v) const
+	LeVertex cross(LeVertex v) const
 	{
-		Vertex c;
+		LeVertex c;
 		c.x = y * v.z - v.y * z;
 		c.y = -x * v.z + v.x * z;
 		c.z = x * v.y - v.x * y;
 		return c;
 	}
 
-	Vertex sign() const
+	LeVertex sign() const
 	{
-		Vertex c;
+		LeVertex c;
 		c.x = copysignf(1.0f, x);
 		c.y = copysignf(1.0f, y);
 		c.z = copysignf(1.0f, z);
@@ -175,9 +176,9 @@ struct __attribute__ ((aligned (16))) Vertex
 		return c;
 	}
 
-	Vertex round() const
+	LeVertex round() const
 	{
-		Vertex c;
+		LeVertex c;
 		c.x = floorf(x + 0.5f);
 		c.y = floorf(y + 0.5f);
 		c.z = floorf(z + 0.5f);
@@ -185,9 +186,9 @@ struct __attribute__ ((aligned (16))) Vertex
 		return c;
 	}
 
-	Vertex floor() const
+	LeVertex floor() const
 	{
-		Vertex c;
+		LeVertex c;
 		c.x = floorf(x);
 		c.y = floorf(y);
 		c.z = floorf(z);
@@ -195,7 +196,7 @@ struct __attribute__ ((aligned (16))) Vertex
 		return c;
 	}
 
-	Vertex normalize()
+	LeVertex normalize()
 	{
 		float d = norm();
 		if (d == 0.0f) {
@@ -216,20 +217,20 @@ struct __attribute__ ((aligned (16))) Vertex
 };
 
 /*****************************************************************************/
-struct __attribute__ ((aligned (16))) Axis
+struct __attribute__ ((aligned (16))) LeAxis
 {
-	Vertex origin;
-	Vertex axis;
+	LeVertex origin;
+	LeVertex axis;
 	float norm;
 
-	Axis()
+	LeAxis()
 	{
-		origin = Vertex(0.0f, 0.0f, 0.0f);
-		axis = Vertex(0.0f, 0.0f, 1.0f);
+		origin = LeVertex(0.0f, 0.0f, 0.0f);
+		axis = LeVertex(0.0f, 0.0f, 1.0f);
 		norm = 1.0f;
 	}
 
-	Axis(Vertex v1, Vertex v2)
+	LeAxis(LeVertex v1, LeVertex v2)
 	{
 		origin = v1;
 		axis = (v2 - v1).normalize();
@@ -238,48 +239,48 @@ struct __attribute__ ((aligned (16))) Axis
 };
 
 /*****************************************************************************/
-struct __attribute__ ((aligned (16))) Plan
+struct __attribute__ ((aligned (16))) LePlan
 {
-	Axis xAxis;
-	Axis yAxis;
-	Axis zAxis;
+	LeAxis xAxis;
+	LeAxis yAxis;
+	LeAxis zAxis;
 
-	Plan()
+	LePlan()
 	{
-		xAxis.axis = Vertex(1.0f, 0.0f, 0.0f);
-		yAxis.axis = Vertex(0.0f, 1.0f, 0.0f);
-		zAxis.axis = Vertex(0.0f, 0.0f, 1.0f);
+		xAxis.axis = LeVertex(1.0f, 0.0f, 0.0f);
+		yAxis.axis = LeVertex(0.0f, 1.0f, 0.0f);
+		zAxis.axis = LeVertex(0.0f, 0.0f, 1.0f);
 	}
 
-	Plan(Vertex v1, Vertex v2, Vertex v3) :
-		xAxis(Axis(v1, v2)), yAxis(Axis(v1, v3))
+	LePlan(LeVertex v1, LeVertex v2, LeVertex v3) :
+		xAxis(LeAxis(v1, v2)), yAxis(LeAxis(v1, v3))
 	{
-		zAxis = Axis(v1, v1 + xAxis.axis.cross(yAxis.axis));
+		zAxis = LeAxis(v1, v1 + xAxis.axis.cross(yAxis.axis));
 		zAxis.origin = v1;
 	}
 };
 
 /*****************************************************************************/
-struct __attribute__ ((aligned (16))) Matrix
+struct __attribute__ ((aligned (16))) LeMatrix
 {
-	Vertex lines[4];
+	LeVertex lines[4];
 
-	Matrix()
+	LeMatrix()
 	{
 		identity();
 	}
 
 	void identity()
 	{
-		lines[0] = Vertex(1.0f, 0.0f, 0.0f, 0.0f);
-		lines[1] = Vertex(0.0f, 1.0f, 0.0f, 0.0f);
-		lines[2] = Vertex(0.0f, 0.0f, 1.0f, 0.0f);
-		lines[3] = Vertex(0.0f, 0.0f, 0.0f, 1.0f);
+		lines[0] = LeVertex(1.0f, 0.0f, 0.0f, 0.0f);
+		lines[1] = LeVertex(0.0f, 1.0f, 0.0f, 0.0f);
+		lines[2] = LeVertex(0.0f, 0.0f, 1.0f, 0.0f);
+		lines[3] = LeVertex(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	void zero()
 	{
-		Vertex zv = Vertex(0.0f, 0.0f, 0.0f, 0.0f);
+		LeVertex zv = LeVertex(0.0f, 0.0f, 0.0f, 0.0f);
 		lines[0] = zv;
 		lines[1] = zv;
 		lines[2] = zv;
@@ -295,7 +296,7 @@ struct __attribute__ ((aligned (16))) Matrix
 
 	void scale(float sx, float sy, float sz)
 	{
-		Matrix m;
+		LeMatrix m;
 		m.lines[0].x *= sx;
 		m.lines[1].y *= sy;
 		m.lines[2].z *= sz;
@@ -309,85 +310,85 @@ struct __attribute__ ((aligned (16))) Matrix
 		rotateX(ax);
 	}
 
-	void rotateBackUp(Vertex back, Vertex up, float a)
+	void rotateBackUp(LeVertex back, LeVertex up, float a)
 	{
 		back.normalize();
 		up.normalize();
-		Vertex right = up.cross(back);
+		LeVertex right = up.cross(back);
 
-		Matrix m1;
+		LeMatrix m1;
 		m1.lines[0] = right;
 		m1.lines[1] = up;
 		m1.lines[2] = back;
 
-		Matrix m2;
+		LeMatrix m2;
 		m2.rotateY(a);
 
-		Matrix m3;
-		m3.lines[0] = Vertex(right.x, up.x, back.x, 0.0f);
-		m3.lines[1] = Vertex(right.y, up.y, back.y, 0.0f);
-		m3.lines[2] = Vertex(right.z, up.z, back.z, 0.0f);
-		m3.lines[3] = Vertex(0.0f, 0.0f, 0.0f, 1.0f);
+		LeMatrix m3;
+		m3.lines[0] = LeVertex(right.x, up.x, back.x, 0.0f);
+		m3.lines[1] = LeVertex(right.y, up.y, back.y, 0.0f);
+		m3.lines[2] = LeVertex(right.z, up.z, back.z, 0.0f);
+		m3.lines[3] = LeVertex(0.0f, 0.0f, 0.0f, 1.0f);
 
 		*this = m3 * m2 * m1 * *this;
 	}
 
-	void rotateBackRight(Vertex back, Vertex right, float a)
+	void rotateBackRight(LeVertex back, LeVertex right, float a)
 	{
 		back.normalize();
 		right.normalize();
-		Vertex up = back.cross(right);
+		LeVertex up = back.cross(right);
 
-		Matrix m1;
+		LeMatrix m1;
 		m1.lines[0] = right;
 		m1.lines[1] = up;
 		m1.lines[2] = back;
 
-		Matrix m2;
+		LeMatrix m2;
 		m2.rotateY(a);
 
-		Matrix m3;
-		m3.lines[0] = Vertex(right.x, up.x, back.x, 0.0f);
-		m3.lines[1] = Vertex(right.y, up.y, back.y, 0.0f);
-		m3.lines[2] = Vertex(right.z, up.z, back.z, 0.0f);
-		m3.lines[3] = Vertex(0.0f, 0.0f, 0.0f, 1.0f);
+		LeMatrix m3;
+		m3.lines[0] = LeVertex(right.x, up.x, back.x, 0.0f);
+		m3.lines[1] = LeVertex(right.y, up.y, back.y, 0.0f);
+		m3.lines[2] = LeVertex(right.z, up.z, back.z, 0.0f);
+		m3.lines[3] = LeVertex(0.0f, 0.0f, 0.0f, 1.0f);
 
 		*this = m3 * m2 * m1 * *this;
 	}
 
-	void alignBackUp(Vertex back, Vertex up)
+	void alignBackUp(LeVertex back, LeVertex up)
 	{
 		back.normalize();
 		up.normalize();
-		Vertex right = up.cross(back);
+		LeVertex right = up.cross(back);
 
-		Matrix m;
-		m.lines[0] = Vertex(right.x, up.x, back.x, 0.0f);
-		m.lines[1] = Vertex(right.y, up.y, back.y, 0.0f);
-		m.lines[2] = Vertex(right.z, up.z, back.z, 0.0f);
-		m.lines[3] = Vertex(0.0f, 0.0f, 0.0f, 1.0f);
+		LeMatrix m;
+		m.lines[0] = LeVertex(right.x, up.x, back.x, 0.0f);
+		m.lines[1] = LeVertex(right.y, up.y, back.y, 0.0f);
+		m.lines[2] = LeVertex(right.z, up.z, back.z, 0.0f);
+		m.lines[3] = LeVertex(0.0f, 0.0f, 0.0f, 1.0f);
 
 		*this = m * *this;
 	}
 
-	void alignBackRight(Vertex back, Vertex right)
+	void alignBackRight(LeVertex back, LeVertex right)
 	{
 		back.normalize();
 		right.normalize();
-		Vertex up = back.cross(right);
+		LeVertex up = back.cross(right);
 
-		Matrix m;
-		m.lines[0] = Vertex(right.x, up.x, back.x, 0.0f);
-		m.lines[1] = Vertex(right.y, up.y, back.y, 0.0f);
-		m.lines[2] = Vertex(right.z, up.z, back.z, 0.0f);
-		m.lines[3] = Vertex(0.0f, 0.0f, 0.0f, 1.0f);
+		LeMatrix m;
+		m.lines[0] = LeVertex(right.x, up.x, back.x, 0.0f);
+		m.lines[1] = LeVertex(right.y, up.y, back.y, 0.0f);
+		m.lines[2] = LeVertex(right.z, up.z, back.z, 0.0f);
+		m.lines[3] = LeVertex(0.0f, 0.0f, 0.0f, 1.0f);
 
 		*this = m * *this;
 	}
 
 	void rotateX(float a)
 	{
-		Matrix m;
+		LeMatrix m;
 		float c = cosf(a);
 		float s = sinf(a);
 		m.lines[1].y = c;
@@ -399,7 +400,7 @@ struct __attribute__ ((aligned (16))) Matrix
 
 	void rotateY(float a)
 	{
-		Matrix m;
+		LeMatrix m;
 		float c = cosf(a);
 		float s = sinf(a);
 		m.lines[0].x = c;
@@ -411,7 +412,7 @@ struct __attribute__ ((aligned (16))) Matrix
 
 	void rotateZ(float a)
 	{
-		Matrix m;
+		LeMatrix m;
 		float c = cosf(a);
 		float s = sinf(a);
 		m.lines[0].x = c;
@@ -421,13 +422,13 @@ struct __attribute__ ((aligned (16))) Matrix
 		*this = m * *this;
 	}
 
-	Matrix inverse3x3()
+	LeMatrix inverse3x3()
 	{
 		float d = lines[0].x*(lines[1].y*lines[2].z-lines[2].y*lines[1].z)
 				- lines[0].y*(lines[1].x*lines[2].z-lines[1].z*lines[2].x)
                 + lines[0].z*(lines[1].x*lines[2].y-lines[1].y*lines[2].x);
 
-		Matrix m;
+		LeMatrix m;
 		if (d == 0.0f) {m.zero(); return m;}
 		d = 1.0f / d;
 
@@ -446,21 +447,21 @@ struct __attribute__ ((aligned (16))) Matrix
 		return m;
 	}
 
-	Vertex operator * (Vertex v) const
+	LeVertex operator * (LeVertex v) const
 	{
 		v.w = 1.0f;
-		Vertex l1 = lines[0] * v;
-		Vertex l2 = lines[1] * v;
-		Vertex l3 = lines[2] * v;
+		LeVertex l1 = lines[0] * v;
+		LeVertex l2 = lines[1] * v;
+		LeVertex l3 = lines[2] * v;
 
-		return Vertex(l1.x + l1.y + l1.z + l1.w,
+		return LeVertex(l1.x + l1.y + l1.z + l1.w,
 					  l2.x + l2.y + l2.z + l2.w,
 					  l3.x + l3.y + l3.z + l3.w);
 	}
 
-	Matrix operator + (Matrix m) const
+	LeMatrix operator + (LeMatrix m) const
 	{
-		Matrix r;
+		LeMatrix r;
 		r.lines[0] = lines[0] + m.lines[0];
 		r.lines[1] = lines[1] + m.lines[1];
 		r.lines[2] = lines[2] + m.lines[2];
@@ -469,14 +470,14 @@ struct __attribute__ ((aligned (16))) Matrix
 		return r;
 	}
 
-	Matrix operator * (Matrix m) const
+	LeMatrix operator * (LeMatrix m) const
 	{
-		Matrix r;
+		LeMatrix r;
 		for (int i = 0; i < 4; i++) {
-			Vertex vx = Vertex(lines[i].x, lines[i].x, lines[i].x, lines[i].x);
-			Vertex vy = Vertex(lines[i].y, lines[i].y, lines[i].y, lines[i].y);
-			Vertex vz = Vertex(lines[i].z, lines[i].z, lines[i].z, lines[i].z);
-			Vertex vw = Vertex(lines[i].w, lines[i].w, lines[i].w, lines[i].w);
+			LeVertex vx = LeVertex(lines[i].x, lines[i].x, lines[i].x, lines[i].x);
+			LeVertex vy = LeVertex(lines[i].y, lines[i].y, lines[i].y, lines[i].y);
+			LeVertex vz = LeVertex(lines[i].z, lines[i].z, lines[i].z, lines[i].z);
+			LeVertex vw = LeVertex(lines[i].w, lines[i].w, lines[i].w, lines[i].w);
 			r.lines[i] = vx * m.lines[0] + vy * m.lines[1] + vz * m.lines[2] + vw * m.lines[3];
 		}
 
@@ -485,14 +486,14 @@ struct __attribute__ ((aligned (16))) Matrix
 };
 
 /*****************************************************************************/
-namespace Geo{
-	const Vertex up    = Vertex(0.0f, 1.0f, 0.0f);
-	const Vertex down  = Vertex(0.0f, -1.0f, 0.0f);
-	const Vertex front = Vertex(0.0f, 0.0f, -1.0f);
-	const Vertex back  = Vertex(0.0f, 0.0f, 1.0f);
-	const Vertex left  = Vertex(-1.0f, 0.0f, 0.0f);
-	const Vertex right = Vertex(1.0f, 0.0f, 0.0f);
-	const Vertex zero  = Vertex(0.0f, 0.0f, 0.0f);
+namespace LePrimitives {
+	const LeVertex up    = LeVertex(0.0f, 1.0f, 0.0f);
+	const LeVertex down  = LeVertex(0.0f, -1.0f, 0.0f);
+	const LeVertex front = LeVertex(0.0f, 0.0f, -1.0f);
+	const LeVertex back  = LeVertex(0.0f, 0.0f, 1.0f);
+	const LeVertex left  = LeVertex(-1.0f, 0.0f, 0.0f);
+	const LeVertex right = LeVertex(1.0f, 0.0f, 0.0f);
+	const LeVertex zero  = LeVertex(0.0f, 0.0f, 0.0f);
 }
 
 #endif	//LE_GEOMETRY_SIMD_H

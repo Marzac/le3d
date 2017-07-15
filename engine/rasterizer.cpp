@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -33,6 +33,9 @@
 #include "rasterizer.h"
 #include "draw.h"
 #include "bmpcache.h"
+
+#include "global.h"
+#include "config.h"
 
 #include "emmintrin.h"
 #include "mmintrin.h"
@@ -72,11 +75,11 @@ void LeRasterizer::setBackground(uint32_t color)
 }
 
 /*****************************************************************************/
-void LeRasterizer::rasterList(TriList * trilist)
+void LeRasterizer::rasterList(LeTriList * trilist)
 {
 	trilist->zSort();
 	for (int i = 0; i < trilist->noValid; i++) {
-		Triangle * tri = &trilist->triangles[trilist->srcIndices[i]];
+		LeTriangle * tri = &trilist->triangles[trilist->srcIndices[i]];
 
 	// Retrieve the material
 		LeBmpCache::Slot * slot = &bmpCache.slots[tri->tex];

@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -32,9 +32,11 @@
 
 #include "bitmap.h"
 
+#include "global.h"
+#include "config.h"
+
 #include "emmintrin.h"
 #include "mmintrin.h"
-#include <stdint.h>
 
 /*****************************************************************************/
 LeBitmap::LeBitmap() :

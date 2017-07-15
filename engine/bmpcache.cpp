@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -33,7 +33,9 @@
 #include "bmpcache.h"
 #include "bmpfile.h"
 
-#include <stdint.h>
+#include "global.h"
+#include "config.h"
+
 #include <string.h>
 #include <dirent.h>
 

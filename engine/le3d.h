@@ -1,6 +1,6 @@
 /**
-	\file light.h
-	\brief LightEngine 3D: Simple light models (point / directional / ambient)
+	\file le3d.h
+	\brief LightEngine 3D: General include file
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
@@ -30,47 +30,29 @@
 	SOFTWARE.
 */
 
-#ifndef LE_LIGHT_H
-#define LE_LIGHT_H
+#ifndef LE_LE3D_H
+#define LE_LE3D_H
 
-#include "global.h"
-#include "config.h"
+	#include "global.h"
+	#include "config.h"
+	
+	#include "window.h"
+	#include "draw.h"
+	#include "renderer.h"
+	#include "rasterizer.h"
+	#include "gamepad.h"
 
-#include "geometry.h"
-#include "mesh.h"
+	#include "geometry.h"
+	#include "trilist.h"
+	#include "verlist.h"
 
-/*****************************************************************************/
-typedef enum {
-	LE_LIGHT_POINT = 0,			/** A point light (intensity decrease with distance) */
-	LE_LIGHT_DIRECTIONAL,		/** A directional light (light intensity depends of incidence) */
-	LE_LIGHT_AMBIENT,			/** An ambient light (light influence all triangles) */
-}LE_LIGHT_TYPES;
+	#include "light.h"
+	#include "mesh.h"
+	#include "bitmap.h"
 
-/*****************************************************************************/
-class LeLight
-{
-public:
-	LeLight();
-	LeLight(LE_LIGHT_TYPES type, uint32_t color);
+	#include "bmpfile.h"
+	#include "objfile.h"
+	#include "bmpcache.h"
+	#include "meshcache.h"
 
-	void setPosition(float x, float y, float z);
-	void setDirection(float dx, float dy, float dz);
-	void setColor(uint32_t color);
-
-	static void blackMesh(LeMesh * mesh);
-	void shineMesh(LeMesh * mesh);
-
-	LeAxis pos;
-
-	int type;
-	uint32_t color;
-	float rolloff;
-
-private:
-	void shinePoint(LeMesh * mesh);
-	void shineDirectional(LeMesh * mesh);
-	void shineAmbient(LeMesh * mesh);
-	void macColor(uint32_t color1, uint32_t color2, float factor, uint32_t &result);
-};
-
-#endif // LE_LIGHT_H
+#endif

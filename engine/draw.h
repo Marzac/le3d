@@ -1,12 +1,12 @@
 /**
 	\file draw.h
 	\brief LightEngine 3D: Native OS graphic context
-	\brief Windows implementation
+	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -34,6 +34,8 @@
 #define LE_DRAW_H
 
 #include "global.h"
+#include "config.h"
+
 #include "bitmap.h"
 
 /*****************************************************************************/
@@ -49,7 +51,7 @@ typedef enum{
 /*****************************************************************************/
 struct LeFont
 {
-	Handle font;
+	LeHandle font;
 
 	LeFont()
 	{
@@ -61,12 +63,8 @@ struct LeFont
 class LeDraw
 {
 public:
-	LeDraw(Handle context, int width, int heigth);
+	LeDraw(LeHandle context, int width, int heigth);
 	~LeDraw();
-
-	void prepareContext(Handle &context, Handle &bitmap, int width, int height);
-	void unPrepareContext(Handle &context, Handle &bitmap);
-	void setCustomLayer(Handle context);
 
 	void flip(float zoom = 1.0f);
 
@@ -96,22 +94,26 @@ public:
 	int getHeight() {return height;}
 
 private:
+	void prepareContext(LeHandle &context, LeHandle &bitmap, int width, int height);
+	void unPrepareContext(LeHandle &context, LeHandle &bitmap);
+	void setCustomLayer(LeHandle context);
+	
+private:
 	int width;
 	int height;
 	uint32_t backColor;
 
-	Handle frontContext;
-	Handle backContext;
-	Handle backBitmap;
+	LeHandle frontContext;
+	LeHandle backContext;
+	LeHandle backBitmap;
 
-	Handle overlayContext[2];
-	Handle overlayBitmap[2];
+	LeHandle overlayContext[2];
+	LeHandle overlayBitmap[2];
 
-	Handle draftContext;
-	Handle draftBitmap;
+	LeHandle draftContext;
+	LeHandle draftBitmap;
 
-	Handle contexts[LE_LAYER_NB];
-
+	LeHandle contexts[LE_LAYER_NB];
 };
 
 #endif	//LE_DRAW_H

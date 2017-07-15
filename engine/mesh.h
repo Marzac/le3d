@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -34,6 +34,8 @@
 #define LE_MESH_H
 
 #include "global.h"
+#include "config.h"
+
 #include "geometry.h"
 
 /*****************************************************************************/
@@ -41,46 +43,48 @@ class LeMesh
 {
 public:
 	LeMesh();
-	LeMesh(Vertex vertexes[], int noVertexes, float texCoords[], int noTexCoords,
+	LeMesh(LeVertex vertexes[], int noVertexes, float texCoords[], int noTexCoords,
 		 int vertexList[], int texCoordsList[],
 		 uint32_t colors[], int noTriangles);
 	virtual ~LeMesh();
 
-	LeMesh * shadowCopy();
-	LeMesh * copy();
+	void shadowCopy(LeMesh * copy);
+	void copy(LeMesh * copy);
+	void deallocate();
 
 	void setPosition(float x, float y, float z);
 	void setScale(float sx, float sy, float sz);
 	void setRotation(float ax, float ay, float az);
-	void transform(const Matrix &matrix);
-	void updateMatrix();
+	void transform(const LeMatrix &matrix);
 
-	void setMatrix(const Matrix &matrix);
+	void setMatrix(const LeMatrix &matrix);
+	void updateMatrix();
 
 	void computeNormals();
 	void allocateShades();
+	void allocateNormals();
 
-	Matrix view;
-	Vertex pos;
-	Vertex size;
-	Vertex angle;
+	LeMatrix view;
+	LeVertex pos;
+	LeVertex size;
+	LeVertex angle;
 
-	Vertex * vertexes;
+// Static mesh data
+	LeVertex * vertexes;
 	int noVertexes;
 	float * texCoords;
 	int noTexCoords;
-
 	int * vertexList;
 	int * texCoordsList;
 	int * texSlotList;
 	uint32_t * colors;
 	int noTriangles;
 
-	Vertex * normals;
+// Temporary mesh data
+	LeVertex * normals;
 	uint32_t * shades;
 
 	bool allocated;
-
 };
 
 #endif // LE_MESH_H

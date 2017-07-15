@@ -1,12 +1,12 @@
 /**
 	\file gamepad.cpp
 	\brief LightEngine 3D: Native OS gamepad manager
-	\brief Windows implementation
+	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -32,20 +32,22 @@
 
 #include "gamepad.h"
 
-#include <stdint.h>
+#include "global.h"
+#include "config.h"
+
 #include <math.h>
 #include <windows.h>
 
-int GamePad::lastCompatible = -1;
+int LeGamePad::lastCompatible = -1;
 
 /*****************************************************************************/
-GamePad::GamePad(int pad) :
+LeGamePad::LeGamePad(int pad) :
 	threshold(8192.0f), pad(pad)
 {
 }
 
 /*****************************************************************************/
-void GamePad::getStickPosition(PAD_STICKS stick, float &x, float &y)
+void LeGamePad::getStickPosition(LE_PAD_STICKS stick, float &x, float &y)
 {
 	JOYINFOEX info;
 // Get gamepad state
@@ -55,15 +57,15 @@ void GamePad::getStickPosition(PAD_STICKS stick, float &x, float &y)
 	joyGetPosEx(pad, &info);
 // Retrieve coordinates
 	switch(stick) {
-	case PAD_LEFT_STICK:
+	case LE_PAD_LEFT_STICK:
 		x = applyThreshold(((int32_t) info.dwXpos) - 32768);
 		y = applyThreshold(((int32_t) info.dwYpos) - 32768);
 		return;
-	case PAD_RIGHT_STICK:
+	case LE_PAD_RIGHT_STICK:
 		x = applyThreshold(((int32_t) info.dwUpos) - 32768);
 		y = applyThreshold(((int32_t) info.dwRpos) - 32768);
 		return;
-	case PAD_TRIGGERS:
+	case LE_PAD_TRIGGERS:
 		{
 		float t = applyThreshold(((int32_t) info.dwZpos) - 32768);
 		x = t > 0.0f ? t : 0.0f;
@@ -84,7 +86,7 @@ void GamePad::getStickPosition(PAD_STICKS stick, float &x, float &y)
 	}
 }
 
-void GamePad::getButtonsState(int &buttons)
+void LeGamePad::getButtonsState(int &buttons)
 {
 	JOYINFOEX info;
 	memset(&info, 0, sizeof(JOYINFOEX));
@@ -95,7 +97,7 @@ void GamePad::getButtonsState(int &buttons)
 }
 
 /*****************************************************************************/
-inline float GamePad::applyThreshold(float value)
+inline float LeGamePad::applyThreshold(float value)
 {
 	const float scale = 1.0f / (32768.0f - threshold);
 	float sign = copysignf(1.0f, value);
@@ -103,13 +105,13 @@ inline float GamePad::applyThreshold(float value)
 	return (value - sign * threshold) * scale;
 }
 
-void GamePad::setStickThreshold(int threshold)
+void LeGamePad::setStickThreshold(int threshold)
 {
 	this->threshold = threshold;
 }
 
 /*****************************************************************************/
-int GamePad::getCompatiblePad(int minAxes, int minButtons)
+int LeGamePad::getCompatiblePad(int minAxes, int minButtons)
 {
 	int nb = joyGetNumDevs();
 	int pi = lastCompatible + 1;

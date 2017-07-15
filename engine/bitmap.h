@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -34,14 +34,14 @@
 #define LE_BITMAP_H
 
 #include "global.h"
-#include <stdint.h>
+#include "config.h"
 
 /*****************************************************************************/
 typedef enum{
 	LE_BMP_DEFAULT = 0,
 	LE_BMP_ALPHACHANNEL = 1,
 	LE_BMP_PREMULTIPLIED = 2
-}BITMAP_FLAGS;
+}LE_BITMAP_FLAGS;
 
 /*****************************************************************************/
 class LeBmpFont;
@@ -61,8 +61,8 @@ public:
 	void deallocate();
 	void alphaPreMult();
 
-	Handle context;
-	Handle bitmap;
+	LeHandle context;
+	LeHandle bitmap;
 
 	int tx, ty;
 	int txP2, tyP2;

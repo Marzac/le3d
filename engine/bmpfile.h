@@ -1,12 +1,12 @@
 /**
 	\file bmpfile.h
-	\brief LightEngine 3D: Windows bitmap file importer / exporter
+	\brief LightEngine 3D: BMP file importer / exporter
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -34,8 +34,9 @@
 #define LE_BMPFILE_H
 
 #include "global.h"
-#include "bitmap.h"
+#include "config.h"
 
+#include "bitmap.h"
 #include <stdio.h>
 
 /*****************************************************************************/
@@ -52,7 +53,6 @@ private:
 	int readBitmap(FILE * file, LeBitmap * bitmap);
 	int writeBitmap(FILE * file, LeBitmap * bitmap);
 	char * path;
-
 };
 
 #endif // LE_BMPFILE_H

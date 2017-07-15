@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -32,6 +32,9 @@
 
 #include "mesh.h"
 
+#include "global.h"
+#include "config.h"
+
 #include <stdlib.h>
 #include <strings.h>
 
@@ -48,7 +51,7 @@ LeMesh::LeMesh() :
 	updateMatrix();
 }
 
-LeMesh::LeMesh(Vertex vertexes[], int noVertexes, float texCoords[], int noTexCoords,
+LeMesh::LeMesh(LeVertex vertexes[], int noVertexes, float texCoords[], int noTexCoords,
 		   int vertexList[], int texCoordsList[],
 		   uint32_t colors[], int noTriangles) :
 	view(), pos(), size(1.0f, 1.0f, 1.0f), angle(),
@@ -64,22 +67,44 @@ LeMesh::LeMesh(Vertex vertexes[], int noVertexes, float texCoords[], int noTexCo
 
 LeMesh::~LeMesh()
 {
-	if (allocated) {
-		if (vertexes) delete vertexes;
-		if (texCoords) delete texCoords;
-		if (vertexList) delete vertexList;
-		if (texCoordsList) delete texCoordsList;
-		if (texSlotList) delete texSlotList;
-		if (colors) delete colors;
-	}
-	if (shades) delete shades;
-	if (normals) delete normals;
+	deallocate();
 }
 
 /*****************************************************************************/
-LeMesh * LeMesh::shadowCopy()
+void LeMesh::deallocate()
 {
-	LeMesh * copy = new LeMesh();
+// Deallocate static data
+	if (allocated) {
+		if (vertexes) delete vertexes;
+		vertexes = NULL;
+		noVertexes = 0;
+		if (texCoords) delete texCoords;
+		texCoords = NULL;
+		noTexCoords = 0;
+		if (vertexList) delete vertexList;
+		vertexList = NULL;
+		if (texCoordsList) delete texCoordsList;
+		texCoordsList = NULL;
+		if (texSlotList) delete texSlotList;
+		texSlotList = NULL;
+		if (colors) delete colors;
+		colors = NULL;
+		noTriangles = 0;
+	}
+
+// Deallocate temporary data
+	if (normals) delete normals;
+	normals = NULL;
+	if (shades) delete shades;
+	shades = NULL;
+}
+
+
+/*****************************************************************************/
+void LeMesh::shadowCopy(LeMesh * copy)
+{
+	if (copy->allocated) copy->deallocate();
+
 	copy->vertexes = vertexes;
 	copy->noVertexes = noVertexes;
 	copy->texCoords = texCoords;
@@ -89,20 +114,24 @@ LeMesh * LeMesh::shadowCopy()
 	copy->texSlotList = texSlotList;
 	copy->colors = colors;
 	copy->noTriangles = noTriangles;
-
-	copy->normals = normals;
-	copy->shades = new uint32_t[noTriangles];
-
 	copy->allocated = false;
-	return copy;
+
+	if (normals) {
+		copy->normals = new LeVertex[noTriangles];
+		memcpy(copy->normals, normals, noTriangles * sizeof(LeVertex));
+	}
+	if (shades) {
+		copy->shades = new uint32_t[noTriangles];
+		memcpy(copy->shades, shades, noTriangles * sizeof(uint32_t));
+	}
 }
 
-LeMesh * LeMesh::copy()
+void LeMesh::copy(LeMesh * copy)
 {
-	LeMesh * copy = new LeMesh();
+	if (copy->allocated) copy->deallocate();
 
-	copy->vertexes = new Vertex[noVertexes];
-	memcpy(copy->vertexes, vertexes, noVertexes * sizeof(Vertex));
+	copy->vertexes = new LeVertex[noVertexes];
+	memcpy(copy->vertexes, vertexes, noVertexes * sizeof(LeVertex));
 	copy->noVertexes = noVertexes;
 	copy->texCoords = new float[noTexCoords * 2];
 	memcpy(copy->texCoords, texCoords, noTexCoords * sizeof(float) * 2);
@@ -116,14 +145,16 @@ LeMesh * LeMesh::copy()
 	copy->colors = new uint32_t[noTriangles];
 	memcpy(copy->colors, colors, noTriangles * sizeof(uint32_t));
 	copy->noTriangles = noTriangles;
-
-	copy->normals = new Vertex[noTriangles];
-	memcpy(copy->normals, normals, noTriangles * sizeof(Vertex));
-	copy->shades = new uint32_t[noTriangles];
-	memcpy(copy->shades, shades, noTriangles * sizeof(uint32_t));
-
 	copy->allocated = true;
-	return copy;
+
+	if (normals) {
+		copy->normals = new LeVertex[noTriangles];
+		memcpy(copy->normals, normals, noTriangles * sizeof(LeVertex));
+	}
+	if (shades) {
+		copy->shades = new uint32_t[noTriangles];
+		memcpy(copy->shades, shades, noTriangles * sizeof(uint32_t));
+	}
 }
 
 /*****************************************************************************/
@@ -148,7 +179,7 @@ void LeMesh::setRotation(float ax, float ay, float az)
 	this->angle.z = az;
 }
 
-void LeMesh::transform(const Matrix &matrix)
+void LeMesh::transform(const LeMatrix &matrix)
 {
 	updateMatrix();
 	view = matrix * view;
@@ -163,7 +194,7 @@ void LeMesh::updateMatrix()
 }
 
 /*****************************************************************************/
-void LeMesh::setMatrix(const Matrix &matrix)
+void LeMesh::setMatrix(const LeMatrix &matrix)
 {
 	view = matrix;
 }
@@ -171,18 +202,24 @@ void LeMesh::setMatrix(const Matrix &matrix)
 /*****************************************************************************/
 void LeMesh::computeNormals()
 {
-	if (!normals)
-		normals = new Vertex[noTriangles];
-
+	if (!normals) allocateNormals();
 	for (int i = 0; i < noTriangles; i++) {
-		Vertex v1 = vertexes[vertexList[i*3]];
-		Vertex v2 = vertexes[vertexList[i*3+1]];
-		Vertex v3 = vertexes[vertexList[i*3+2]];
-		Vertex a = v2 - v1;
-		Vertex b = v3 - v1;
-		Vertex c = a.cross(b);
+		LeVertex v1 = vertexes[vertexList[i*3]];
+		LeVertex v2 = vertexes[vertexList[i*3+1]];
+		LeVertex v3 = vertexes[vertexList[i*3+2]];
+		LeVertex a = v2 - v1;
+		LeVertex b = v3 - v1;
+		LeVertex c = a.cross(b);
 		c.normalize();
 		normals[i] = c;
+	}
+}
+
+void LeMesh::allocateNormals()
+{
+	if (!normals) {
+		normals = new LeVertex[noTriangles];
+		memset(normals, 0x00, noTriangles * sizeof(LeVertex));
 	}
 }
 

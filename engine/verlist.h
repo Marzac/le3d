@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -30,29 +30,29 @@
 	SOFTWARE.
 */
 
-#ifndef VERLIST_H
-#define VERLIST_H
+#ifndef LE_VERLIST_H
+#define LE_VERLIST_H
 
 #include "global.h"
+#include "config.h"
+
 #include "geometry.h"
-#include <math.h>
 
 /*****************************************************************************/
-class VerList
+class LeVerList
 {
 public:
-	VerList();
-	VerList(int noVertexes);
-	~VerList();
+	LeVerList();
+	LeVerList(int noVertexes);
+	~LeVerList();
 
 	void allocate(int noVertexes);
 
 public:
-	Vertex * vertexes;
+	LeVertex * vertexes;
 
 	int noAllocated;
 	int noUsed;
-
 };
 
 #endif

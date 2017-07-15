@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -33,7 +33,9 @@
 #include "objfile.h"
 #include "bmpcache.h"
 
-#include <stdint.h>
+#include "global.h"
+#include "config.h"
+
 #include <stdlib.h>
 #include <strings.h>
 
@@ -252,7 +254,7 @@ void LeObjFile::importVertexes(FILE * file, LeMesh * mesh)
 	int nb = countTokens(file, objGeoVertex);
 	if (!nb) return;
 // Allocate memory
-	mesh->vertexes = (Vertex *) new Vertex[nb];
+	mesh->vertexes = (LeVertex *) new LeVertex[nb];
 	if (!mesh->vertexes) return;
 	mesh->noVertexes = nb;
 // Import vertexes

@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -34,15 +34,16 @@
 #define LE_GEOMETRY_SCALAR_H
 
 #include "global.h"
+#include "config.h"
 
 #include <math.h>
 
 /*****************************************************************************/
-struct Vertex
+struct LeVertex
 {
 	float x, y, z, w;
 
-	Vertex()
+	LeVertex()
 	{
 		x = 0.0f;
 		y = 0.0f;
@@ -50,7 +51,7 @@ struct Vertex
 		w = 1.0f;
 	}
 
-	Vertex(float px, float py, float pz)
+	LeVertex(float px, float py, float pz)
 	{
 		x = px;
 		y = py;
@@ -58,25 +59,25 @@ struct Vertex
 		w = 1.0f;
 	}
 
-	static Vertex spherical(float azi, float inc, float dist)
+	static LeVertex spherical(float azi, float inc, float dist)
 	{
-		Vertex r;
+		LeVertex r;
 		r.x = cosf(azi) * cosf(inc) * dist;
 		r.y = sinf(inc) * dist;
 		r.z = -sinf(azi) * cosf(inc) * dist;
 		return r;
 	}
 
-	Vertex operator + (Vertex v) const
+	LeVertex operator + (LeVertex v) const
 	{
-		Vertex r;
+		LeVertex r;
 		r.x = x + v.x;
 		r.y = y + v.y;
 		r.z = z + v.z;
 		return r;
 	}
 
-	Vertex operator += (Vertex v)
+	LeVertex operator += (LeVertex v)
 	{
 		x += v.x;
 		y += v.y;
@@ -84,25 +85,25 @@ struct Vertex
 		return *this;
 	}
 
-	Vertex operator - (Vertex v) const
+	LeVertex operator - (LeVertex v) const
 	{
-		Vertex r;
+		LeVertex r;
 		r.x = x - v.x;
 		r.y = y - v.y;
 		r.z = z - v.z;
 		return r;
 	}
 
-	Vertex operator - () const
+	LeVertex operator - () const
 	{
-		Vertex r;
+		LeVertex r;
 		r.x = -x;
 		r.y = -y;
 		r.z = -z;
 		return r;
 	}
 
-	Vertex operator -= (Vertex v)
+	LeVertex operator -= (LeVertex v)
 	{
 		x -= v.x;
 		y -= v.y;
@@ -110,34 +111,34 @@ struct Vertex
 		return *this;
 	}
 
-	Vertex operator * (Vertex v) const
+	LeVertex operator * (LeVertex v) const
 	{
-		Vertex r;
+		LeVertex r;
 		r.x = x * v.x;
 		r.y = y * v.y;
 		r.z = z * v.z;
 		return r;
 	}
 
-	Vertex operator / (Vertex v) const
+	LeVertex operator / (LeVertex v) const
 	{
-		Vertex r;
+		LeVertex r;
 		r.x = x / v.x;
 		r.y = y / v.y;
 		r.z = z / v.z;
 		return r;
 	}
 
-	Vertex operator * (float v) const
+	LeVertex operator * (float v) const
 	{
-		Vertex r;
+		LeVertex r;
 		r.x = x * v;
 		r.y = y * v;
 		r.z = z * v;
 		return r;
 	}
 
-	Vertex operator *= (Vertex v)
+	LeVertex operator *= (LeVertex v)
 	{
 		x *= v.x;
 		y *= v.y;
@@ -145,7 +146,7 @@ struct Vertex
 		return *this;
 	}
 
-	Vertex operator *= (float v)
+	LeVertex operator *= (float v)
 	{
 		x *= v;
 		y *= v;
@@ -153,29 +154,29 @@ struct Vertex
 		return *this;
 	}
 
-	bool operator == (Vertex v)
+	bool operator == (LeVertex v)
 	{
 		return x == v.x && y == v.y && z == v.z;
 	}
 
 
-	float dot(Vertex v) const
+	float dot(LeVertex v) const
 	{
 		return x * v.x + y * v.y + z * v.z;
 	}
 
-	Vertex cross(Vertex v) const
+	LeVertex cross(LeVertex v) const
 	{
-		Vertex c;
+		LeVertex c;
 		c.x = y * v.z - v.y * z;
 		c.y = -x * v.z + v.x * z;
 		c.z = x * v.y - v.x * y;
 		return c;
 	}
 
-	Vertex sign() const
+	LeVertex sign() const
 	{
-		Vertex c;
+		LeVertex c;
 		c.x = copysignf(1.0f, x);
 		c.y = copysignf(1.0f, y);
 		c.z = copysignf(1.0f, z);
@@ -183,9 +184,9 @@ struct Vertex
 		return c;
 	}
 
-	Vertex round() const
+	LeVertex round() const
 	{
-		Vertex c;
+		LeVertex c;
 		c.x = floorf(x + 0.5f);
 		c.y = floorf(y + 0.5f);
 		c.z = floorf(z + 0.5f);
@@ -193,9 +194,9 @@ struct Vertex
 		return c;
 	}
 
-	Vertex floor() const
+	LeVertex floor() const
 	{
-		Vertex c;
+		LeVertex c;
 		c.x = floorf(x);
 		c.y = floorf(y);
 		c.z = floorf(z);
@@ -203,7 +204,7 @@ struct Vertex
 		return c;
 	}
 
-	Vertex normalize()
+	LeVertex normalize()
 	{
 		float d = norm();
 		if (d == 0.0f) {
@@ -226,13 +227,13 @@ struct Vertex
 };
 
 /*****************************************************************************/
-struct Axis
+struct LeAxis
 {
-	Vertex origin;
-	Vertex axis;
+	LeVertex origin;
+	LeVertex axis;
 	float  norm;
 
-	Axis()
+	LeAxis()
 	{
 		origin.x = 0.0f;
 		origin.y = 0.0f;
@@ -243,7 +244,7 @@ struct Axis
 		norm = 1.0f;
 	}
 
-	Axis(Vertex v1, Vertex v2)
+	LeAxis(LeVertex v1, LeVertex v2)
 	{
 		origin.x = v1.x;
 		origin.y = v1.y;
@@ -259,13 +260,13 @@ struct Axis
 };
 
 /*****************************************************************************/
-struct Plan
+struct LePlan
 {
-	Axis xAxis;
-	Axis yAxis;
-	Axis zAxis;
+	LeAxis xAxis;
+	LeAxis yAxis;
+	LeAxis zAxis;
 
-	Plan()
+	LePlan()
 	{
 		xAxis.axis.x = 1.0f;
 		xAxis.axis.y = 0.0f;
@@ -280,18 +281,18 @@ struct Plan
 		zAxis.axis.z = 1.0f;
 	}
 
-	Plan(Vertex v1, Vertex v2, Vertex v3) :
-		xAxis(Axis(v1, v2)), yAxis(Axis(v1, v3))
+	LePlan(LeVertex v1, LeVertex v2, LeVertex v3) :
+		xAxis(LeAxis(v1, v2)), yAxis(LeAxis(v1, v3))
 	{
 
-		Vertex tv1, tv2;
+		LeVertex tv1, tv2;
 		tv1.x = xAxis.axis.z * yAxis.axis.y;
 		tv1.y = xAxis.axis.x * yAxis.axis.z;
 		tv1.z = xAxis.axis.y * yAxis.axis.x;
 		tv2.x = xAxis.axis.y * yAxis.axis.z;
 		tv2.y = xAxis.axis.z * yAxis.axis.x;
 		tv2.z = xAxis.axis.x * yAxis.axis.y;
-		zAxis = Axis(tv1, tv2);
+		zAxis = LeAxis(tv1, tv2);
 		zAxis.origin.x = v1.x;
 		zAxis.origin.y = v1.y;
 		zAxis.origin.z = v1.z;
@@ -299,11 +300,11 @@ struct Plan
 };
 
 /*****************************************************************************/
-struct Matrix
+struct LeMatrix
 {
 	float mat[4][4];
 
-	Matrix()
+	LeMatrix()
 	{
 		identity();
 	}
@@ -345,7 +346,7 @@ struct Matrix
 
 	void scale(float sx, float sy, float sz)
 	{
-		Matrix m;
+		LeMatrix m;
 		m.mat[0][0] *= sx;
 		m.mat[1][1] *= sy;
 		m.mat[2][2] *= sz;
@@ -359,47 +360,47 @@ struct Matrix
 		rotateX(ax);
 	}
 
-	void rotateBackUp(Vertex back, Vertex up, float a)
+	void rotateBackUp(LeVertex back, LeVertex up, float a)
 	{
 		back.normalize();
 		up.normalize();
-		Vertex right = up.cross(back);
+		LeVertex right = up.cross(back);
 
-		Matrix m1;
+		LeMatrix m1;
 		m1.mat[0][0] = right.x;
 		m1.mat[0][1] = right.y;
 		m1.mat[0][2] = right.z;
 		m1.mat[0][3] = right.w;
-		
+
 		m1.mat[1][0] = up.x;
 		m1.mat[1][1] = up.y;
 		m1.mat[1][2] = up.z;
 		m1.mat[1][3] = up.w;
-		
+
 		m1.mat[2][0] = back.x;
 		m1.mat[2][1] = back.y;
 		m1.mat[2][2] = back.z;
 		m1.mat[2][3] = back.w;
-		
-		Matrix m2;
+
+		LeMatrix m2;
 		m2.rotateY(a);
 
-		Matrix m3;
+		LeMatrix m3;
 		m3.mat[0][0] = right.x;
 		m3.mat[1][0] = right.y;
 		m3.mat[2][0] = right.z;
 		m3.mat[3][0] = 0.0f;
-		
+
 		m3.mat[0][1] = up.x;
 		m3.mat[1][1] = up.y;
 		m3.mat[2][1] = up.z;
 		m3.mat[3][1] = 0.0f;
-		
+
 		m3.mat[0][2] = back.x;
 		m3.mat[1][2] = back.y;
 		m3.mat[2][2] = back.z;
 		m3.mat[3][2] = 0.0f;
-		
+
 		m3.mat[0][3] = 0.0f;
 		m3.mat[1][3] = 0.0f;
 		m3.mat[2][3] = 0.0f;
@@ -408,47 +409,47 @@ struct Matrix
 		*this = m3 * m2 * m1 * *this;
 	}
 
-	void rotateBackRight(Vertex back, Vertex right, float a)
+	void rotateBackRight(LeVertex back, LeVertex right, float a)
 	{
 		back.normalize();
 		right.normalize();
-		Vertex up = back.cross(right);
+		LeVertex up = back.cross(right);
 
-		Matrix m1;
+		LeMatrix m1;
 		m1.mat[0][0] = right.x;
 		m1.mat[0][1] = right.y;
 		m1.mat[0][2] = right.z;
 		m1.mat[0][3] = right.w;
-		
+
 		m1.mat[1][0] = up.x;
 		m1.mat[1][1] = up.y;
 		m1.mat[1][2] = up.z;
 		m1.mat[1][3] = up.w;
-		
+
 		m1.mat[2][0] = back.x;
 		m1.mat[2][1] = back.y;
 		m1.mat[2][2] = back.z;
 		m1.mat[2][3] = back.w;
-		
-		Matrix m2;
+
+		LeMatrix m2;
 		m2.rotateY(a);
 
-		Matrix m3;
+		LeMatrix m3;
 		m3.mat[0][0] = right.x;
 		m3.mat[1][0] = right.y;
 		m3.mat[2][0] = right.z;
 		m3.mat[3][0] = 0.0f;
-		
+
 		m3.mat[0][1] = up.x;
 		m3.mat[1][1] = up.y;
 		m3.mat[2][1] = up.z;
 		m3.mat[3][1] = 0.0f;
-		
+
 		m3.mat[0][2] = back.x;
 		m3.mat[1][2] = back.y;
 		m3.mat[2][2] = back.z;
 		m3.mat[3][2] = 1.0f;
-		
+
 		m3.mat[3][3] = 0.0f;
 		m3.mat[3][3] = 0.0f;
 		m3.mat[3][3] = 0.0f;
@@ -457,28 +458,28 @@ struct Matrix
 		*this = m3 * m2 * m1 * *this;
 	}
 
-	void alignBackUp(Vertex back, Vertex up)
+	void alignBackUp(LeVertex back, LeVertex up)
 	{
 		back.normalize();
 		up.normalize();
-		Vertex right = up.cross(back);
+		LeVertex right = up.cross(back);
 
-		Matrix m;
+		LeMatrix m;
 		m.mat[0][0] = right.x;
 		m.mat[1][0] = right.y;
 		m.mat[2][0] = right.z;
 		m.mat[3][0] = 0.0f;
-		
+
 		m.mat[0][1] = up.x;
 		m.mat[1][1] = up.y;
 		m.mat[2][1] = up.z;
 		m.mat[3][1] = 0.0f;
-		
+
 		m.mat[0][2] = back.x;
 		m.mat[1][2] = back.y;
 		m.mat[2][2] = back.z;
 		m.mat[3][2] = 0.0f;
-		
+
 		m.mat[0][3] = 0.0f;
 		m.mat[1][3] = 0.0f;
 		m.mat[2][3] = 0.0f;
@@ -486,23 +487,23 @@ struct Matrix
 		*this = m * *this;
 	}
 
-	void alignBackRight(Vertex back, Vertex right)
+	void alignBackRight(LeVertex back, LeVertex right)
 	{
 		back.normalize();
 		right.normalize();
-		Vertex up = back.cross(right);
+		LeVertex up = back.cross(right);
 
-		Matrix m;
+		LeMatrix m;
 		m.mat[0][0] = right.x;
 		m.mat[1][0] = right.y;
 		m.mat[2][0] = right.z;
 		m.mat[3][0] = 0.0f;
-		
+
 		m.mat[0][1] = up.x;
 		m.mat[1][1] = up.y;
 		m.mat[2][1] = up.z;
 		m.mat[3][1] = 0.0f;
-		
+
 		m.mat[0][2] = back.x;
 		m.mat[1][2] = back.y;
 		m.mat[2][2] = back.z;
@@ -512,13 +513,13 @@ struct Matrix
 		m.mat[1][3] = 0.0f;
 		m.mat[2][3] = 0.0f;
 		m.mat[3][3] = 1.0f;
-		
+
 		*this = m * *this;
 	}
 
 	void rotateX(float a)
 	{
-		Matrix m;
+		LeMatrix m;
 		float c = cosf(a);
 		float s = sinf(a);
 		m.mat[1][1] = c;
@@ -530,7 +531,7 @@ struct Matrix
 
 	void rotateY(float a)
 	{
-		Matrix m;
+		LeMatrix m;
 		float c = cosf(a);
 		float s = sinf(a);
 		m.mat[0][0] = c;
@@ -542,7 +543,7 @@ struct Matrix
 
 	void rotateZ(float a)
 	{
-		Matrix m;
+		LeMatrix m;
 		float c = cosf(a);
 		float s = sinf(a);
 		m.mat[0][0] = c;
@@ -552,13 +553,13 @@ struct Matrix
 		*this = m * *this;
 	}
 
-	Matrix inverse3x3()
+	LeMatrix inverse3x3()
 	{
 		float d = mat[0][0]*(mat[1][1]*mat[2][2]-mat[2][1]*mat[1][2])
 				- mat[0][1]*(mat[1][0]*mat[2][2]-mat[1][2]*mat[2][0])
                 + mat[0][2]*(mat[1][0]*mat[2][1]-mat[1][1]*mat[2][0]);
 
-		Matrix m;
+		LeMatrix m;
 		if (d == 0.0f) {m.zero(); return m;}
 		d = 1.0f / d;
 
@@ -577,17 +578,17 @@ struct Matrix
 		return m;
 	}
 
-	Vertex operator * (Vertex v) const
+	LeVertex operator * (LeVertex v) const
 	{
 		float x = v.x * mat[0][0] + v.y * mat[0][1] + v.z * mat[0][2] + mat[0][3];
 		float y = v.x * mat[1][0] + v.y * mat[1][1] + v.z * mat[1][2] + mat[1][3];
 		float z = v.x * mat[2][0] + v.y * mat[2][1] + v.z * mat[2][2] + mat[2][3];
-		return Vertex(x, y, z);
+		return LeVertex(x, y, z);
 	}
 
-	Matrix operator + (Matrix m) const
+	LeMatrix operator + (LeMatrix m) const
 	{
-		Matrix r;
+		LeMatrix r;
 		for (int i = 0; i < 4; i++) {
 			r.mat[i][0] = mat[i][0] + m.mat[i][0];
 			r.mat[i][1] = mat[i][1] + m.mat[i][1];
@@ -597,9 +598,9 @@ struct Matrix
 		return r;
 	}
 
-	Matrix operator * (Matrix m) const
+	LeMatrix operator * (LeMatrix m) const
 	{
-		Matrix r;
+		LeMatrix r;
 		for (int i = 0; i < 4; i++) {
 			r.mat[i][0] = mat[i][0] * m.mat[0][0] + mat[i][1] * m.mat[1][0] + mat[i][2] * m.mat[2][0] + mat[i][3] * m.mat[3][0];
 			r.mat[i][1] = mat[i][0] * m.mat[0][1] + mat[i][1] * m.mat[1][1] + mat[i][2] * m.mat[2][1] + mat[i][3] * m.mat[3][1];
@@ -611,14 +612,14 @@ struct Matrix
 };
 
 /*****************************************************************************/
-namespace Geo{
-	const Vertex up    = Vertex(0.0f, 1.0f, 0.0f);
-	const Vertex down  = Vertex(0.0f, -1.0f, 0.0f);
-	const Vertex front = Vertex(0.0f, 0.0f, -1.0f);
-	const Vertex back  = Vertex(0.0f, 0.0f, 1.0f);
-	const Vertex left  = Vertex(-1.0f, 0.0f, 0.0f);
-	const Vertex right = Vertex(1.0f, 0.0f, 0.0f);
-	const Vertex zero  = Vertex(0.0f, 0.0f, 0.0f);
+namespace LePrimitives {
+	const LeVertex up    = LeVertex(0.0f, 1.0f, 0.0f);
+	const LeVertex down  = LeVertex(0.0f, -1.0f, 0.0f);
+	const LeVertex front = LeVertex(0.0f, 0.0f, -1.0f);
+	const LeVertex back  = LeVertex(0.0f, 0.0f, 1.0f);
+	const LeVertex left  = LeVertex(-1.0f, 0.0f, 0.0f);
+	const LeVertex right = LeVertex(1.0f, 0.0f, 0.0f);
+	const LeVertex zero  = LeVertex(0.0f, 0.0f, 0.0f);
 }
 
 #endif	//LE_GEOMETRY_SCALAR_H

@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -30,11 +30,12 @@
 	SOFTWARE.
 */
 
-
 #ifndef LE_RASTERIZER_H
 #define LE_RASTERIZER_H
 
 #include "global.h"
+#include "config.h"
+
 #include "draw.h"
 #include "geometry.h"
 #include "trilist.h"
@@ -47,7 +48,7 @@ public:
 	~LeRasterizer();
 
 	void setBackground(uint32_t color);
-	void rasterList(TriList * trilist);
+	void rasterList(LeTriList * trilist);
 	void flush();
 
 	LeBitmap frame;
@@ -72,7 +73,6 @@ private:
 	int32_t us[4], vs[4];
 
 	uint32_t background;
-
 };
 
 #endif // LE_RASTERIZER_H

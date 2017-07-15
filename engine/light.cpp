@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -32,11 +32,15 @@
 
 #include "light.h"
 
+#include "global.h"
+#include "config.h"
+
 #include <stdlib.h>
 #include <strings.h>
 
 /*****************************************************************************/
 void macColor(uint32_t color1, uint32_t color2, float factor, uint32_t &result);
+
 /*****************************************************************************/
 LeLight::LeLight() :
 	type(LE_LIGHT_AMBIENT), color(0x00CCCCCC), rolloff(1.0f)
@@ -98,14 +102,14 @@ void LeLight::shineMesh(LeMesh * mesh)
 inline void LeLight::shinePoint(LeMesh * mesh)
 {
 // Compute the origin
-	Vertex o = pos.origin - mesh->pos;
+	LeVertex o = pos.origin - mesh->pos;
 	for (int j = 0; j < mesh->noTriangles; j++) {
 		const float third = 1.0f / 3.0f;
-		Vertex v1 = mesh->vertexes[mesh->vertexList[j*3]];
-		Vertex v2 = mesh->vertexes[mesh->vertexList[j*3+1]];
-		Vertex v3 = mesh->vertexes[mesh->vertexList[j*3+2]];
-		Vertex m = (v1 + v2 + v3) * third - o;
-		Vertex n = mesh->normals[j];
+		LeVertex v1 = mesh->vertexes[mesh->vertexList[j*3]];
+		LeVertex v2 = mesh->vertexes[mesh->vertexList[j*3+1]];
+		LeVertex v3 = mesh->vertexes[mesh->vertexList[j*3+2]];
+		LeVertex m = (v1 + v2 + v3) * third - o;
+		LeVertex n = mesh->normals[j];
 
 		float p = n.dot(m);
 		if (p > 0.0f) continue;
@@ -118,8 +122,8 @@ inline void LeLight::shinePoint(LeMesh * mesh)
 inline void LeLight::shineDirectional(LeMesh * mesh)
 {
 // Compute light relative direction
-	Matrix iv = mesh->view.inverse3x3();
-	Vertex rp = iv * pos.axis;
+	LeMatrix iv = mesh->view.inverse3x3();
+	LeVertex rp = iv * pos.axis;
 
 // Calculate the light
 	for (int j = 0; j < mesh->noTriangles; j++) {

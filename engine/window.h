@@ -1,12 +1,12 @@
 /**
 	\file window.h
 	\brief LightEngine 3D: Native OS window manager
-	\brief Windows implementation
+	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -34,6 +34,7 @@
 #define LE_WINDOW_H
 
 #include "global.h"
+#include "config.h"
 
 /*****************************************************************************/
 typedef enum {
@@ -59,7 +60,7 @@ public:
 	LeWindow(const char * name, int width, int height);
 	~LeWindow();
 
-	Handle getContext();
+	LeHandle getContext();
 
 	typedef void (* KeyCallback) (int key, int state);
 	typedef void (* MouseCallback) (int x, int y, int buttons);
@@ -73,13 +74,12 @@ public:
 	void sendMouseEvent(int x, int y, int buttons);
 
 private:
-	Handle hwnd;
+	LeHandle hwnd;
 	int width;
 	int height;
 
 	KeyCallback keyCallback;
 	MouseCallback mouseCallback;
-
 };
 
 #endif	// LE_WINDOW_H

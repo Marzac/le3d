@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -32,22 +32,23 @@
 
 #include "trilist.h"
 
-#include <stdint.h>
+#include "global.h"
+#include "config.h"
 
 /*****************************************************************************/
-TriList::TriList() :
+LeTriList::LeTriList() :
 	srcIndices(NULL), dstIndices(NULL),
 	noAllocated(0), noUsed(0), noValid(0)
 {
 	allocate(LE_TRILIST_MAX);
 }
 
-TriList::TriList(int noTriangles)
+LeTriList::LeTriList(int noTriangles)
 {
 	allocate(noTriangles);
 }
 
-TriList::~TriList()
+LeTriList::~LeTriList()
 {
 	if (triangles) delete[] triangles;
 	if (srcIndices) delete[] srcIndices;
@@ -55,22 +56,22 @@ TriList::~TriList()
 }
 
 /*****************************************************************************/
-void TriList::allocate(int noTriangles)
+void LeTriList::allocate(int noTriangles)
 {
-	triangles = new Triangle[noTriangles];
+	triangles = new LeTriangle[noTriangles];
 	srcIndices = new int[noTriangles * 3];
 	dstIndices = new int[noTriangles * 3];
 	noAllocated = noTriangles;
 }
 
-void TriList::zSort()
+void LeTriList::zSort()
 {
 	if (!noValid) return;
 	zMergeSort(srcIndices, dstIndices, noValid);
 }
 
 /*****************************************************************************/
-void TriList::zMergeSort(int indices[], int tmp[], int nb)
+void LeTriList::zMergeSort(int indices[], int tmp[], int nb)
 {
 	int h1 = nb >> 1;
 	int h2 = nb - h1;

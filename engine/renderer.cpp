@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -32,14 +32,17 @@
 
 #include "renderer.h"
 
-#include <stdint.h>
+#include "global.h"
+#include "config.h"
+
 #include <stdlib.h>
 #include <strings.h>
 #include <math.h>
 
 /*****************************************************************************/
 LeRenderer::LeRenderer(int width, int height) :
-	extra(0), colors(NULL),
+	extra(0), extraMax(0),
+	colors(NULL),
 	usedTrilist(&intTrilist),
 	usedVerlist(&intVerlist),
 	enableBack(true), vOffset(0.0f)
@@ -85,7 +88,7 @@ void LeRenderer::render(LeMesh * mesh)
 	else colors = mesh->colors;
 
 // Transform the geometry
-	Triangle * triRender = &usedTrilist->triangles[usedTrilist->noUsed];
+	LeTriangle * triRender = &usedTrilist->triangles[usedTrilist->noUsed];
 	int * id1 = &usedTrilist->srcIndices[usedTrilist->noValid];
 	int * id2 = &usedTrilist->dstIndices[usedTrilist->noValid];
 
@@ -122,13 +125,13 @@ void LeRenderer::flush()
 }
 
 /*****************************************************************************/
-void LeRenderer::setTriList(TriList * trilist)
+void LeRenderer::setTriList(LeTriList * trilist)
 {
 	if (!trilist) usedTrilist = &intTrilist;
 	else usedTrilist = trilist;
 }
 
-TriList * LeRenderer::getTriList()
+LeTriList * LeRenderer::getTriList()
 {
 	return usedTrilist;
 }
@@ -155,7 +158,7 @@ void LeRenderer::updateViewMatrix()
 	viewMatrix.rotate(-viewRotation.x, -viewRotation.y, -viewRotation.z);
 }
 
-void LeRenderer::setViewMatrix(Matrix view)
+void LeRenderer::setViewMatrix(LeMatrix view)
 {
 	viewMatrix = view;
 }
@@ -169,10 +172,10 @@ void LeRenderer::setViewProjection(float fov)
 
 void LeRenderer::setViewport(float left, float top, float right, float bottom)
 {
-	viewLeftAxis   = Axis(Vertex(left,  top,    0.0f), Vertex(left,  bottom, 0.0f));
-	viewRightAxis  = Axis(Vertex(right, bottom, 0.0f), Vertex(right, top,    0.0f));
-	viewTopAxis    = Axis(Vertex(right, top,    0.0f), Vertex(left,  top,    0.0f));
-	viewBottomAxis = Axis(Vertex(left,  bottom, 0.0f), Vertex(right, bottom ,0.0f));
+	viewLeftAxis   = LeAxis(LeVertex(left,  top,    0.0f), LeVertex(left,  bottom, 0.0f));
+	viewRightAxis  = LeAxis(LeVertex(right, bottom, 0.0f), LeVertex(right, top,    0.0f));
+	viewTopAxis    = LeAxis(LeVertex(right, top,    0.0f), LeVertex(left,  top,    0.0f));
+	viewBottomAxis = LeAxis(LeVertex(left,  bottom, 0.0f), LeVertex(right, bottom ,0.0f));
 }
 
 /*****************************************************************************/
@@ -182,7 +185,7 @@ void LeRenderer::setBackculling(bool enable)
 }
 
 /*****************************************************************************/
-void LeRenderer::transform(Matrix view, Vertex srcVertexes[], Vertex dstVertexes[], int nb)
+void LeRenderer::transform(LeMatrix view, LeVertex srcVertexes[], LeVertex dstVertexes[], int nb)
 {
 	view = viewMatrix * view;
 	for (int i = 0; i < nb; i++)
@@ -190,23 +193,23 @@ void LeRenderer::transform(Matrix view, Vertex srcVertexes[], Vertex dstVertexes
 }
 
 /*****************************************************************************/
-int LeRenderer::build(LeMesh * mesh, Vertex vertexes[], Triangle tris[], int indices[])
+int LeRenderer::build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[])
 {
 	int k = 0;
 	float fontZ = viewFrontPlan.zAxis.origin.z;
 	float backZ = viewBackPlan.zAxis.origin.z;
 
 	for (int i = 0; i < mesh->noTriangles; i++) {
-		Vertex * v1 = &vertexes[mesh->vertexList[i*3]];
-		Vertex * v2 = &vertexes[mesh->vertexList[i*3+1]];
-		Vertex * v3 = &vertexes[mesh->vertexList[i*3+2]];
+		LeVertex * v1 = &vertexes[mesh->vertexList[i*3]];
+		LeVertex * v2 = &vertexes[mesh->vertexList[i*3+1]];
+		LeVertex * v3 = &vertexes[mesh->vertexList[i*3+2]];
 
 	// Hard clip
 		if (v1->z > fontZ && v2->z > fontZ && v3->z > fontZ) continue;
 		if (v1->z < backZ && v2->z < backZ && v3->z < backZ) continue;
 
 	// Copy coordinates (for clipping)
-		Triangle * tri = &tris[k];
+		LeTriangle * tri = &tris[k];
 		tri->xs[0] = v1->x;
 		tri->ys[0] = v1->y;
 		tri->zs[0] = v1->z;
@@ -243,7 +246,7 @@ int LeRenderer::build(LeMesh * mesh, Vertex vertexes[], Triangle tris[], int ind
 }
 
 /*****************************************************************************/
-int LeRenderer::project(Triangle tris[], int srcIndices[], int dstIndices[], int nb)
+int LeRenderer::project(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb)
 {
 	int k = 0;
 	float centerX = width * 0.5f;
@@ -253,7 +256,7 @@ int LeRenderer::project(Triangle tris[], int srcIndices[], int dstIndices[], int
 		int j = srcIndices[i];
 
 	// Project on frame
-		Triangle * tri = &tris[j];
+		LeTriangle * tri = &tris[j];
 		tri->xs[0] = tri->xs[0] * ztx / tri->zs[0] + centerX;
 		tri->xs[1] = tri->xs[1] * ztx / tri->zs[1] + centerX;
 		tri->xs[2] = tri->xs[2] * ztx / tri->zs[2] + centerX;
@@ -272,7 +275,7 @@ int LeRenderer::project(Triangle tris[], int srcIndices[], int dstIndices[], int
 }
 
 /*****************************************************************************/
-int LeRenderer::clip3D(Triangle tris[], int srcIndices[], int dstIndices[], int nb, Plan &plan)
+int LeRenderer::clip3D(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb, LePlan &plan)
 {
 	int k = 0;
 	for (int i = 0; i < nb; i++) {
@@ -280,7 +283,7 @@ int LeRenderer::clip3D(Triangle tris[], int srcIndices[], int dstIndices[], int 
 		int j = srcIndices[i];
 
 	// Project against clipping plan
-		Triangle * tri = &tris[j];
+		LeTriangle * tri = &tris[j];
 		float pj1 = (tri->xs[0] - plan.zAxis.origin.x) * plan.zAxis.axis.x + (tri->ys[0] - plan.zAxis.origin.y) * plan.zAxis.axis.y + (tri->zs[0] - plan.zAxis.origin.z) * plan.zAxis.axis.z;
 		float pj2 = (tri->xs[1] - plan.zAxis.origin.x) * plan.zAxis.axis.x + (tri->ys[1] - plan.zAxis.origin.y) * plan.zAxis.axis.y + (tri->zs[1] - plan.zAxis.origin.z) * plan.zAxis.axis.z;
 		float pj3 = (tri->xs[2] - plan.zAxis.origin.x) * plan.zAxis.axis.x + (tri->ys[2] - plan.zAxis.origin.y) * plan.zAxis.axis.y + (tri->zs[2] - plan.zAxis.origin.z) * plan.zAxis.axis.z;
@@ -361,7 +364,7 @@ int LeRenderer::clip3D(Triangle tris[], int srcIndices[], int dstIndices[], int 
 		}
 		if (s >= 4 && extra < extraMax) {
 		// Copy triangle coordinates
-			Triangle * ntri = &tris[extra];
+			LeTriangle * ntri = &tris[extra];
 			ntri->xs[0] = nx[0];
 			ntri->xs[1] = nx[2];
 			ntri->xs[2] = nx[3];
@@ -392,7 +395,7 @@ int LeRenderer::clip3D(Triangle tris[], int srcIndices[], int dstIndices[], int 
 }
 
 /*****************************************************************************/
-int LeRenderer::clip2D(Triangle tris[], int srcIndices[], int dstIndices[], int nb, Axis &axis)
+int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb, LeAxis &axis)
 {
 	int k = 0;
 	for (int i = 0; i < nb; i++) {
@@ -400,7 +403,7 @@ int LeRenderer::clip2D(Triangle tris[], int srcIndices[], int dstIndices[], int 
 		int j = srcIndices[i];
 
 	// Project against clipping line
-		Triangle * tri = &tris[j];
+		LeTriangle * tri = &tris[j];
 		float pj1 = (tri->xs[0] - axis.origin.x) * axis.axis.y - (tri->ys[0] - axis.origin.y) * axis.axis.x;
 		float pj2 = (tri->xs[1] - axis.origin.x) * axis.axis.y - (tri->ys[1] - axis.origin.y) * axis.axis.x;
 		float pj3 = (tri->xs[2] - axis.origin.x) * axis.axis.y - (tri->ys[2] - axis.origin.y) * axis.axis.x;
@@ -467,7 +470,7 @@ int LeRenderer::clip2D(Triangle tris[], int srcIndices[], int dstIndices[], int 
 		}
 		if (s >= 4 && extra < extraMax) {
 		// Copy triangle coordinates
-			Triangle * ntri = &tris[extra];
+			LeTriangle * ntri = &tris[extra];
 			ntri->xs[0] = nx[0];
 			ntri->xs[1] = nx[2];
 			ntri->xs[2] = nx[3];
@@ -492,7 +495,7 @@ int LeRenderer::clip2D(Triangle tris[], int srcIndices[], int dstIndices[], int 
 }
 
 /*****************************************************************************/
-int LeRenderer::backculling(Triangle tris[], int srcIndices[], int dstIndices[], int nb)
+int LeRenderer::backculling(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb)
 {
 	int k = 0;
 	if (!enableBack) {
@@ -501,7 +504,7 @@ int LeRenderer::backculling(Triangle tris[], int srcIndices[], int dstIndices[],
 	}
 	for (int i = 0; i < nb; i++) {
 		int j = srcIndices[i];
-		Triangle * tri = &tris[j];
+		LeTriangle * tri = &tris[j];
 		float back = (tri->xs[1] - tri->xs[0]) * (tri->ys[2] - tri->ys[0]);
 		back -= (tri->ys[1] - tri->ys[0]) * (tri->xs[2] - tri->xs[0]);
 		if (back <= 0.0f) dstIndices[k++] = j;

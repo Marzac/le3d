@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -31,6 +31,9 @@
 */
 
 #include "window.h"
+
+#include "global.h"
+#include "config.h"
 
 #include <windows.h>
 #include <wingdi.h>
@@ -70,7 +73,7 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	AdjustWindowRect(&size, WS_OVERLAPPEDWINDOW, 0);
 
 // Create and display window
-	if ((hwnd = (Handle) CreateWindowEx(
+	if ((hwnd = (LeHandle) CreateWindowEx(
 		   0,
 		   className,
 		   name,
@@ -94,9 +97,9 @@ LeWindow::~LeWindow()
 }
 
 /*****************************************************************************/
-Handle LeWindow::getContext()
+LeHandle LeWindow::getContext()
 {
-	return (Handle) GetDC((HWND) hwnd);
+	return (LeHandle) GetDC((HWND) hwnd);
 }
 
 /*****************************************************************************/

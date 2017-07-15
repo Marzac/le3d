@@ -1,12 +1,12 @@
 /**
 	\file draw.cpp
 	\brief LightEngine 3D: Native OS graphic context
-	\brief Windows implementation
+	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -32,18 +32,21 @@
 
 #include "draw.h"
 
+#include "global.h"
+#include "config.h"
+
 #define WINVER	0x0600
 #include <windef.h>
 #include <windows.h>
 
 /*****************************************************************************/
-LeDraw::LeDraw(Handle context, int width, int height) :
+LeDraw::LeDraw(LeHandle context, int width, int height) :
 	width(width), height(height),
 	backColor(0),
 	frontContext(context)
 {
 	if (!frontContext)
-		frontContext = (Handle) GetDC(NULL);
+		frontContext = (LeHandle) GetDC(NULL);
 
 	prepareContext(backContext, backBitmap, width, height);
 	prepareContext(overlayContext[0], overlayBitmap[0], width, height);
@@ -65,10 +68,10 @@ LeDraw::~LeDraw()
 }
 
 /*****************************************************************************/
-void LeDraw::prepareContext(Handle &context, Handle &bitmap, int width, int height)
+void LeDraw::prepareContext(LeHandle &context, LeHandle &bitmap, int width, int height)
 {
-	context = (Handle) CreateCompatibleDC((HDC) frontContext);
-	bitmap = (Handle) CreateCompatibleBitmap((HDC) frontContext, width, height);
+	context = (LeHandle) CreateCompatibleDC((HDC) frontContext);
+	bitmap = (LeHandle) CreateCompatibleBitmap((HDC) frontContext, width, height);
 
 	SelectObject((HDC) context, (HANDLE) bitmap);
 
@@ -80,7 +83,7 @@ void LeDraw::prepareContext(Handle &context, Handle &bitmap, int width, int heig
 	SetBkMode((HDC) context, TRANSPARENT);
 }
 
-void LeDraw::unPrepareContext(Handle &context, Handle &bitmap)
+void LeDraw::unPrepareContext(LeHandle &context, LeHandle &bitmap)
 {
 	if (context) DeleteDC((HDC) context);
 	if (bitmap) DeleteObject((HANDLE) bitmap);
@@ -89,7 +92,7 @@ void LeDraw::unPrepareContext(Handle &context, Handle &bitmap)
 }
 
 /*****************************************************************************/
-void LeDraw::setCustomLayer(Handle context)
+void LeDraw::setCustomLayer(LeHandle context)
 {
 	contexts[LE_LAYER_CUSTOM] = context;
 }
@@ -208,8 +211,8 @@ void LeDraw::prepareBitmap(LeBitmap * bitmap, bool alpha)
 	else info.bV4AlphaMask = 0x00000000;
 
 // Create the bitmap resources
-	bitmap->context = (Handle) CreateCompatibleDC((HDC) frontContext);
-	bitmap->bitmap = (Handle) CreateCompatibleBitmap((HDC) frontContext, bitmap->tx, bitmap->ty);
+	bitmap->context = (LeHandle) CreateCompatibleDC((HDC) frontContext);
+	bitmap->bitmap = (LeHandle) CreateCompatibleBitmap((HDC) frontContext, bitmap->tx, bitmap->ty);
 	SelectObject((HDC) bitmap->context, (HBITMAP) bitmap->bitmap);
 	SetDIBits((HDC) bitmap->context, (HBITMAP) bitmap->bitmap, 0, bitmap->ty, bitmap->data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
 
@@ -280,7 +283,7 @@ void LeDraw::prepareFont(LeFont * font, const char * family, int height, int wei
 	logFont.lfWeight = weight;
 	logFont.lfQuality = NONANTIALIASED_QUALITY;
 	strcpy(logFont.lfFaceName, family);
-	font->font = (Handle) CreateFontIndirect(&logFont);
+	font->font = (LeHandle) CreateFontIndirect(&logFont);
 }
 
 void LeDraw::unprepareFont(LeFont * font)

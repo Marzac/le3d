@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -30,14 +30,14 @@
 	SOFTWARE.
 */
 
-#ifndef TRILIST_H
-#define TRILIST_H
+#ifndef LE_TRILIST_H
+#define LE_TRILIST_H
 
 #include "global.h"
-#include <math.h>
+#include "config.h"
 
 /*****************************************************************************/
-struct Triangle
+struct LeTriangle
 {
 	float xs[4];
 	float ys[4];
@@ -50,12 +50,12 @@ struct Triangle
 };
 
 /*****************************************************************************/
-class TriList
+class LeTriList
 {
 public:
-	TriList();
-	TriList(int noTrangles);
-	~TriList();
+	LeTriList();
+	LeTriList(int noTrangles);
+	~LeTriList();
 
 	void allocate(int noTriangles);
 	void zSort();
@@ -63,7 +63,7 @@ public:
 public:
 	int * srcIndices;
 	int * dstIndices;
-	Triangle * triangles;
+	LeTriangle * triangles;
 
 	int noAllocated;
 	int noUsed;
@@ -71,7 +71,6 @@ public:
 
 private:
 	void zMergeSort(int indices[], int tmp[], int nb);
-
 };
 
 #endif

@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -32,28 +32,29 @@
 
 #include "verlist.h"
 
-#include <stdint.h>
+#include "global.h"
+#include "config.h"
 
 /*****************************************************************************/
-VerList::VerList() :
+LeVerList::LeVerList() :
 	noAllocated(0), noUsed(0)
 {
 	allocate(LE_VERLIST_MAX);
 }
 
-VerList::VerList(int noVertexes)
+LeVerList::LeVerList(int noVertexes)
 {
 	allocate(noVertexes);
 }
 
-VerList::~VerList()
+LeVerList::~LeVerList()
 {
 	if (vertexes) delete[] vertexes;
 }
 
 /*****************************************************************************/
-void VerList::allocate(int noVertexes)
+void LeVerList::allocate(int noVertexes)
 {
-	vertexes = new Vertex[noVertexes];
+	vertexes = new LeVertex[noVertexes];
 	noAllocated = noVertexes;
 }

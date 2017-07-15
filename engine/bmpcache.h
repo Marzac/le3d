@@ -1,12 +1,12 @@
 /**
 	\file bmpcache.h
-	\brief LightEngine 3D: Bitmap cache management
+	\brief LightEngine 3D: Bitmap cache manager
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -34,9 +34,9 @@
 #define LE_BMPCACHE_H
 
 #include "global.h"
-#include "bitmap.h"
+#include "config.h"
 
-#include <stdio.h>
+#include "bitmap.h"
 
 /*****************************************************************************/
 typedef enum{

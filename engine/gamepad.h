@@ -1,12 +1,12 @@
 /**
 	\file gamepad.h
 	\brief LightEngine 3D: Native OS gamepad manager
-	\brief Windows implementation
+	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.0
+	\version 1.1
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -30,24 +30,27 @@
 	SOFTWARE.
 */
 
-#ifndef GAMEPAD_H
-#define GAMEPAD_H
+#ifndef LE_GAMEPAD_H
+#define LE_GAMEPAD_H
+
+#include "global.h"
+#include "config.h"
 
 /*****************************************************************************/
 typedef enum{
-	PAD_LEFT_STICK = 0,
-	PAD_RIGHT_STICK,
-	PAD_TRIGGERS,
-	PAD_DPAD,
-}PAD_STICKS;
+	LE_PAD_LEFT_STICK = 0,
+	LE_PAD_RIGHT_STICK,
+	LE_PAD_TRIGGERS,
+	LE_PAD_DPAD,
+}LE_PAD_STICKS;
 
 /*****************************************************************************/
-class GamePad
+class LeGamePad
 {
 public:
-	GamePad(int pad);
+	LeGamePad(int pad);
 
-	void getStickPosition(PAD_STICKS stick, float &x, float &y);
+	void getStickPosition(LE_PAD_STICKS stick, float &x, float &y);
 	void getButtonsState(int &buttons);
 	void setStickThreshold(int threshold);
 
@@ -62,4 +65,4 @@ private:
 	int pad;
 };
 
-#endif // GAMEPAD_H
+#endif // LE_GAMEPAD_H
