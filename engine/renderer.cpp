@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.1
+	\version 1.2
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -40,6 +40,11 @@
 #include <math.h>
 
 /*****************************************************************************/
+#if LE_RENDERER_3DFRUSTRUM == 0 && LE_RENDERER_2DFRAME == 0
+	#error One of the clipping systems (3D frustrum or 2D frame) must be enabled (in config.h).
+#endif
+
+/*****************************************************************************/
 LeRenderer::LeRenderer(int width, int height) :
 	extra(0), extraMax(0),
 	colors(NULL),
@@ -47,18 +52,8 @@ LeRenderer::LeRenderer(int width, int height) :
 	usedVerlist(&intVerlist),
 	enableBack(true), vOffset(0.0f)
 {
-// Configure default viewport
-	viewFrontPlan.zAxis.origin.z = LE_RENDERER_FRONT;
-	viewBackPlan.zAxis.origin.z  = LE_RENDERER_BACK;
-	viewFrontPlan.zAxis.axis.z = -1.0f;
-	viewBackPlan.zAxis.axis.z = -1.0f;
-
-	float minX = 0.0f;
-	float maxX = width - 1.0f;
-	float minY = 0.0f;
-	float maxY = height - 1.0f;
-	setViewport(minX, minY, maxX, maxY);
-
+// Configure viewport
+	setViewport(0.0f, 0.0f, width, height);
 	this->width = width;
 	this->height = height;
 
@@ -96,20 +91,32 @@ void LeRenderer::render(LeMesh * mesh)
 	int * id2 = &usedTrilist->dstIndices[usedTrilist->noValid];
 
 	transform(mesh->view, mesh->vertexes, usedVerlist->vertexes, mesh->noVertexes);
-	int noTris = build(mesh, usedVerlist->vertexes, triRender, id2);
+	int noTris = build(mesh, usedVerlist->vertexes, triRender, id1);
 
 // Pointer for extra triangles
 	extra = noTris;
 	extraMax = freeTriangles;
 
 // Clip and project
-	noTris = clip3D(triRender, id2, id1, noTris, viewFrontPlan);
+	noTris = clip3D(triRender, id1, id2, noTris, viewFrontPlan);
+	noTris = clip3D(triRender, id2, id1, noTris, viewBackPlan);
+
+#if LE_RENDERER_3DFRUSTRUM == 1
+	noTris = clip3D(triRender, id1, id2, noTris, viewLeftPlan);
+	noTris = clip3D(triRender, id2, id1, noTris, viewRightPlan);
+	noTris = clip3D(triRender, id1, id2, noTris, viewTopPlan);
+	noTris = clip3D(triRender, id2, id1, noTris, viewBotPlan);
+#endif
+
 	noTris = project(triRender, id1, id2, noTris);
 	noTris = backculling(triRender, id2, id1, noTris);
+
+#if LE_RENDERER_2DFRAME == 1
 	noTris = clip2D(triRender, id1, id2, noTris, viewLeftAxis);
 	noTris = clip2D(triRender, id2, id1, noTris, viewRightAxis);
 	noTris = clip2D(triRender, id1, id2, noTris, viewTopAxis);
 	noTris = clip2D(triRender, id2, id1, noTris, viewBottomAxis);
+#endif // LE_RENDERER_2DFRAME
 
 // Make render indices absolute
 	for (int i = 0; i < noTris; i++)
@@ -170,6 +177,7 @@ void LeRenderer::setViewProjection(float fov)
 	float ratio = tanf(fov * d2r);
 	ztx = -width / ratio;
 	zty = -width / ratio;
+	updateFrustrum();
 }
 
 void LeRenderer::setViewport(float left, float top, float right, float bottom)
@@ -184,6 +192,25 @@ void LeRenderer::setViewport(float left, float top, float right, float bottom)
 void LeRenderer::setBackculling(bool enable)
 {
 	enableBack = enable;
+}
+
+/*****************************************************************************/
+void LeRenderer::updateFrustrum()
+{
+	viewFrontPlan.zAxis.origin.z = LE_RENDERER_FRONT;
+	viewBackPlan.zAxis.origin.z  = LE_RENDERER_BACK;
+	viewFrontPlan.zAxis.axis.z = -1.0f;
+	viewBackPlan.zAxis.axis.z = 1.0f;
+
+	float hf = height * 0.5f * LE_RENDERER_FRONT / zty;
+	float hb = height * 0.5f * LE_RENDERER_BACK / zty;
+	viewTopPlan = LePlan(LeVertex(0.0f,  hf, LE_RENDERER_FRONT), LeVertex(1.0f,  hb, LE_RENDERER_BACK), LeVertex(1.0f, hf, LE_RENDERER_FRONT));
+	viewBotPlan = LePlan(LeVertex(0.0f, -hf, LE_RENDERER_FRONT), LeVertex(1.0f, -hb, LE_RENDERER_BACK), LeVertex(-1.0f, -hf, LE_RENDERER_FRONT));
+
+	float wf = width * 0.5f * LE_RENDERER_FRONT / ztx;
+	float wb = width * 0.5f * LE_RENDERER_BACK / ztx;
+	viewLeftPlan  = LePlan(LeVertex(-wf, 0.0f, LE_RENDERER_FRONT), LeVertex(-wb, 0.0f, LE_RENDERER_BACK), LeVertex(-wf,  1.0f, LE_RENDERER_FRONT));
+	viewRightPlan = LePlan(LeVertex( wf, 0.0f, LE_RENDERER_FRONT), LeVertex( wb, 0.0f, LE_RENDERER_BACK), LeVertex( wf, -1.0f, LE_RENDERER_FRONT));
 }
 
 /*****************************************************************************/
@@ -257,20 +284,38 @@ int LeRenderer::project(LeTriangle tris[], int srcIndices[], int dstIndices[], i
 	for (int i = 0; i < nb; i++) {
 		int j = srcIndices[i];
 
-	// Project on frame
 		LeTriangle * tri = &tris[j];
-		tri->xs[0] = tri->xs[0] * ztx / tri->zs[0] + centerX;
-		tri->xs[1] = tri->xs[1] * ztx / tri->zs[1] + centerX;
-		tri->xs[2] = tri->xs[2] * ztx / tri->zs[2] + centerX;
-		tri->ys[0] = centerY - tri->ys[0] * zty / tri->zs[0];
-		tri->ys[1] = centerY - tri->ys[1] * zty / tri->zs[1];
-		tri->ys[2] = centerY - tri->ys[2] * zty / tri->zs[2];
+		float w0 = 1.0f / tri->zs[0];
+		float w1 = 1.0f / tri->zs[1];
+		float w2 = 1.0f / tri->zs[2];
 
-	// Hard clip
+		tri->xs[0] = tri->xs[0] * ztx * w0 + centerX;
+		tri->xs[1] = tri->xs[1] * ztx * w1 + centerX;
+		tri->xs[2] = tri->xs[2] * ztx * w2 + centerX;
+
 		if (tri->xs[0] <  viewLeftAxis.origin.x   && tri->xs[1] <  viewLeftAxis.origin.x   && tri->xs[2]  < viewLeftAxis.origin.x)   continue;
 		if (tri->xs[0] >= viewRightAxis.origin.x  && tri->xs[1] >= viewRightAxis.origin.x  && tri->xs[2] >= viewRightAxis.origin.x)  continue;
+
+		tri->ys[0] = centerY - tri->ys[0] * zty * w0;
+		tri->ys[1] = centerY - tri->ys[1] * zty * w1;
+		tri->ys[2] = centerY - tri->ys[2] * zty * w2;
+
 		if (tri->ys[0] <  viewTopAxis.origin.y    && tri->ys[1] <  viewTopAxis.origin.y    && tri->ys[2] <  viewTopAxis.origin.y)    continue;
 		if (tri->ys[0] >= viewBottomAxis.origin.y && tri->ys[1] >= viewBottomAxis.origin.y && tri->ys[2] >= viewBottomAxis.origin.y) continue;
+
+	#if LE_RENDERER_ZTEX == 1
+		tri->zs[0] = w0;
+		tri->zs[1] = w1;
+		tri->zs[2] = w2;
+
+		tri->us[0] *= w0;
+		tri->us[1] *= w1;
+		tri->us[2] *= w2;
+		tri->vs[0] *= w0;
+		tri->vs[1] *= w1;
+		tri->vs[2] *= w2;
+	#endif // LE_RENDERER_ZTEX
+
 		dstIndices[k++] = j;
 	}
 	return k;
@@ -412,10 +457,16 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 
 	// Compute intersections
 		float nx[4], ny[4];
+	#if LE_RENDERER_ZTEX == 1
+		float nz[4];
+	#endif // LE_RENDERER_ZTEX
 		float nu[4], nv[4];
 		if (pj1 >= 0.0f) {
 			nx[s]   = tri->xs[0];
 			ny[s]   = tri->ys[0];
+		#if LE_RENDERER_ZTEX == 1
+			nz[s]   = tri->zs[0];
+		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[0];
 			nv[s++] = tri->vs[0];
 		}
@@ -423,12 +474,18 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			float ratio = cabs(pj1 / (pj1 - pj2));
 			nx[s]   = tri->xs[0] + ratio * (tri->xs[1] - tri->xs[0]);
 			ny[s]   = tri->ys[0] + ratio * (tri->ys[1] - tri->ys[0]);
+		#if LE_RENDERER_ZTEX == 1
+			nz[s]   = tri->zs[0] + ratio * (tri->zs[1] - tri->zs[0]);
+		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[0] + ratio * (tri->us[1] - tri->us[0]);
 			nv[s++] = tri->vs[0] + ratio * (tri->vs[1] - tri->vs[0]);
 		}
 		if (pj2 >= 0.0f) {
 			nx[s]   = tri->xs[1];
 			ny[s]   = tri->ys[1];
+		#if LE_RENDERER_ZTEX == 1
+			nz[s]   = tri->zs[1];
+		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[1];
 			nv[s++] = tri->vs[1];
 		}
@@ -436,12 +493,18 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			float ratio = cabs(pj2 / (pj2 - pj3));
 			nx[s]   = tri->xs[1] + ratio * (tri->xs[2] - tri->xs[1]);
 			ny[s]   = tri->ys[1] + ratio * (tri->ys[2] - tri->ys[1]);
+		#if LE_RENDERER_ZTEX == 1
+			nz[s]   = tri->zs[1] + ratio * (tri->zs[2] - tri->zs[1]);
+		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[1] + ratio * (tri->us[2] - tri->us[1]);
 			nv[s++] = tri->vs[1] + ratio * (tri->vs[2] - tri->vs[1]);
 		}
 		if (pj3 >= 0.0f) {
 			nx[s]   = tri->xs[2];
 			ny[s]   = tri->ys[2];
+		#if LE_RENDERER_ZTEX == 1
+			nz[s]   = tri->zs[2];
+		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[2];
 			nv[s++] = tri->vs[2];
 		}
@@ -449,6 +512,9 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			float ratio = cabs(pj3 / (pj3 - pj1));
 			nx[s]   = tri->xs[2] + ratio * (tri->xs[0] - tri->xs[2]);
 			ny[s]   = tri->ys[2] + ratio * (tri->ys[0] - tri->ys[2]);
+		#if LE_RENDERER_ZTEX == 1
+			nz[s]   = tri->zs[2] + ratio * (tri->zs[0] - tri->zs[2]);
+		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[2] + ratio * (tri->us[0] - tri->us[2]);
 			nv[s++] = tri->vs[2] + ratio * (tri->vs[0] - tri->vs[2]);
 		}
@@ -461,6 +527,11 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			tri->ys[0] = ny[0];
 			tri->ys[1] = ny[1];
 			tri->ys[2] = ny[2];
+		#if LE_RENDERER_ZTEX == 1
+			tri->zs[0] = nz[0];
+			tri->zs[1] = nz[1];
+			tri->zs[2] = nz[2];
+		#endif // LE_RENDERER_ZTEX
 			tri->us[0] = nu[0];
 			tri->us[1] = nu[1];
 			tri->us[2] = nu[2];
@@ -479,6 +550,11 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			ntri->ys[0] = ny[0];
 			ntri->ys[1] = ny[2];
 			ntri->ys[2] = ny[3];
+		#if LE_RENDERER_ZTEX == 1
+			ntri->zs[0] = nz[0];
+			ntri->zs[1] = nz[2];
+			ntri->zs[2] = nz[3];
+		#endif // LE_RENDERER_ZTEX
 			ntri->us[0] = nu[0];
 			ntri->us[1] = nu[2];
 			ntri->us[2] = nu[3];
@@ -514,6 +590,7 @@ int LeRenderer::backculling(LeTriangle tris[], int srcIndices[], int dstIndices[
 	return k;
 }
 
+/*****************************************************************************/
 void LeRenderer::setViewOffset(float offset)
 {
 	vOffset = offset * offset;

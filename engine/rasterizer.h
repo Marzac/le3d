@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.1
+	\version 1.2
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -36,43 +36,15 @@
 #include "global.h"
 #include "config.h"
 
-#include "draw.h"
-#include "geometry.h"
-#include "trilist.h"
+#ifndef LE_RENDERER_INTRASTER
+	#error LE_RENDERER_INTRASTER undefined.
+	#error Use LE_RENDERER_INTRASTER (in config.h) to select between fixed point or floating point triangle rasterization.
+#else
+	#if LE_RENDERER_INTRASTER
+		#include "rasterizer_integer.h"
+	#else
+		#include "rasterizer_float.h"
+	#endif
+#endif
 
-/*****************************************************************************/
-class LeRasterizer
-{
-public:
-	LeRasterizer(int width, int height);
-	~LeRasterizer();
-
-	void setBackground(uint32_t color);
-	void rasterList(LeTriList * trilist);
-	void flush();
-
-	LeBitmap frame;
-
-private:
-	void topTriangle(int vt, int vm1, int vm2);
-	void bottomTriangle(int vm1, int vm2, int vb);
-	void fillFlatTex(int y, int x1, int x2, int u1, int u2, int v1, int v2);
-	void fillFlatTexAlpha(int y, int x1, int x2, int u1, int u2, int v1, int v2);
-
-	void cv4(const float * in, int32_t * out);
-	void cv4s(const float * in, int32_t * out, float s);
-
-	uint32_t color;
-	uint32_t * texPixels;
-	uint32_t texSizeU;
-	uint32_t texSizeV;
-	uint32_t texMaskU;
-	uint32_t texMaskV;
-
-	int32_t xs[4], ys[4];
-	int32_t us[4], vs[4];
-
-	uint32_t background;
-};
-
-#endif // LE_RASTERIZER_H
+#endif	// LE_RASTERIZER_H

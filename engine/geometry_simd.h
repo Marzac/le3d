@@ -39,6 +39,11 @@
 #include <math.h>
 
 /*****************************************************************************/
+#ifndef LE_GEOMETRY_H
+	#error The file geometry_simd.h should not be included directly. Include geometry.h instead.
+#endif
+
+/*****************************************************************************/
 typedef float V4SF __attribute__ ((vector_size (16)));
 struct __attribute__ ((aligned (16))) LeVertex
 {
@@ -256,7 +261,6 @@ struct __attribute__ ((aligned (16))) LePlan
 		xAxis(LeAxis(v1, v2)), yAxis(LeAxis(v1, v3))
 	{
 		zAxis = LeAxis(v1, v1 + xAxis.axis.cross(yAxis.axis));
-		zAxis.origin = v1;
 	}
 };
 

@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.1
+	\version 1.2
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -78,6 +78,7 @@ public:
 private:
 	int build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[]);
 
+	void updateFrustrum();
 	void transform(LeMatrix view, LeVertex srcVertexes[], LeVertex dstVertexes[], int nb);
 	int project(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb);
 	int clip3D(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb, LePlan &plan);
@@ -101,6 +102,12 @@ private:
 
 	LePlan viewFrontPlan;
 	LePlan viewBackPlan;
+
+	LePlan viewLeftPlan;
+	LePlan viewRightPlan;
+	LePlan viewTopPlan;
+	LePlan viewBotPlan;
+
 	LeAxis viewLeftAxis;
 	LeAxis viewRightAxis;
 	LeAxis viewTopAxis;

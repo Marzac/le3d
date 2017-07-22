@@ -40,6 +40,11 @@
 #include <math.h>
 
 /*****************************************************************************/
+#ifndef LE_GEOMETRY_H
+	#error The file geometry_scalar.h should not be included directly. Include geometry.h instead.
+#endif
+
+/*****************************************************************************/
 struct LeVertex
 {
 	float x, y, z, w;

@@ -35,12 +35,13 @@
 
 	#include "global.h"
 	#include "config.h"
-	
+
 	#include "window.h"
 	#include "draw.h"
 	#include "renderer.h"
 	#include "rasterizer.h"
 	#include "gamepad.h"
+	#include "play.h"
 
 	#include "geometry.h"
 	#include "trilist.h"
@@ -49,9 +50,11 @@
 	#include "light.h"
 	#include "mesh.h"
 	#include "bitmap.h"
+	#include "sample.h"
 
 	#include "bmpfile.h"
 	#include "objfile.h"
+	#include "oggfile.h"
 	#include "bmpcache.h"
 	#include "meshcache.h"
 

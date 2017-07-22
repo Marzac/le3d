@@ -52,14 +52,20 @@
 
 /** Renderer configuration */
 	#define LE_RENDERER_FRONT			-0.5f					/** Front clipping plane */
-	#define LE_RENDERER_BACK			-100000.0f				/** Back clipping plane */
+	#define LE_RENDERER_BACK			-32768.0f				/** Back clipping plane */
 	#define LE_RENDERER_FOV				65.0f					/** Default field of view */
+	#define LE_RENDERER_3DFRUSTRUM		1						/** Use a 3D frustrum to clip triangles */
+	#define LE_RENDERER_2DFRAME			0						/** Use a 2D frame to clip triangles */
+
+	#define LE_RENDERER_ZTEX			1						/** Enable perspective correction on texture mapping */
+	#define LE_RENDERER_INTRASTER		1						/** Enable fixed point or floating point rasterizing */
+
 	#define LE_TRILIST_MAX				10000					/** Maximum number of triangles in display list */
 	#define LE_VERLIST_MAX				(3 * LE_TRILIST_MAX)	/** Maximum number of vertexes in transformation buffer */
 
 /** Performance optimizations */
 	#define LE_USE_SIMD					1						/** Use SIMD (SSE / Neon) vectors */
-	#define LE_USE_MMX					1						/** Use MMX acceleration for integer math */
+	#define LE_USE_MMX					0						/** Use MMX acceleration for integer math */
 	#define LE_FORCE_16B_ALIGN			1						/** Force 16bit alignment (needed by SSE) */
-	
-#endif 
+
+#endif
