@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.1
+	\version 1.2
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -41,7 +41,6 @@
 	#include "renderer.h"
 	#include "rasterizer.h"
 	#include "gamepad.h"
-	#include "play.h"
 
 	#include "geometry.h"
 	#include "trilist.h"
@@ -50,11 +49,9 @@
 	#include "light.h"
 	#include "mesh.h"
 	#include "bitmap.h"
-	#include "sample.h"
 
 	#include "bmpfile.h"
 	#include "objfile.h"
-	#include "oggfile.h"
 	#include "bmpcache.h"
 	#include "meshcache.h"
 
