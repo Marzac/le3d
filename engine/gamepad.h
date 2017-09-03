@@ -38,11 +38,25 @@
 
 /*****************************************************************************/
 typedef enum{
-	LE_PAD_LEFT_STICK = 0,
-	LE_PAD_RIGHT_STICK,
+	LE_PAD_STICK_LEFT = 0,
+	LE_PAD_STICK_RIGHT,
 	LE_PAD_TRIGGERS,
 	LE_PAD_DPAD,
 }LE_PAD_STICKS;
+
+typedef enum{
+	LE_PAD_BUTTON_A 		= 0x0001,
+	LE_PAD_BUTTON_B 		= 0x0002,
+	LE_PAD_BUTTON_X 		= 0x0004,
+	LE_PAD_BUTTON_Y			= 0x0008,
+	LE_PAD_LEFT_BUMPER		= 0x0010,
+	LE_PAD_RIGHT_BUMPER		= 0x0020,
+	LE_PAD_BUTTON_BACK		= 0x0040,
+	LE_PAD_BUTTON_START		= 0x0080,
+	LE_PAD_LEFT_CLICK		= 0x0100,
+	LE_PAD_RIGHT_CLICK		= 0x0200,
+
+}LE_PAD_BUTTONS;
 
 /*****************************************************************************/
 class LeGamePad

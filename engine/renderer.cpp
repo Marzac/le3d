@@ -265,7 +265,7 @@ int LeRenderer::build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int
 		tri->vd = d1 * d1 + d2 * d2 + d3 * d3 - vOffset;
 
 	// Set the material
-		tri->color = colors[i];
+		tri->color = 0xFFFFFF;//colors[i];
 		tri->tex = mesh->texSlotList[i];
 
 		indices[k] = k;
@@ -593,5 +593,5 @@ int LeRenderer::backculling(LeTriangle tris[], int srcIndices[], int dstIndices[
 /*****************************************************************************/
 void LeRenderer::setViewOffset(float offset)
 {
-	vOffset = offset * offset;
+	vOffset = offset * offset * csgn(offset);
 }

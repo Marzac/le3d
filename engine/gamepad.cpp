@@ -50,18 +50,20 @@ LeGamePad::LeGamePad(int pad) :
 void LeGamePad::getStickPosition(LE_PAD_STICKS stick, float &x, float &y)
 {
 	JOYINFOEX info;
+
 // Get gamepad state
 	memset(&info, 0, sizeof(JOYINFOEX));
 	info.dwSize = sizeof(JOYINFOEX);
 	info.dwFlags = JOY_RETURNALL;
 	joyGetPosEx(pad, &info);
+
 // Retrieve coordinates
 	switch(stick) {
-	case LE_PAD_LEFT_STICK:
+	case LE_PAD_STICK_LEFT:
 		x = applyThreshold(((int32_t) info.dwXpos) - 32768);
 		y = applyThreshold(((int32_t) info.dwYpos) - 32768);
 		return;
-	case LE_PAD_RIGHT_STICK:
+	case LE_PAD_STICK_RIGHT:
 		x = applyThreshold(((int32_t) info.dwUpos) - 32768);
 		y = applyThreshold(((int32_t) info.dwRpos) - 32768);
 		return;
@@ -72,7 +74,7 @@ void LeGamePad::getStickPosition(LE_PAD_STICKS stick, float &x, float &y)
 		y = t < 0.0f ? -t : 0.0f;
 		return;
 		}
-	case 3:
+	case LE_PAD_DPAD:
 		{
 		uint16_t angle = info.dwPOV;
 		if (angle == 0xffff) {

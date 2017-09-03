@@ -58,7 +58,7 @@
 	#define LE_RENDERER_2DFRAME			0						/** Use a 2D frame to clip triangles */
 
 	#define LE_RENDERER_ZTEX			1						/** Enable perspective correction on texture mapping */
-	#define LE_RENDERER_INTRASTER		1						/** Enable fixed point or floating point rasterizing */
+	#define LE_RENDERER_INTRASTER		0						/** Enable fixed point or floating point rasterizing */
 
 	#define LE_TRILIST_MAX				10000					/** Maximum number of triangles in display list */
 	#define LE_VERLIST_MAX				(3 * LE_TRILIST_MAX)	/** Maximum number of vertexes in transformation buffer */

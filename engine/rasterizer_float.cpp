@@ -142,14 +142,11 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 			}
 		}
 
-	// Ceil the bottom vertex
-		ys[vb] = ceilf(ys[vb]);
-
 	// Compute the mean point
 		float dy = ys[vb] - ys[vt];
-		if (dy <= 0.0f) continue;
-
+		if (dy == 0.0f) continue;
 		float n = (ys[vm1] - ys[vt]) / dy;
+
 		xs[3] = (xs[vb] - xs[vt]) * n + xs[vt];
 		ys[3] = ys[vm1];
 	#if LE_RENDERER_ZTEX == 1
@@ -176,9 +173,7 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 /*****************************************************************************/
 void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 {
-	int y1 = ys[vt];
-	int y2 = ys[vm1];
-	float d = y2 - y1;
+	float d = ys[vm1] - ys[vt];
 	if (d == 0.0f) return;
 
 	float ax1 = (xs[vm1] - xs[vt]) / d;
@@ -200,7 +195,8 @@ void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 	float v1 = vs[vt];
 	float v2 = v1;
 
-	x2 = ceilf(x2);
+	int y1 = (int) ys[vt];
+	int y2 = (int) ys[vm1];
 	for (int y = y1; y < y2; y++) {
 		fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
 		x1 += ax1;
@@ -216,9 +212,7 @@ void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 
 void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 {
-	int y1 = ys[vm1];
-	int y2 = ys[vb];
-	float d = y2 - y1;
+	float d = ys[vb] - ys[vm1];
 	if (d == 0.0f) return;
 
 	float ax1 = (xs[vb] - xs[vm1]) / d;
@@ -240,7 +234,8 @@ void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 	float u2 = us[vm2];
 	float v2 = vs[vm2];
 
-	x2 = ceilf(x2);
+	int y1 = (int) ys[vm1];
+	int y2 = (int) ys[vb];
 	for (int y = y1; y < y2; y++) {
 		fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
 		x1 += ax1;
@@ -256,9 +251,7 @@ void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 
 void LeRasterizer::topTriangle(int vt, int vm1, int vm2)
 {
-	int y1 = ys[vt];
-	int y2 = ys[vm1];
-	float d = y2 - y1;
+	float d = ys[vm1] - ys[vt];
 	if (d == 0.0f) return;
 
 	float ax1 = (xs[vm1] - xs[vt]) / d;
@@ -276,7 +269,8 @@ void LeRasterizer::topTriangle(int vt, int vm1, int vm2)
 	float v1 = vs[vt];
 	float v2 = v1;
 
-	x2 = ceilf(x2);
+	int y1 = (int) ys[vt];
+	int y2 = (int) ys[vm1];
 	for (int y = y1; y < y2; y++) {
 		fillFlatTex(y, x1, x2, u1, u2, v1, v2);
 		x1 += ax1;
@@ -290,9 +284,7 @@ void LeRasterizer::topTriangle(int vt, int vm1, int vm2)
 
 void LeRasterizer::bottomTriangle(int vm1, int vm2, int vb)
 {
-	int y1 = ys[vm1];
-	int y2 = ys[vb];
-	float d = y2 - y1;
+	float d = ys[vb] - ys[vm1];
 	if (d == 0.0f) return;
 
 	float ax1 = (xs[vb] - xs[vm1]) / d;
@@ -310,7 +302,8 @@ void LeRasterizer::bottomTriangle(int vm1, int vm2, int vb)
 	float u2 = us[vm2];
 	float v2 = vs[vm2];
 
-	x2 = ceilf(x2);
+	int y1 = (int) ys[vm1];
+	int y2 = (int) ys[vb];
 	for (int y = y1; y < y2; y++) {
 		fillFlatTex(y, x1, x2, u1, u2, v1, v2);
 		x1 += ax1;
@@ -338,7 +331,7 @@ inline void LeRasterizer::fillFlatTexZC(float y, float x1, float x2, float w1, f
 	int xe = (int) x2;
 	uint8_t * p = (uint8_t *) (xb + ((int) y) * frame.tx + (uint32_t *) frame.data);
 
-	for (int x = xb; x < xe; x++) {
+	for (int x = xb; x <= xe; x++) {
 		float z = 1.0f / w1;
 		uint32_t tu = ((int32_t) (u1 * z)) & texMaskU;
 		uint32_t tv = ((int32_t) (v1 * z)) & texMaskV;
@@ -369,7 +362,7 @@ inline void LeRasterizer::fillFlatTex(float y, float x1, float x2, float u1, flo
 	int xe = (int) x2;
 	uint8_t * p = (uint8_t *) (xb + ((int) y) * frame.tx + (uint32_t *) frame.data);
 
-	for (int x = x1; x < x2; x++) {
+	for (int x = xb; x <= xe; x++) {
 		uint32_t tu = ((int32_t) u1) & texMaskU;
 		uint32_t tv = ((int32_t) v1) & texMaskV;
 		uint8_t * t = (uint8_t *) &texPixels[tu + (tv << texSizeU)];
@@ -400,7 +393,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(float y, float x1, float x2, float 
 	int xe = (int) x2;
 	uint8_t * p = (uint8_t *) (xb + ((int) y) * frame.tx + (uint32_t *) frame.data);
 
-	for (int x = x1; x < x2; x++) {
+	for (int x = xb; x <= xe; x++) {
 		float z = 1.0f / w1;
 		uint32_t tu = ((int32_t) (u1 * z)) & texMaskU;
 		uint32_t tv = ((int32_t) (v1 * z)) & texMaskV;
@@ -432,7 +425,7 @@ inline void LeRasterizer::fillFlatTexAlpha(float y, float x1, float x2, float u1
 	int xe = (int) x2;
 	uint8_t * p = (uint8_t *) (xb + ((int) y) * frame.tx + (uint32_t *) frame.data);
 
-	for (int x = x1; x < x2; x++) {
+	for (int x = xb; x <= xe; x++) {
 		uint32_t tu = ((int32_t) u1) & texMaskU;
 		uint32_t tv = ((int32_t) v1) & texMaskV;
 		uint8_t * t = (uint8_t *) &texPixels[tu + (tv << texSizeU)];

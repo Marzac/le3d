@@ -117,7 +117,6 @@ void LeDraw::setPixels(void * data)
 	SetDIBits((HDC) backContext, (HBITMAP) backBitmap, 0, -info.bV4Height, data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
 }
 
-
 /*****************************************************************************/
 void LeDraw::flip(float zoom)
 {
