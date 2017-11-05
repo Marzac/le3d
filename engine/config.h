@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -43,7 +43,8 @@
 	#define LE_MESHCACHE_SLOTS			1024					/** Maximum number of meshes in cache */
 
 /** Bitmap management */
-	#define LE_BMP_CHECKCOORDS 			1						/** Check coordinated on bitmap operations */
+	#define LE_BMP_CHECKCOORDS 			1						/** Check coordinates on bitmap operations */
+	#define LE_BMP_MIPMAPS	 			32						/** Maximum mipmap level */
 
 /** Wavefront object parser */
 	#define LE_OBJ_MAX_NAME				256						/** Wavefront object maximum name string length */
@@ -58,14 +59,15 @@
 	#define LE_RENDERER_2DFRAME			0						/** Use a 2D frame to clip triangles */
 
 	#define LE_RENDERER_ZTEX			1						/** Enable perspective correction on texture mapping */
-	#define LE_RENDERER_INTRASTER		0						/** Enable fixed point or floating point rasterizing */
+	#define LE_RENDERER_INTRASTER		1						/** Enable fixed point or floating point rasterizing */
+	#define LE_RENDERER_MIPMAPS			1						/** Enable mipmapping on textures */
 
-	#define LE_TRILIST_MAX				10000					/** Maximum number of triangles in display list */
+	#define LE_TRILIST_MAX				50000					/** Maximum number of triangles in display list */
 	#define LE_VERLIST_MAX				(3 * LE_TRILIST_MAX)	/** Maximum number of vertexes in transformation buffer */
 
 /** Performance optimizations */
 	#define LE_USE_SIMD					1						/** Use SIMD (SSE / Neon) vectors */
-	#define LE_USE_MMX					0						/** Use MMX acceleration for integer math */
+	#define LE_USE_MMX					1						/** Use MMX acceleration for integer math */
 	#define LE_FORCE_16B_ALIGN			1						/** Force 16bit alignment (needed by SSE) */
 
 #endif

@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -46,10 +46,10 @@
 
 /*****************************************************************************/
 LeRenderer::LeRenderer(int width, int height) :
+	usedVerlist(&intVerlist),
+	usedTrilist(&intTrilist),
 	extra(0), extraMax(0),
 	colors(NULL),
-	usedTrilist(&intTrilist),
-	usedVerlist(&intVerlist),
 	enableBack(true), vOffset(0.0f)
 {
 // Configure viewport
@@ -163,8 +163,8 @@ void LeRenderer::setViewRotation(float ax, float ay, float az)
 void LeRenderer::updateViewMatrix()
 {
 	viewMatrix.identity();
-	viewMatrix.translate(-viewPosition.x, -viewPosition.y, -viewPosition.z);
-	viewMatrix.rotate(-viewRotation.x, -viewRotation.y, -viewRotation.z);
+	viewMatrix.translate(-viewPosition);
+	viewMatrix.rotate(-viewRotation);
 }
 
 void LeRenderer::setViewMatrix(LeMatrix view)
@@ -265,7 +265,7 @@ int LeRenderer::build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int
 		tri->vd = d1 * d1 + d2 * d2 + d3 * d3 - vOffset;
 
 	// Set the material
-		tri->color = 0xFFFFFF;//colors[i];
+		tri->color = colors[i];
 		tri->tex = mesh->texSlotList[i];
 
 		indices[k] = k;
