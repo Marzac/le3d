@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -48,13 +48,15 @@ public:
 		 uint32_t colors[], int noTriangles);
 	virtual ~LeMesh();
 
-	void shadowCopy(LeMesh * copy);
-	void copy(LeMesh * copy);
+	void shadowCopy(LeMesh * copy) const;
+	void copy(LeMesh * copy) const;
+
+	void allocate(int noVertexes, int noTexCoords, int noTriangles);
 	void deallocate();
 
-	void setPosition(float x, float y, float z);
-	void setScale(float sx, float sy, float sz);
-	void setRotation(float ax, float ay, float az);
+	void setPosition(LeVertex pos);
+	void setScale(LeVertex scale);
+	void setRotation(LeVertex angle);
 	void transform(const LeMatrix &matrix);
 
 	void setMatrix(const LeMatrix &matrix);
@@ -66,7 +68,7 @@ public:
 
 	LeMatrix view;
 	LeVertex pos;
-	LeVertex size;
+	LeVertex scale;
 	LeVertex angle;
 
 // Static mesh data
