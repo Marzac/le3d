@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -51,12 +51,12 @@ void * operator new[](size_t size)
 
 void operator delete(void * ptr)
 {
-	_aligned_free(ptr);
+//	_aligned_free(ptr);
 }
 
 void operator delete[](void * ptr)
 {
-	_aligned_free(ptr);
+//	_aligned_free(ptr);
 }
 #endif // LE_FORCE_16B_ALIGN
 
@@ -109,4 +109,17 @@ void LeGlobal::getFileName(char * name, const int maxName, const char * path)
 		}
 	}
 	strncpy(name, path, maxName-1);
+}
+
+
+/*****************************************************************************/
+int LeGlobal::log2i32(int n)
+{
+	int r = 0;
+	if (n >= 0x10000) {n >>= 16; r |= 0x10;}
+	if (n >= 0x100) {n >>= 8; r |= 0x8;}
+	if (n >= 0x10) {n >>= 4; r |= 0x4;}
+	if (n >= 0x4) {n >>= 2;	r |= 0x2;}
+	if (n >= 0x2) {r |= 0x1;}
+	return r;
 }
