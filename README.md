@@ -23,17 +23,18 @@ The renderer provides:
 - Z-sorting  
 
 The rasterizer:  
-- Draw flat lit textured triangles  
-- Draw flat lit textured (with alpha channel) triangles  
-- Has basic texture sampling (no filtering)  
-- Has texture perspective correction  
+- Draws flat lit textured triangles
+- Handles textures with an alpha channel and mipmaps
+- Performs perspective correction
+- Does texture sampling without filtering
 
 The backend :  
-- Handle native graphic contexts  
-- Handle windows  
-- Handle joysticks  
+- Handles graphic contexts  
+- Handles windows  
+- Handles mouse
+- Handles joysticks  
 
-Platform supported (by backend):  
+Platforms supported (by backend):  
 - Windows (XP / 7 / 8 and 10)  
 
 # Limitations  
@@ -42,4 +43,4 @@ Platform supported (by backend):
 - No shaders  
 
 # Comparison  
-It renders graphics very much like a Sony Playstation one.  
+It renders graphics a bit better than a Sony Playstation one.  
