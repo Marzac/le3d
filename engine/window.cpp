@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -45,6 +45,7 @@ const char * className = "LightEngine";
 LeWindow::LeWindow(const char * name, int width, int height) :
 	width(width),
 	height(height),
+	fullScreen(false),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {
@@ -61,13 +62,14 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	wincl.hCursor = LoadCursor (NULL, IDC_ARROW);
 	wincl.lpszMenuName = NULL;
 	wincl.cbClsExtra = 0;
-	wincl.cbWndExtra = sizeof(LeWindow *);
+	wincl.cbWndExtra = 32;
 	wincl.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
 	if (!RegisterClassEx (&wincl)) return;
 
 // Compute the client size
 	RECT size;
-	memset(&size, 0, sizeof(RECT));
+	size.top    = 0;
+	size.left   = 0;
 	size.right  = width;
 	size.bottom = height;
 	AdjustWindowRect(&size, WS_OVERLAPPEDWINDOW, 0);
@@ -75,9 +77,9 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 // Create and display window
 	if ((hwnd = (LeHandle) CreateWindowEx(
 		   0,
-		   className,
+		   wincl.lpszClassName,
 		   name,
-		   WS_OVERLAPPEDWINDOW,
+		   WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 		   CW_USEDEFAULT,
 		   CW_USEDEFAULT,
 		   size.right - size.left,
@@ -87,8 +89,8 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 		   NULL,
 		   NULL
 	)) == 0) return;
+
 	SetWindowLongPtr((HWND) hwnd, 0, (long long) this);
-	ShowWindow((HWND) hwnd, 1);
 }
 
 LeWindow::~LeWindow()
@@ -160,31 +162,35 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 }
 
 /*****************************************************************************/
-/*
-void wndFullScreen(WNDSTR * window)
+DEVMODE devMode;
+void LeWindow::setFullScreen()
 {
 	DEVMODE newMode;
 	if (fullScreen) return;
+
 // Retrieve display characteristics
 	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devMode);
 	memcpy(&newMode, &devMode, sizeof(DEVMODE));
-	newMode.dmPelsWidth = window->size.right;
-	newMode.dmPelsHeight = window->size.bottom;
+	newMode.dmPelsWidth = width;
+	newMode.dmPelsHeight = height;
 	newMode.dmFields = DM_PELSHEIGHT | DM_PELSWIDTH;
+
 // Change windows position
-	SetWindowPos(window->hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
-	ShowWindow(window->hwnd, SW_MAXIMIZE);
+	SetWindowPos((HWND) hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
+	ShowWindow((HWND) hwnd, SW_MAXIMIZE);
+
 // Switch to full screen
 	ChangeDisplaySettings (&newMode, CDS_FULLSCREEN);
-	fullScreen = 1;
+	fullScreen = true;
 }
 
-void wndNormalScreen(WNDSTR * window)
+void LeWindow::setWindowed()
 {
 	if (!fullScreen) return;
-	SetWindowPos(window->hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-	ShowWindow(window->hwnd, SW_NORMAL);
+
+	SetWindowPos((HWND) hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+	ShowWindow((HWND) hwnd, SW_NORMAL);
 	ChangeDisplaySettings (&devMode, CDS_RESET);
-	fullScreen = 0;
+	fullScreen = false;
 }
-*/
+

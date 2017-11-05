@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -60,6 +60,9 @@ public:
 	LeWindow(const char * name, int width, int height);
 	~LeWindow();
 
+	void setFullScreen();
+	void setWindowed();
+
 	LeHandle getContext();
 
 	typedef void (* KeyCallback) (int key, int state);
@@ -77,6 +80,7 @@ private:
 	LeHandle hwnd;
 	int width;
 	int height;
+	bool fullScreen;
 
 	KeyCallback keyCallback;
 	MouseCallback mouseCallback;
