@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -53,18 +53,14 @@ LeLight::LeLight(LE_LIGHT_TYPES type, uint32_t color) :
 }
 
 /*****************************************************************************/
-void LeLight::setPosition(float x, float y, float z)
+void LeLight::setPosition(LeVertex org)
 {
-	pos.origin.x = x;
-	pos.origin.y = y;
-	pos.origin.z = z;
+	pos.origin = org;
 }
 
-void LeLight::setDirection(float dx, float dy, float dz)
+void LeLight::setDirection(LeVertex axis)
 {
-	pos.axis.x = dx;
-	pos.axis.y = dy;
-	pos.axis.z = dz;
+	pos.axis = axis;
 	pos.axis.normalize();
 }
 
@@ -124,6 +120,7 @@ inline void LeLight::shineDirectional(LeMesh * mesh)
 // Compute light relative direction
 	LeMatrix iv = mesh->view.inverse3x3();
 	LeVertex rp = iv * pos.axis;
+	rp.normalize();
 
 // Calculate the light
 	for (int j = 0; j < mesh->noTriangles; j++) {

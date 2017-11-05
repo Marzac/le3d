@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -53,8 +53,8 @@ public:
 	LeLight();
 	LeLight(LE_LIGHT_TYPES type, uint32_t color);
 
-	void setPosition(float x, float y, float z);
-	void setDirection(float dx, float dy, float dz);
+	void setPosition(LeVertex org);
+	void setDirection(LeVertex axis);
 	void setColor(uint32_t color);
 
 	static void blackMesh(LeMesh * mesh);
