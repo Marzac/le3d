@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -226,10 +226,11 @@ struct LeVertex
 		return *this;
 	}
 
-	float norm()
+	float norm() const
 	{
 		return sqrtf(dot(*this));
 	}
+
 };
 
 /*****************************************************************************/
@@ -343,27 +344,27 @@ struct LeMatrix
 		memset(mat, 0, sizeof(float) * 16);
 	}
 
-	void translate(float dx, float dy, float dz)
+	void translate(LeVertex d)
 	{
-		mat[0][3] += dx;
-		mat[1][3] += dy;
-		mat[2][3] += dz;
+		mat[0][3] += d.x;
+		mat[1][3] += d.y;
+		mat[2][3] += d.z;
 	}
 
-	void scale(float sx, float sy, float sz)
+	void scale(LeVertex s)
 	{
 		LeMatrix m;
-		m.mat[0][0] *= sx;
-		m.mat[1][1] *= sy;
-		m.mat[2][2] *= sz;
+		m.mat[0][0] *= s.x;
+		m.mat[1][1] *= s.y;
+		m.mat[2][2] *= s.z;
 		*this = m * *this;
 	}
 
-	void rotate(float ax, float ay, float az)
+	void rotate(LeVertex a)
 	{
-		rotateY(ay);
-		rotateZ(az);
-		rotateX(ax);
+		rotateY(a.y);
+		rotateZ(a.z);
+		rotateX(a.x);
 	}
 
 	void rotateBackUp(LeVertex back, LeVertex up, float a)

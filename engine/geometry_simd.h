@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -215,7 +215,7 @@ struct __attribute__ ((aligned (16))) LeVertex
 		return *this;
 	}
 
-	float norm()
+	float norm() const
 	{
 		return sqrtf(dot(*this));
 	}
@@ -291,27 +291,27 @@ struct __attribute__ ((aligned (16))) LeMatrix
 		lines[3] = zv;
 	}
 
-	void translate(float dx, float dy, float dz)
+	void translate(LeVertex d)
 	{
-		lines[0].w += dx;
-		lines[1].w += dy;
-		lines[2].w += dz;
+		lines[0].w += d.x;
+		lines[1].w += d.y;
+		lines[2].w += d.z;
 	}
 
-	void scale(float sx, float sy, float sz)
+	void scale(LeVertex s)
 	{
 		LeMatrix m;
-		m.lines[0].x *= sx;
-		m.lines[1].y *= sy;
-		m.lines[2].z *= sz;
+		m.lines[0].x *= s.x;
+		m.lines[1].y *= s.y;
+		m.lines[2].z *= s.z;
 		*this = m * *this;
 	}
 
-	void rotate(float ax, float ay, float az)
+	void rotate(LeVertex a)
 	{
-		rotateY(ay);
-		rotateZ(az);
-		rotateX(ax);
+		rotateY(a.y);
+		rotateZ(a.z);
+		rotateX(a.x);
 	}
 
 	void rotateBackUp(LeVertex back, LeVertex up, float a)
