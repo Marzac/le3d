@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -39,81 +39,22 @@
 #include "bitmap.h"
 
 /*****************************************************************************/
-typedef enum{
-	LE_LAYER_BACK = 0,		/** Back ground layer */
-	LE_LAYER_OVERLAY_1,		/** First overlay */
-	LE_LAYER_OVERLAY_2,		/** Second overlay */
-	LE_LAYER_DRAFT,			/** Draft layer */
-	LE_LAYER_CUSTOM,		/** User defined layer */
-	LE_LAYER_NB,
-} LE_DRAW_LAYER;
-
-/*****************************************************************************/
-struct LeFont
-{
-	LeHandle font;
-
-	LeFont()
-	{
-		font = 0;
-	}
-};
-
-/*****************************************************************************/
 class LeDraw
 {
 public:
 	LeDraw(LeHandle context, int width, int heigth);
 	~LeDraw();
 
-	void flip(float zoom = 1.0f);
-
-	void setBackground(uint32_t color);
 	void setPixels(void * data);
-
-	void line(float x1, float y1, float x2, float y2, uint32_t color, LE_DRAW_LAYER layer = LE_LAYER_BACK);
-	void lines(float coords[], int nb, uint32_t color, LE_DRAW_LAYER layer = LE_LAYER_BACK);
-	void rect(float x1, float y1, float x2, float y2, uint32_t color, LE_DRAW_LAYER layer = LE_LAYER_BACK);
-	void fill(float x1, float y1, float x2, float y2, uint32_t color, LE_DRAW_LAYER layer = LE_LAYER_BACK);
-	void clear(uint32_t color, LE_DRAW_LAYER layer);
-
-	void prepareBitmap(LeBitmap * bitmap, bool alpha);
-	void unprepareBitmap(LeBitmap * bitmap);
-
-	void prepareFont(LeFont * font, const char * family, int height, int weight);
-	void unprepareFont(LeFont * font);
-
-	void layerBlit(LE_DRAW_LAYER layerDst, LE_DRAW_LAYER layerSrc, uint8_t alpha);
-	void bitmapBlit(LE_DRAW_LAYER layerDst, const LeBitmap * bitmap, float x, float y, float sx, float sy, float sw, float sh, float alpha);
-	void bitmapAlphaBlit(LE_DRAW_LAYER layerDst, const LeBitmap * bitmap, float x, float y, float sx, float sy, float sw, float sh, float alpha);
-
-	void text(float x, float y, const char * text, const LeFont * font, uint32_t color, LE_DRAW_LAYER layer = LE_LAYER_BACK);
-	void textBitmap(float x, float y, const char * text, uint32_t color);
 
 	int getWidth() {return width;}
 	int getHeight() {return height;}
 
 private:
-	void prepareContext(LeHandle &context, LeHandle &bitmap, int width, int height);
-	void unPrepareContext(LeHandle &context, LeHandle &bitmap);
-	void setCustomLayer(LeHandle context);
-	
-private:
 	int width;
 	int height;
-	uint32_t backColor;
 
 	LeHandle frontContext;
-	LeHandle backContext;
-	LeHandle backBitmap;
-
-	LeHandle overlayContext[2];
-	LeHandle overlayBitmap[2];
-
-	LeHandle draftContext;
-	LeHandle draftBitmap;
-
-	LeHandle contexts[LE_LAYER_NB];
 };
 
 #endif	//LE_DRAW_H
