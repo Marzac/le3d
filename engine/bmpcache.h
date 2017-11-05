@@ -43,6 +43,7 @@ typedef enum{
 	LE_BMPCACHE_NORMAL = 0,				/** Regular bitmap */
 	LE_BMPCACHE_ALPHACHANNEL = 1,		/** Bitmap with alpha channel */
 	LE_BMPCACHE_ANIMATION = 2,			/** Bitmap with animation (use the cursor & extra bitmaps) */
+	LE_BMPCACHE_MIPMAPPED = 4,			/** Bitmap with mipmaps attached */
 }LE_BMPCACHE_FLAGS;
 
 /*****************************************************************************/

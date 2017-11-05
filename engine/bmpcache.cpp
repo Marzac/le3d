@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -86,10 +86,16 @@ LeBitmap * LeBmpCache::loadBMP(const char * path)
 		return NULL;
 	}
 
+#if LE_RENDERER_MIPMAPS == 1
+	bitmap->makeMipmaps();
+	slots[slot].flags |= LE_BMPCACHE_MIPMAPPED;
+#endif
+
 	if (bitmap->flags & LE_BMP_ALPHACHANNEL) {
-		bitmap->alphaPreMult();
+		bitmap->preMultiplyAlpha();
 		slots[slot].flags |= LE_BMPCACHE_ALPHACHANNEL;
 	}
+
 	return bitmap;
 }
 
