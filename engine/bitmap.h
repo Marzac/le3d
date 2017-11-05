@@ -59,7 +59,9 @@ public:
 
 	void allocate(int tx, int ty);
 	void deallocate();
-	void alphaPreMult();
+
+	void preMultiplyAlpha();
+	void makeMipmaps();
 
 	LeHandle context;
 	LeHandle bitmap;
@@ -69,7 +71,10 @@ public:
 	int flags;
 
 	void * data;
-	bool allocated;
+	bool dataAllocated;
+
+	LeBitmap * mipmaps[LE_BMP_MIPMAPS];
+	int mmLevels;
 };
 
 /*****************************************************************************/

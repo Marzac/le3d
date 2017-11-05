@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -44,13 +44,16 @@ LeBitmap::LeBitmap() :
 	tx(0), ty(0),
 	txP2(0), tyP2(0),
 	flags(LE_BMP_DEFAULT),
-	data(NULL), allocated(false)
+	data(NULL), dataAllocated(false),
+	mmLevels(0)
 {
+	for (int l = 0; l < LE_BMP_MIPMAPS; l++)
+		mipmaps[l] = NULL;
 }
 
 LeBitmap::~LeBitmap()
 {
-	if (allocated) deallocate();
+	deallocate();
 }
 
 
@@ -228,27 +231,34 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 /*****************************************************************************/
 void LeBitmap::allocate(int tx, int ty)
 {
+	data = new uint32_t[tx*ty];
+	dataAllocated = true;
+
 	this->tx = tx;
 	this->ty = ty;
-	txP2 = tyP2 = 0;
+	txP2 = LeGlobal::log2i32(tx);
+	tyP2 = LeGlobal::log2i32(ty);
 	flags = LE_BMP_DEFAULT;
-	data = new uint32_t[tx*ty];
-	allocated = true;
 }
 
 void LeBitmap::deallocate()
 {
-	if (data) delete[] (uint32_t *)data;
+	if (dataAllocated && data) delete[] (uint32_t *) data;
+	dataAllocated = false;
+
+	for (int l = 1; l < mmLevels; l++)
+		delete mipmaps[l];
+
 	tx = ty = 0;
 	txP2 = tyP2 = 0;
 	flags = 0;
-	allocated = false;
 }
 
 /*****************************************************************************/
-void LeBitmap::alphaPreMult()
+void LeBitmap::preMultiplyAlpha()
 {
 	size_t noPixels = tx * ty;
+
 	uint8_t * c = (uint8_t *) data;
 	for (size_t i = 0; i < noPixels; i++) {
 		c[0] = (c[0] * c[3]) >> 8;
@@ -256,5 +266,54 @@ void LeBitmap::alphaPreMult()
 		c[2] = (c[2] * c[3]) >> 8;
 		c += 4;
 	}
+
 	flags |= LE_BMP_PREMULTIPLIED;
+	flags |= LE_BMP_ALPHACHANNEL;
+
+	for (int l = 1; l < mmLevels; l++)
+		mipmaps[l]->preMultiplyAlpha();
+}
+
+
+/*****************************************************************************/
+void LeBitmap::makeMipmaps()
+{
+	if ((tx & (tx - 1)) != 0 || (ty & (ty - 1)) != 0)
+		return;
+
+	mmLevels = 0;
+	mipmaps[mmLevels++] = this;
+
+	int mtx = tx / 2;
+	int mty = ty / 2;
+
+	uint32_t * o = (uint32_t *) data;
+
+	for (int l = 0; l < LE_BMP_MIPMAPS; l++) {
+		if (mtx < 4 || mty < 4) break;
+
+		LeBitmap * bmp = new LeBitmap();
+		bmp->allocate(mtx, mty);
+
+		uint32_t * p = (uint32_t *) bmp->data;
+
+		for (int y = 0; y < mty; y++) {
+			for (int x = 0; x < mtx; x++) {
+				uint8_t * s = (uint8_t *) o;
+				int r = (s[0] + s[0+4] + s[0+mtx*2*4] + s[0+4+mtx*2*4]) >> 2;
+				int g = (s[1] + s[1+4] + s[1+mtx*2*4] + s[1+4+mtx*2*4]) >> 2;
+				int b = (s[2] + s[2+4] + s[2+mtx*2*4] + s[2+4+mtx*2*4]) >> 2;
+				int a = (s[3] + s[3+4] + s[3+mtx*2*4] + s[3+4+mtx*2*4]) >> 2;
+				* p++ = (a << 24) | (b << 16) | (g << 8) | r;
+				o += 2;
+			}
+			o += mtx * 2;
+		}
+
+		mtx /= 2;
+		mty /= 2;
+		o = (uint32_t *) bmp->data;
+
+		mipmaps[mmLevels++] = bmp;
+	}
 }
