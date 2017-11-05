@@ -1,6 +1,6 @@
 /**
 	\file rasterizer_integer.cpp
-	\brief LightEngine 3D: Triangle rasterizer (textured and textured with alpha channel)
+	\brief LightEngine 3D: Triangle rasterizer
 	\brief All platforms implementation
 	\brief Integer mathematics
 	\brief Support textured triangles

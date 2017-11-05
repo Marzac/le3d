@@ -1,8 +1,10 @@
 /**
 	\file rasterizer_float.h
-	\brief LightEngine 3D: Triangle rasterizer (textured and textured with alpha channel)
+	\brief LightEngine 3D: Triangle rasterizer
 	\brief All platforms implementation
-	\brief Float implementation
+	\brief Floating point mathematics
+	\brief Support textured triangles
+	\brief Textures can have an alpha channel and mipmaps
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net

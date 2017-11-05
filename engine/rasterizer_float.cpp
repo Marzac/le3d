@@ -2,7 +2,7 @@
 	\file rasterizer_float.cpp
 	\brief LightEngine 3D: Triangle rasterizer 
 	\brief All platforms implementation
-	\brief Floating points mathematics
+	\brief Floating point mathematics
 	\brief Support textured triangles
 	\brief Textures can have an alpha channel and mipmaps
 	\author Frederic Meslin (fred@fredslab.net)
