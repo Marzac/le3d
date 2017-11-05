@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -37,7 +37,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 /*****************************************************************************/
 #pragma pack(push, 1)
@@ -176,8 +175,8 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 // Retrieve bitmap size
 	bitmap->tx = info.biWidth;
 	bitmap->ty = info.biHeight;
-	bitmap->txP2 = (int) log2f((float)bitmap->tx);
-	bitmap->tyP2 = (int) log2f((float)bitmap->ty);
+	bitmap->txP2 = LeGlobal::log2i32(bitmap->tx);
+	bitmap->tyP2 = LeGlobal::log2i32(bitmap->ty);
 
 	int upsidedown = 1;
 	if (bitmap->ty < 0) {
@@ -196,11 +195,12 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	srcScan = (srcScan + 0x3) & ~0x3;
 	int size = bitmap->tx * bitmap->ty * sizeof(uint32_t);
 	bitmap->data = malloc(size);
-	bitmap->allocated = true;
+	bitmap->dataAllocated = true;
+
+// Load bitmap data
 	uint8_t * buffer = (uint8_t *) malloc(srcScan);
 	uint8_t * data = (uint8_t *) bitmap->data;
 
-// Load bitmap data
 	int dstScan = bitmap->tx * sizeof(uint32_t);
 	fseek(file, header.bfOffBits, SEEK_SET);
 	if (upsidedown)
@@ -243,6 +243,7 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 			else data += dstScan;
 		}
 	}
+
 	free(buffer);
 	return 1;
 }
