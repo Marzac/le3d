@@ -1,13 +1,15 @@
 /**
 	\file rasterizer_float.cpp
-	\brief LightEngine 3D: Triangle rasterizer (textured and textured with alpha channel)
+	\brief LightEngine 3D: Triangle rasterizer 
 	\brief All platforms implementation
-	\brief Float implementation
+	\brief Floating points mathematics
+	\brief Support textured triangles
+	\brief Textures can have an alpha channel and mipmaps
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.1
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -52,6 +54,7 @@
 /*****************************************************************************/
 LeRasterizer::LeRasterizer(int width, int height) :
 	color(0xFFFFFF),
+	bmp(NULL),
 	texPixels(NULL),
 	texSizeU(0), texSizeV(0),
 	texMaskU(0), texMaskV(0),
@@ -91,37 +94,26 @@ void LeRasterizer::setBackground(uint32_t color)
 void LeRasterizer::rasterList(LeTriList * trilist)
 {
 	trilist->zSort();
+	
 	for (int i = 0; i < trilist->noValid; i++) {
 		LeTriangle * tri = &trilist->triangles[trilist->srcIndices[i]];
 
 	// Retrieve the material
 		LeBmpCache::Slot * slot = &bmpCache.slots[tri->tex];
-		LeBitmap * bmp;
 		if (slot->flags & LE_BMPCACHE_ANIMATION)
 			bmp = &slot->extras[slot->cursor];
 		else bmp = slot->bitmap;
 		color = tri->color;
 
-	// Retrieve texture information
-		texPixels = (uint32_t *) bmp->data;
-		texSizeU = bmp->txP2;
-		texSizeV = bmp->tyP2;
-		texMaskU = (1 << bmp->txP2) - 1;
-		texMaskV = (1 << bmp->tyP2) - 1;
-
-	// Convert coordinates
-		float sx = (float) (1 << bmp->txP2);
-		float sy = (float) (1 << bmp->tyP2);
+	// Convert position coordinates
 		for (int i = 0; i < 3; i++) {
 			xs[i] = tri->xs[i];
 			ys[i] = tri->ys[i];
 		#if LE_RENDERER_ZTEX == 1
 			ws[i] = tri->zs[i];
 		#endif // LE_RENDERER_ZTEX
-			us[i] = tri->us[i] * sx;
-			vs[i] = tri->vs[i] * sy;
 		}
-
+	
 	// Sort vertexes vertically
 		int vt = 0, vb = 0, vm1 = 0, vm2 = 3;
 		if (ys[0] < ys[1]) {
@@ -141,12 +133,38 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 				vt = 2; vm1 = 1; vb = 0;
 			}
 		}
-
-	// Compute the mean point
+		
+	// Get vertical span	
 		float dy = ys[vb] - ys[vt];
 		if (dy == 0.0f) continue;
-		float n = (ys[vm1] - ys[vt]) / dy;
+	
+	// Choose the mipmap level
+	#if LE_RENDERER_MIPMAPS == 1
+		if (bmp->mmLevels) {
+			int r = (bmp->ty + dy * 0.5f) / dy;
+			int l = LeGlobal::log2i32(r);
+			l = cmin(l, bmp->mmLevels - 1);
+			bmp = bmp->mipmaps[l];
+		}
+	#endif
+	
+	// Retrieve texture information
+		texPixels = (uint32_t *) bmp->data;
+		texSizeU = bmp->txP2;
+		texSizeV = bmp->tyP2;
+		texMaskU = (1 << bmp->txP2) - 1;
+		texMaskV = (1 << bmp->tyP2) - 1;
 
+	// Convert texture coordinates
+		float sx = (float) (1 << bmp->txP2);
+		float sy = (float) (1 << bmp->tyP2);
+		for (int i = 0; i < 3; i++) {
+			us[i] = tri->us[i] * sx;
+			vs[i] = tri->vs[i] * sy;
+		}
+
+	// Compute the mean vertex
+		float n = (ys[vm1] - ys[vt]) / dy;
 		xs[3] = (xs[vb] - xs[vt]) * n + xs[vt];
 		ys[3] = ys[vm1];
 	#if LE_RENDERER_ZTEX == 1
@@ -197,16 +215,22 @@ void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 
 	int y1 = (int) ys[vt];
 	int y2 = (int) ys[vm1];
-	for (int y = y1; y < y2; y++) {
-		fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
-		x1 += ax1;
-		w1 += aw1;
-		u1 += au1;
-		v1 += av1;
-		x2 += ax2;
-		w2 += aw2;
-		u2 += au2;
-		v2 += av2;
+	if (bmp->flags & LE_BMP_ALPHACHANNEL) {
+		for (int y = y1; y < y2; y++) {
+			fillFlatTexAlphaZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
+			x1 += ax1; x2 += ax2;
+			u1 += au1; u2 += au2;
+			v1 += av1; v2 += av2;
+			w2 += aw2; w1 += aw1;
+		}
+	}else{
+		for (int y = y1; y < y2; y++) {
+			fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
+			x1 += ax1; x2 += ax2;
+			u1 += au1; u2 += au2;
+			v1 += av1; v2 += av2;
+			w2 += aw2; w1 += aw1;
+		}
 	}
 }
 
@@ -236,16 +260,23 @@ void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 
 	int y1 = (int) ys[vm1];
 	int y2 = (int) ys[vb];
-	for (int y = y1; y < y2; y++) {
-		fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
-		x1 += ax1;
-		w1 += aw1;
-		u1 += au1;
-		v1 += av1;
-		x2 += ax2;
-		w2 += aw2;
-		u2 += au2;
-		v2 += av2;
+
+	if (bmp->flags & LE_BMP_ALPHACHANNEL) {
+		for (int y = y1; y < y2; y++) {
+			fillFlatTexAlphaZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
+			x1 += ax1; x2 += ax2;
+			w1 += aw1; w2 += aw2;
+			u1 += au1; u2 += au2;
+			v1 += av1; v2 += av2;
+		}
+	}else{
+		for (int y = y1; y < y2; y++) {
+			fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
+			x1 += ax1; x2 += ax2;
+			w1 += aw1; w2 += aw2;
+			u1 += au1; u2 += au2;
+			v1 += av1; v2 += av2;
+		}
 	}
 }
 
@@ -271,14 +302,22 @@ void LeRasterizer::topTriangle(int vt, int vm1, int vm2)
 
 	int y1 = (int) ys[vt];
 	int y2 = (int) ys[vm1];
-	for (int y = y1; y < y2; y++) {
-		fillFlatTex(y, x1, x2, u1, u2, v1, v2);
-		x1 += ax1;
-		u1 += au1;
-		v1 += av1;
-		x2 += ax2;
-		u2 += au2;
-		v2 += av2;
+
+	if (bmp->flags & LE_BMP_ALPHACHANNEL) {
+		for (int y = y1; y < y2; y++) {
+			fillFlatTexAlpha(y, x1, x2, u1, u2, v1, v2);
+			x1 += ax1; x2 += ax2;
+			u1 += au1; u2 += au2;
+			v1 += av1; v2 += av2;
+		}
+	}else{
+		for (int y = y1; y < y2; y++) {
+			fillFlatTex(y, x1, x2, u1, u2, v1, v2);
+			x1 += ax1; x2 += ax2;
+			u1 += au1; u2 += au2;
+			v1 += av1; v2 += av2;
+		}
+
 	}
 }
 
@@ -304,14 +343,21 @@ void LeRasterizer::bottomTriangle(int vm1, int vm2, int vb)
 
 	int y1 = (int) ys[vm1];
 	int y2 = (int) ys[vb];
-	for (int y = y1; y < y2; y++) {
-		fillFlatTex(y, x1, x2, u1, u2, v1, v2);
-		x1 += ax1;
-		u1 += au1;
-		v1 += av1;
-		x2 += ax2;
-		u2 += au2;
-		v2 += av2;
+
+	if (bmp->flags & LE_BMP_ALPHACHANNEL) {
+		for (int y = y1; y < y2; y++) {
+			fillFlatTexAlpha(y, x1, x2, u1, u2, v1, v2);
+			x1 += ax1; x2 += ax2;
+			u1 += au1; u2 += au2;
+			v1 += av1; v2 += av2;
+		}
+	}else{
+		for (int y = y1; y < y2; y++) {
+			fillFlatTex(y, x1, x2, u1, u2, v1, v2);
+			x1 += ax1; x2 += ax2;
+			u1 += au1; u2 += au2;
+			v1 += av1; v2 += av2;
+		}
 	}
 }
 

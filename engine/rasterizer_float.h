@@ -7,7 +7,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -72,6 +72,8 @@ private:
 	inline void fillFlatTexAlpha(float y, float x1, float x2, float u1, float u2, float v1, float v2);
 
 	uint32_t color;
+	LeBitmap * bmp;
+
 	uint32_t * texPixels;
 	uint32_t texSizeU;
 	uint32_t texSizeV;

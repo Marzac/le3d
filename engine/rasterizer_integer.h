@@ -7,7 +7,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\version 1.3
 
 	The MIT License (MIT)
 	Copyright (c) 2017 Frédéric Meslin
@@ -75,6 +75,8 @@ private:
 	void f2i32sx3(const float * in, int32_t * out, float s);
 
 	uint32_t color;
+	LeBitmap * bmp;
+
 	uint32_t * texPixels;
 	uint32_t texSizeU;
 	uint32_t texSizeV;
