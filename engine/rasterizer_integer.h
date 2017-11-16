@@ -49,6 +49,10 @@
 #include "geometry.h"
 #include "trilist.h"
 
+#if LE_USE_SIMD == 1
+	#include "simd.h"
+#endif
+
 /*****************************************************************************/
 class LeRasterizer
 {
@@ -84,6 +88,15 @@ private:
 	uint32_t texSizeV;
 	uint32_t texMaskU;
 	uint32_t texMaskV;
+
+#if LE_USE_SIMD == 1
+/*
+	v4sf texScale_4;
+	v4si texMaskU_4;
+	v4si texMaskV_4;
+*/
+	v4si color_4;
+#endif // LE_USE_SIMD
 
 	int32_t xs[4], ys[4];
 	int32_t ws[4];

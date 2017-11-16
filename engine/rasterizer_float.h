@@ -49,6 +49,10 @@
 #include "geometry.h"
 #include "trilist.h"
 
+#if LE_USE_SIMD == 1
+	#include "simd.h"
+#endif
+
 /*****************************************************************************/
 class LeRasterizer
 {
@@ -65,13 +69,9 @@ public:
 private:
 	void topTriangleZC(int vt, int vm1, int vm2);
 	void bottomTriangleZC(int vm1, int vm2, int vb);
-	void topTriangle(int vt, int vm1, int vm2);
-	void bottomTriangle(int vm1, int vm2, int vb);
 
 	inline void fillFlatTexZC(float y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2);
 	inline void fillFlatTexAlphaZC(float y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2);
-	inline void fillFlatTex(float y, float x1, float x2, float u1, float u2, float v1, float v2);
-	inline void fillFlatTexAlpha(float y, float x1, float x2, float u1, float u2, float v1, float v2);
 
 	uint32_t color;
 	LeBitmap * bmp;
@@ -82,8 +82,14 @@ private:
 	uint32_t texMaskU;
 	uint32_t texMaskV;
 
-	float xs[4], ys[4];
-	float ws[4];
+#if LE_USE_SIMD == 1
+	v4sf texScale_4;
+	v4si texMaskU_4;
+	v4si texMaskV_4;
+	v4si color_4;
+#endif // LE_USE_SIMD
+
+	float xs[4], ys[4], ws[4];
 	float us[4], vs[4];
 
 	uint32_t background;

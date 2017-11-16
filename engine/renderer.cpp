@@ -303,18 +303,15 @@ int LeRenderer::project(LeTriangle tris[], int srcIndices[], int dstIndices[], i
 		if (tri->ys[0] <  viewTopAxis.origin.y    && tri->ys[1] <  viewTopAxis.origin.y    && tri->ys[2] <  viewTopAxis.origin.y)    continue;
 		if (tri->ys[0] >= viewBottomAxis.origin.y && tri->ys[1] >= viewBottomAxis.origin.y && tri->ys[2] >= viewBottomAxis.origin.y) continue;
 
-	#if LE_RENDERER_ZTEX == 1
 		tri->zs[0] = w0;
 		tri->zs[1] = w1;
 		tri->zs[2] = w2;
-
 		tri->us[0] *= w0;
 		tri->us[1] *= w1;
 		tri->us[2] *= w2;
 		tri->vs[0] *= w0;
 		tri->vs[1] *= w1;
 		tri->vs[2] *= w2;
-	#endif // LE_RENDERER_ZTEX
 
 		dstIndices[k++] = j;
 	}
@@ -456,17 +453,12 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 		float pj3 = (tri->xs[2] - axis.origin.x) * axis.axis.y - (tri->ys[2] - axis.origin.y) * axis.axis.x;
 
 	// Compute intersections
-		float nx[4], ny[4];
-	#if LE_RENDERER_ZTEX == 1
-		float nz[4];
-	#endif // LE_RENDERER_ZTEX
+		float nx[4], ny[4], nz[4];
 		float nu[4], nv[4];
 		if (pj1 >= 0.0f) {
 			nx[s]   = tri->xs[0];
 			ny[s]   = tri->ys[0];
-		#if LE_RENDERER_ZTEX == 1
 			nz[s]   = tri->zs[0];
-		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[0];
 			nv[s++] = tri->vs[0];
 		}
@@ -474,18 +466,14 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			float ratio = cabs(pj1 / (pj1 - pj2));
 			nx[s]   = tri->xs[0] + ratio * (tri->xs[1] - tri->xs[0]);
 			ny[s]   = tri->ys[0] + ratio * (tri->ys[1] - tri->ys[0]);
-		#if LE_RENDERER_ZTEX == 1
 			nz[s]   = tri->zs[0] + ratio * (tri->zs[1] - tri->zs[0]);
-		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[0] + ratio * (tri->us[1] - tri->us[0]);
 			nv[s++] = tri->vs[0] + ratio * (tri->vs[1] - tri->vs[0]);
 		}
 		if (pj2 >= 0.0f) {
 			nx[s]   = tri->xs[1];
 			ny[s]   = tri->ys[1];
-		#if LE_RENDERER_ZTEX == 1
 			nz[s]   = tri->zs[1];
-		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[1];
 			nv[s++] = tri->vs[1];
 		}
@@ -493,18 +481,14 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			float ratio = cabs(pj2 / (pj2 - pj3));
 			nx[s]   = tri->xs[1] + ratio * (tri->xs[2] - tri->xs[1]);
 			ny[s]   = tri->ys[1] + ratio * (tri->ys[2] - tri->ys[1]);
-		#if LE_RENDERER_ZTEX == 1
 			nz[s]   = tri->zs[1] + ratio * (tri->zs[2] - tri->zs[1]);
-		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[1] + ratio * (tri->us[2] - tri->us[1]);
 			nv[s++] = tri->vs[1] + ratio * (tri->vs[2] - tri->vs[1]);
 		}
 		if (pj3 >= 0.0f) {
 			nx[s]   = tri->xs[2];
 			ny[s]   = tri->ys[2];
-		#if LE_RENDERER_ZTEX == 1
 			nz[s]   = tri->zs[2];
-		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[2];
 			nv[s++] = tri->vs[2];
 		}
@@ -512,9 +496,7 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			float ratio = cabs(pj3 / (pj3 - pj1));
 			nx[s]   = tri->xs[2] + ratio * (tri->xs[0] - tri->xs[2]);
 			ny[s]   = tri->ys[2] + ratio * (tri->ys[0] - tri->ys[2]);
-		#if LE_RENDERER_ZTEX == 1
 			nz[s]   = tri->zs[2] + ratio * (tri->zs[0] - tri->zs[2]);
-		#endif // LE_RENDERER_ZTEX
 			nu[s]   = tri->us[2] + ratio * (tri->us[0] - tri->us[2]);
 			nv[s++] = tri->vs[2] + ratio * (tri->vs[0] - tri->vs[2]);
 		}
@@ -527,11 +509,9 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			tri->ys[0] = ny[0];
 			tri->ys[1] = ny[1];
 			tri->ys[2] = ny[2];
-		#if LE_RENDERER_ZTEX == 1
 			tri->zs[0] = nz[0];
 			tri->zs[1] = nz[1];
 			tri->zs[2] = nz[2];
-		#endif // LE_RENDERER_ZTEX
 			tri->us[0] = nu[0];
 			tri->us[1] = nu[1];
 			tri->us[2] = nu[2];
@@ -550,11 +530,9 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 			ntri->ys[0] = ny[0];
 			ntri->ys[1] = ny[2];
 			ntri->ys[2] = ny[3];
-		#if LE_RENDERER_ZTEX == 1
 			ntri->zs[0] = nz[0];
 			ntri->zs[1] = nz[2];
 			ntri->zs[2] = nz[3];
-		#endif // LE_RENDERER_ZTEX
 			ntri->us[0] = nu[0];
 			ntri->us[1] = nu[2];
 			ntri->us[2] = nu[3];
