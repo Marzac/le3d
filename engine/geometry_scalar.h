@@ -36,13 +36,9 @@
 #include "global.h"
 #include "config.h"
 
-#include <string.h>
-#include <math.h>
+#if LE_USE_SIMD == 0
 
-/*****************************************************************************/
-#ifndef LE_GEOMETRY_H
-	#error The file geometry_scalar.h should not be included directly. Include geometry.h instead.
-#endif
+#include <math.h>
 
 /*****************************************************************************/
 struct LeVertex
@@ -341,7 +337,9 @@ struct LeMatrix
 
 	void zero()
 	{
-		memset(mat, 0, sizeof(float) * 16);
+		for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			mat[i][j] = 0;
 	}
 
 	void translate(LeVertex d)
@@ -628,5 +626,7 @@ namespace LePrimitives {
 	const LeVertex right = LeVertex(1.0f, 0.0f, 0.0f);
 	const LeVertex zero  = LeVertex(0.0f, 0.0f, 0.0f);
 }
+
+#endif // LE_USE_SIMD
 
 #endif	//LE_GEOMETRY_SCALAR_H

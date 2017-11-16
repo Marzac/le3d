@@ -33,18 +33,14 @@
 #ifndef LE_GEOMETRY_H
 #define LE_GEOMETRY_H
 
-#include "global.h"
 #include "config.h"
 
 #ifndef LE_USE_SIMD
 	#error LE_USE_SIMD undefined.
-	#error Use LE_USE_SIMD in (config.h) to enable or disable SIMD acceleration for vectors calculation.
-#else
-	#if LE_USE_SIMD
-		#include "geometry_simd.h"
-	#else
-		#include "geometry_scalar.h"
-	#endif
-#endif
+	#error Use LE_USE_SIMD in (config.h) to enable or disable SIMD acceleration for calculations.
+#endif // LE_USE_SIMD
+
+#include "geometry_simd.h"
+#include "geometry_scalar.h"
 
 #endif

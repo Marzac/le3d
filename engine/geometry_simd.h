@@ -36,15 +36,12 @@
 #include "global.h"
 #include "config.h"
 
+#if LE_USE_SIMD == 1
+
+#include "simd.h"
 #include <math.h>
 
 /*****************************************************************************/
-#ifndef LE_GEOMETRY_H
-	#error The file geometry_simd.h should not be included directly. Include geometry.h instead.
-#endif
-
-/*****************************************************************************/
-typedef float V4SF __attribute__ ((vector_size (16)));
 struct __attribute__ ((aligned (16))) LeVertex
 {
 	union {
@@ -499,5 +496,7 @@ namespace LePrimitives {
 	const LeVertex right = LeVertex(1.0f, 0.0f, 0.0f);
 	const LeVertex zero  = LeVertex(0.0f, 0.0f, 0.0f);
 }
+
+#endif // LE_USE_SIMD
 
 #endif	//LE_GEOMETRY_SIMD_H
