@@ -1,7 +1,7 @@
 /**
 	\file timing.cpp
-	\brief LightEngine 3D (tools): Time measurement and framerate limiter
-	\brief All platforms implementation
+	\brief LightEngine 3D (tools): Native OS time measurement
+	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
@@ -62,25 +62,6 @@ LeTiming::~LeTiming()
 }
 
 /*****************************************************************************/
-/*
-void LeTiming::estimate()
-{
-	Time iTime;
-	gettimeofday(&iTime, NULL);
-	uint64_t iTicks = __rdtsc();
-	uint64_t eTime = 0;
-	while(eTime < 250000) {
-		Time cTime;
-		gettimeofday(&cTime, NULL);
-		eTime = (cTime.tv_sec - iTime.tv_sec) * 1000000;
-		eTime += cTime.tv_usec - iTime.tv_usec;
-	}
-	uint64_t cTicks = __rdtsc();
-	ticksPerSec = (float) (cTicks - iTicks) / (eTime * 0.000001f);
-}
-*/
-
-/*****************************************************************************/
 void LeTiming::firstFrame()
 {
 	LARGE_INTEGER pc;
@@ -94,14 +75,32 @@ bool LeTiming::isNextFrame()
 	QueryPerformanceCounter(&pc);
 	int64_t dt = pc.QuadPart - lastCounter;
 	if (dt < countsPerFrame) return false;
-
-	lastCounter = pc.QuadPart + countsPerFrame - dt;
+	lastCounter = pc.QuadPart - (dt - countsPerFrame);
 	fps = (float) countsPerSec / dt;
 	return true;
 }
 
-
+/*****************************************************************************/
 /*
+	static int t = 0;
+	if (t++ == 60) {
+		printf("FPS %lf\n", (double) countsPerSec / dt);
+		t = 0;
+	}
+	
+	Time iTime;
+	gettimeofday(&iTime, NULL);
+	uint64_t iTicks = __rdtsc();
+	uint64_t eTime = 0;
+	while(eTime < 250000) {
+		Time cTime;
+		gettimeofday(&cTime, NULL);
+		eTime = (cTime.tv_sec - iTime.tv_sec) * 1000000;
+		eTime += cTime.tv_usec - iTime.tv_usec;
+	}
+	uint64_t cTicks = __rdtsc();
+	ticksPerSec = (float) (cTicks - iTicks) / (eTime * 0.000001f);
+
 	int64_t dt = __rdtsc() - fpsLastTicks;
 	if (dt < ticksPerFrame) return false;
 	fpsLastTicks = __rdtsc() + ticksPerFrame - dt;

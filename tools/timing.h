@@ -1,7 +1,7 @@
 /**
 	\file timing.cpp
-	\brief LightEngine 3D (tools): Time measurement and framerate limiter
-	\brief All platforms implementation
+	\brief LightEngine 3D (tools): Native OS time measurement
+	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
