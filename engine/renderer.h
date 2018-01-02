@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@
 */
 
 /*****************************************************************************
-	The renderer assume a standard, right handed coordinate system
+	The renderer assumes a right handed coordinate system:
 	- X goes right
 	- Y goes top
 	- Z goes backward
@@ -45,6 +45,7 @@
 
 #include "geometry.h"
 #include "mesh.h"
+#include "bset.h"
 #include "rasterizer.h"
 #include "trilist.h"
 #include "verlist.h"
@@ -57,12 +58,15 @@ public:
 	~LeRenderer();
 
 	void render(LeMesh * mesh);
+	void render(LeBSet * bset);
+
 	void flush();
 
 	void setViewPosition(float x, float y, float z);
 	void setViewRotation(float ax, float ay, float az);
 	void updateViewMatrix();
-	void setViewMatrix(LeMatrix view);
+	
+	void setViewMatrix(const LeMatrix & view);
 
 	void setViewProjection(float fov);
 	void setViewport(float left, float top, float right, float bottom);
@@ -76,9 +80,13 @@ public:
 	LeVerList * getVerList();
 
 private:
+    bool checkMemory(int noVertexes, int noTriangles);
+
 	int build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[]);
+    int build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int indices[]);
 
 	void updateFrustrum();
+
 	void transform(LeMatrix view, LeVertex srcVertexes[], LeVertex dstVertexes[], int nb);
 	int project(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb);
 	int clip3D(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb, LePlan &plan);
@@ -121,4 +129,4 @@ private:
 	float vOffset;
 };
 
-#endif
+#endif // LE_RENDERER_H

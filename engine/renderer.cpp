@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -74,16 +74,8 @@ LeRenderer::~LeRenderer()
 void LeRenderer::render(LeMesh * mesh)
 {
 // Check vertex memory space
-	if (mesh->noVertexes > usedVerlist->noAllocated) return;
-	usedVerlist->noUsed = 0;
-
-// Check triangle memory space
-	int freeTriangles = usedTrilist->noAllocated - usedTrilist->noUsed;
-	if (mesh->noTriangles > freeTriangles) return;
-
-// Assign the color source
-	if (mesh->shades) colors = mesh->shades;
-	else colors = mesh->colors;
+    if (!checkMemory(mesh->noVertexes, mesh->noTriangles))
+        return;
 
 // Transform the geometry
 	LeTriangle * triRender = &usedTrilist->triangles[usedTrilist->noUsed];
@@ -92,10 +84,7 @@ void LeRenderer::render(LeMesh * mesh)
 
 	transform(mesh->view, mesh->vertexes, usedVerlist->vertexes, mesh->noVertexes);
 	int noTris = build(mesh, usedVerlist->vertexes, triRender, id1);
-
-// Pointer for extra triangles
 	extra = noTris;
-	extraMax = freeTriangles;
 
 // Clip and project
 	noTris = clip3D(triRender, id1, id2, noTris, viewFrontPlan);
@@ -106,7 +95,7 @@ void LeRenderer::render(LeMesh * mesh)
 	noTris = clip3D(triRender, id2, id1, noTris, viewRightPlan);
 	noTris = clip3D(triRender, id1, id2, noTris, viewTopPlan);
 	noTris = clip3D(triRender, id2, id1, noTris, viewBotPlan);
-#endif
+#endif // LE_RENDERER_3DFRUSTRUM
 
 	noTris = project(triRender, id1, id2, noTris);
 	noTris = backculling(triRender, id2, id1, noTris);
@@ -127,6 +116,67 @@ void LeRenderer::render(LeMesh * mesh)
 	usedTrilist->noValid += noTris;
 }
 
+void LeRenderer::render(LeBSet * bset)
+{
+// Check vertex memory space
+    int noVertexes = bset->noBillboards * 4;
+    int noTriangles = bset->noBillboards * 2;
+    if (!checkMemory(noVertexes, noTriangles))
+        return;
+
+// Transform the geometry
+	LeTriangle * triRender = &usedTrilist->triangles[usedTrilist->noUsed];
+	int * id1 = &usedTrilist->srcIndices[usedTrilist->noValid];
+	int * id2 = &usedTrilist->dstIndices[usedTrilist->noValid];
+
+    transform(bset->view, bset->places, usedVerlist->vertexes, bset->noBillboards);
+    int noTris = build(bset, usedVerlist->vertexes, triRender, id1);
+	extra = noTris;
+
+// Clip and project
+	noTris = clip3D(triRender, id1, id2, noTris, viewFrontPlan);
+	noTris = clip3D(triRender, id2, id1, noTris, viewBackPlan);
+
+#if LE_RENDERER_3DFRUSTRUM == 1
+	noTris = clip3D(triRender, id1, id2, noTris, viewLeftPlan);
+	noTris = clip3D(triRender, id2, id1, noTris, viewRightPlan);
+	noTris = clip3D(triRender, id1, id2, noTris, viewTopPlan);
+	noTris = clip3D(triRender, id2, id1, noTris, viewBotPlan);
+#endif // LE_RENDERER_3DFRUSTRUM
+
+	noTris = project(triRender, id1, id2, noTris);
+	noTris = backculling(triRender, id2, id1, noTris);
+
+#if LE_RENDERER_2DFRAME == 1
+	noTris = clip2D(triRender, id1, id2, noTris, viewLeftAxis);
+	noTris = clip2D(triRender, id2, id1, noTris, viewRightAxis);
+	noTris = clip2D(triRender, id1, id2, noTris, viewTopAxis);
+	noTris = clip2D(triRender, id2, id1, noTris, viewBottomAxis);
+#endif // LE_RENDERER_2DFRAME
+
+// Make render indices absolute
+	for (int i = 0; i < noTris; i++)
+		id1[i] += usedTrilist->noUsed;
+
+// Modify the state
+	usedTrilist->noUsed += extra;
+	usedTrilist->noValid += noTris;
+}
+
+/*****************************************************************************/
+bool LeRenderer::checkMemory(int noVertexes, int noTriangles)
+{
+	if (noVertexes > usedVerlist->noAllocated) return false;
+	usedVerlist->noUsed = 0;
+
+	int freeTriangles = usedTrilist->noAllocated - usedTrilist->noUsed;
+	if (noTriangles > freeTriangles) return false;
+    extraMax = freeTriangles;
+
+	return true;
+}
+
+/*****************************************************************************/
 void LeRenderer::flush()
 {
 	usedTrilist->noUsed = 0;
@@ -167,7 +217,7 @@ void LeRenderer::updateViewMatrix()
 	viewMatrix.rotate(-viewRotation);
 }
 
-void LeRenderer::setViewMatrix(LeMatrix view)
+void LeRenderer::setViewMatrix(const LeMatrix & view)
 {
 	viewMatrix = view;
 }
@@ -225,8 +275,11 @@ void LeRenderer::transform(LeMatrix view, LeVertex srcVertexes[], LeVertex dstVe
 int LeRenderer::build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[])
 {
 	int k = 0;
-	float fontZ = viewFrontPlan.zAxis.origin.z;
+	float frontZ = viewFrontPlan.zAxis.origin.z;
 	float backZ = viewBackPlan.zAxis.origin.z;
+
+    if (mesh->shades) colors = mesh->shades;
+	else colors = mesh->colors;
 
 	for (int i = 0; i < mesh->noTriangles; i++) {
 		LeVertex * v1 = &vertexes[mesh->vertexList[i*3]];
@@ -234,7 +287,7 @@ int LeRenderer::build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int
 		LeVertex * v3 = &vertexes[mesh->vertexList[i*3+2]];
 
 	// Hard clip
-		if (v1->z > fontZ && v2->z > fontZ && v3->z > fontZ) continue;
+		if (v1->z > frontZ && v2->z > frontZ && v3->z > frontZ) continue;
 		if (v1->z < backZ && v2->z < backZ && v3->z < backZ) continue;
 
 	// Copy coordinates (for clipping)
@@ -273,6 +326,76 @@ int LeRenderer::build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int
 	}
 	return k;
 }
+
+int LeRenderer::build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int indices[])
+{
+	int k = 0;
+	float frontZ = viewFrontPlan.zAxis.origin.z;
+	float backZ = viewBackPlan.zAxis.origin.z;
+
+    if (bset->shades) colors = bset->shades;
+	else colors = bset->colors;
+
+	for (int i = 0; i < bset->noBillboards; i++) {
+        if (!bset->flags[i]) continue;
+		LeVertex * v = &vertexes[i];
+		if (v->z > frontZ && v->z < backZ) continue;
+
+        float sx = bset->sizes[i*2+0] * 0.5f;
+        float sy = bset->sizes[i*2+1] * 0.5f;
+
+	// Construct billboard
+		LeTriangle * tri = &tris[k];
+		tri->xs[0] = v->x + sx;
+		tri->ys[0] = v->y + sy;
+		tri->zs[0] = v->z;
+		tri->xs[1] = v->x - sx;
+		tri->ys[1] = v->y + sy;
+		tri->zs[1] = v->z;
+		tri->xs[2] = v->x - sx;
+		tri->ys[2] = v->y - sy;
+		tri->zs[2] = v->z;
+
+        tri->us[0] = 1.0f;
+		tri->vs[0] = 0.0f;
+		tri->us[1] = 0.0f;
+		tri->vs[1] = 0.0f;
+		tri->us[2] = 0.0f;
+		tri->vs[2] = 1.0f;
+
+		tri->vd = v->x * v->x + v->y * v->y + v->z * v->z - vOffset;
+        tri->color = colors[i];
+		tri->tex = bset->texSlots[i];
+		indices[k] = k;
+		k++;
+
+		tri = &tris[k];
+		tri->xs[0] = v->x + sx;
+		tri->ys[0] = v->y + sy;
+		tri->zs[0] = v->z;
+		tri->xs[1] = v->x - sx;
+		tri->ys[1] = v->y - sy;
+		tri->zs[1] = v->z;
+		tri->xs[2] = v->x + sx;
+		tri->ys[2] = v->y - sy;
+		tri->zs[2] = v->z;
+
+        tri->us[0] = 1.0f;
+		tri->vs[0] = 0.0f;
+		tri->us[1] = 0.0f;
+		tri->vs[1] = 1.0f;
+		tri->us[2] = 1.0f;
+		tri->vs[2] = 1.0f;
+
+		tri->vd = v->x * v->x + v->y * v->y + v->z * v->z - vOffset;
+        tri->color = colors[i];
+		tri->tex = bset->texSlots[i];
+		indices[k] = k;
+		k++;
+	}
+	return k;
+}
+
 
 /*****************************************************************************/
 int LeRenderer::project(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb)
