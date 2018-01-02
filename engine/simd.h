@@ -54,7 +54,7 @@
 	typedef union {V4SU v; uint32_t u[4];} v4su;
 
 /** 8x 16bit signed integer vector */
-    typedef int16_t V8SH __attribute__ ((vector_size (16)));
+	typedef int16_t V8SH __attribute__ ((vector_size (16)));
 	typedef union {V8SH v; int16_t i[8];} v8sh;
 
 /** 8x 16bit unsigned integer vector */

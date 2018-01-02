@@ -42,31 +42,31 @@
 /*****************************************************************************/
 /** XInput driver structures and constants */
 typedef struct {
-    uint16_t buttons;
-    uint8_t leftTrigger;
-    uint8_t rightTrigger;
-    int16_t thumbLX;
-    int16_t thumbLY;
-    int16_t thumbRX;
-    int16_t thumbRY;
+	uint16_t buttons;
+	uint8_t leftTrigger;
+	uint8_t rightTrigger;
+	int16_t thumbLX;
+	int16_t thumbLY;
+	int16_t thumbRX;
+	int16_t thumbRY;
 }XInputGamepad;
 
 typedef struct {
-    uint32_t packetNumber;
-    XInputGamepad gamepad;
+	uint32_t packetNumber;
+	XInputGamepad gamepad;
 }XInputState;
 
 typedef struct {
-    uint16_t leftMotorSpeed;
-    uint16_t rightMotorSpeed;
+	uint16_t leftMotorSpeed;
+	uint16_t rightMotorSpeed;
 }XInputVibration;
 
 typedef struct {
-    uint8_t type;
-    uint8_t subType;
-    uint16_t flags;
-    XInputGamepad gamepad;
-    XInputVibration vibration;
+	uint8_t type;
+	uint8_t subType;
+	uint16_t flags;
+	XInputGamepad gamepad;
+	XInputVibration vibration;
 }XInputCaps;
 
 /** XInput driver function types */
@@ -75,7 +75,7 @@ typedef __stdcall uint32_t DLLXInputGetCapabilities(uint32_t userIndex, uint32_t
 typedef __stdcall uint32_t DLLXInputGetState(uint32_t userIndex, XInputState * state);
 typedef __stdcall uint32_t DLLXInputSetState(uint32_t userIndex, XInputVibration * vibration);
 
-/** XInput driver entry points  */
+/** XInput driver entry points	*/
 DLLXInputEnable * XInputEnable = NULL;
 DLLXInputGetCapabilities * XInputGetCapabilities = NULL;
 DLLXInputGetState * XInputGetState = NULL;
@@ -83,9 +83,9 @@ DLLXInputSetState * XInputSetState = NULL;
 
 /*****************************************************************************/
 LeGamePad::LeGamePad(int pad) :
-    stickLeftX(0.0f), stickLeftY(0.0f),
-    stickRightX(0.0f), stickRightY(0.0f),
-    buttons(0), toggled(), pad(pad)
+	stickLeftX(0.0f), stickLeftY(0.0f),
+	stickRightX(0.0f), stickRightY(0.0f),
+	buttons(0), toggled(), pad(pad)
 {
 }
 
@@ -96,46 +96,46 @@ LeGamePad::~LeGamePad()
 /*****************************************************************************/
 void LeGamePad::init()
 {
-    stickLeftX = 0.0f;
-    stickLeftY = 0.0f;
-    stickRightX = 0.0f;
-    stickRightY = 0.0f;
-    buttons = 0;
+	stickLeftX = 0.0f;
+	stickLeftY = 0.0f;
+	stickRightX = 0.0f;
+	stickRightY = 0.0f;
+	buttons = 0;
 
-    feedback(0.0f, 0.0f);
+	feedback(0.0f, 0.0f);
 }
 
 /*****************************************************************************/
 void LeGamePad::update()
 {
-    XInputState state;
-    memset(&state, 0, sizeof(XInputState));
-    XInputGetState(pad, &state);
+	XInputState state;
+	memset(&state, 0, sizeof(XInputState));
+	XInputGetState(pad, &state);
 
-    stickLeftX = normalize(state.gamepad.thumbLX);
-    stickLeftY = normalize(state.gamepad.thumbLY);
-    stickRightX = normalize(state.gamepad.thumbRX);
-    stickRightY = normalize(state.gamepad.thumbRY);
+	stickLeftX = normalize(state.gamepad.thumbLX);
+	stickLeftY = normalize(state.gamepad.thumbLY);
+	stickRightX = normalize(state.gamepad.thumbRX);
+	stickRightY = normalize(state.gamepad.thumbRY);
 
-    toggled = buttons ^ state.gamepad.buttons;
-    buttons = state.gamepad.buttons;
+	toggled = buttons ^ state.gamepad.buttons;
+	buttons = state.gamepad.buttons;
 }
 
 void LeGamePad::feedback(float left, float right)
 {
-    XInputVibration vibration;
-    vibration.leftMotorSpeed = left * 0xFFFF;
-    vibration.rightMotorSpeed = right * 0xFFFF;
-    XInputSetState(pad, &vibration);
+	XInputVibration vibration;
+	vibration.leftMotorSpeed = left * 0xFFFF;
+	vibration.rightMotorSpeed = right * 0xFFFF;
+	XInputSetState(pad, &vibration);
 }
 
 /*****************************************************************************/
 inline float LeGamePad::normalize(int32_t axis)
 {
-    float value = (float) axis;
+	float value = (float) axis;
 	float sign = copysignf(1.0f, value);
 	if (value * sign < LE_GAMEPAD_THRESHOLD) return 0.0f;
-    const float scale = 1.0f / (32768.0f - LE_GAMEPAD_THRESHOLD);
+	const float scale = 1.0f / (32768.0f - LE_GAMEPAD_THRESHOLD);
 	return (value - LE_GAMEPAD_THRESHOLD * sign) * scale;
 }
 
@@ -149,18 +149,18 @@ __stdcall uint32_t XInputSetStateFB(uint32_t userIndex, XInputVibration * vibrat
 /** XInput driver init */
 void LeGamePad::setup()
 {
-    HMODULE module = LoadLibrary("xinput1_3.dll");
-    if (module) {
-        XInputEnable = (DLLXInputEnable *) GetProcAddress(module, "XInputEnable");
-        XInputGetCapabilities = (DLLXInputGetCapabilities *) GetProcAddress(module, "XInputGetCapabilities");
-        XInputGetState = (DLLXInputGetState *) GetProcAddress(module, "XInputGetState");
-        XInputSetState = (DLLXInputSetState *) GetProcAddress(module, "XInputSetState");
-    }else printf("gamepad: unable to load MS xInput driver (V1.3)");
+	HMODULE module = LoadLibrary("xinput1_3.dll");
+	if (module) {
+		XInputEnable = (DLLXInputEnable *) GetProcAddress(module, "XInputEnable");
+		XInputGetCapabilities = (DLLXInputGetCapabilities *) GetProcAddress(module, "XInputGetCapabilities");
+		XInputGetState = (DLLXInputGetState *) GetProcAddress(module, "XInputGetState");
+		XInputSetState = (DLLXInputSetState *) GetProcAddress(module, "XInputSetState");
+	}else printf("gamepad: unable to load MS xInput driver (V1.3)");
 
-    if (!XInputEnable) XInputEnable = XInputEnableFB;
-    if (!XInputGetCapabilities) XInputGetCapabilities = XInputGetCapabilitiesFB;
-    if (!XInputGetState) XInputGetState = XInputGetStateFB;
-    if (!XInputSetState) XInputSetState = XInputSetStateFB;
+	if (!XInputEnable) XInputEnable = XInputEnableFB;
+	if (!XInputGetCapabilities) XInputGetCapabilities = XInputGetCapabilitiesFB;
+	if (!XInputGetState) XInputGetState = XInputGetStateFB;
+	if (!XInputSetState) XInputSetState = XInputSetStateFB;
 
-    XInputEnable(true);
+	XInputEnable(true);
 }

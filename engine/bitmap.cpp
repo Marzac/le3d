@@ -74,21 +74,21 @@ LeBmpFont::~LeBmpFont()
 void LeBitmap::clear(uint32_t color)
 {
 	int size = tx * ty;
-    int b = size >> 2;
-    int r = size & 0x3;
+	int b = size >> 2;
+	int r = size & 0x3;
 
-    v4su color_4 = {color, color, color, color};
+	v4su color_4 = {color, color, color, color};
 	v4su * p_4 = (v4su *) data;
 	for (int t = 0; t < b; t ++)
 		*p_4++ = color_4;
 
-    uint32_t * p = (uint32_t *) p_4;
-    if (r == 0) return;
-    *p++ = color;
-    if (r == 1) return;
-    *p++ = color;
-    if (r == 2) return;
-    *p++ = color;
+	uint32_t * p = (uint32_t *) p_4;
+	if (r == 0) return;
+	*p++ = color;
+	if (r == 1) return;
+	*p++ = color;
+	if (r == 2) return;
+	*p++ = color;
 }
 #else
 void LeBitmap::clear(uint32_t color)
@@ -103,22 +103,22 @@ void LeBitmap::clear(uint32_t color)
 /*****************************************************************************/
 void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
 {
-    if (x >= tx) return;
-    if (y >= ty) return;
-    int xe = x + w;
-    if (xe <= 0) return;
-    int ye = y + h;
-    if (ye <= 0) return;
+	if (x >= tx) return;
+	if (y >= ty) return;
+	int xe = x + w;
+	if (xe <= 0) return;
+	int ye = y + h;
+	if (ye <= 0) return;
 
-    if (x < 0) x = 0;
-    if (y < 0) y = 0;
-    if (xe > tx) xe = tx;
-    if (ye > ty) ye = ty;
+	if (x < 0) x = 0;
+	if (y < 0) y = 0;
+	if (xe > tx) xe = tx;
+	if (ye > ty) ye = ty;
 
 	uint32_t * d = (uint32_t *) data;
 	d += x + y * tx;
-    w = xe - x;
-    h = ye - y;
+	w = xe - x;
+	h = ye - y;
 
 	int step = tx - w;
 	for (int j = 0; j < h; j++){
@@ -131,28 +131,28 @@ void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
 /*****************************************************************************/
 void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
 {
-    if (xDst >= tx) return;
-    if (yDst >= ty) return;
-    int xeDst = xDst + w;
-    if (xeDst <= 0) return;
-    int yeDst = yDst + h;
-    if (yeDst <= 0) return;
+	if (xDst >= tx) return;
+	if (yDst >= ty) return;
+	int xeDst = xDst + w;
+	if (xeDst <= 0) return;
+	int yeDst = yDst + h;
+	if (yeDst <= 0) return;
 
-    if (xDst < 0) {
-        xDst = 0; xSrc -= xDst;
-    }
-    if (yDst < 0) {
-        yDst = 0; ySrc -= yDst;
-    }
-    if (xeDst > tx) xeDst = tx;
-    if (yeDst > ty) yeDst = ty;
+	if (xDst < 0) {
+		xDst = 0; xSrc -= xDst;
+	}
+	if (yDst < 0) {
+		yDst = 0; ySrc -= yDst;
+	}
+	if (xeDst > tx) xeDst = tx;
+	if (yeDst > ty) yeDst = ty;
 
 	uint32_t * d = (uint32_t *) data;
 	uint32_t * s = (uint32_t *) src->data;
 	d += xDst + yDst * tx;
 	s += xSrc + ySrc * src->tx;
-    w = xeDst - xDst;
-    h = yeDst - yDst;
+	w = xeDst - xDst;
+	h = yeDst - yDst;
 
 	int stepDst = tx - w;
 	int stepSrc = src->tx - w;
@@ -169,55 +169,55 @@ void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xS
 #if LE_USE_SIMD == 1
 void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
 {
-    if (xDst >= tx) return;
-    if (yDst >= ty) return;
-    int xeDst = xDst + w;
-    if (xeDst <= 0) return;
-    int yeDst = yDst + h;
-    if (yeDst <= 0) return;
+	if (xDst >= tx) return;
+	if (yDst >= ty) return;
+	int xeDst = xDst + w;
+	if (xeDst <= 0) return;
+	int yeDst = yDst + h;
+	if (yeDst <= 0) return;
 
-    if (xDst < 0) {
-        xDst = 0; xSrc -= xDst;
-    }
-    if (yDst < 0) {
-        yDst = 0; ySrc -= yDst;
-    }
-    if (xeDst > tx) xeDst = tx;
-    if (yeDst > ty) yeDst = ty;
+	if (xDst < 0) {
+		xDst = 0; xSrc -= xDst;
+	}
+	if (yDst < 0) {
+		yDst = 0; ySrc -= yDst;
+	}
+	if (xeDst > tx) xeDst = tx;
+	if (yeDst > ty) yeDst = ty;
 
 	uint32_t * d = (uint32_t *) data;
 	uint32_t * s = (uint32_t *) src->data;
 	d += xDst + yDst * tx;
 	s += xSrc + ySrc * src->tx;
-    w = xeDst - xDst;
-    h = yeDst - yDst;
+	w = xeDst - xDst;
+	h = yeDst - yDst;
 
 	int stepDst = tx - w;
 	int stepSrc = src->tx - w;
 
-    v4si zv = {0, 0, 0, 0};
-    v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
+	v4si zv = {0, 0, 0, 0};
+	v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
 
 	for (int y = 0; y < h; y++){
 		for (int x = 0; x < w; x++){
-            v4si dp, sp;
+			v4si dp, sp;
 			dp.v = (V4SI) _mm_loadl_epi64((__m128i *) d);
-            sp.v = (V4SI) _mm_loadl_epi64((__m128i *) s++);
-            dp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)dp.v);
-            sp.v = (V4SI) _mm_unpacklo_epi8((__m128i)sp.v, (__m128i)zv.v);
+			sp.v = (V4SI) _mm_loadl_epi64((__m128i *) s++);
+			dp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)dp.v);
+			sp.v = (V4SI) _mm_unpacklo_epi8((__m128i)sp.v, (__m128i)zv.v);
 
-            v4si ap;
-            ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)sp.v, 0xFF);
-            ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
-            dp.v = (V4SI) _mm_mulhi_epu16((__m128i)dp.v, (__m128i)ap.v);
-            dp.v = (V4SI) _mm_adds_epu16((__m128i)sp.v, (__m128i)dp.v);
-            dp.v = (V4SI) _mm_packus_epi16((__m128i)dp.v, (__m128i)zv.v);
+			v4si ap;
+			ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)sp.v, 0xFF);
+			ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
+			dp.v = (V4SI) _mm_mulhi_epu16((__m128i)dp.v, (__m128i)ap.v);
+			dp.v = (V4SI) _mm_adds_epu16((__m128i)sp.v, (__m128i)dp.v);
+			dp.v = (V4SI) _mm_packus_epi16((__m128i)dp.v, (__m128i)zv.v);
 
 			*d++ = _mm_cvtsi128_si32((__m128i)dp.v);
 		}
 
-        s += stepSrc;
-        d += stepDst;
+		s += stepSrc;
+		d += stepDst;
 	}
 }
 
@@ -225,28 +225,28 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 
 void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
 {
-    if (xDst >= tx) return;
-    if (yDst >= ty) return;
-    int xeDst = xDst + w;
-    if (xeDst <= 0) return;
-    int yeDst = yDst + h;
-    if (yeDst <= 0) return;
+	if (xDst >= tx) return;
+	if (yDst >= ty) return;
+	int xeDst = xDst + w;
+	if (xeDst <= 0) return;
+	int yeDst = yDst + h;
+	if (yeDst <= 0) return;
 
-    if (xDst < 0) {
-        xDst = 0; xSrc -= xDst;
-    }
-    if (yDst < 0) {
-        yDst = 0; ySrc -= yDst;
-    }
-    if (xeDst > tx) xeDst = tx;
-    if (yeDst > ty) yeDst = ty;
+	if (xDst < 0) {
+		xDst = 0; xSrc -= xDst;
+	}
+	if (yDst < 0) {
+		yDst = 0; ySrc -= yDst;
+	}
+	if (xeDst > tx) xeDst = tx;
+	if (yeDst > ty) yeDst = ty;
 
 	uint32_t * d = (uint32_t *) data;
 	uint32_t * s = (uint32_t *) src->data;
 	d += xDst + yDst * tx;
 	s += xSrc + ySrc * src->tx;
-    w = xeDst - xDst;
-    h = yeDst - yDst;
+	w = xeDst - xDst;
+	h = yeDst - yDst;
 
 	int stepDst = tx - w;
 	int stepSrc = src->tx - w;
@@ -272,68 +272,68 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 #if LE_USE_SIMD == 1
 void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t hDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t wSrc, int32_t hSrc)
 {
-    if (wDst <= 0) return;
-    if (hDst <= 0) return;
+	if (wDst <= 0) return;
+	if (hDst <= 0) return;
 
-    int32_t us = (wSrc << 16) / wDst;
-    int32_t vs = (hSrc << 16) / hDst;
+	int32_t us = (wSrc << 16) / wDst;
+	int32_t vs = (hSrc << 16) / hDst;
 
-    if (xDst >= tx) return;
-    if (yDst >= ty) return;
-    int xeDst = xDst + wDst;
-    if (xeDst <= 0) return;
-    int yeDst = yDst + hDst;
-    if (yeDst <= 0) return;
+	if (xDst >= tx) return;
+	if (yDst >= ty) return;
+	int xeDst = xDst + wDst;
+	if (xeDst <= 0) return;
+	int yeDst = yDst + hDst;
+	if (yeDst <= 0) return;
 
-    int32_t ub = 0;
-    int32_t vb = 0;
-    if (xDst < 0) {
-        ub = ((int64_t)(-xDst * wSrc) << 16) / wDst;
-        xDst = 0;
-    }
-    if (yDst < 0) {
-        vb = ((int64_t)(-yDst * hSrc) << 16) / hDst;
-        yDst = 0;
-    }
-    if (xeDst > tx) xeDst = tx;
-    if (yeDst > ty) yeDst = ty;
+	int32_t ub = 0;
+	int32_t vb = 0;
+	if (xDst < 0) {
+		ub = ((int64_t)(-xDst * wSrc) << 16) / wDst;
+		xDst = 0;
+	}
+	if (yDst < 0) {
+		vb = ((int64_t)(-yDst * hSrc) << 16) / hDst;
+		yDst = 0;
+	}
+	if (xeDst > tx) xeDst = tx;
+	if (yeDst > ty) yeDst = ty;
 
 	uint32_t * d = (uint32_t *) data;
 	uint32_t * s = (uint32_t *) src->data;
 	d += xDst + yDst * tx;
 
-    wDst = xeDst - xDst;
-    hDst = yeDst - yDst;
+	wDst = xeDst - xDst;
+	hDst = yeDst - yDst;
 	int stepDst = tx - wDst;
 
-    v4si zv = {0, 0, 0, 0};
-    v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
+	v4si zv = {0, 0, 0, 0};
+	v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
 
-    int32_t u = ub;
-    int32_t v = vb;
+	int32_t u = ub;
+	int32_t v = vb;
 	for (int y = 0; y < hDst; y++){
 		for (int x = 0; x < wDst; x++){
 			uint32_t * p = &s[(u >> 16) + (v >> 16) * src->tx];
-            u += us;
+			u += us;
 
-            v4si dp, sp;
+			v4si dp, sp;
 			dp.v = (V4SI) _mm_loadl_epi64((__m128i *) d);
-            sp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
-            dp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)dp.v);
-            sp.v = (V4SI) _mm_unpacklo_epi8((__m128i)sp.v, (__m128i)zv.v);
+			sp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
+			dp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)dp.v);
+			sp.v = (V4SI) _mm_unpacklo_epi8((__m128i)sp.v, (__m128i)zv.v);
 
-            v4si ap;
-            ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)sp.v, 0xFF);
-            ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
-            dp.v = (V4SI) _mm_mulhi_epu16((__m128i)dp.v, (__m128i)ap.v);
-            dp.v = (V4SI) _mm_adds_epu16((__m128i)sp.v, (__m128i)dp.v);
-            dp.v = (V4SI) _mm_packus_epi16((__m128i)dp.v, (__m128i)zv.v);
+			v4si ap;
+			ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)sp.v, 0xFF);
+			ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
+			dp.v = (V4SI) _mm_mulhi_epu16((__m128i)dp.v, (__m128i)ap.v);
+			dp.v = (V4SI) _mm_adds_epu16((__m128i)sp.v, (__m128i)dp.v);
+			dp.v = (V4SI) _mm_packus_epi16((__m128i)dp.v, (__m128i)zv.v);
 			*d++ = _mm_cvtsi128_si32((__m128i)dp.v);
 		}
 
 		u = ub;
-        v += vs;
-        d += stepDst;
+		v += vs;
+		d += stepDst;
 	}
 }
 
@@ -341,47 +341,47 @@ void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t 
 
 void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t hDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t wSrc, int32_t hSrc)
 {
-    if (wDst <= 0) return;
-    if (hDst <= 0) return;
+	if (wDst <= 0) return;
+	if (hDst <= 0) return;
 
-    int32_t us = (wSrc << 16) / wDst;
-    int32_t vs = (hSrc << 16) / hDst;
+	int32_t us = (wSrc << 16) / wDst;
+	int32_t vs = (hSrc << 16) / hDst;
 
-    if (xDst >= tx) return;
-    if (yDst >= ty) return;
-    int xeDst = xDst + wDst;
-    if (xeDst <= 0) return;
-    int yeDst = yDst + hDst;
-    if (yeDst <= 0) return;
+	if (xDst >= tx) return;
+	if (yDst >= ty) return;
+	int xeDst = xDst + wDst;
+	if (xeDst <= 0) return;
+	int yeDst = yDst + hDst;
+	if (yeDst <= 0) return;
 
-    int32_t ub = 0;
-    int32_t vb = 0;
-    if (xDst < 0) {
-        ub = ((int64_t)(-xDst * wSrc) << 16) / wDst;
-        xDst = 0;
-    }
-    if (yDst < 0) {
-        vb = ((int64_t)(-yDst * hSrc) << 16) / hDst;
-        yDst = 0;
-    }
-    if (xeDst > tx) xeDst = tx;
-    if (yeDst > ty) yeDst = ty;
+	int32_t ub = 0;
+	int32_t vb = 0;
+	if (xDst < 0) {
+		ub = ((int64_t)(-xDst * wSrc) << 16) / wDst;
+		xDst = 0;
+	}
+	if (yDst < 0) {
+		vb = ((int64_t)(-yDst * hSrc) << 16) / hDst;
+		yDst = 0;
+	}
+	if (xeDst > tx) xeDst = tx;
+	if (yeDst > ty) yeDst = ty;
 
 	uint32_t * d = (uint32_t *) data;
 	uint32_t * s = (uint32_t *) src->data;
 	d += xDst + yDst * tx;
 
-    wDst = xeDst - xDst;
-    hDst = yeDst - yDst;
+	wDst = xeDst - xDst;
+	hDst = yeDst - yDst;
 	int stepDst = tx - wDst;
 
-    int32_t u = ub;
-    int32_t v = vb;
+	int32_t u = ub;
+	int32_t v = vb;
 	for (int y = 0; y < hDst; y++){
 		for (int x = 0; x < wDst; x++){
 			uint8_t * sPix = (uint8_t *) &s[(u >> 16) + (v >> 16) * src->tx];
-            uint8_t * dPix = (uint8_t *) d ++;
-            u += us;
+			uint8_t * dPix = (uint8_t *) d ++;
+			u += us;
 
 			uint16_t a = 256 - sPix[3];
 			dPix[0] = ((dPix[0] * a) >> 8) + sPix[0];
@@ -391,8 +391,8 @@ void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t 
 		}
 
 		u = ub;
-        v += vs;
-        d += stepDst;
+		v += vs;
+		d += stepDst;
 	}
 }
 
@@ -436,7 +436,7 @@ void LeBitmap::allocate(int tx, int ty)
 void LeBitmap::deallocate()
 {
 	if (dataAllocated && data)
-        delete[] (uint32_t *) data;
+		delete[] (uint32_t *) data;
 	dataAllocated = false;
 
 	for (int l = 1; l < mmLevels; l++)

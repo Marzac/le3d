@@ -253,7 +253,7 @@ int LeObjFile::countMatLib(FILE * file)
 LeObjMaterial * LeObjFile::findMaterial(const char * name)
 {
 	for (int i = 0; i < noMaterials; i++)
-        if (strcmp(name, materials[i].name) == 0)
+		if (strcmp(name, materials[i].name) == 0)
 			return &materials[i];
 	return &defMaterial;
 }
@@ -340,11 +340,11 @@ void LeObjFile::importTriangles(FILE * file, LeMesh * mesh)
 			uint32_t b = cbound(curMaterial->diffuse[2] * 255.0f, 0.0f, 255.0f);
 			mesh->colors[index] = r | (g << 8) | (b << 16);
 
-            int slot = 0;
+			int slot = 0;
 			const char * texName = curMaterial->texture;
 			if (texName[0]) {
-                slot = bmpCache.getFromName(texName);
-                if (!slot) printf("objFile: using default texture (instead of %s)!\n", texName);
+				slot = bmpCache.getFromName(texName);
+				if (!slot) printf("objFile: using default texture (instead of %s)!\n", texName);
 			}
 			mesh->texSlotList[index++] = slot;
 		}else if (strncmp(line, objMaterialSet, 7) == 0) {

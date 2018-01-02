@@ -35,89 +35,89 @@
 
 /*****************************************************************************/
 LeBSet::LeBSet() :
-    view(),
-    pos(), scale(1.0f, 1.0f, 1.0f), angle(),
-    places(NULL), sizes(NULL),
-    colors(NULL), texSlots(NULL),
-    flags(NULL),
-    noBillboards(0),
-    shades(NULL),
-    allocated(false)
+	view(),
+	pos(), scale(1.0f, 1.0f, 1.0f), angle(),
+	places(NULL), sizes(NULL),
+	colors(NULL), texSlots(NULL),
+	flags(NULL),
+	noBillboards(0),
+	shades(NULL),
+	allocated(false)
 {
-    updateMatrix();
+	updateMatrix();
 }
 
 LeBSet::LeBSet(int noBillboards) :
-    view(),
-    pos(), scale(1.0f, 1.0f, 1.0f), angle(),
-    places(NULL), sizes(NULL),
-    colors(NULL), texSlots(NULL),
-    flags(NULL),
-    noBillboards(0),
-    shades(NULL),
-    allocated(false)
+	view(),
+	pos(), scale(1.0f, 1.0f, 1.0f), angle(),
+	places(NULL), sizes(NULL),
+	colors(NULL), texSlots(NULL),
+	flags(NULL),
+	noBillboards(0),
+	shades(NULL),
+	allocated(false)
 {
-    allocate(noBillboards);
-    basic();
-    updateMatrix();
+	allocate(noBillboards);
+	basic();
+	updateMatrix();
 }
 
 LeBSet::~LeBSet()
 {
-    deallocate();
+	deallocate();
 }
 
 /*****************************************************************************/
 void LeBSet::shadowCopy(LeBSet * copy) const
 {
-    if (copy->allocated) copy->deallocate();
+	if (copy->allocated) copy->deallocate();
 
-    copy->places = places;
-    copy->sizes = sizes;
-    copy->colors = colors;
-    copy->texSlots = texSlots;
-    copy->flags = flags;
+	copy->places = places;
+	copy->sizes = sizes;
+	copy->colors = colors;
+	copy->texSlots = texSlots;
+	copy->flags = flags;
 
-    if (shades) {
-        copy->shades = new uint32_t[noBillboards];
-        memcpy(copy->shades, shades, noBillboards * sizeof(uint32_t));
-    }
+	if (shades) {
+		copy->shades = new uint32_t[noBillboards];
+		memcpy(copy->shades, shades, noBillboards * sizeof(uint32_t));
+	}
 }
 
 void LeBSet::copy(LeBSet * copy) const
 {
-    if (copy->allocated) copy->deallocate();
+	if (copy->allocated) copy->deallocate();
 
-    copy->allocate(noBillboards);
+	copy->allocate(noBillboards);
 
-    memcpy(copy->places, places, noBillboards * sizeof(LeVertex));
-    memcpy(copy->sizes, sizes, noBillboards * sizeof(float) * 2);
-    memcpy(copy->colors, colors, noBillboards * sizeof(uint32_t));
-    memcpy(copy->texSlots, texSlots, noBillboards * sizeof(int));
-    memcpy(copy->flags, flags, noBillboards * sizeof(int));
+	memcpy(copy->places, places, noBillboards * sizeof(LeVertex));
+	memcpy(copy->sizes, sizes, noBillboards * sizeof(float) * 2);
+	memcpy(copy->colors, colors, noBillboards * sizeof(uint32_t));
+	memcpy(copy->texSlots, texSlots, noBillboards * sizeof(int));
+	memcpy(copy->flags, flags, noBillboards * sizeof(int));
 }
 
 /*****************************************************************************/
 void LeBSet::basic()
 {
-    for (int b = 0; b < noBillboards; b++) {
-        sizes[b*2+0] = 32.0f;
-        sizes[b*2+1] = 32.0f;
-        colors[b] = 0x00FFFFFF;
-        texSlots[b] = 0;
-        flags[b] = 0;
-    }
+	for (int b = 0; b < noBillboards; b++) {
+		sizes[b*2+0] = 32.0f;
+		sizes[b*2+1] = 32.0f;
+		colors[b] = 0x00FFFFFF;
+		texSlots[b] = 0;
+		flags[b] = 0;
+	}
 }
 
 /*****************************************************************************/
 void LeBSet::allocate(int noBillboards)
 {
-    if (allocated) deallocate();
+	if (allocated) deallocate();
 
 	places = new LeVertex[noBillboards];
 	sizes = new float[noBillboards * 2];
 	colors = new uint32_t[noBillboards];
-    texSlots = new int[noBillboards];
+	texSlots = new int[noBillboards];
 	flags = new int[noBillboards];
 
 	this->noBillboards = noBillboards;
@@ -126,24 +126,24 @@ void LeBSet::allocate(int noBillboards)
 
 void LeBSet::deallocate()
 {
-    if (allocated) {
-        if (places) delete[] places;
-        places = NULL;
-        if (sizes) delete[] sizes;
-        sizes = NULL;
-        if (colors) delete[] colors;
-        colors = NULL;
-        if (texSlots) delete[] texSlots;
-        texSlots = NULL;
-        if (flags) delete[] flags;
-        flags = NULL;
+	if (allocated) {
+		if (places) delete[] places;
+		places = NULL;
+		if (sizes) delete[] sizes;
+		sizes = NULL;
+		if (colors) delete[] colors;
+		colors = NULL;
+		if (texSlots) delete[] texSlots;
+		texSlots = NULL;
+		if (flags) delete[] flags;
+		flags = NULL;
 
-        noBillboards = 0;
-        allocated = false;
-    }
+		noBillboards = 0;
+		allocated = false;
+	}
 
-    if (shades) delete[] shades;
-    shades = NULL;
+	if (shades) delete[] shades;
+	shades = NULL;
 }
 
 /*****************************************************************************/
@@ -155,7 +155,7 @@ void LeBSet::transform(const LeMatrix &matrix)
 
 void LeBSet::setMatrix(const LeMatrix &matrix)
 {
-    view = matrix;
+	view = matrix;
 }
 
 void LeBSet::updateMatrix()

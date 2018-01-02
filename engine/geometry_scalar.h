@@ -340,14 +340,14 @@ struct LeMatrix
 			mat[i][j] = 0;
 	}
 
-    void transpose()
-    {
-        LeMatrix m;
-        for (int i = 0; i < 4; i++)
+	void transpose()
+	{
+		LeMatrix m;
+		for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 4; j++)
-            m.mat[j][i] = mat[i][j];
-        *this = m;
-    }
+			m.mat[j][i] = mat[i][j];
+		*this = m;
+	}
 
 	void translate(LeVertex d)
 	{
@@ -569,7 +569,7 @@ struct LeMatrix
 	{
 		float d = mat[0][0]*(mat[1][1]*mat[2][2]-mat[2][1]*mat[1][2])
 				- mat[0][1]*(mat[1][0]*mat[2][2]-mat[1][2]*mat[2][0])
-                + mat[0][2]*(mat[1][0]*mat[2][1]-mat[1][1]*mat[2][0]);
+				+ mat[0][2]*(mat[1][0]*mat[2][1]-mat[1][1]*mat[2][0]);
 
 		LeMatrix m;
 		if (d == 0.0f) {m.zero(); return m;}
@@ -625,13 +625,13 @@ struct LeMatrix
 
 /*****************************************************************************/
 namespace LePrimitives {
-	const LeVertex up    = LeVertex(0.0f, 1.0f, 0.0f);
-	const LeVertex down  = LeVertex(0.0f, -1.0f, 0.0f);
+	const LeVertex up	 = LeVertex(0.0f, 1.0f, 0.0f);
+	const LeVertex down	 = LeVertex(0.0f, -1.0f, 0.0f);
 	const LeVertex front = LeVertex(0.0f, 0.0f, -1.0f);
-	const LeVertex back  = LeVertex(0.0f, 0.0f, 1.0f);
-	const LeVertex left  = LeVertex(-1.0f, 0.0f, 0.0f);
+	const LeVertex back	 = LeVertex(0.0f, 0.0f, 1.0f);
+	const LeVertex left	 = LeVertex(-1.0f, 0.0f, 0.0f);
 	const LeVertex right = LeVertex(1.0f, 0.0f, 0.0f);
-	const LeVertex zero  = LeVertex(0.0f, 0.0f, 0.0f);
+	const LeVertex zero	 = LeVertex(0.0f, 0.0f, 0.0f);
 }
 
 #endif	//LE_GEOMETRY_SCALAR_H

@@ -71,8 +71,8 @@ LeMeshCache::~LeMeshCache()
 LeMesh * LeMeshCache::loadOBJ(const char * path)
 {
 	if (noSlots >= LE_MESHCACHE_SLOTS) {
-        printf("meshCache: no free slots!\n");
-        return NULL;
+		printf("meshCache: no free slots!\n");
+		return NULL;
 	}
 
 	LeObjFile objFile = LeObjFile(path);
@@ -92,23 +92,23 @@ void LeMeshCache::loadDirectory(const char * path)
 	char ext[LE_MAX_FILE_EXTENSION+1];
 	char filePath[LE_MAX_FILE_PATH+1];
 
-    DIR * dir = opendir(path);
-    struct dirent * dd;
+	DIR * dir = opendir(path);
+	struct dirent * dd;
 
-    while ((dd = readdir(dir))) {
-    	if (dd->d_name[0] == '.') continue;
+	while ((dd = readdir(dir))) {
+		if (dd->d_name[0] == '.') continue;
 		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, dd->d_name);
 
-    	if (strcmp(ext, "obj") == 0) {
-        // Load a Wavefront obj file
+		if (strcmp(ext, "obj") == 0) {
+		// Load a Wavefront obj file
 			snprintf(filePath, LE_MAX_FILE_PATH, "%s/%s", path, dd->d_name);
 			filePath[LE_MAX_FILE_PATH] = '\0';
 			printf("meshCache: loading mesh: %s\n", filePath);
 			loadOBJ(filePath);
-    	}
+		}
 
-    }
-    closedir(dir);
+	}
+	closedir(dir);
 }
 
 /*****************************************************************************/
@@ -144,7 +144,7 @@ void LeMeshCache::deleteSlot(int index)
 	slot->name[0] = '\0';
 	slot->flags = 0;
 
-    noSlots--;
+	noSlots--;
 }
 
 /*****************************************************************************/
@@ -162,6 +162,6 @@ int LeMeshCache::getFromName(const char * path)
 	}
 
 // Resource not found
-    printf("meshCache: %s not found!\n", path);
+	printf("meshCache: %s not found!\n", path);
 	return 0;
 }

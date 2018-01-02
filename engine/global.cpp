@@ -91,10 +91,10 @@ void LeGlobal::getFileDirectory(char * dir, int dirSize, const char * path)
 	dir[0] = '\0';
 	int len = strlen(path);
 	while(len) {
-        char c = path[--len];
-        if (c == '/' || c == '\\') {
-            if (len > dirSize - 2) return;
-            strncpy(dir, path, len+1);
+		char c = path[--len];
+		if (c == '/' || c == '\\') {
+			if (len > dirSize - 2) return;
+			strncpy(dir, path, len+1);
 			dir[len+1] = 0;
 			return;
 		}

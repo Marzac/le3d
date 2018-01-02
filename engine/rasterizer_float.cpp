@@ -136,11 +136,11 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 	// Choose the mipmap level
 	#if LE_RENDERER_MIPMAPS == 1
 		if (bmp->mmLevels) {
-            float utop = tri->us[vt] / tri->zs[vt];
-            float ubot = tri->us[vb] / tri->zs[vb];
-            float vtop = tri->vs[vt] / tri->zs[vt];
-            float vbot = tri->vs[vb] / tri->zs[vb];
-            float d = cmax(fabs(utop - ubot), fabs(vtop - vbot));
+			float utop = tri->us[vt] / tri->zs[vt];
+			float ubot = tri->us[vb] / tri->zs[vb];
+			float vtop = tri->vs[vt] / tri->zs[vt];
+			float vbot = tri->vs[vb] / tri->zs[vb];
+			float d = cmax(fabs(utop - ubot), fabs(vtop - vbot));
 
 			int r = (d * bmp->ty + dy * 0.5f) / dy;
 			int l = LeGlobal::log2i32(r);
@@ -157,10 +157,10 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		texMaskV = (1 << bmp->tyP2) - 1;
 
 	#if LE_USE_SIMD == 1
-        float texSizeUFloat = (float) (1 << texSizeU);
+		float texSizeUFloat = (float) (1 << texSizeU);
 		texScale_4.v = (V4SF) {texSizeUFloat, texSizeUFloat, texSizeUFloat, texSizeUFloat};
 		texMaskU_4.v = (V4SU) {texMaskU, texMaskU, texMaskU, texMaskU};
- 		texMaskV_4.v = (V4SU) {texMaskV << texSizeU, texMaskV << texSizeU, texMaskV << texSizeU, texMaskV << texSizeU};
+		texMaskV_4.v = (V4SU) {texMaskV << texSizeU, texMaskV << texSizeU, texMaskV << texSizeU, texMaskV << texSizeU};
 		v4si zv = {0, 0, 0, 0};
 		color_1.v = (V4SU) _mm_loadu_si128((__m128i *) &color);
 		color_1.v = (V4SU) _mm_unpacklo_epi32((__m128i)color_1.v,(__m128i)color_1.v);
@@ -247,7 +247,7 @@ void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 	float d = ys[vb] - ys[vm1];
 	if (d == 0.0f) return;
 
-    float id = 1.0f / d;
+	float id = 1.0f / d;
 	float ax1 = (xs[vb] - xs[vm1]) * id;
 	float aw1 = (ws[vb] - ws[vm1]) * id;
 	float au1 = (us[vb] - us[vm1]) * id;
@@ -341,12 +341,12 @@ inline void LeRasterizer::fillFlatTexZC(float y, float x1, float x2, float w1, f
 		tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[2]]);
 		tq.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[3]]);
 		t2.v = (V4SI) _mm_unpacklo_epi32((__m128i)tp.v, (__m128i)tq.v);
-        t2.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)t2.v);
+		t2.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)t2.v);
 		t2.v = (V4SI) _mm_mulhi_epu16((__m128i)t2.v, (__m128i)color_1.v);
 
 		tp.v = (V4SI) _mm_packus_epi16((__m128i)t1.v, (__m128i)t2.v);
-        _mm_storeu_si128((__m128i *) p, (__m128i) tp.v);
-        p += 4;
+		_mm_storeu_si128((__m128i *) p, (__m128i) tp.v);
+		p += 4;
 
 		w_4.v += aw_4.v;
 		u_4.v += au_4.v;
@@ -370,22 +370,22 @@ inline void LeRasterizer::fillFlatTexZC(float y, float x1, float x2, float w1, f
 	v4si zv = {0, 0, 0, 0};
 	v4si tp;
 	tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[0]]);
-    tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)tp.v);
-    tp.v = (V4SI) _mm_mulhi_epu16((__m128i)tp.v, (__m128i)color_1.v);
+	tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)tp.v);
+	tp.v = (V4SI) _mm_mulhi_epu16((__m128i)tp.v, (__m128i)color_1.v);
 	tp.v = (V4SI) _mm_packus_epi16((__m128i)tp.v, (__m128i)zv.v);
 	*p++ = _mm_cvtsi128_si32((__m128i)tp.v);
 
 	if (r == 1) return;
 	tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[1]]);
-    tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)tp.v);
-    tp.v = (V4SI) _mm_mulhi_epu16((__m128i)tp.v, (__m128i)color_1.v);
+	tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)tp.v);
+	tp.v = (V4SI) _mm_mulhi_epu16((__m128i)tp.v, (__m128i)color_1.v);
 	tp.v = (V4SI) _mm_packus_epi16((__m128i)tp.v, (__m128i)zv.v);
 	*p++ = _mm_cvtsi128_si32((__m128i)tp.v);
 
 	if (r == 2) return;
 	tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[2]]);
-    tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)tp.v);
-    tp.v = (V4SI) _mm_mulhi_epu16((__m128i)tp.v, (__m128i)color_1.v);
+	tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)tp.v);
+	tp.v = (V4SI) _mm_mulhi_epu16((__m128i)tp.v, (__m128i)color_1.v);
 	tp.v = (V4SI) _mm_packus_epi16((__m128i)tp.v, (__m128i)zv.v);
 	*p++ = _mm_cvtsi128_si32((__m128i)tp.v);
 }
@@ -414,7 +414,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(float y, float x1, float x2, float 
 	int b = (xe - xb) >> 2;
 	int r = (xe - xb) & 0x3;
 
-    v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
+	v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
 	for (int x = 0; x < b; x ++) {
 		v4sf z_4;
 		z_4.v = __builtin_ia32_rcpps(w_4.v);
@@ -432,45 +432,45 @@ inline void LeRasterizer::fillFlatTexAlphaZC(float y, float x1, float x2, float 
 
 		v4si zv = {0, 0, 0, 0};
 		v4si tp, tq, fp, t1, t2;
-        v4si ap, apl, aph;
+		v4si ap, apl, aph;
 
 		fp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
 		tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[0]]);
-        tq.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[1]]);
-        t1.v = (V4SI) _mm_unpacklo_epi32((__m128i)tp.v, (__m128i)tq.v);
+		tq.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[1]]);
+		t1.v = (V4SI) _mm_unpacklo_epi32((__m128i)tp.v, (__m128i)tq.v);
 		fp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)fp.v);
 		t1.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)t1.v);
 
-        apl.v = (V4SI) _mm_shufflelo_epi16((__m128i)t1.v, 0xFF);
-        aph.v = (V4SI) _mm_shufflehi_epi16((__m128i)t1.v, 0xFF);
-        ap.v = (V4SI) _mm_move_sd((__m128d)aph.v, (__m128d)apl.v);
-        ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
-        ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
+		apl.v = (V4SI) _mm_shufflelo_epi16((__m128i)t1.v, 0xFF);
+		aph.v = (V4SI) _mm_shufflehi_epi16((__m128i)t1.v, 0xFF);
+		ap.v = (V4SI) _mm_move_sd((__m128d)aph.v, (__m128d)apl.v);
+		ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
+		ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
 
 		t1.v = (V4SI) _mm_mulhi_epu16((__m128i)t1.v, (__m128i)color_1.v);
 		fp.v = (V4SI) _mm_mulhi_epu16((__m128i)fp.v, (__m128i)ap.v);
 		t1.v = (V4SI) _mm_adds_epu16((__m128i)t1.v, (__m128i)fp.v);
 
-        fp.v = (V4SI) _mm_loadl_epi64((__m128i *) (p+2));
+		fp.v = (V4SI) _mm_loadl_epi64((__m128i *) (p+2));
 		tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[2]]);
-        tq.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[3]]);
-        t2.v = (V4SI) _mm_unpacklo_epi32((__m128i)tp.v, (__m128i)tq.v);
+		tq.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[3]]);
+		t2.v = (V4SI) _mm_unpacklo_epi32((__m128i)tp.v, (__m128i)tq.v);
 		fp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)fp.v);
 		t2.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)t2.v);
 
-        apl.v = (V4SI) _mm_shufflelo_epi16((__m128i)t2.v, 0xFF);
-        aph.v = (V4SI) _mm_shufflehi_epi16((__m128i)t2.v, 0xFF);
-        ap.v = (V4SI) _mm_move_sd((__m128d)aph.v, (__m128d)apl.v);
-        ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
-        ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
+		apl.v = (V4SI) _mm_shufflelo_epi16((__m128i)t2.v, 0xFF);
+		aph.v = (V4SI) _mm_shufflehi_epi16((__m128i)t2.v, 0xFF);
+		ap.v = (V4SI) _mm_move_sd((__m128d)aph.v, (__m128d)apl.v);
+		ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
+		ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
 
 		t2.v = (V4SI) _mm_mulhi_epu16((__m128i)t2.v, (__m128i)color_1.v);
 		fp.v = (V4SI) _mm_mulhi_epu16((__m128i)fp.v, (__m128i)ap.v);
 		t2.v = (V4SI) _mm_adds_epu16((__m128i)t2.v, (__m128i)fp.v);
 
 		tp.v = (V4SI) _mm_packus_epi16((__m128i)t1.v, (__m128i)t2.v);
-        _mm_storeu_si128((__m128i *) p, (__m128i) tp.v);
-        p += 4;
+		_mm_storeu_si128((__m128i *) p, (__m128i) tp.v);
+		p += 4;
 
 		w_4.v += aw_4.v;
 		u_4.v += au_4.v;
@@ -494,15 +494,15 @@ inline void LeRasterizer::fillFlatTexAlphaZC(float y, float x1, float x2, float 
 
 	v4si zv = {0, 0, 0, 0};
 	v4si tp, fp;
-    fp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
-    tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[0]]);
+	fp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
+	tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[0]]);
 	fp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)fp.v);
 	tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)tp.v);
 
 	v4si ap;
-    ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)tp.v, 0xFF);
-    ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
-    ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
+	ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)tp.v, 0xFF);
+	ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
+	ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
 
 	tp.v = (V4SI) _mm_mulhi_epu16((__m128i)tp.v, (__m128i)color_1.v);
 	fp.v = (V4SI) _mm_mulhi_epu16((__m128i)fp.v, (__m128i)ap.v);
@@ -513,14 +513,14 @@ inline void LeRasterizer::fillFlatTexAlphaZC(float y, float x1, float x2, float 
 
 	if (r == 1) return;
 
-    fp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
-    tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[1]]);
+	fp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
+	tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[1]]);
 	fp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)fp.v);
 	tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)tp.v);
 
-    ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)tp.v, 0xFF);
-    ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
-    ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
+	ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)tp.v, 0xFF);
+	ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
+	ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
 
 	tp.v = (V4SI) _mm_mulhi_epu16((__m128i)tp.v, (__m128i)color_1.v);
 	fp.v = (V4SI) _mm_mulhi_epu16((__m128i)fp.v, (__m128i)ap.v);
@@ -530,14 +530,14 @@ inline void LeRasterizer::fillFlatTexAlphaZC(float y, float x1, float x2, float 
 	*p++ = _mm_cvtsi128_si32((__m128i)tp.v);
 
 	if (r == 2) return;
-    fp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
-    tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[2]]);
+	fp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
+	tp.v = (V4SI) _mm_loadl_epi64((__m128i *) &texPixels[mui_4.i[2]]);
 	fp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)fp.v);
 	tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)tp.v);
 
-    ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)tp.v, 0xFF);
-    ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
-    ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
+	ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)tp.v, 0xFF);
+	ap.v = (V4SI) _mm_srli_epi16((__m128i)ap.v, 8);
+	ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
 
 	tp.v = (V4SI) _mm_mulhi_epu16((__m128i)tp.v, (__m128i)color_1.v);
 	fp.v = (V4SI) _mm_mulhi_epu16((__m128i)fp.v, (__m128i)ap.v);

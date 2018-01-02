@@ -138,13 +138,13 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 	// Choose the mipmap level
 	#if LE_RENDERER_MIPMAPS == 1
 		if (bmp->mmLevels) {
-            float utop = tri->us[vt] / tri->zs[vt];
-            float ubot = tri->us[vb] / tri->zs[vb];
-            float vtop = tri->vs[vt] / tri->zs[vt];
-            float vbot = tri->vs[vb] / tri->zs[vb];
-            float d = cmax(fabs(utop - ubot), fabs(vtop - vbot));
+			float utop = tri->us[vt] / tri->zs[vt];
+			float ubot = tri->us[vb] / tri->zs[vb];
+			float vtop = tri->vs[vt] / tri->zs[vt];
+			float vbot = tri->vs[vb] / tri->zs[vb];
+			float d = cmax(fabs(utop - ubot), fabs(vtop - vbot));
 
-            int r = (d * bmp->ty + dy * 0.5f) / dy;
+			int r = (d * bmp->ty + dy * 0.5f) / dy;
 			int l = LeGlobal::log2i32(r);
 			l = cmin(l, bmp->mmLevels - 1);
 			bmp = bmp->mipmaps[l];
@@ -220,7 +220,7 @@ void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 	int v2 = v1;
 
 	int y1 = ys[vt];
-    int y2 = ys[vm1];
+	int y2 = ys[vm1];
 	x2 += 0xFFFF;
 
 	if (bmp->flags & LE_BMP_RGBA) {

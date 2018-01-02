@@ -47,12 +47,12 @@ void * operator new[](size_t size)
 
 void operator delete(void * ptr)
 {
-    _aligned_free(ptr);
+	_aligned_free(ptr);
 }
 
 void operator delete[](void * ptr)
 {
-    _aligned_free(ptr);
+	_aligned_free(ptr);
 }
 
 #endif // LE_USE_SIMD

@@ -71,7 +71,7 @@ void LeTiming::firstFrame()
 
 void LeTiming::lastFrame()
 {
-    timeEndPeriod(LE_TIMING_GRANULARITY);
+	timeEndPeriod(LE_TIMING_GRANULARITY);
 }
 
 bool LeTiming::isNextFrame()
@@ -83,7 +83,7 @@ bool LeTiming::isNextFrame()
 	lastCounter = pc.QuadPart;
 
 	fps = (float) countsPerSec / dt;
-    if (enableFPSDisplay) displayFPS();
+	if (enableFPSDisplay) displayFPS();
 
 	return true;
 }
@@ -91,30 +91,30 @@ bool LeTiming::isNextFrame()
 void LeTiming::waitNextFrame()
 {
 	while(1) {
-        LARGE_INTEGER pc;
-        QueryPerformanceCounter(&pc);
-        int64_t dt = pc.QuadPart - lastCounter;
-        int64_t dg = countsPerFrame - dt;
-        if (dg <= 0) break;
+		LARGE_INTEGER pc;
+		QueryPerformanceCounter(&pc);
+		int64_t dt = pc.QuadPart - lastCounter;
+		int64_t dg = countsPerFrame - dt;
+		if (dg <= 0) break;
 
-        int64_t ms = (1000 * dg) / countsPerSec;
-        ms -= LE_TIMING_GRANULARITY;
-        if (ms > 0) Sleep(ms);
+		int64_t ms = (1000 * dg) / countsPerSec;
+		ms -= LE_TIMING_GRANULARITY;
+		if (ms > 0) Sleep(ms);
 	}
 
 	LARGE_INTEGER pc;
-    QueryPerformanceCounter(&pc);
-    int64_t dt = pc.QuadPart - lastCounter;
-    lastCounter = pc.QuadPart;
+	QueryPerformanceCounter(&pc);
+	int64_t dt = pc.QuadPart - lastCounter;
+	lastCounter = pc.QuadPart;
 
-    fps = (float) countsPerSec / dt;
-    if (enableFPSDisplay) displayFPS();
+	fps = (float) countsPerSec / dt;
+	if (enableFPSDisplay) displayFPS();
 }
 
 /*****************************************************************************/
 void LeTiming::displayFPS()
 {
-    static int ttd = 0;
+	static int ttd = 0;
 	if (ttd++ == LE_TIMING_FPS) {
 		printf("FPS %f\n", fps);
 		ttd = 0;

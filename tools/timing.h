@@ -39,7 +39,7 @@
 
 /*****************************************************************************/
 #define LE_TIMING_FPS			30		/*< Target FPS */
-#define LE_TIMING_GRANULARITY	1       /*< Desired scheduler granularity (in ms) */
+#define LE_TIMING_GRANULARITY	1		/*< Desired scheduler granularity (in ms) */
 
 /*****************************************************************************/
 class LeTiming {
@@ -51,19 +51,19 @@ public:
 	void lastFrame();
 
 	bool isNextFrame();
-    void waitNextFrame();
+	void waitNextFrame();
 
 public:
-	float fps;				    /*< Current game FPS */
-	float targetFps;		    /*< Target game FPS */
-    bool enableFPSDisplay;      /*< Periodically displays current FPS in console */
+	float fps;					/*< Current game FPS */
+	float targetFps;			/*< Target game FPS */
+	bool enableFPSDisplay;		/*< Periodically displays current FPS in console */
 
 private:
 	int64_t countsPerSec;
 	int64_t countsPerFrame;
 	int64_t lastCounter;
 
-    void displayFPS();
+	void displayFPS();
 };
 
 #endif // LE_TIMING_H

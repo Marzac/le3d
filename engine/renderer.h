@@ -80,10 +80,10 @@ public:
 	LeVerList * getVerList();
 
 private:
-    bool checkMemory(int noVertexes, int noTriangles);
+	bool checkMemory(int noVertexes, int noTriangles);
 
 	int build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[]);
-    int build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int indices[]);
+	int build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int indices[]);
 
 	void updateFrustrum();
 

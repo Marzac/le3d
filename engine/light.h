@@ -72,7 +72,7 @@ private:
 	void shineAmbient(LeMesh * mesh);
 
 public:
-    static void blendColors(uint32_t color1, uint32_t color2, float factor, uint32_t &result);
+	static void blendColors(uint32_t color1, uint32_t color2, float factor, uint32_t &result);
 
 };
 

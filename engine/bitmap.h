@@ -38,9 +38,9 @@
 
 /*****************************************************************************/
 typedef enum{
-	LE_BMP_RGB              = 0,    /** Bitmap in 32bit RGB color format */
-	LE_BMP_RGBA             = 1,    /** Bitmap in 32bit RGBA format */
-	LE_BMP_PREMULTIPLIED    = 2     /** Bitmap in 32bit RGBA (alpha pre-multiplied) format */
+	LE_BMP_RGB				= 0,	/** Bitmap in 32bit RGB color format */
+	LE_BMP_RGBA				= 1,	/** Bitmap in 32bit RGBA format */
+	LE_BMP_PREMULTIPLIED	= 2		/** Bitmap in 32bit RGBA (alpha pre-multiplied) format */
 }LE_BITMAP_FLAGS;
 
 /*****************************************************************************/

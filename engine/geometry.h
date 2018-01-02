@@ -44,9 +44,9 @@
 
 /*****************************************************************************/
 #if LE_USE_SIMD == 1
-    #include "geometry_simd.h"
+	#include "geometry_simd.h"
 #else
-    #include "geometry_scalar.h"
+	#include "geometry_scalar.h"
 #endif // LE_USE_SIMD
 
 #endif // LE_GEOMETRY_H

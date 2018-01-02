@@ -51,7 +51,7 @@ LeBmpCache::LeBmpCache() :
 // Create the default bitmap (32x32 all white)
 	LeBitmap * defBitmap = new LeBitmap();
 	defBitmap->allocate(32, 32);
-    memset(defBitmap->data, 0xFF, 32 * 32 * sizeof(uint32_t));
+	memset(defBitmap->data, 0xFF, 32 * 32 * sizeof(uint32_t));
 
 // Register the default bitmap
 	Slot * defSlot = &slots[0];
@@ -75,8 +75,8 @@ LeBmpCache::~LeBmpCache()
 LeBitmap * LeBmpCache::loadBMP(const char * path)
 {
 	if (noSlots >= LE_BMPCACHE_SLOTS) {
-        printf("bmpCache: no free slots!\n");
-        return NULL;
+		printf("bmpCache: no free slots!\n");
+		return NULL;
 	}
 
 	LeBmpFile bmpFile = LeBmpFile(path);
@@ -108,22 +108,22 @@ void LeBmpCache::loadDirectory(const char * path)
 	char ext[LE_MAX_FILE_EXTENSION+1];
 	char filePath[LE_MAX_FILE_PATH+1];
 
-    DIR * dir = opendir(path);
-    struct dirent * dd;
+	DIR * dir = opendir(path);
+	struct dirent * dd;
 
-    while ((dd = readdir(dir))) {
-    	if (dd->d_name[0] == '.') continue;
+	while ((dd = readdir(dir))) {
+		if (dd->d_name[0] == '.') continue;
 		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, dd->d_name);
 
-    	if (strcmp(ext, "bmp") == 0) {
-        // Load a Windows bmp file
+		if (strcmp(ext, "bmp") == 0) {
+		// Load a Windows bmp file
 			snprintf(filePath, LE_MAX_FILE_PATH, "%s/%s", path, dd->d_name);
 			filePath[LE_MAX_FILE_PATH] = '\0';
 			printf("bmpCache: loading bitmap: %s\n", filePath);
 			loadBMP(filePath);
-    	}
-    }
-    closedir(dir);
+		}
+	}
+	closedir(dir);
 }
 
 /*****************************************************************************/
@@ -181,6 +181,6 @@ int LeBmpCache::getFromName(const char * path)
 	}
 
 // Resource not found
-    printf("bmpCache: %s not found!\n", path);
+	printf("bmpCache: %s not found!\n", path);
 	return 0;
 }

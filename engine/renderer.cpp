@@ -74,8 +74,8 @@ LeRenderer::~LeRenderer()
 void LeRenderer::render(LeMesh * mesh)
 {
 // Check vertex memory space
-    if (!checkMemory(mesh->noVertexes, mesh->noTriangles))
-        return;
+	if (!checkMemory(mesh->noVertexes, mesh->noTriangles))
+		return;
 
 // Transform the geometry
 	LeTriangle * triRender = &usedTrilist->triangles[usedTrilist->noUsed];
@@ -119,18 +119,18 @@ void LeRenderer::render(LeMesh * mesh)
 void LeRenderer::render(LeBSet * bset)
 {
 // Check vertex memory space
-    int noVertexes = bset->noBillboards * 4;
-    int noTriangles = bset->noBillboards * 2;
-    if (!checkMemory(noVertexes, noTriangles))
-        return;
+	int noVertexes = bset->noBillboards * 4;
+	int noTriangles = bset->noBillboards * 2;
+	if (!checkMemory(noVertexes, noTriangles))
+		return;
 
 // Transform the geometry
 	LeTriangle * triRender = &usedTrilist->triangles[usedTrilist->noUsed];
 	int * id1 = &usedTrilist->srcIndices[usedTrilist->noValid];
 	int * id2 = &usedTrilist->dstIndices[usedTrilist->noValid];
 
-    transform(bset->view, bset->places, usedVerlist->vertexes, bset->noBillboards);
-    int noTris = build(bset, usedVerlist->vertexes, triRender, id1);
+	transform(bset->view, bset->places, usedVerlist->vertexes, bset->noBillboards);
+	int noTris = build(bset, usedVerlist->vertexes, triRender, id1);
 	extra = noTris;
 
 // Clip and project
@@ -171,7 +171,7 @@ bool LeRenderer::checkMemory(int noVertexes, int noTriangles)
 
 	int freeTriangles = usedTrilist->noAllocated - usedTrilist->noUsed;
 	if (noTriangles > freeTriangles) return false;
-    extraMax = freeTriangles;
+	extraMax = freeTriangles;
 
 	return true;
 }
@@ -232,10 +232,10 @@ void LeRenderer::setViewProjection(float fov)
 
 void LeRenderer::setViewport(float left, float top, float right, float bottom)
 {
-	viewLeftAxis   = LeAxis(LeVertex(left,  top,    0.0f), LeVertex(left,  bottom, 0.0f));
-	viewRightAxis  = LeAxis(LeVertex(right, bottom, 0.0f), LeVertex(right, top,    0.0f));
-	viewTopAxis    = LeAxis(LeVertex(right, top,    0.0f), LeVertex(left,  top,    0.0f));
-	viewBottomAxis = LeAxis(LeVertex(left,  bottom, 0.0f), LeVertex(right, bottom ,0.0f));
+	viewLeftAxis   = LeAxis(LeVertex(left,	top,	0.0f), LeVertex(left,  bottom, 0.0f));
+	viewRightAxis  = LeAxis(LeVertex(right, bottom, 0.0f), LeVertex(right, top,	   0.0f));
+	viewTopAxis	   = LeAxis(LeVertex(right, top,	0.0f), LeVertex(left,  top,	   0.0f));
+	viewBottomAxis = LeAxis(LeVertex(left,	bottom, 0.0f), LeVertex(right, bottom ,0.0f));
 }
 
 /*****************************************************************************/
@@ -248,18 +248,18 @@ void LeRenderer::setBackculling(bool enable)
 void LeRenderer::updateFrustrum()
 {
 	viewFrontPlan.zAxis.origin.z = LE_RENDERER_FRONT;
-	viewBackPlan.zAxis.origin.z  = LE_RENDERER_BACK;
+	viewBackPlan.zAxis.origin.z	 = LE_RENDERER_BACK;
 	viewFrontPlan.zAxis.axis.z = -1.0f;
 	viewBackPlan.zAxis.axis.z = 1.0f;
 
 	float hf = height * 0.5f * LE_RENDERER_FRONT / zty;
 	float hb = height * 0.5f * LE_RENDERER_BACK / zty;
-	viewTopPlan = LePlan(LeVertex(0.0f,  hf, LE_RENDERER_FRONT), LeVertex(1.0f,  hb, LE_RENDERER_BACK), LeVertex(1.0f, hf, LE_RENDERER_FRONT));
+	viewTopPlan = LePlan(LeVertex(0.0f,	 hf, LE_RENDERER_FRONT), LeVertex(1.0f,	 hb, LE_RENDERER_BACK), LeVertex(1.0f, hf, LE_RENDERER_FRONT));
 	viewBotPlan = LePlan(LeVertex(0.0f, -hf, LE_RENDERER_FRONT), LeVertex(1.0f, -hb, LE_RENDERER_BACK), LeVertex(-1.0f, -hf, LE_RENDERER_FRONT));
 
 	float wf = width * 0.5f * LE_RENDERER_FRONT / ztx;
 	float wb = width * 0.5f * LE_RENDERER_BACK / ztx;
-	viewLeftPlan  = LePlan(LeVertex(-wf, 0.0f, LE_RENDERER_FRONT), LeVertex(-wb, 0.0f, LE_RENDERER_BACK), LeVertex(-wf,  1.0f, LE_RENDERER_FRONT));
+	viewLeftPlan  = LePlan(LeVertex(-wf, 0.0f, LE_RENDERER_FRONT), LeVertex(-wb, 0.0f, LE_RENDERER_BACK), LeVertex(-wf,	 1.0f, LE_RENDERER_FRONT));
 	viewRightPlan = LePlan(LeVertex( wf, 0.0f, LE_RENDERER_FRONT), LeVertex( wb, 0.0f, LE_RENDERER_BACK), LeVertex( wf, -1.0f, LE_RENDERER_FRONT));
 }
 
@@ -278,7 +278,7 @@ int LeRenderer::build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int
 	float frontZ = viewFrontPlan.zAxis.origin.z;
 	float backZ = viewBackPlan.zAxis.origin.z;
 
-    if (mesh->shades) colors = mesh->shades;
+	if (mesh->shades) colors = mesh->shades;
 	else colors = mesh->colors;
 
 	for (int i = 0; i < mesh->noTriangles; i++) {
@@ -333,16 +333,16 @@ int LeRenderer::build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int
 	float frontZ = viewFrontPlan.zAxis.origin.z;
 	float backZ = viewBackPlan.zAxis.origin.z;
 
-    if (bset->shades) colors = bset->shades;
+	if (bset->shades) colors = bset->shades;
 	else colors = bset->colors;
 
 	for (int i = 0; i < bset->noBillboards; i++) {
-        if (!bset->flags[i]) continue;
+		if (!bset->flags[i]) continue;
 		LeVertex * v = &vertexes[i];
 		if (v->z > frontZ && v->z < backZ) continue;
 
-        float sx = bset->sizes[i*2+0] * 0.5f;
-        float sy = bset->sizes[i*2+1] * 0.5f;
+		float sx = bset->sizes[i*2+0] * 0.5f;
+		float sy = bset->sizes[i*2+1] * 0.5f;
 
 	// Construct billboard
 		LeTriangle * tri = &tris[k];
@@ -356,7 +356,7 @@ int LeRenderer::build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int
 		tri->ys[2] = v->y - sy;
 		tri->zs[2] = v->z;
 
-        tri->us[0] = 1.0f;
+		tri->us[0] = 1.0f;
 		tri->vs[0] = 0.0f;
 		tri->us[1] = 0.0f;
 		tri->vs[1] = 0.0f;
@@ -364,7 +364,7 @@ int LeRenderer::build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int
 		tri->vs[2] = 1.0f;
 
 		tri->vd = v->x * v->x + v->y * v->y + v->z * v->z - vOffset;
-        tri->color = colors[i];
+		tri->color = colors[i];
 		tri->tex = bset->texSlots[i];
 		indices[k] = k;
 		k++;
@@ -380,7 +380,7 @@ int LeRenderer::build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int
 		tri->ys[2] = v->y - sy;
 		tri->zs[2] = v->z;
 
-        tri->us[0] = 1.0f;
+		tri->us[0] = 1.0f;
 		tri->vs[0] = 0.0f;
 		tri->us[1] = 0.0f;
 		tri->vs[1] = 1.0f;
@@ -388,7 +388,7 @@ int LeRenderer::build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int
 		tri->vs[2] = 1.0f;
 
 		tri->vd = v->x * v->x + v->y * v->y + v->z * v->z - vOffset;
-        tri->color = colors[i];
+		tri->color = colors[i];
 		tri->tex = bset->texSlots[i];
 		indices[k] = k;
 		k++;
@@ -416,14 +416,14 @@ int LeRenderer::project(LeTriangle tris[], int srcIndices[], int dstIndices[], i
 		tri->xs[1] = tri->xs[1] * ztx * w1 + centerX;
 		tri->xs[2] = tri->xs[2] * ztx * w2 + centerX;
 
-		if (tri->xs[0] <  viewLeftAxis.origin.x   && tri->xs[1] <  viewLeftAxis.origin.x   && tri->xs[2]  < viewLeftAxis.origin.x)   continue;
-		if (tri->xs[0] >= viewRightAxis.origin.x  && tri->xs[1] >= viewRightAxis.origin.x  && tri->xs[2] >= viewRightAxis.origin.x)  continue;
+		if (tri->xs[0] <  viewLeftAxis.origin.x	  && tri->xs[1] <  viewLeftAxis.origin.x   && tri->xs[2]  < viewLeftAxis.origin.x)	 continue;
+		if (tri->xs[0] >= viewRightAxis.origin.x  && tri->xs[1] >= viewRightAxis.origin.x  && tri->xs[2] >= viewRightAxis.origin.x)	 continue;
 
 		tri->ys[0] = centerY - tri->ys[0] * zty * w0;
 		tri->ys[1] = centerY - tri->ys[1] * zty * w1;
 		tri->ys[2] = centerY - tri->ys[2] * zty * w2;
 
-		if (tri->ys[0] <  viewTopAxis.origin.y    && tri->ys[1] <  viewTopAxis.origin.y    && tri->ys[2] <  viewTopAxis.origin.y)    continue;
+		if (tri->ys[0] <  viewTopAxis.origin.y	  && tri->ys[1] <  viewTopAxis.origin.y	   && tri->ys[2] <	viewTopAxis.origin.y)	 continue;
 		if (tri->ys[0] >= viewBottomAxis.origin.y && tri->ys[1] >= viewBottomAxis.origin.y && tri->ys[2] >= viewBottomAxis.origin.y) continue;
 
 		tri->zs[0] = w0;
@@ -459,48 +459,48 @@ int LeRenderer::clip3D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 		float nx[4], ny[4], nz[4];
 		float nu[4], nv[4];
 		if (pj1 > 0.0f) {
-			nx[s]   = tri->xs[0];
-			ny[s]   = tri->ys[0];
-			nz[s]   = tri->zs[0];
-			nu[s]   = tri->us[0];
+			nx[s]	= tri->xs[0];
+			ny[s]	= tri->ys[0];
+			nz[s]	= tri->zs[0];
+			nu[s]	= tri->us[0];
 			nv[s++] = tri->vs[0];
 		}
 		if (pj1 * pj2 < 0.0f) {
 			float ratio = cabs(pj1 / (pj1 - pj2));
-			nx[s]   = tri->xs[0] + ratio * (tri->xs[1] - tri->xs[0]);
-			ny[s]   = tri->ys[0] + ratio * (tri->ys[1] - tri->ys[0]);
-			nz[s]   = tri->zs[0] + ratio * (tri->zs[1] - tri->zs[0]);
-			nu[s]   = tri->us[0] + ratio * (tri->us[1] - tri->us[0]);
+			nx[s]	= tri->xs[0] + ratio * (tri->xs[1] - tri->xs[0]);
+			ny[s]	= tri->ys[0] + ratio * (tri->ys[1] - tri->ys[0]);
+			nz[s]	= tri->zs[0] + ratio * (tri->zs[1] - tri->zs[0]);
+			nu[s]	= tri->us[0] + ratio * (tri->us[1] - tri->us[0]);
 			nv[s++] = tri->vs[0] + ratio * (tri->vs[1] - tri->vs[0]);
 		}
 		if (pj2 >= 0.0f) {
-			nx[s]   = tri->xs[1];
-			ny[s]   = tri->ys[1];
-			nz[s]   = tri->zs[1];
-			nu[s]   = tri->us[1];
+			nx[s]	= tri->xs[1];
+			ny[s]	= tri->ys[1];
+			nz[s]	= tri->zs[1];
+			nu[s]	= tri->us[1];
 			nv[s++] = tri->vs[1];
 		}
 		if (pj2 * pj3 < 0.0f) {
 			float ratio = cabs(pj2 / (pj2 - pj3));
-			nx[s]   = tri->xs[1] + ratio * (tri->xs[2] - tri->xs[1]);
-			ny[s]   = tri->ys[1] + ratio * (tri->ys[2] - tri->ys[1]);
-			nz[s]   = tri->zs[1] + ratio * (tri->zs[2] - tri->zs[1]);
-			nu[s]   = tri->us[1] + ratio * (tri->us[2] - tri->us[1]);
+			nx[s]	= tri->xs[1] + ratio * (tri->xs[2] - tri->xs[1]);
+			ny[s]	= tri->ys[1] + ratio * (tri->ys[2] - tri->ys[1]);
+			nz[s]	= tri->zs[1] + ratio * (tri->zs[2] - tri->zs[1]);
+			nu[s]	= tri->us[1] + ratio * (tri->us[2] - tri->us[1]);
 			nv[s++] = tri->vs[1] + ratio * (tri->vs[2] - tri->vs[1]);
 		}
 		if (pj3 >= 0.0f) {
-			nx[s]   = tri->xs[2];
-			ny[s]   = tri->ys[2];
-			nz[s]   = tri->zs[2];
-			nu[s]   = tri->us[2];
+			nx[s]	= tri->xs[2];
+			ny[s]	= tri->ys[2];
+			nz[s]	= tri->zs[2];
+			nu[s]	= tri->us[2];
 			nv[s++] = tri->vs[2];
 		}
 		if (pj3 * pj1 < 0.0f) {
 			float ratio = cabs(pj3 / (pj3 - pj1));
-			nx[s]   = tri->xs[2] + ratio * (tri->xs[0] - tri->xs[2]);
-			ny[s]   = tri->ys[2] + ratio * (tri->ys[0] - tri->ys[2]);
-			nz[s]   = tri->zs[2] + ratio * (tri->zs[0] - tri->zs[2]);
-			nu[s]   = tri->us[2] + ratio * (tri->us[0] - tri->us[2]);
+			nx[s]	= tri->xs[2] + ratio * (tri->xs[0] - tri->xs[2]);
+			ny[s]	= tri->ys[2] + ratio * (tri->ys[0] - tri->ys[2]);
+			nz[s]	= tri->zs[2] + ratio * (tri->zs[0] - tri->zs[2]);
+			nu[s]	= tri->us[2] + ratio * (tri->us[0] - tri->us[2]);
 			nv[s++] = tri->vs[2] + ratio * (tri->vs[0] - tri->vs[2]);
 		}
 	// Build triangle list
@@ -579,48 +579,48 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 		float nx[4], ny[4], nz[4];
 		float nu[4], nv[4];
 		if (pj1 >= 0.0f) {
-			nx[s]   = tri->xs[0];
-			ny[s]   = tri->ys[0];
-			nz[s]   = tri->zs[0];
-			nu[s]   = tri->us[0];
+			nx[s]	= tri->xs[0];
+			ny[s]	= tri->ys[0];
+			nz[s]	= tri->zs[0];
+			nu[s]	= tri->us[0];
 			nv[s++] = tri->vs[0];
 		}
 		if (pj1 * pj2 < 0.0f) {
 			float ratio = cabs(pj1 / (pj1 - pj2));
-			nx[s]   = tri->xs[0] + ratio * (tri->xs[1] - tri->xs[0]);
-			ny[s]   = tri->ys[0] + ratio * (tri->ys[1] - tri->ys[0]);
-			nz[s]   = tri->zs[0] + ratio * (tri->zs[1] - tri->zs[0]);
-			nu[s]   = tri->us[0] + ratio * (tri->us[1] - tri->us[0]);
+			nx[s]	= tri->xs[0] + ratio * (tri->xs[1] - tri->xs[0]);
+			ny[s]	= tri->ys[0] + ratio * (tri->ys[1] - tri->ys[0]);
+			nz[s]	= tri->zs[0] + ratio * (tri->zs[1] - tri->zs[0]);
+			nu[s]	= tri->us[0] + ratio * (tri->us[1] - tri->us[0]);
 			nv[s++] = tri->vs[0] + ratio * (tri->vs[1] - tri->vs[0]);
 		}
 		if (pj2 >= 0.0f) {
-			nx[s]   = tri->xs[1];
-			ny[s]   = tri->ys[1];
-			nz[s]   = tri->zs[1];
-			nu[s]   = tri->us[1];
+			nx[s]	= tri->xs[1];
+			ny[s]	= tri->ys[1];
+			nz[s]	= tri->zs[1];
+			nu[s]	= tri->us[1];
 			nv[s++] = tri->vs[1];
 		}
 		if (pj2 * pj3 < 0.0f) {
 			float ratio = cabs(pj2 / (pj2 - pj3));
-			nx[s]   = tri->xs[1] + ratio * (tri->xs[2] - tri->xs[1]);
-			ny[s]   = tri->ys[1] + ratio * (tri->ys[2] - tri->ys[1]);
-			nz[s]   = tri->zs[1] + ratio * (tri->zs[2] - tri->zs[1]);
-			nu[s]   = tri->us[1] + ratio * (tri->us[2] - tri->us[1]);
+			nx[s]	= tri->xs[1] + ratio * (tri->xs[2] - tri->xs[1]);
+			ny[s]	= tri->ys[1] + ratio * (tri->ys[2] - tri->ys[1]);
+			nz[s]	= tri->zs[1] + ratio * (tri->zs[2] - tri->zs[1]);
+			nu[s]	= tri->us[1] + ratio * (tri->us[2] - tri->us[1]);
 			nv[s++] = tri->vs[1] + ratio * (tri->vs[2] - tri->vs[1]);
 		}
 		if (pj3 >= 0.0f) {
-			nx[s]   = tri->xs[2];
-			ny[s]   = tri->ys[2];
-			nz[s]   = tri->zs[2];
-			nu[s]   = tri->us[2];
+			nx[s]	= tri->xs[2];
+			ny[s]	= tri->ys[2];
+			nz[s]	= tri->zs[2];
+			nu[s]	= tri->us[2];
 			nv[s++] = tri->vs[2];
 		}
 		if (pj3 * pj1 < 0.0f) {
 			float ratio = cabs(pj3 / (pj3 - pj1));
-			nx[s]   = tri->xs[2] + ratio * (tri->xs[0] - tri->xs[2]);
-			ny[s]   = tri->ys[2] + ratio * (tri->ys[0] - tri->ys[2]);
-			nz[s]   = tri->zs[2] + ratio * (tri->zs[0] - tri->zs[2]);
-			nu[s]   = tri->us[2] + ratio * (tri->us[0] - tri->us[2]);
+			nx[s]	= tri->xs[2] + ratio * (tri->xs[0] - tri->xs[2]);
+			ny[s]	= tri->ys[2] + ratio * (tri->ys[0] - tri->ys[2]);
+			nz[s]	= tri->zs[2] + ratio * (tri->zs[0] - tri->zs[2]);
+			nu[s]	= tri->us[2] + ratio * (tri->us[0] - tri->us[2]);
 			nv[s++] = tri->vs[2] + ratio * (tri->vs[0] - tri->vs[2]);
 		}
 	// Build triangle list

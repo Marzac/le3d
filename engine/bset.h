@@ -40,22 +40,22 @@
 
 /*****************************************************************************/
 typedef enum {
-    LE_BSET_EXIST = 0x01,
+	LE_BSET_EXIST = 0x01,
 } LE_BSET_BSET_FLAGS;
 
 /*****************************************************************************/
 class LeBSet
 {
 public:
-    LeBSet();
-    LeBSet(int noBillboards);
-    ~LeBSet();
+	LeBSet();
+	LeBSet(int noBillboards);
+	~LeBSet();
 
-    void shadowCopy(LeBSet * copy) const;
+	void shadowCopy(LeBSet * copy) const;
 	void copy(LeBSet * copy) const;
-    void basic();
+	void basic();
 
-    void allocate(int noBillboards);
+	void allocate(int noBillboards);
 	void deallocate();
 
 	void transform(const LeMatrix &matrix);

@@ -43,8 +43,8 @@
 typedef struct {
 	uint16_t bfType;
 	uint32_t bfSize;
-	int16_t  bfReserved1;
-	int16_t  bfReserved2;
+	int16_t	 bfReserved1;
+	int16_t	 bfReserved2;
 	uint32_t bfOffBits;
 } BMPFILEHEADER;
 #pragma pack(pop)
@@ -52,14 +52,14 @@ typedef struct {
 #pragma pack(push, 1)
 typedef struct {
 	uint32_t biSize;
-	int32_t  biWidth;
-	int32_t  biHeight;
-	int16_t  biPlanes;
-	int16_t  biBitCount;
+	int32_t	 biWidth;
+	int32_t	 biHeight;
+	int16_t	 biPlanes;
+	int16_t	 biBitCount;
 	uint32_t biCompression;
 	uint32_t biSizeImage;
-	int32_t  biXPelsPerMeter;
-	int32_t  biYPelsPerMeter;
+	int32_t	 biXPelsPerMeter;
+	int32_t	 biYPelsPerMeter;
 	uint32_t biClrUsed;
 	uint32_t biClrImportant;
 } BMPINFOHEADER;
@@ -67,11 +67,11 @@ typedef struct {
 
 #pragma pack(push, 1)
 typedef struct {
-  uint32_t CSType;
-  uint32_t Endpoints[9];
-  uint32_t GammaRed;
-  uint32_t GammaGreen;
-  uint32_t GammaBlue;
+	uint32_t CSType;
+	uint32_t Endpoints[9];
+	uint32_t GammaRed;
+	uint32_t GammaGreen;
+	uint32_t GammaBlue;
 } BMPCOLORSPACE;
 
 #pragma pack(push, 1)
@@ -232,7 +232,7 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 		for (int y = 0; y < bitmap->ty; y ++) {
 			fread(buffer, srcScan, 1, file);
 			uint32_t * d = (uint32_t *) data;
-			uint8_t  * s = buffer;
+			uint8_t	 * s = buffer;
 			for (int i = 0; i < bitmap->tx; i ++) {
 				uint32_t r, g, b;
 				b = * s++;

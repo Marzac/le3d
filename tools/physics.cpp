@@ -73,25 +73,25 @@ int collideRectRect(float &ansX, float &ansY, float srcX, float srcY, float srcW
 /*****************************************************************************/
 int collideSphereSphere(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float radius1, float radius2)
 {
-    float rt = radius1 + radius2;
+	float rt = radius1 + radius2;
 
-    ans = LePrimitives::zero;
-    contact = LePrimitives::zero;
+	ans = LePrimitives::zero;
+	contact = LePrimitives::zero;
 
-    float n2 = pos.dot(pos);
-    if (n2 > rt * rt) return 0;
-    if (n2 == 0.0f) return 1;
+	float n2 = pos.dot(pos);
+	if (n2 > rt * rt) return 0;
+	if (n2 == 0.0f) return 1;
 
-    float n = sqrtf(n2);
-    LeVertex dir = pos * (1.0f / n);
-    ans = dir * (rt - n);
-    contact = dir * radius1;
-    return 1;
+	float n = sqrtf(n2);
+	LeVertex dir = pos * (1.0f / n);
+	ans = dir * (rt - n);
+	contact = dir * radius1;
+	return 1;
 }
 
 int traceSphere(const LeVertex &pos, float radius, const LeVertex &axis, float &distance)
 {
-    return 0;
+	return 0;
 }
 
 /*****************************************************************************/
@@ -103,14 +103,14 @@ int collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex &pos, floa
 
 // Outside of the area
 	ans = LePrimitives::zero;
-    contact = LePrimitives::zero;
+	contact = LePrimitives::zero;
 
-    if (pos.x > lx)  return 0;
-    if (pos.x < -lx) return 0;
-    if (pos.y > ly)  return 0;
-    if (pos.y < -ly) return 0;
-    if (pos.z > lz)  return 0;
-    if (pos.z < -lz) return 0;
+	if (pos.x > lx)	 return 0;
+	if (pos.x < -lx) return 0;
+	if (pos.y > ly)	 return 0;
+	if (pos.y < -ly) return 0;
+	if (pos.z > lz)	 return 0;
+	if (pos.z < -lz) return 0;
 
 	float dx = fabs(pos.x);
 	float dy = fabs(pos.y);
@@ -119,58 +119,58 @@ int collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex &pos, floa
 // Touching a side
 	if (dx > size.x) {
 		if (dy <= size.y && dz <= size.z) {
-            float sx = csgn(pos.x);
-            ans.x = (lx - dx) * sx;
-            contact = pos;
-            contact.x = size.x * sx;
-            return PHYSICS_BOX_SIDE;
+			float sx = csgn(pos.x);
+			ans.x = (lx - dx) * sx;
+			contact = pos;
+			contact.x = size.x * sx;
+			return PHYSICS_BOX_SIDE;
 		}
 	}
 
 	if (dy > size.y) {
 		if (dx <= size.x && dz <= size.z) {
-            float sy = csgn(pos.y);
-            ans.y = (ly - dy) * sy;
-            contact = pos;
-            contact.y = size.y * sy;
-            return PHYSICS_BOX_SIDE;
+			float sy = csgn(pos.y);
+			ans.y = (ly - dy) * sy;
+			contact = pos;
+			contact.y = size.y * sy;
+			return PHYSICS_BOX_SIDE;
 		}
 	}
 
 	if (dz > size.z) {
 		if (dx <= size.x && dy <= size.y) {
-            float sz = csgn(pos.z);
-            ans.z = (lz - dz) * sz;
-            contact.z = size.y * sz;
-            return PHYSICS_BOX_SIDE;
+			float sz = csgn(pos.z);
+			ans.z = (lz - dz) * sz;
+			contact.z = size.y * sz;
+			return PHYSICS_BOX_SIDE;
 		}
 	}
 
 // Touching an edge
-    int res = PHYSICS_BOX_CORNER;
-    LeVertex corner = size * pos.sign();
-    if (dx < size.x) {
-        corner.x = pos.x;
-        res = PHYSICS_BOX_EDGE;
-    }
-    if (dy < size.y) {
-        corner.y = pos.y;
-        res = PHYSICS_BOX_EDGE;
-    }
-    if (dz < size.z) {
-        corner.z = pos.z;
-        res = PHYSICS_BOX_EDGE;
-    }
+	int res = PHYSICS_BOX_CORNER;
+	LeVertex corner = size * pos.sign();
+	if (dx < size.x) {
+		corner.x = pos.x;
+		res = PHYSICS_BOX_EDGE;
+	}
+	if (dy < size.y) {
+		corner.y = pos.y;
+		res = PHYSICS_BOX_EDGE;
+	}
+	if (dz < size.z) {
+		corner.z = pos.z;
+		res = PHYSICS_BOX_EDGE;
+	}
 
 // Touching a corner
-    LeVertex delta = pos - corner;
-    float r = delta.dot(delta);
-    if (r > radius * radius) return 0;
+	LeVertex delta = pos - corner;
+	float r = delta.dot(delta);
+	if (r > radius * radius) return 0;
 
-    delta.normalize();
-    ans = delta * (radius - sqrtf(r));
-    contact = corner + delta * radius;
-    return res;
+	delta.normalize();
+	ans = delta * (radius - sqrtf(r));
+	contact = corner + delta * radius;
+	return res;
 }
 
 /*****************************************************************************/
@@ -270,16 +270,16 @@ int collideSphereMesh(LeVertex &ans, LeVertex &contact, const LeVertex &pos, flo
 		LeVertex h = pos - n * d;
 		LeVertex v2 = mt * mesh->vertexes[mesh->vertexList[t*3+1]];
 		LeVertex v3 = mt * mesh->vertexes[mesh->vertexList[t*3+2]];
-        float n1 = n.dot((v1 - h).cross(v2 - h));
-        if (n1 < 0.0f) continue;
-        float n2 = n.dot((v2 - h).cross(v3 - h));
-        if (n2 < 0.0f) continue;
-        float n3 = n.dot((v3 - h).cross(v1 - h));
-        if (n3 < 0.0f) continue;
+		float n1 = n.dot((v1 - h).cross(v2 - h));
+		if (n1 < 0.0f) continue;
+		float n2 = n.dot((v2 - h).cross(v3 - h));
+		if (n2 < 0.0f) continue;
+		float n3 = n.dot((v3 - h).cross(v1 - h));
+		if (n3 < 0.0f) continue;
 
-        ans = n * (radius - d);
-        contact = h;
-        return 1;
+		ans = n * (radius - d);
+		contact = h;
+		return 1;
 	}
 
 	for (int t = 0; t < mesh->noTriangles; t++) {
@@ -288,16 +288,16 @@ int collideSphereMesh(LeVertex &ans, LeVertex &contact, const LeVertex &pos, flo
 		LeVertex v2 = mt * mesh->vertexes[mesh->vertexList[t*3+1]];
 		LeVertex v3 = mt * mesh->vertexes[mesh->vertexList[t*3+2]];
 
-        LeVertex localContact, localAns;
+		LeVertex localContact, localAns;
 		int n = collideCircleSegment(localAns, localContact, v1, v2, pos, radius);
-        n += collideCircleSegment(localAns, localContact, v2, v3, pos, radius);
-        n += collideCircleSegment(localAns, localContact, v3, v1, pos, radius);
-        if (!n) continue;
+		n += collideCircleSegment(localAns, localContact, v2, v3, pos, radius);
+		n += collideCircleSegment(localAns, localContact, v3, v1, pos, radius);
+		if (!n) continue;
 
-        float in = 1.0f / n;
-        ans = localAns * in;
-        contact = localContact * in;
-        return 2;
+		float in = 1.0f / n;
+		ans = localAns * in;
+		contact = localContact * in;
+		return 2;
 	}
 
 	return 0;
@@ -315,19 +315,19 @@ int collideCircleSegment(LeVertex &ans, LeVertex &contact, const LeVertex &v1, c
 
 	float delta = b * b - 4.0f * a * g;
 	if (delta < 0.0f) return 0;
-    float sd = sqrtf(delta);
+	float sd = sqrtf(delta);
 
-    float t1 = 0.5f * (-b - sd) / a;
-    t1 = cbound(t1, 0.0f, 1.0f);
-    float t2 = 0.5f * (-b + sd) / a;
-    t2 = cbound(t2, 0.0f, 1.0f);
-    if (t1 == t2) return 0;
+	float t1 = 0.5f * (-b - sd) / a;
+	t1 = cbound(t1, 0.0f, 1.0f);
+	float t2 = 0.5f * (-b + sd) / a;
+	t2 = cbound(t2, 0.0f, 1.0f);
+	if (t1 == t2) return 0;
 
-    LeVertex h = v1 + d * ((t1 + t2) * 0.5f);
-    LeVertex n = c - h;
-    float t = n.norm();
+	LeVertex h = v1 + d * ((t1 + t2) * 0.5f);
+	LeVertex n = c - h;
+	float t = n.norm();
 
-    ans += n * ((radius - t) / t);
+	ans += n * ((radius - t) / t);
 	contact += h;
 	return 1;
 }

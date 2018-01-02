@@ -53,9 +53,9 @@ LeMesh::LeMesh() :
 }
 
 LeMesh::LeMesh(LeVertex vertexes[], int noVertexes,
-            float texCoords[], int noTexCoords,
-            int vertexList[], int texCoordsList[],
-            uint32_t colors[], int noTriangles) :
+			float texCoords[], int noTexCoords,
+			int vertexList[], int texCoordsList[],
+			uint32_t colors[], int noTriangles) :
 	view(),
 	pos(), scale(1.0f, 1.0f, 1.0f), angle(),
 	vertexes(vertexes), noVertexes(noVertexes),

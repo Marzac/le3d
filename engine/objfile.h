@@ -88,14 +88,14 @@ private:
 	void importTriangles(FILE * file, LeMesh * mesh);
 
 	void importMatLib(FILE * file);
-	int  countMatLib(FILE * file);
+	int	 countMatLib(FILE * file);
 	void readColor(const char * buffer, float * color);
 
-	int  getNoMaterials(FILE * file);
+	int	 getNoMaterials(FILE * file);
 	void loadMaterials(FILE * file);
 	LeObjMaterial * findMaterial(const char * name);
 
-	int  readLine(FILE * file, char * buffer, int len);
+	int	 readLine(FILE * file, char * buffer, int len);
 	void readVertex(const char * buffer, LeMesh * mesh, int index);
 	void readTriangle(const char * buffer, LeMesh * mesh, int index);
 	void readTexCoord(const char * buffer, LeMesh * mesh, int index);

@@ -288,15 +288,15 @@ struct __attribute__ ((aligned (16))) LeMatrix
 		lines[3] = zv;
 	}
 
-    void transpose()
-    {
-        LeMatrix m;
-        m.lines[0] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
-        m.lines[1] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
-        m.lines[2] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
-        m.lines[3] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
-        *this = m;
-    }
+	void transpose()
+	{
+		LeMatrix m;
+		m.lines[0] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
+		m.lines[1] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
+		m.lines[2] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
+		m.lines[3] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
+		*this = m;
+	}
 
 	void translate(LeVertex d)
 	{
@@ -437,23 +437,23 @@ struct __attribute__ ((aligned (16))) LeMatrix
 	{
 		float d = lines[0].x*(lines[1].y*lines[2].z-lines[2].y*lines[1].z)
 				- lines[0].y*(lines[1].x*lines[2].z-lines[1].z*lines[2].x)
-                + lines[0].z*(lines[1].x*lines[2].y-lines[1].y*lines[2].x);
+				+ lines[0].z*(lines[1].x*lines[2].y-lines[1].y*lines[2].x);
 
 		LeMatrix m;
 		if (d == 0.0f) {m.zero(); return m;}
 		d = 1.0f / d;
 
-		m.lines[0].x =  (lines[1].y * lines[2].z - lines[2].y * lines[1].z) * d;
+		m.lines[0].x =	(lines[1].y * lines[2].z - lines[2].y * lines[1].z) * d;
 		m.lines[0].y = -(lines[0].y * lines[2].z - lines[2].y * lines[0].z) * d;
-		m.lines[0].z =  (lines[0].y * lines[1].z - lines[1].y * lines[0].z) * d;
+		m.lines[0].z =	(lines[0].y * lines[1].z - lines[1].y * lines[0].z) * d;
 
 		m.lines[1].x = -(lines[1].x * lines[2].z - lines[2].x * lines[1].z) * d;
-		m.lines[1].y =  (lines[0].x * lines[2].z - lines[2].x * lines[0].z) * d;
+		m.lines[1].y =	(lines[0].x * lines[2].z - lines[2].x * lines[0].z) * d;
 		m.lines[1].z = -(lines[0].x * lines[1].z - lines[1].x * lines[0].z) * d;
 
-		m.lines[2].x =  (lines[1].x * lines[2].y - lines[2].x * lines[1].y) * d;
+		m.lines[2].x =	(lines[1].x * lines[2].y - lines[2].x * lines[1].y) * d;
 		m.lines[2].y = -(lines[0].x * lines[2].y - lines[2].x * lines[0].y) * d;
-		m.lines[2].z =  (lines[0].x * lines[1].y - lines[1].x * lines[0].y) * d;
+		m.lines[2].z =	(lines[0].x * lines[1].y - lines[1].x * lines[0].y) * d;
 
 		return m;
 	}
@@ -498,13 +498,13 @@ struct __attribute__ ((aligned (16))) LeMatrix
 
 /*****************************************************************************/
 namespace LePrimitives {
-	const LeVertex up    = LeVertex(0.0f, 1.0f, 0.0f);
-	const LeVertex down  = LeVertex(0.0f, -1.0f, 0.0f);
+	const LeVertex up	 = LeVertex(0.0f, 1.0f, 0.0f);
+	const LeVertex down	 = LeVertex(0.0f, -1.0f, 0.0f);
 	const LeVertex front = LeVertex(0.0f, 0.0f, -1.0f);
-	const LeVertex back  = LeVertex(0.0f, 0.0f, 1.0f);
-	const LeVertex left  = LeVertex(-1.0f, 0.0f, 0.0f);
+	const LeVertex back	 = LeVertex(0.0f, 0.0f, 1.0f);
+	const LeVertex left	 = LeVertex(-1.0f, 0.0f, 0.0f);
 	const LeVertex right = LeVertex(1.0f, 0.0f, 0.0f);
-	const LeVertex zero  = LeVertex(0.0f, 0.0f, 0.0f);
+	const LeVertex zero	 = LeVertex(0.0f, 0.0f, 0.0f);
 }
 
 #endif	//LE_GEOMETRY_SIMD_H

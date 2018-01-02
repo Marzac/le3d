@@ -37,24 +37,24 @@
 #include <stdint.h>
 
 /*****************************************************************************/
-#define LE_GAMEPAD_THRESHOLD    4096.0f
+#define LE_GAMEPAD_THRESHOLD	4096.0f
 
 /*****************************************************************************/
 typedef enum{
-    LE_GAMEPAD_DPAD_UP          = 0x0001,
-    LE_GAMEPAD_DPAD_DOWN        = 0x0002,
-    LE_GAMEPAD_DPAD_LEFT        = 0x0004,
-    LE_GAMEPAD_DPAD_RIGHT       = 0x0008,
-    LE_GAMEPAD_START            = 0x0010,
-    LE_GAMEPAD_BACK             = 0x0020,
-    LE_GAMEPAD_LEFT_THUMB       = 0x0040,
-    LE_GAMEPAD_RIGHT_THUMB      = 0x0080,
-    LE_GAMEPAD_LEFT_SHOULDER    = 0x0100,
-    LE_GAMEPAD_RIGHT_SHOULDER   = 0x0200,
-    LE_GAMEPAD_A                = 0x1000,
-    LE_GAMEPAD_B                = 0x2000,
-    LE_GAMEPAD_X                = 0x4000,
-    LE_GAMEPAD_Y                = 0x8000,
+	LE_GAMEPAD_DPAD_UP			= 0x0001,
+	LE_GAMEPAD_DPAD_DOWN		= 0x0002,
+	LE_GAMEPAD_DPAD_LEFT		= 0x0004,
+	LE_GAMEPAD_DPAD_RIGHT		= 0x0008,
+	LE_GAMEPAD_START			= 0x0010,
+	LE_GAMEPAD_BACK				= 0x0020,
+	LE_GAMEPAD_LEFT_THUMB		= 0x0040,
+	LE_GAMEPAD_RIGHT_THUMB		= 0x0080,
+	LE_GAMEPAD_LEFT_SHOULDER	= 0x0100,
+	LE_GAMEPAD_RIGHT_SHOULDER	= 0x0200,
+	LE_GAMEPAD_A				= 0x1000,
+	LE_GAMEPAD_B				= 0x2000,
+	LE_GAMEPAD_X				= 0x4000,
+	LE_GAMEPAD_Y				= 0x8000,
 }LE_GAMEPAD_BUTTONS;
 
 /*****************************************************************************/
@@ -62,24 +62,24 @@ class LeGamePad
 {
 public:
 	LeGamePad(int pad);
-    ~LeGamePad();
+	~LeGamePad();
 
-    void init();
-    void update();
-    void feedback(float left, float right);
+	void init();
+	void update();
+	void feedback(float left, float right);
 
-    float stickLeftX;
-    float stickLeftY;
-    float stickRightX;
-    float stickRightY;
+	float stickLeftX;
+	float stickLeftY;
+	float stickRightX;
+	float stickRightY;
 
-    int buttons;
-    int toggled;
+	int buttons;
+	int toggled;
 
-    static void setup();
+	static void setup();
 
 private:
-    float normalize(int32_t axis);
+	float normalize(int32_t axis);
 	int pad;
 };
 

@@ -41,12 +41,12 @@
 	typedef unsigned long long		LeHandle;												/** Native OS handle / pointer holder type */
 
 /** Handful macros */
-	#define cmax(a,b) 				((a)>(b)?(a):(b))										/** Return the maximum of two values */
-	#define cmin(a,b) 				((a)<(b)?(a):(b))										/** Return the minimum of two values */
-	#define cabs(a)   				((a)<0.0f?(-(a)):(a))									/** Return the absolute value */
+	#define cmax(a,b)				((a)>(b)?(a):(b))										/** Return the maximum of two values */
+	#define cmin(a,b)				((a)<(b)?(a):(b))										/** Return the minimum of two values */
+	#define cabs(a)					((a)<0.0f?(-(a)):(a))									/** Return the absolute value */
 	#define cbound(v, vmin, vmax)	((v)>(vmax)?(vmax):((v)<(vmin)?(vmin):(v)))				/** Limit a value between two bounds (included) */
-	#define csgn(a)   				((a)<0.0f?-1.0f:1.0f)									/** Return the sign (+1.0 or -1.0) of a value */
-	#define cthr(a, t) 				((a)<(-t)?-1.0f:((a)>(t)?1.0f:0.0f))					/** Compare a value to a threshold and return +1.0 (above), -1.0 (below) or 0.0f (inside) */
+	#define csgn(a)					((a)<0.0f?-1.0f:1.0f)									/** Return the sign (+1.0 or -1.0) of a value */
+	#define cthr(a, t)				((a)<(-t)?-1.0f:((a)>(t)?1.0f:0.0f))					/** Compare a value to a threshold and return +1.0 (above), -1.0 (below) or 0.0f (inside) */
 	#define cmod(a, m)				(((a) % (m) + (m)) % (m))								/** Perform a non-signed modulo (integer) */
 	#define cmodf(a, m)				(fmodf((fmodf((a), (m)) + (m)), (m)))					/** Perform a non-signed modulo (float) */
 
@@ -57,14 +57,14 @@
 /*****************************************************************************/
 /** Global string & math functions */
 	namespace LeGlobal {
-		void toLower(char * txt);														    /** Convert in place null terminated C string to lower case */
-		void toUpper(char * txt);														    /** Convert in place null terminated C string to upper case */
+		void toLower(char * txt);															/** Convert in place null terminated C string to lower case */
+		void toUpper(char * txt);															/** Convert in place null terminated C string to upper case */
 
-		void getFileExtention(char * ext, const int extSize, const char * path);		    /** Return a file extension from a path */
-		void getFileName(char * name, const int nameSize, const char * path);			    /** Return a file name from a path */
-        void getFileDirectory(char * dir, int dirSize, const char * path);                  /** Return a directory name from a path */
+		void getFileExtention(char * ext, const int extSize, const char * path);			/** Return a file extension from a path */
+		void getFileName(char * name, const int nameSize, const char * path);				/** Return a file name from a path */
+		void getFileDirectory(char * dir, int dirSize, const char * path);					/** Return a directory name from a path */
 
-		int log2i32(int n);																    /** Compute the log2 of a 32bit integer */
+		int log2i32(int n);																	/** Compute the log2 of a 32bit integer */
 	};
 
 #endif // LE_GLOBAL_H

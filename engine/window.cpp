@@ -68,9 +68,9 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 
 // Compute the client size
 	RECT size;
-	size.top    = 0;
-	size.left   = 0;
-	size.right  = width;
+	size.top	= 0;
+	size.left	= 0;
+	size.right	= width;
 	size.bottom = height;
 	AdjustWindowRect(&size, WS_OVERLAPPEDWINDOW, 0);
 
@@ -112,9 +112,9 @@ void LeWindow::sendKeyEvent(int code, int state)
 	if (state & 0x80000000)
 		tState = LE_WINDOW_KEY_UP;
 	else tState = LE_WINDOW_KEY_DOWN;
-	if (GetKeyState(VK_SHIFT) & 0x8000)   tState |= LE_WINDOW_KEY_SHIFT;
+	if (GetKeyState(VK_SHIFT) & 0x8000)	  tState |= LE_WINDOW_KEY_SHIFT;
 	if (GetKeyState(VK_CONTROL) & 0x8000) tState |= LE_WINDOW_KEY_CTRL;
-	if (GetKeyState(VK_MENU) & 0x8000)    tState |= LE_WINDOW_KEY_ALT;
+	if (GetKeyState(VK_MENU) & 0x8000)	  tState |= LE_WINDOW_KEY_ALT;
 	keyCallback(code, tState);
 }
 

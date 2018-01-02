@@ -44,9 +44,9 @@
 
 /*****************************************************************************/
 #if LE_RENDERER_INTRASTER == 1
-    #include "rasterizer_integer.h"
+	#include "rasterizer_integer.h"
 #else
-    #include "rasterizer_float.h"
+	#include "rasterizer_float.h"
 #endif
 
 #endif // LE_RASTERIZER_H

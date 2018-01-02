@@ -128,7 +128,7 @@ inline void LeLight::shineDirectional(LeMesh * mesh)
 
 inline void LeLight::shineAmbient(LeMesh * mesh)
 {
-	for (int j = 0; j <  mesh->noTriangles; j++)
+	for (int j = 0; j <	 mesh->noTriangles; j++)
 		blendColors(mesh->colors[j], color, 1.0f, mesh->shades[j]);
 }
 
@@ -137,7 +137,7 @@ void LeLight::blendColors(uint32_t color1, uint32_t color2, float factor, uint32
 {
 	uint8_t * c1 = (uint8_t *) &color1;
 	uint8_t * c2 = (uint8_t *) &color2;
-	uint8_t * r  = (uint8_t *) &result;
+	uint8_t * r	 = (uint8_t *) &result;
 	uint32_t f = factor * 65536.0f;
 	r[0] = cbound(r[0] + ((c1[0] * c2[0] * f) >> 24), 0, 255);
 	r[1] = cbound(r[1] + ((c1[1] * c2[1] * f) >> 24), 0, 255);
