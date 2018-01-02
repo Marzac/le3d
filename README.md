@@ -1,5 +1,6 @@
 # le3d  
 **LightEngine 3D**  
+
 A straightforward C++ 3D software engine for real-time graphics.  
 The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
 Code has been designed for resource constrained platforms.  
