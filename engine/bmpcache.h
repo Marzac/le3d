@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -40,10 +40,10 @@
 
 /*****************************************************************************/
 typedef enum{
-	LE_BMPCACHE_NORMAL = 0,				/** Regular bitmap */
-	LE_BMPCACHE_ALPHACHANNEL = 1,		/** Bitmap with alpha channel */
-	LE_BMPCACHE_ANIMATION = 2,			/** Bitmap with animation (use the cursor & extra bitmaps) */
-	LE_BMPCACHE_MIPMAPPED = 4,			/** Bitmap with mipmaps attached */
+	LE_BMPCACHE_RGB             = 0,		/** Bitmap in 32bit RGB color format */
+	LE_BMPCACHE_RGBA            = 1,		/** Bitmap in 32bit RGBA (alpha pre-multiplied) format */
+	LE_BMPCACHE_ANIMATION       = 2,		/** Bitmap with animation (uses cursor & extra bitmaps) */
+	LE_BMPCACHE_MIPMAPPED       = 4,		/** Bitmap with computed mipmaps */
 }LE_BMPCACHE_FLAGS;
 
 /*****************************************************************************/
@@ -60,8 +60,8 @@ public:
 public:
 	typedef struct{
 		LeBitmap * bitmap;
-		char path[LE_MAX_FILE_PATH];
-		char name[LE_MAX_FILE_NAME];
+		char path[LE_MAX_FILE_PATH+1];
+		char name[LE_MAX_FILE_NAME+1];
 		int flags;
 
 		LeBitmap * extras;

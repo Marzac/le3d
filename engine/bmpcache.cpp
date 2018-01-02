@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -48,9 +48,10 @@ LeBmpCache::LeBmpCache() :
 {
 	memset(slots, 0, sizeof(Slot) * LE_BMPCACHE_SLOTS);
 
-// Create a default bitmap
+// Create the default bitmap (32x32 all white)
 	LeBitmap * defBitmap = new LeBitmap();
 	defBitmap->allocate(32, 32);
+    memset(defBitmap->data, 0xFF, 32 * 32 * sizeof(uint32_t));
 
 // Register the default bitmap
 	Slot * defSlot = &slots[0];
@@ -70,11 +71,13 @@ LeBmpCache::~LeBmpCache()
 		deleteSlot(i);
 }
 
-
 /*****************************************************************************/
 LeBitmap * LeBmpCache::loadBMP(const char * path)
 {
-	if (noSlots >= LE_BMPCACHE_SLOTS) return NULL;
+	if (noSlots >= LE_BMPCACHE_SLOTS) {
+        printf("bmpCache: no free slots!\n");
+        return NULL;
+	}
 
 	LeBmpFile bmpFile = LeBmpFile(path);
 	LeBitmap * bitmap = bmpFile.load();
@@ -91,9 +94,9 @@ LeBitmap * LeBmpCache::loadBMP(const char * path)
 	slots[slot].flags |= LE_BMPCACHE_MIPMAPPED;
 #endif
 
-	if (bitmap->flags & LE_BMP_ALPHACHANNEL) {
-		bitmap->preMultiplyAlpha();
-		slots[slot].flags |= LE_BMPCACHE_ALPHACHANNEL;
+	if (bitmap->flags & LE_BMPCACHE_RGBA) {
+		bitmap->preMultiply();
+		slots[slot].flags |= LE_BMPCACHE_RGBA;
 	}
 
 	return bitmap;
@@ -102,24 +105,23 @@ LeBitmap * LeBmpCache::loadBMP(const char * path)
 /*****************************************************************************/
 void LeBmpCache::loadDirectory(const char * path)
 {
-	char ext[LE_MAX_FILE_EXTENSION];
-	char filePath[LE_MAX_FILE_PATH];
+	char ext[LE_MAX_FILE_EXTENSION+1];
+	char filePath[LE_MAX_FILE_PATH+1];
 
     DIR * dir = opendir(path);
     struct dirent * dd;
 
     while ((dd = readdir(dir))) {
     	if (dd->d_name[0] == '.') continue;
-		LeGlobal::getFileExt(ext, LE_MAX_FILE_EXTENSION, dd->d_name);
+		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, dd->d_name);
 
-	// Load a windows bitmap file
     	if (strcmp(ext, "bmp") == 0) {
+        // Load a Windows bmp file
 			snprintf(filePath, LE_MAX_FILE_PATH, "%s/%s", path, dd->d_name);
-			filePath[LE_MAX_FILE_PATH-1] = '\0';
+			filePath[LE_MAX_FILE_PATH] = '\0';
+			printf("bmpCache: loading bitmap: %s\n", filePath);
 			loadBMP(filePath);
-			printf("Load bitmap: %s\n", filePath);
     	}
-
     }
     closedir(dir);
 }
@@ -133,11 +135,11 @@ int LeBmpCache::createSlot(LeBitmap * bitmap, const char * path)
 
 	// Register the bitmap
 		slot->bitmap = bitmap;
-		strncpy(slot->path, path, LE_MAX_FILE_PATH - 1);
-		slot->path[LE_MAX_FILE_PATH-1] = '\0';
+		strncpy(slot->path, path, LE_MAX_FILE_PATH);
+		slot->path[LE_MAX_FILE_PATH] = '\0';
 		LeGlobal::getFileName(slot->name, LE_MAX_FILE_NAME, path);
 
-	// Initialise the extra flags
+	// Initialize the flags
 		slot->extras = NULL;
 		slot->noExtras = 0;
 		slot->cursor = 0;
@@ -156,17 +158,18 @@ void LeBmpCache::deleteSlot(int index)
 
 	delete slot->bitmap;
 	slot->bitmap = NULL;
-
 	slot->path[0] = '\0';
 	slot->name[0] = '\0';
 	slot->cursor = 0;
 	slot->flags = 0;
+
+	noSlots--;
 }
 
 /*****************************************************************************/
 int LeBmpCache::getFromName(const char * path)
 {
-	char name[LE_MAX_FILE_NAME];
+	char name[LE_MAX_FILE_NAME+1];
 	LeGlobal::getFileName(name, LE_MAX_FILE_NAME, path);
 
 // Search for resource
@@ -178,6 +181,6 @@ int LeBmpCache::getFromName(const char * path)
 	}
 
 // Resource not found
+    printf("bmpCache: %s not found!\n", path);
 	return 0;
 }
-
