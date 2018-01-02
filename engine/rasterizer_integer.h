@@ -1,18 +1,17 @@
 /**
 	\file rasterizer_integer.h
-	\brief LightEngine 3D: Triangle rasterizer
+	\brief LightEngine 3D: Triangle rasterizer (fixed point)
 	\brief All platforms implementation
-	\brief Integer mathematics
 	\brief Support textured triangles
 	\brief Textures can have an alpha channel and mipmaps
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2017-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -36,12 +35,6 @@
 #ifndef LE_RASTERIZER_INTEGER_H
 #define LE_RASTERIZER_INTEGER_H
 
-/*****************************************************************************/
-#ifndef LE_RASTERIZER_H
-	#error The file rasterizer_integer.h should not be included directly. Include rasterizer.h instead.
-#endif
-
-/*****************************************************************************/
 #include "global.h"
 #include "config.h"
 
@@ -90,11 +83,6 @@ private:
 	uint32_t texMaskV;
 
 #if LE_USE_SIMD == 1
-/*
-	v4sf texScale_4;
-	v4si texMaskU_4;
-	v4si texMaskV_4;
-*/
 	v4si color_4;
 #endif // LE_USE_SIMD
 

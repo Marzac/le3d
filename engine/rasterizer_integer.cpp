@@ -1,18 +1,17 @@
 /**
 	\file rasterizer_integer.cpp
-	\brief LightEngine 3D: Triangle rasterizer
+	\brief LightEngine 3D: Triangle rasterizer (fixed point)
 	\brief All platforms implementation
-	\brief Integer mathematics
 	\brief Support textured triangles
 	\brief Textures can have an alpha channel and mipmaps
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -100,9 +99,17 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		color = tri->color;
 
 	// Convert position coordinates
-		f2i32x3(tri->xs, xs);
-		f2i32x3(tri->ys, ys);
-		f2i32sx3(tri->zs, ws, 4096.0f);
+		xs[0] = (int32_t) (tri->xs[0]) << 16;
+		xs[1] = (int32_t) (tri->xs[1]) << 16;
+		xs[2] = (int32_t) (tri->xs[2]) << 16;
+		ys[0] = (int32_t) (tri->ys[0]);
+		ys[1] = (int32_t) (tri->ys[1]);
+		ys[2] = (int32_t) (tri->ys[2]);
+
+		const float sw = 65536.0f * 4096.0f;
+		ws[0] = (int32_t) (tri->zs[0] * sw);
+		ws[1] = (int32_t) (tri->zs[1] * sw);
+		ws[2] = (int32_t) (tri->zs[2] * sw);
 
 	// Sort vertexes vertically
 		int vt = 0, vb = 0, vm1 = 0, vm2 = 3;
@@ -123,42 +130,53 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 				vt = 2; vm1 = 1; vb = 0;
 			}
 		}
-		ys[vb] = ((ys[vb] + 0xFFFF) >> 16) << 16;
 
 	// Get vertical span
-		int dy = (ys[vb] - ys[vt]) >> 16;
-		if (dy <= 0) continue;
+		int dy = ys[vb] - ys[vt];
+		if (dy == 0) continue;
 
 	// Choose the mipmap level
 	#if LE_RENDERER_MIPMAPS == 1
 		if (bmp->mmLevels) {
-			int r = (bmp->ty + (dy >> 1)) / dy;
+            float utop = tri->us[vt] / tri->zs[vt];
+            float ubot = tri->us[vb] / tri->zs[vb];
+            float vtop = tri->vs[vt] / tri->zs[vt];
+            float vbot = tri->vs[vb] / tri->zs[vb];
+            float d = cmax(fabs(utop - ubot), fabs(vtop - vbot));
+
+            int r = (d * bmp->ty + dy * 0.5f) / dy;
 			int l = LeGlobal::log2i32(r);
 			l = cmin(l, bmp->mmLevels - 1);
 			bmp = bmp->mipmaps[l];
 		}
 	#endif
 
-	// Get texture information
+	// Retrieve texture information
 		texPixels = (uint32_t *) bmp->data;
 		texSizeU = bmp->txP2;
 		texSizeV = bmp->tyP2;
 		texMaskU = (1 << bmp->txP2) - 1;
 		texMaskV = (1 << bmp->tyP2) - 1;
 
-	// Prepare vectors
-	#if LE_USE_SIMD == 1
+	#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
 		v4si zv = {0, 0, 0, 0};
 		color_4.v = (V4SI) _mm_load_ss((float *) &color);
 		color_4.v = (V4SI) _mm_unpacklo_epi8((__m128i)color_4.v, (__m128i)zv.v);
 	#endif
 
 	// Convert texture coordinates
-		f2i32sx3(tri->us, us, 1 << bmp->txP2);
-		f2i32sx3(tri->vs, vs, 1 << bmp->tyP2);
+		const float su = (float) (65536 << bmp->txP2);
+		us[0] = (int32_t) (tri->us[0] * su);
+		us[1] = (int32_t) (tri->us[1] * su);
+		us[2] = (int32_t) (tri->us[2] * su);
+
+		const float sv = (float) (65536 << bmp->tyP2);
+		vs[0] = (int32_t) (tri->vs[0] * sv);
+		vs[1] = (int32_t) (tri->vs[1] * sv);
+		vs[2] = (int32_t) (tri->vs[2] * sv);
 
 	// Compute the mean vertex
-		int n = (ys[vm1] - ys[vt]) / dy;
+		int n = ((ys[vm1] - ys[vt]) << 16) / dy;
 		xs[3] = (((int64_t) (xs[vb] - xs[vt]) * n) >> 16) + xs[vt];
 		ys[3] = ys[vm1];
 		ws[3] = (((int64_t) (ws[vb] - ws[vt]) * n) >> 16) + ws[vt];
@@ -178,9 +196,7 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 /*****************************************************************************/
 void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 {
-	int y1 = ys[vt] >> 16;
-	int y2 = ys[vm1] >> 16;
-	int d = y2 - y1;
+	int d = ys[vm1] - ys[vt];
 	if (d == 0) return;
 
 	int	ax1 = (xs[vm1] - xs[vt]) / d;
@@ -203,9 +219,11 @@ void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 	int v1 = vs[vt];
 	int v2 = v1;
 
+	int y1 = ys[vt];
+    int y2 = ys[vm1];
 	x2 += 0xFFFF;
 
-	if (bmp->flags & LE_BMP_ALPHACHANNEL) {
+	if (bmp->flags & LE_BMP_RGBA) {
 		for (int y = y1; y < y2; y++) {
 			fillFlatTexAlphaZC(y, x1 >> 16, x2 >> 16, w1, w2, u1, u2, v1, v2);
 			x1 += ax1; x2 += ax2;
@@ -226,9 +244,7 @@ void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 
 void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 {
-	int y1 = ys[vm1] >> 16;
-	int y2 = ys[vb] >> 16;
-	int d = y2 - y1;
+	int d = ys[vb] - ys[vm1];
 	if (d == 0) return;
 
 	int	ax1 = (xs[vb] - xs[vm1]) / d;
@@ -251,9 +267,11 @@ void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 	int u2 = us[vm2];
 	int v2 = vs[vm2];
 
+	int y1 = ys[vm1];
+	int y2 = ys[vb];
 	x2 += 0xFFFF;
 
-	if (bmp->flags & LE_BMP_ALPHACHANNEL) {
+	if (bmp->flags & LE_BMP_RGBA) {
 		for (int y = y1; y < y2; y++) {
 			fillFlatTexAlphaZC(y, x1 >> 16, x2 >> 16, w1, w2, u1, u2, v1, v2);
 			x1 += ax1; x2 += ax2;
@@ -273,7 +291,7 @@ void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 }
 
 /*****************************************************************************/
-#if LE_USE_SIMD == 1
+#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
 inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2)
 {
 	int d = x2 - x1;
@@ -284,7 +302,7 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 	int aw = (w2 - w1) / d;
 	uint32_t * p = x1 + y * frame.tx + (uint32_t *) frame.data;
 
-	for (int x = x1; x < x2; x ++) {
+	for (int x = x1; x <= x2; x ++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
 		uint32_t tu = ((u1 * z) >> 24) & texMaskU;
 		uint32_t tv = ((v1 * z) >> 24) & texMaskV;
@@ -296,7 +314,7 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 		tp.v = (V4SI) _mm_mullo_epi16((__m128i)tp.v, (__m128i)color_4.v);
 		tp.v = (V4SI) _mm_srli_epi16((__m128i)tp.v, 8);
 		tp.v = (V4SI) _mm_packus_epi16((__m128i)tp.v, (__m128i)zv.v);
-		*p++ = _mm_extract_epi32((__m128i)tp.v, 0);
+		*p++ = _mm_cvtsi128_si32((__m128i)tp.v);
 
 		u1 += au;
 		v1 += av;
@@ -315,7 +333,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 
 	uint32_t * p = x1 + y * frame.tx + (uint32_t *) frame.data;
 
-	for (int x = x1; x < x2; x ++) {
+	for (int x = x1; x <= x2; x ++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
 		uint32_t tu = ((u1 * z) >> 24) & texMaskU;
 		uint32_t tv = ((v1 * z) >> 24) & texMaskV;
@@ -334,7 +352,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 		tp.v = (V4SI) _mm_adds_epu16((__m128i)tp.v, (__m128i)fp.v);
 		tp.v = (V4SI) _mm_srli_epi16((__m128i)tp.v, 8);
 		tp.v = (V4SI) _mm_packus_epi16((__m128i)tp.v, (__m128i)zv.v);
-		*p++ = _mm_extract_epi32((__m128i)tp.v, 0);
+		*p++ = _mm_cvtsi128_si32((__m128i)tp.v);
 
 		u1 += au;
 		v1 += av;
@@ -356,7 +374,7 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 	int aw = (w2 - w1) / d;
 
 	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + (uint32_t *) frame.data);
-	for (int x = x1; x < x2; x++) {
+	for (int x = x1; x <= x2; x++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
 		uint32_t tu = ((u1 * z) >> 24) & texMaskU;
 		uint32_t tv = ((v1 * z) >> 24) & texMaskV;
@@ -386,7 +404,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 
 	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + (uint32_t *) frame.data);
 
-	for (int x = x1; x < x2; x++) {
+	for (int x = x1; x <= x2; x++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
 		uint32_t tu = ((u1 * z) >> 24) & texMaskU;
 		uint32_t tv = ((v1 * z) >> 24) & texMaskV;
@@ -404,22 +422,6 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 	}
 }
 
-#endif
-
-/*****************************************************************************/
-inline void LeRasterizer::f2i32x3(const float * in, int32_t * out)
-{
-	out[0] = (int32_t) (in[0] * 65536.0f);
-	out[1] = (int32_t) (in[1] * 65536.0f);
-	out[2] = (int32_t) (in[2] * 65536.0f);
-}
-
-inline void LeRasterizer::f2i32sx3(const float * in, int32_t * out, float s)
-{
-	const float k = 65536.0f * s;
-	out[0]  = (int32_t) (in[0] * k);
-	out[1]  = (int32_t) (in[1] * k);
-	out[2]  = (int32_t) (in[2] * k);
-}
+#endif //LE_USE_SIMD && LE_USE_SSE2
 
 #endif // LE_RENDERER_INTRASTER == 1
