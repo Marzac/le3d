@@ -1,15 +1,15 @@
 /**
-	\file draw.cpp
-	\brief LightEngine 3D: Native OS graphic context
+	\file gamepad.h
+	\brief LightEngine 3D: Native OS gamepad manager
 	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\copyright Frederic Meslin 2015 - 2017
+	\version 1.3
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2017 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -30,36 +30,53 @@
 	SOFTWARE.
 */
 
-#include "draw.h"
+#ifndef LE_GAMEPAD_H
+#define LE_GAMEPAD_H
 
 #include "global.h"
 #include "config.h"
 
-#define WINVER	0x0600
-#include <windef.h>
-#include <windows.h>
+/*****************************************************************************/
+typedef enum{
+	LE_PAD_STICK_LEFT = 0,
+	LE_PAD_STICK_RIGHT,
+	LE_PAD_TRIGGERS,
+	LE_PAD_DPAD,
+}LE_PAD_STICKS;
+
+typedef enum{
+	LE_PAD_BUTTON_A 		= 0x0001,
+	LE_PAD_BUTTON_B 		= 0x0002,
+	LE_PAD_BUTTON_X 		= 0x0004,
+	LE_PAD_BUTTON_Y			= 0x0008,
+	LE_PAD_LEFT_BUMPER		= 0x0010,
+	LE_PAD_RIGHT_BUMPER		= 0x0020,
+	LE_PAD_BUTTON_BACK		= 0x0040,
+	LE_PAD_BUTTON_START		= 0x0080,
+	LE_PAD_LEFT_CLICK		= 0x0100,
+	LE_PAD_RIGHT_CLICK		= 0x0200,
+
+}LE_PAD_BUTTONS;
 
 /*****************************************************************************/
-LeDraw::LeDraw(LeHandle context, int width, int height) :
-	width(width), height(height),
-	frontContext(context)
+class LeGamePad
 {
-	if (!frontContext) frontContext = (LeHandle) GetDC(NULL);
-}
+public:
+	LeGamePad(int pad);
 
-LeDraw::~LeDraw()
-{
-}
+	void getStickPosition(LE_PAD_STICKS stick, float &x, float &y);
+	void getButtonsState(int &buttons);
+	void setStickThreshold(int threshold);
 
-/*****************************************************************************/
-void LeDraw::setPixels(void * data)
-{
-	BITMAPV4HEADER info;
-	info.bV4Size = sizeof(BITMAPV4HEADER);
-	info.bV4Width = width;
-	info.bV4Height = -height;
-	info.bV4Planes = 1;
-	info.bV4BitCount = 32;
-	info.bV4V4Compression = BI_RGB;
-	SetDIBitsToDevice((HDC) frontContext, 0, 0, width, height, 0, 0, 0, height, data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
-}
+	static int getCompatiblePad(int minAxes, int minButtons);
+
+private:
+	float applyThreshold(float value);
+
+private:
+	static int lastCompatible;
+	float threshold;
+	int pad;
+};
+
+#endif // LE_GAMEPAD_H

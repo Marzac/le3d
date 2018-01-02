@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -33,17 +33,32 @@
 #ifndef LE_SIMD_H
 #define LE_SIMD_H
 
+/** Intrinsics includes */
+#if LE_USE_SSE2
 	#include "xmmintrin.h"
 	#include "emmintrin.h"
 	#include "smmintrin.h"
+#endif // LE_USE_SSE2
 
+/*****************************************************************************/
+/** 4x 32bit float vector */
 	typedef float V4SF __attribute__ ((vector_size (16)));
 	typedef union {V4SF v; float f[4];} v4sf;
 
-	typedef int32_t V2SI __attribute__ ((vector_size (8)));
-	typedef union {V2SI v; int32_t i[2];} v2si;
-
+/** 4x 32bit signed integer vector */
 	typedef int32_t V4SI __attribute__ ((vector_size (16)));
 	typedef union {V4SI v; int32_t i[4];} v4si;
 
-#endif
+/** 4x 32bit unsigned integer vector */
+	typedef uint32_t V4SU __attribute__ ((vector_size (16)));
+	typedef union {V4SU v; uint32_t u[4];} v4su;
+
+/** 8x 16bit signed integer vector */
+    typedef int16_t V8SH __attribute__ ((vector_size (16)));
+	typedef union {V8SH v; int16_t i[8];} v8sh;
+
+/** 8x 16bit unsigned integer vector */
+	typedef uint16_t V8SW __attribute__ ((vector_size (16)));
+	typedef union {V8SW v; uint16_t u[8];} v8sw;
+
+#endif // LE_SIMD_H

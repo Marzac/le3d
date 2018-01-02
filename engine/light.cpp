@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -53,12 +53,12 @@ LeLight::LeLight(LE_LIGHT_TYPES type, uint32_t color) :
 }
 
 /*****************************************************************************/
-void LeLight::setPosition(LeVertex org)
+void LeLight::setPosition(const LeVertex & org)
 {
 	pos.origin = org;
 }
 
-void LeLight::setDirection(LeVertex axis)
+void LeLight::setDirection(const LeVertex & axis)
 {
 	pos.axis = axis;
 	pos.axis.normalize();
@@ -97,7 +97,6 @@ void LeLight::shineMesh(LeMesh * mesh)
 /*****************************************************************************/
 inline void LeLight::shinePoint(LeMesh * mesh)
 {
-// Compute the origin
 	LeVertex o = pos.origin - mesh->pos;
 	for (int j = 0; j < mesh->noTriangles; j++) {
 		const float third = 1.0f / 3.0f;
@@ -111,32 +110,30 @@ inline void LeLight::shinePoint(LeMesh * mesh)
 		if (p > 0.0f) continue;
 		float d = m.dot(m);
 		float e = cmax((1.0f - d * rolloff), 0.0f);
-		macColor(mesh->colors[j], color, e, mesh->shades[j]);
+		blendColors(mesh->colors[j], color, e, mesh->shades[j]);
 	}
 }
 
 inline void LeLight::shineDirectional(LeMesh * mesh)
 {
-// Compute light relative direction
 	LeMatrix iv = mesh->view.inverse3x3();
 	LeVertex rp = iv * pos.axis;
 	rp.normalize();
 
-// Calculate the light
 	for (int j = 0; j < mesh->noTriangles; j++) {
 		float p = -rp.dot(mesh->normals[j]);
-		if (p > 0.0f) macColor(0xFFFFFF, color, p, mesh->shades[j]);
+		if (p > 0.0f) blendColors(0xFFFFFF, color, p, mesh->shades[j]);
 	}
 }
 
 inline void LeLight::shineAmbient(LeMesh * mesh)
 {
 	for (int j = 0; j <  mesh->noTriangles; j++)
-		macColor(mesh->colors[j], color, 1.0f, mesh->shades[j]);
+		blendColors(mesh->colors[j], color, 1.0f, mesh->shades[j]);
 }
 
 /*****************************************************************************/
-inline void LeLight::macColor(uint32_t color1, uint32_t color2, float factor, uint32_t &result)
+void LeLight::blendColors(uint32_t color1, uint32_t color2, float factor, uint32_t &result)
 {
 	uint8_t * c1 = (uint8_t *) &color1;
 	uint8_t * c2 = (uint8_t *) &color2;
@@ -146,4 +143,3 @@ inline void LeLight::macColor(uint32_t color1, uint32_t color2, float factor, ui
 	r[1] = cbound(r[1] + ((c1[1] * c2[1] * f) >> 24), 0, 255);
 	r[2] = cbound(r[2] + ((c1[2] * c2[2] * f) >> 24), 0, 255);
 }
-

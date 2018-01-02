@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -53,8 +53,8 @@ public:
 	LeLight();
 	LeLight(LE_LIGHT_TYPES type, uint32_t color);
 
-	void setPosition(LeVertex org);
-	void setDirection(LeVertex axis);
+	void setPosition(const LeVertex & org);
+	void setDirection(const LeVertex & axis);
 	void setColor(uint32_t color);
 
 	static void blackMesh(LeMesh * mesh);
@@ -70,7 +70,10 @@ private:
 	void shinePoint(LeMesh * mesh);
 	void shineDirectional(LeMesh * mesh);
 	void shineAmbient(LeMesh * mesh);
-	void macColor(uint32_t color1, uint32_t color2, float factor, uint32_t &result);
+
+public:
+    static void blendColors(uint32_t color1, uint32_t color2, float factor, uint32_t &result);
+
 };
 
 #endif // LE_LIGHT_H
