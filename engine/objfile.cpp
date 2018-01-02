@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -66,13 +66,14 @@ LeObjFile::LeObjFile(const char * filename) :
 	path(NULL),
 	materials(NULL), curMaterial(&defMaterial), noMaterials(0)
 {
+	memset(line, 0, LE_OBJ_MAX_LINE+1);
 	if (filename) path = strdup(filename);
 }
 
 LeObjFile::~LeObjFile()
 {
 	if (path) free(path);
-	//if (materials) delete[] materials;
+	if (materials) delete[] materials;
 }
 
 /*****************************************************************************/
@@ -92,6 +93,7 @@ LeMesh * LeObjFile::loadMesh(int index)
 	curMaterial = &defMaterial;
 
 	fseek(file, 0, SEEK_SET);
+
 	int object = 0;
 	int len = readLine(file, line, LE_OBJ_MAX_LINE);
 	while (len) {
@@ -105,6 +107,7 @@ LeMesh * LeObjFile::loadMesh(int index)
 		}
 		len = readLine(file, line, LE_OBJ_MAX_LINE);
 	}
+
 	fclose(file);
 	return mesh;
 }
@@ -113,12 +116,14 @@ int LeObjFile::getNoMeshes()
 {
 	FILE * file = fopen(path, "rb");
 	if (!file) return 0;
+
 	int nbObjects = 0;
 	int len = readLine(file, line, LE_OBJ_MAX_LINE);
 	while (len) {
 		if (strncmp(line, objObject, 2) == 0) nbObjects ++;
 		len = readLine(file, line, LE_OBJ_MAX_LINE);
 	}
+
 	fclose(file);
 	return nbObjects;
 }
@@ -127,6 +132,7 @@ const char * LeObjFile::getMeshName(int index)
 {
 	FILE * file = fopen(path, "rb");
 	if (!file) return NULL;
+
 	int object = 0;
 	int readLen = readLine(file, line, LE_OBJ_MAX_LINE);
 	while (readLen) {
@@ -139,6 +145,7 @@ const char * LeObjFile::getMeshName(int index)
 		}
 		readLen = readLine(file, line, LE_OBJ_MAX_LINE);
 	}
+
 	fclose(file);
 	return NULL;
 }
@@ -148,19 +155,23 @@ void LeObjFile::loadMaterials(FILE * file)
 {
 	FILE * libFile;
 	char filename[LE_OBJ_MAX_PATH+1];
-	char libName[LE_OBJ_MAX_NAME+1];
+	char libName[LE_OBJ_MAX_PATH+LE_OBJ_MAX_NAME+1];
+
 	noMaterials	= 0;
 	int nb = getNoMaterials(file);
 	materials = new LeObjMaterial[nb];
 	if (!materials) return;
+
 	fseek(file, 0, SEEK_SET);
+
 	int len = readLine(file, line, LE_OBJ_MAX_LINE);
 	while (len) {
 		if (strncmp(line, objMaterialLib, 7) == 0) {
 			strncpy(libName, &line[7], LE_OBJ_MAX_NAME);
 			libName[LE_OBJ_MAX_NAME] = '\0';
-			getDir(filename, LE_OBJ_MAX_PATH);
-			strcat(filename, libName);	//TODO: secure this
+			LeGlobal::getFileDirectory(filename, LE_OBJ_MAX_PATH, path);
+			strcat(filename, libName);
+
 			libFile = fopen(filename, "rb");
 			if (libFile) {
 				importMatLib(libFile);
@@ -175,16 +186,19 @@ int LeObjFile::getNoMaterials(FILE * file)
 {
 	FILE * libFile;
 	char filename[LE_OBJ_MAX_PATH+1];
-	char libName[LE_OBJ_MAX_NAME+1];
+	char libName[LE_OBJ_MAX_PATH+LE_OBJ_MAX_NAME+1];
+
 	int nbMats = 0;
 	fseek(file, 0, SEEK_SET);
+
 	int len = readLine(file, line, LE_OBJ_MAX_LINE);
 	while (len) {
 		if (strncmp(line, objMaterialLib, 7) == 0) {
 			strncpy(libName, &line[7], LE_OBJ_MAX_NAME);
 			libName[LE_OBJ_MAX_NAME] = '\0';
-			getDir(filename, LE_OBJ_MAX_PATH);
-			strcat(filename, libName);	//TODO: secure this
+			LeGlobal::getFileDirectory(filename, LE_OBJ_MAX_PATH, path);
+			strcat(filename, libName);
+
 			libFile = fopen(filename, "rb");
 			if (libFile) {
 				nbMats += countMatLib(libFile);
@@ -238,12 +252,9 @@ int LeObjFile::countMatLib(FILE * file)
 /*****************************************************************************/
 LeObjMaterial * LeObjFile::findMaterial(const char * name)
 {
-	int i;
-	for (i = 0; i < noMaterials; i++)
-        if (strcmp(name, materials[i].name) == 0) {
-			//printf("Found %s", objMaterials[i].name);
+	for (int i = 0; i < noMaterials; i++)
+        if (strcmp(name, materials[i].name) == 0)
 			return &materials[i];
-		}
 	return &defMaterial;
 }
 
@@ -253,10 +264,12 @@ void LeObjFile::importVertexes(FILE * file, LeMesh * mesh)
 // Count number of vertexes
 	int nb = countTokens(file, objGeoVertex);
 	if (!nb) return;
+
 // Allocate memory
 	mesh->vertexes = (LeVertex *) new LeVertex[nb];
 	if (!mesh->vertexes) return;
 	mesh->noVertexes = nb;
+
 // Import vertexes
 	int start = ftell(file);
 	int len = readLine(file, line, LE_OBJ_MAX_LINE);
@@ -277,10 +290,12 @@ void LeObjFile::importTexCoords(FILE * file, LeMesh * mesh)
 // Count number of tex coords
 	int nb = countTokens(file, objTexCoords);
 	if (!nb) return;
+
 // Allocate memory
 	mesh->texCoords = (float *) new float[nb * 2];
 	if (!mesh->texCoords) return;
 	mesh->noTexCoords = nb;
+
 // Import tex coords
 	int start = ftell(file);
 	int len = readLine(file, line, LE_OBJ_MAX_LINE);
@@ -301,6 +316,7 @@ void LeObjFile::importTriangles(FILE * file, LeMesh * mesh)
 // Count number of triangles
 	int nb = countTokens(file, objFace);
 	if (!nb) return;
+
 // Allocate memory
 	mesh->vertexList = new int[3 * nb];
 	memset(mesh->vertexList, 0, 3 * nb * sizeof(int));
@@ -311,6 +327,7 @@ void LeObjFile::importTriangles(FILE * file, LeMesh * mesh)
 	mesh->colors = new uint32_t[nb];
 	memset(mesh->colors, 0, nb * sizeof(uint32_t));
 	mesh->noTriangles = nb;
+
 // Import the triangles
 	int start = ftell(file);
 	int len = readLine(file, line, LE_OBJ_MAX_LINE);
@@ -322,13 +339,14 @@ void LeObjFile::importTriangles(FILE * file, LeMesh * mesh)
 			uint32_t g = cbound(curMaterial->diffuse[1] * 255.0f, 0.0f, 255.0f);
 			uint32_t b = cbound(curMaterial->diffuse[2] * 255.0f, 0.0f, 255.0f);
 			mesh->colors[index] = r | (g << 8) | (b << 16);
-			int slot = bmpCache.getFromName(curMaterial->texture);
-			if (slot < 0) {
-				printf("objFile: Taking default texture!\n");
-				slot = 0;
+
+            int slot = 0;
+			const char * texName = curMaterial->texture;
+			if (texName[0]) {
+                slot = bmpCache.getFromName(texName);
+                if (!slot) printf("objFile: using default texture (instead of %s)!\n", texName);
 			}
-			mesh->texSlotList[index] = slot;
-			index ++;
+			mesh->texSlotList[index++] = slot;
 		}else if (strncmp(line, objMaterialSet, 7) == 0) {
 			curMaterial = findMaterial(&line[7]);
 		}else if (strncmp(line, objObject, 2) == 0) break;
@@ -343,6 +361,7 @@ int LeObjFile::countTokens(FILE * file, const char * token)
 	int start = ftell(file);
 	int nb = 0;
 	int tl = strlen(token);
+
 	int len = readLine(file, line, LE_OBJ_MAX_LINE);
 	while (len) {
 		if (strncmp(line, token, tl) == 0) nb ++;
@@ -420,48 +439,3 @@ int LeObjFile::readLine(FILE * file, char * buffer, int len)
 	buffer[readLen] = '\0';
 	return readLen;
 }
-
-/*****************************************************************************/
-void LeObjFile::getDir(char * dir, int size)
-{
-	*dir = 0;
-	int len = strlen(path);
-	if (len == 0) return;
-	const char * p = &path[len - 1];
-	while (p >= path) {
-		if (*p == '/' || *p == '\\') {
-			int n = p - path + 1;
-			if (n > size - 1) return;
-			strncpy(dir, path, n);
-			dir[n] = 0;
-			return;
-		} p --;
-	}
-}
-
-/*****************************************************************************/
-/*
-int main()
-{
-	char name[32];
-	FILE * file;
-	file = fopen("autruche.obj", "rb");
-	printf("OBJ file %s information\n", "autruche.obj");
-	printf("\tNum of meshes : %d", embOBJGetNoObjects(file, 0));
-	embOBJGetObjectName(file, 0, name, 32);
-	printf("\tObj1 name : %s", name);
-	embOBJGetObjectName(file, 1, name, 32);
-	printf("\tObj2 name : %s", name);
-	embOBJGetObjectName(file, 2, name, 32);
-	printf("\tObj3 name : %s", name);
-
-	printf("\tNum of materials : %d", embOBJGetNoMaterials(file));
-	embOBJImportMaterials(file);
-
-	LeMesh mesh;
-	embOBJImportMesh(file, 0, &mesh);
-
-
-	fclose(file);
-}
-*/
