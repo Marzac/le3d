@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +48,7 @@
 
 	#include "light.h"
 	#include "mesh.h"
+	#include "bset.h"
 	#include "bitmap.h"
 
 	#include "bmpfile.h"
@@ -55,4 +56,4 @@
 	#include "bmpcache.h"
 	#include "meshcache.h"
 
-#endif
+#endif // LE_LE3D_H
