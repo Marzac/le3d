@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.2
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -38,9 +38,9 @@
 
 /*****************************************************************************/
 typedef enum{
-	LE_BMP_DEFAULT = 0,
-	LE_BMP_ALPHACHANNEL = 1,
-	LE_BMP_PREMULTIPLIED = 2
+	LE_BMP_RGB              = 0,    /** Bitmap in 32bit RGB color format */
+	LE_BMP_RGBA             = 1,    /** Bitmap in 32bit RGBA format */
+	LE_BMP_PREMULTIPLIED    = 2     /** Bitmap in 32bit RGBA (alpha pre-multiplied) format */
 }LE_BITMAP_FLAGS;
 
 /*****************************************************************************/
@@ -55,12 +55,14 @@ public:
 	void rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color);
 	void blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h);
 	void alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h);
+	void alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t hDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t wSrc, int32_t hSrc);
+
 	void text(int x, int y, const char * text, int length, const LeBmpFont * font);
 
 	void allocate(int tx, int ty);
 	void deallocate();
 
-	void preMultiplyAlpha();
+	void preMultiply();
 	void makeMipmaps();
 
 	LeHandle context;

@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -35,15 +35,14 @@
 #include "global.h"
 #include "config.h"
 
-#include "emmintrin.h"
-#include "mmintrin.h"
+#include "simd.h"
 
 /*****************************************************************************/
 LeBitmap::LeBitmap() :
 	context(0), bitmap(0),
 	tx(0), ty(0),
 	txP2(0), tyP2(0),
-	flags(LE_BMP_DEFAULT),
+	flags(LE_BMP_RGB),
 	data(NULL), dataAllocated(false),
 	mmLevels(0)
 {
@@ -71,25 +70,56 @@ LeBmpFont::~LeBmpFont()
 }
 
 /*****************************************************************************/
+#if LE_USE_SIMD == 1
+void LeBitmap::clear(uint32_t color)
+{
+	int size = tx * ty;
+    int b = size >> 2;
+    int r = size & 0x3;
+
+    v4su color_4 = {color, color, color, color};
+	v4su * p_4 = (v4su *) data;
+	for (int t = 0; t < b; t ++)
+		*p_4++ = color_4;
+
+    uint32_t * p = (uint32_t *) p_4;
+    if (r == 0) return;
+    *p++ = color;
+    if (r == 1) return;
+    *p++ = color;
+    if (r == 2) return;
+    *p++ = color;
+}
+#else
 void LeBitmap::clear(uint32_t color)
 {
 	size_t size = tx * ty;
 	uint32_t * p = (uint32_t *) data;
-	for (size_t t = 0; t < size; t += 4) {
-		p[t]   = color;
-		p[t+1] = color;
-		p[t+2] = color;
-		p[t+3] = color;
-	}
+	for (size_t t = 0; t < size; t ++)
+		p[t] = color;
 }
+#endif
 
+/*****************************************************************************/
 void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
 {
-#if LE_BMP_CHECKCOORDS == 1
-	if (x < 0 || y < 0 || x + w > tx || y + h > ty) return;
-#endif
+    if (x >= tx) return;
+    if (y >= ty) return;
+    int xe = x + w;
+    if (xe <= 0) return;
+    int ye = y + h;
+    if (ye <= 0) return;
+
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (xe > tx) xe = tx;
+    if (ye > ty) ye = ty;
+
 	uint32_t * d = (uint32_t *) data;
 	d += x + y * tx;
+    w = xe - x;
+    h = ye - y;
+
 	int step = tx - w;
 	for (int j = 0; j < h; j++){
 		for (int i = 0; i < w; i++)
@@ -99,40 +129,30 @@ void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
 }
 
 /*****************************************************************************/
-void LeBitmap::text(int x, int y, const char * text, int length, const LeBmpFont * font)
-{
-#if LE_BMP_CHECKCOORDS == 1
-	if (x < 0 || y < 0) return;
-#endif
-	int cx = font->charSizeX;
-	int cy = font->charSizeY;
-	int lx = 0;
-	int ly = 0;
-	for (int i = 0; i < length; i++) {
-		int c = text[i];
-		if (c == '\n') {
-			lx = 0;
-			ly ++;
-		}else{
-			if (c >= font->charBegin && c < font->charEnd)
-				alphaBlit(x + lx * font->spaceX, y + ly * font->spaceY, font->font, 0, (c - font->charBegin) * cy, cx, cy);
-			lx ++;
-		}
-	}
-}
-
-/*****************************************************************************/
 void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
 {
-#if LE_BMP_CHECKCOORDS == 1
-	if (xSrc < 0 || ySrc < 0 || xSrc + w > src->tx || ySrc + h > src->ty) return;
-	if (xDst < 0 || yDst < 0 || xDst + w > tx || yDst + h > ty) return;
-#endif
+    if (xDst >= tx) return;
+    if (yDst >= ty) return;
+    int xeDst = xDst + w;
+    if (xeDst <= 0) return;
+    int yeDst = yDst + h;
+    if (yeDst <= 0) return;
+
+    if (xDst < 0) {
+        xDst = 0; xSrc -= xDst;
+    }
+    if (yDst < 0) {
+        yDst = 0; ySrc -= yDst;
+    }
+    if (xeDst > tx) xeDst = tx;
+    if (yeDst > ty) yeDst = ty;
+
 	uint32_t * d = (uint32_t *) data;
 	uint32_t * s = (uint32_t *) src->data;
-
 	d += xDst + yDst * tx;
 	s += xSrc + ySrc * src->tx;
+    w = xeDst - xDst;
+    h = yeDst - yDst;
 
 	int stepDst = tx - w;
 	int stepSrc = src->tx - w;
@@ -145,68 +165,88 @@ void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xS
 	}
 }
 
-#if LE_USE_MMX == 1
+/*****************************************************************************/
+#if LE_USE_SIMD == 1
 void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
 {
-#if LE_BMP_CHECKCOORDS == 1
-	if (xSrc < 0 || ySrc < 0 || xSrc + w > src->tx || ySrc + h > src->ty) return;
-	if (xDst < 0 || yDst < 0 || xDst + w > tx || yDst + h > ty) return;
-#endif
+    if (xDst >= tx) return;
+    if (yDst >= ty) return;
+    int xeDst = xDst + w;
+    if (xeDst <= 0) return;
+    int yeDst = yDst + h;
+    if (yeDst <= 0) return;
+
+    if (xDst < 0) {
+        xDst = 0; xSrc -= xDst;
+    }
+    if (yDst < 0) {
+        yDst = 0; ySrc -= yDst;
+    }
+    if (xeDst > tx) xeDst = tx;
+    if (yeDst > ty) yeDst = ty;
+
 	uint32_t * d = (uint32_t *) data;
 	uint32_t * s = (uint32_t *) src->data;
-
 	d += xDst + yDst * tx;
 	s += xSrc + ySrc * src->tx;
+    w = xeDst - xDst;
+    h = yeDst - yDst;
 
 	int stepDst = tx - w;
 	int stepSrc = src->tx - w;
 
-	__m64 zv = _mm_setzero_si64();
-	__m64 bv = _mm_set1_pi16(0xFF);
+    v4si zv = {0, 0, 0, 0};
+    v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
 
 	for (int y = 0; y < h; y++){
 		for (int x = 0; x < w; x++){
+            v4si dp, sp;
+			dp.v = (V4SI) _mm_loadl_epi64((__m128i *) d);
+            sp.v = (V4SI) _mm_loadl_epi64((__m128i *) s++);
+            dp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)dp.v);
+            sp.v = (V4SI) _mm_unpacklo_epi8((__m128i)sp.v, (__m128i)zv.v);
 
-			uint32_t dPix = *d;
-			uint32_t sPix = *s++;
-			uint32_t a = (sPix >> 24) & 0xFF;
+            v4si ap;
+            ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)sp.v, 0xFF);
+            ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
+            dp.v = (V4SI) _mm_mulhi_epu16((__m128i)dp.v, (__m128i)ap.v);
+            dp.v = (V4SI) _mm_adds_epu16((__m128i)sp.v, (__m128i)dp.v);
+            dp.v = (V4SI) _mm_packus_epi16((__m128i)dp.v, (__m128i)zv.v);
 
-			__m64 a1v = _mm_set1_pi16(a);
-			__m64 a2v = _mm_xor_si64(a1v, bv);
-
-			__m64 sPixCom = (__m64) (uint64_t) sPix;
-			__m64 dPixCom = (__m64) (uint64_t) dPix;
-
-			sPixCom = _mm_unpacklo_pi8(sPixCom, zv);
-			dPixCom = _mm_unpacklo_pi8(dPixCom, zv);
-
-			dPixCom = _mm_mullo_pi16(dPixCom, a2v);
-			dPixCom = _mm_srli_pi16(dPixCom, 8);
-			dPixCom = _mm_adds_pu16(sPixCom, dPixCom);
-			dPixCom = _mm_packs_pu16(dPixCom, zv);
-
-			*d++ = (uint64_t) dPixCom;
+			*d++ = _mm_cvtsi128_si32((__m128i)dp.v);
 		}
 
-		s += stepSrc;
-		d += stepDst;
+        s += stepSrc;
+        d += stepDst;
 	}
-
-	_mm_empty();
 }
 
 #else
+
 void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
 {
-#if LE_BMP_CHECKCOORDS == 1
-	if (xSrc < 0 || ySrc < 0 || xSrc + w > src->tx || ySrc + h > src->ty) return;
-	if (xDst < 0 || yDst < 0 || xDst + w > tx || yDst + h > ty) return;
-#endif
+    if (xDst >= tx) return;
+    if (yDst >= ty) return;
+    int xeDst = xDst + w;
+    if (xeDst <= 0) return;
+    int yeDst = yDst + h;
+    if (yeDst <= 0) return;
+
+    if (xDst < 0) {
+        xDst = 0; xSrc -= xDst;
+    }
+    if (yDst < 0) {
+        yDst = 0; ySrc -= yDst;
+    }
+    if (xeDst > tx) xeDst = tx;
+    if (yeDst > ty) yeDst = ty;
+
 	uint32_t * d = (uint32_t *) data;
 	uint32_t * s = (uint32_t *) src->data;
-
 	d += xDst + yDst * tx;
 	s += xSrc + ySrc * src->tx;
+    w = xeDst - xDst;
+    h = yeDst - yDst;
 
 	int stepDst = tx - w;
 	int stepSrc = src->tx - w;
@@ -215,7 +255,7 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 		for (int x = 0; x < w; x++){
 			uint8_t * dPix = (uint8_t *) d ++;
 			uint8_t * sPix = (uint8_t *) s ++;
-			uint8_t a = sPix[3] ^ 0xFF;
+			uint16_t a = 256 - sPix[3];
 			dPix[0] = ((dPix[0] * a) >> 8) + sPix[0];
 			dPix[1] = ((dPix[1] * a) >> 8) + sPix[1];
 			dPix[2] = ((dPix[2] * a) >> 8) + sPix[2];
@@ -226,7 +266,159 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 		d += stepDst;
 	}
 }
+#endif // LE_USE_SIMD
+
+/*****************************************************************************/
+#if LE_USE_SIMD == 1
+void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t hDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t wSrc, int32_t hSrc)
+{
+    if (wDst <= 0) return;
+    if (hDst <= 0) return;
+
+    int32_t us = (wSrc << 16) / wDst;
+    int32_t vs = (hSrc << 16) / hDst;
+
+    if (xDst >= tx) return;
+    if (yDst >= ty) return;
+    int xeDst = xDst + wDst;
+    if (xeDst <= 0) return;
+    int yeDst = yDst + hDst;
+    if (yeDst <= 0) return;
+
+    int32_t ub = 0;
+    int32_t vb = 0;
+    if (xDst < 0) {
+        ub = ((int64_t)(-xDst * wSrc) << 16) / wDst;
+        xDst = 0;
+    }
+    if (yDst < 0) {
+        vb = ((int64_t)(-yDst * hSrc) << 16) / hDst;
+        yDst = 0;
+    }
+    if (xeDst > tx) xeDst = tx;
+    if (yeDst > ty) yeDst = ty;
+
+	uint32_t * d = (uint32_t *) data;
+	uint32_t * s = (uint32_t *) src->data;
+	d += xDst + yDst * tx;
+
+    wDst = xeDst - xDst;
+    hDst = yeDst - yDst;
+	int stepDst = tx - wDst;
+
+    v4si zv = {0, 0, 0, 0};
+    v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
+
+    int32_t u = ub;
+    int32_t v = vb;
+	for (int y = 0; y < hDst; y++){
+		for (int x = 0; x < wDst; x++){
+			uint32_t * p = &s[(u >> 16) + (v >> 16) * src->tx];
+            u += us;
+
+            v4si dp, sp;
+			dp.v = (V4SI) _mm_loadl_epi64((__m128i *) d);
+            sp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
+            dp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)dp.v);
+            sp.v = (V4SI) _mm_unpacklo_epi8((__m128i)sp.v, (__m128i)zv.v);
+
+            v4si ap;
+            ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)sp.v, 0xFF);
+            ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
+            dp.v = (V4SI) _mm_mulhi_epu16((__m128i)dp.v, (__m128i)ap.v);
+            dp.v = (V4SI) _mm_adds_epu16((__m128i)sp.v, (__m128i)dp.v);
+            dp.v = (V4SI) _mm_packus_epi16((__m128i)dp.v, (__m128i)zv.v);
+			*d++ = _mm_cvtsi128_si32((__m128i)dp.v);
+		}
+
+		u = ub;
+        v += vs;
+        d += stepDst;
+	}
+}
+
+#else
+
+void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t hDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t wSrc, int32_t hSrc)
+{
+    if (wDst <= 0) return;
+    if (hDst <= 0) return;
+
+    int32_t us = (wSrc << 16) / wDst;
+    int32_t vs = (hSrc << 16) / hDst;
+
+    if (xDst >= tx) return;
+    if (yDst >= ty) return;
+    int xeDst = xDst + wDst;
+    if (xeDst <= 0) return;
+    int yeDst = yDst + hDst;
+    if (yeDst <= 0) return;
+
+    int32_t ub = 0;
+    int32_t vb = 0;
+    if (xDst < 0) {
+        ub = ((int64_t)(-xDst * wSrc) << 16) / wDst;
+        xDst = 0;
+    }
+    if (yDst < 0) {
+        vb = ((int64_t)(-yDst * hSrc) << 16) / hDst;
+        yDst = 0;
+    }
+    if (xeDst > tx) xeDst = tx;
+    if (yeDst > ty) yeDst = ty;
+
+	uint32_t * d = (uint32_t *) data;
+	uint32_t * s = (uint32_t *) src->data;
+	d += xDst + yDst * tx;
+
+    wDst = xeDst - xDst;
+    hDst = yeDst - yDst;
+	int stepDst = tx - wDst;
+
+    int32_t u = ub;
+    int32_t v = vb;
+	for (int y = 0; y < hDst; y++){
+		for (int x = 0; x < wDst; x++){
+			uint8_t * sPix = (uint8_t *) &s[(u >> 16) + (v >> 16) * src->tx];
+            uint8_t * dPix = (uint8_t *) d ++;
+            u += us;
+
+			uint16_t a = 256 - sPix[3];
+			dPix[0] = ((dPix[0] * a) >> 8) + sPix[0];
+			dPix[1] = ((dPix[1] * a) >> 8) + sPix[1];
+			dPix[2] = ((dPix[2] * a) >> 8) + sPix[2];
+			dPix[3] = ((dPix[3] * a) >> 8) + sPix[3];
+		}
+
+		u = ub;
+        v += vs;
+        d += stepDst;
+	}
+}
+
 #endif
+
+/*****************************************************************************/
+void LeBitmap::text(int x, int y, const char * text, int length, const LeBmpFont * font)
+{
+	int cx = font->charSizeX;
+	int cy = font->charSizeY;
+	int lx = 0, ly = 0;
+
+	for (int i = 0; i < length; i++) {
+		int c = text[i];
+		if (c == '\n') {
+			lx = 0; ly ++;
+		}else{
+			if (c >= font->charBegin && c < font->charEnd) {
+				int px = x + lx * font->spaceX;
+				int py = y + ly * font->spaceY;
+				alphaBlit(px, py, font->font, 0, (c - font->charBegin) * cy, cx, cy);
+			}
+			lx ++;
+		}
+	}
+}
 
 /*****************************************************************************/
 void LeBitmap::allocate(int tx, int ty)
@@ -238,12 +430,13 @@ void LeBitmap::allocate(int tx, int ty)
 	this->ty = ty;
 	txP2 = LeGlobal::log2i32(tx);
 	tyP2 = LeGlobal::log2i32(ty);
-	flags = LE_BMP_DEFAULT;
+	flags = LE_BMP_RGB;
 }
 
 void LeBitmap::deallocate()
 {
-	if (dataAllocated && data) delete[] (uint32_t *) data;
+	if (dataAllocated && data)
+        delete[] (uint32_t *) data;
 	dataAllocated = false;
 
 	for (int l = 1; l < mmLevels; l++)
@@ -255,7 +448,7 @@ void LeBitmap::deallocate()
 }
 
 /*****************************************************************************/
-void LeBitmap::preMultiplyAlpha()
+void LeBitmap::preMultiply()
 {
 	size_t noPixels = tx * ty;
 
@@ -267,15 +460,11 @@ void LeBitmap::preMultiplyAlpha()
 		c += 4;
 	}
 
-	flags |= LE_BMP_PREMULTIPLIED;
-	flags |= LE_BMP_ALPHACHANNEL;
-
+	flags |= LE_BMP_RGBA | LE_BMP_PREMULTIPLIED;
 	for (int l = 1; l < mmLevels; l++)
-		mipmaps[l]->preMultiplyAlpha();
+		mipmaps[l]->preMultiply();
 }
 
-
-/*****************************************************************************/
 void LeBitmap::makeMipmaps()
 {
 	if ((tx & (tx - 1)) != 0 || (ty & (ty - 1)) != 0)
