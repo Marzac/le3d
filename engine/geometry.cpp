@@ -1,15 +1,15 @@
 /**
 	\file geometry.cpp
-	\brief LightEngine 3D: Vertex / axis / plan structures
+	\brief LightEngine 3D: Vertex / axis / plan / matrix objects
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -31,3 +31,28 @@
 */
 
 #include "geometry.h"
+
+#if LE_USE_SIMD == 1
+
+/** 128Bit aligned allocators / deallocators */
+void * operator new(size_t size)
+{
+	return _aligned_malloc(size, 16);
+}
+
+void * operator new[](size_t size)
+{
+	return _aligned_malloc(size, 16);
+}
+
+void operator delete(void * ptr)
+{
+    _aligned_free(ptr);
+}
+
+void operator delete[](void * ptr)
+{
+    _aligned_free(ptr);
+}
+
+#endif // LE_USE_SIMD

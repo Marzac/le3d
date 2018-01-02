@@ -1,15 +1,15 @@
 /**
 	\file geometry_scalar.h
-	\brief LightEngine 3D: Vertex / axis / plan structures
+	\brief LightEngine 3D: Vertex / axis / plan / matrix objects
 	\brief All platforms implementation (without SIMD support)
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -35,8 +35,6 @@
 
 #include "global.h"
 #include "config.h"
-
-#if LE_USE_SIMD == 0
 
 #include <math.h>
 
@@ -342,6 +340,15 @@ struct LeMatrix
 			mat[i][j] = 0;
 	}
 
+    void transpose()
+    {
+        LeMatrix m;
+        for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+            m.mat[j][i] = mat[i][j];
+        *this = m;
+    }
+
 	void translate(LeVertex d)
 	{
 		mat[0][3] += d.x;
@@ -626,7 +633,5 @@ namespace LePrimitives {
 	const LeVertex right = LeVertex(1.0f, 0.0f, 0.0f);
 	const LeVertex zero  = LeVertex(0.0f, 0.0f, 0.0f);
 }
-
-#endif // LE_USE_SIMD
 
 #endif	//LE_GEOMETRY_SCALAR_H

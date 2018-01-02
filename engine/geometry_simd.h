@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -36,10 +36,9 @@
 #include "global.h"
 #include "config.h"
 
-#if LE_USE_SIMD == 1
-
 #include "simd.h"
 #include <math.h>
+#include <malloc.h>
 
 /*****************************************************************************/
 struct __attribute__ ((aligned (16))) LeVertex
@@ -67,6 +66,7 @@ struct __attribute__ ((aligned (16))) LeVertex
 		vf = vi;
 	}
 
+/*****************************************************************************/
 	static LeVertex spherical(float azi, float inc, float dist)
 	{
 		LeVertex r;
@@ -225,16 +225,16 @@ struct __attribute__ ((aligned (16))) LeAxis
 	LeVertex axis;
 	float norm;
 
-	LeAxis()
+	LeAxis() :
+		origin(),
+		axis(LeVertex(0.0f, 0.0f, 1.0f)),
+		norm(1.0f)		
 	{
-		origin = LeVertex(0.0f, 0.0f, 0.0f);
-		axis = LeVertex(0.0f, 0.0f, 1.0f);
-		norm = 1.0f;
 	}
 
-	LeAxis(LeVertex v1, LeVertex v2)
+	LeAxis(const LeVertex & v1, const LeVertex & v2) :
+		origin(v1)
 	{
-		origin = v1;
 		axis = (v2 - v1).normalize();
 		norm = (v2 - v1).norm();
 	}
@@ -254,7 +254,7 @@ struct __attribute__ ((aligned (16))) LePlan
 		zAxis.axis = LeVertex(0.0f, 0.0f, 1.0f);
 	}
 
-	LePlan(LeVertex v1, LeVertex v2, LeVertex v3) :
+	LePlan(const LeVertex & v1, const LeVertex & v2, const LeVertex & v3) :
 		xAxis(LeAxis(v1, v2)), yAxis(LeAxis(v1, v3))
 	{
 		zAxis = LeAxis(v1, v1 + xAxis.axis.cross(yAxis.axis));
@@ -287,6 +287,16 @@ struct __attribute__ ((aligned (16))) LeMatrix
 		lines[2] = zv;
 		lines[3] = zv;
 	}
+
+    void transpose()
+    {
+        LeMatrix m;
+        m.lines[0] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
+        m.lines[1] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
+        m.lines[2] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
+        m.lines[3] = LeVertex(lines[0].x, lines[1].x, lines[2].x, lines[3].x);
+        *this = m;
+    }
 
 	void translate(LeVertex d)
 	{
@@ -496,7 +506,5 @@ namespace LePrimitives {
 	const LeVertex right = LeVertex(1.0f, 0.0f, 0.0f);
 	const LeVertex zero  = LeVertex(0.0f, 0.0f, 0.0f);
 }
-
-#endif // LE_USE_SIMD
 
 #endif	//LE_GEOMETRY_SIMD_H

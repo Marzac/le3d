@@ -1,15 +1,15 @@
 /**
 	\file geometry.h
-	\brief LightEngine 3D: Vertex / axis / plan structures
+	\brief LightEngine 3D: Vertex / axis / plan / matrix objects
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -33,14 +33,20 @@
 #ifndef LE_GEOMETRY_H
 #define LE_GEOMETRY_H
 
+#include "global.h"
 #include "config.h"
 
+/*****************************************************************************/
 #ifndef LE_USE_SIMD
 	#error LE_USE_SIMD undefined.
 	#error Use LE_USE_SIMD in (config.h) to enable or disable SIMD acceleration for calculations.
 #endif // LE_USE_SIMD
 
-#include "geometry_simd.h"
-#include "geometry_scalar.h"
+/*****************************************************************************/
+#if LE_USE_SIMD == 1
+    #include "geometry_simd.h"
+#else
+    #include "geometry_scalar.h"
+#endif // LE_USE_SIMD
 
-#endif
+#endif // LE_GEOMETRY_H
