@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -34,31 +34,6 @@
 #include "config.h"
 
 #include <strings.h>
-#include <malloc.h>
-
-/*****************************************************************************/
-/** Hack: force 16 byte aligned dynamic allocations */
-#if LE_FORCE_16B_ALIGN == 1
-void * operator new(size_t size)
-{
-	return _aligned_malloc(size, 16);
-}
-
-void * operator new[](size_t size)
-{
-	return _aligned_malloc(size, 16);
-}
-
-void operator delete(void * ptr)
-{
-//	_aligned_free(ptr);
-}
-
-void operator delete[](void * ptr)
-{
-//	_aligned_free(ptr);
-}
-#endif // LE_FORCE_16B_ALIGN
 
 /*****************************************************************************/
 void LeGlobal::toLower(char * txt)
@@ -82,35 +57,49 @@ void LeGlobal::toUpper(char * txt)
 }
 
 /*****************************************************************************/
-void LeGlobal::getFileExt(char * ext, const int maxExt, const char * path)
+void LeGlobal::getFileExtention(char * ext, const int extSize, const char * path)
 {
 	ext[0] = '\0';
 	int len = strlen(path);
 	while(len) {
 		if (path[--len] == '.') {
-			strncpy(ext, &path[len+1], maxExt-1);
-			ext[maxExt-1] = '\0';
+			strncpy(ext, &path[len+1], extSize-1);
+			ext[extSize-1] = '\0';
 			toLower(ext);
 			return;
 		}
 	}
 }
 
-void LeGlobal::getFileName(char * name, const int maxName, const char * path)
+void LeGlobal::getFileName(char * name, const int nameSize, const char * path)
 {
 	name[0] = '\0';
 	int len = strlen(path);
 	while(len) {
 		char c = path[--len];
 		if (c == '\\' || c == '/') {
-			strncpy(name, &path[len+1], maxName-1);
-			name[maxName-1] = '\0';
+			strncpy(name, &path[len+1], nameSize-1);
+			name[nameSize-1] = '\0';
 			return;
 		}
 	}
-	strncpy(name, path, maxName-1);
+	strncpy(name, path, nameSize-1);
 }
 
+void LeGlobal::getFileDirectory(char * dir, int dirSize, const char * path)
+{
+	dir[0] = '\0';
+	int len = strlen(path);
+	while(len) {
+        char c = path[--len];
+        if (c == '/' || c == '\\') {
+            if (len > dirSize - 2) return;
+            strncpy(dir, path, len+1);
+			dir[len+1] = 0;
+			return;
+		}
+	}
+}
 
 /*****************************************************************************/
 int LeGlobal::log2i32(int n)

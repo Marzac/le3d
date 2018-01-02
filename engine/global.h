@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -54,18 +54,17 @@
 	#define d2r						(const float) (M_PI / 180.0f)							/** Mutiply constant to convert degrees in radiants */
 	#define r2d						(const float) (180.0f / M_PI)							/** Mutiply constant to convert radiants in degrees */
 
-/** Smoothing / filters macros */
-	#define lp1factor(fs, dt)		((const float) (1.0f - (1.0f / (1.0f + (((fs) * (dt)) / (2.0f * M_PI))))))
-
 /*****************************************************************************/
 /** Global string & math functions */
 	namespace LeGlobal {
-		void toLower(char * txt);														/** Convert in place null terminated C string to lower case */
-		void toUpper(char * txt);														/** Convert in place null terminated C string to upper case */
-		void getFileExt(char * ext, const int maxExt, const char * path);				/** Return a file extension from a path */
-		void getFileName(char * name, const int maxName, const char * path);			/** Return a file name from a path */
-		int log2i32(int n);																		/** Compute the log2 of a 32bit integer */
+		void toLower(char * txt);														    /** Convert in place null terminated C string to lower case */
+		void toUpper(char * txt);														    /** Convert in place null terminated C string to upper case */
+
+		void getFileExtention(char * ext, const int extSize, const char * path);		    /** Return a file extension from a path */
+		void getFileName(char * name, const int nameSize, const char * path);			    /** Return a file name from a path */
+        void getFileDirectory(char * dir, int dirSize, const char * path);                  /** Return a directory name from a path */
+
+		int log2i32(int n);																    /** Compute the log2 of a 32bit integer */
 	};
 
-
-#endif
+#endif // LE_GLOBAL_H
