@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -105,14 +105,16 @@ LeBitmap * LeBmpFile::load()
 {
 	FILE * file = fopen(path, "rb");
 	if (!file) {
-		printf("bmpFile: File not found %s!\n", path);
+		printf("bmpFile: file not found %s!\n", path);
 		return NULL;
 	}
+
 	LeBitmap * bitmap = new LeBitmap();
 	if (!bitmap) {
 		fclose(file);
 		return NULL;
 	}
+
 	readBitmap(file, bitmap);
 	fclose(file);
 	return bitmap;
@@ -123,9 +125,10 @@ void LeBmpFile::save(LeBitmap * bitmap)
 {
 	FILE * file = fopen(path, "wb");
 	if (!file) {
-		printf("bmpFile: File cannot be opened %s!\n", path);
+		printf("bmpFile: file cannot be opened %s!\n", path);
 		return;
 	}
+
 	writeBitmap(file, bitmap);
 	fclose(file);
 }
@@ -147,15 +150,15 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 
 // Check bitmap format
 	if (strncmp((char *) &header.bfType, "BM", 2)){
-		printf("bmpFile: File not a bitmap!\n");
+		printf("bmpFile: file not a bitmap!\n");
 		return 0;
 	}
 	if (info.biBitCount != 24 && info.biBitCount != 32) {
-		printf("bmpFile: Only 24bit or 32bit bitmaps are supported!\n");
+		printf("bmpFile: only 24bit or 32bit bitmaps are supported!\n");
 		return 0;
 	}
 	if (info.biCompression != BI_RGB && info.biCompression != BI_BITFIELDS){
-		printf("bmpFile: Only uncompressed formats are supported!\n");
+		printf("bmpFile: only uncompressed formats are supported!\n");
 		return 0;
 	}
 
@@ -185,20 +188,20 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	}
 
 // Set bitmap flags
-	bitmap->flags = LE_BMP_DEFAULT;
+	bitmap->flags = LE_BMP_RGB;
 	if (info.biBitCount == 32)
-		bitmap->flags |= LE_BMP_ALPHACHANNEL;
+		bitmap->flags |= LE_BMP_RGBA;
 
 // Allocate bitmap memory
 	int srcScan;
 	srcScan = bitmap->tx * (info.biBitCount >> 3);
 	srcScan = (srcScan + 0x3) & ~0x3;
-	int size = bitmap->tx * bitmap->ty * sizeof(uint32_t);
-	bitmap->data = malloc(size);
+
+	bitmap->data = new uint32_t[bitmap->tx * bitmap->ty];
 	bitmap->dataAllocated = true;
 
 // Load bitmap data
-	uint8_t * buffer = (uint8_t *) malloc(srcScan);
+	uint8_t buffer[srcScan];
 	uint8_t * data = (uint8_t *) bitmap->data;
 
 	int dstScan = bitmap->tx * sizeof(uint32_t);
@@ -221,8 +224,7 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 				b = (c & mask.mB) >> shiftB;
 				*d++ = (a << 24) | (r << 16) | (g << 8) | b;
 			}
-			if (upsidedown)
-				data -= dstScan;
+			if (upsidedown) data -= dstScan;
 			else data += dstScan;
 		}
 	}else{
@@ -238,13 +240,11 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 				r = * s++;
 				* d++ = (r << 16) | (g << 8) | b;
 			}
-			if (upsidedown)
-				data -= dstScan;
+			if (upsidedown) data -= dstScan;
 			else data += dstScan;
 		}
 	}
 
-	free(buffer);
 	return 1;
 }
 
