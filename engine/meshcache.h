@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -53,8 +53,8 @@ public:
 public:
 	typedef struct{
 		LeMesh * mesh;
-		char path[LE_MAX_FILE_PATH];
-		char name[LE_MAX_FILE_NAME];
+		char path[LE_MAX_FILE_PATH+1];
+		char name[LE_MAX_FILE_NAME+1];
 		int flags;
 	}Slot;
 

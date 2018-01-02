@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -57,6 +57,7 @@ LeMeshCache::LeMeshCache() :
 	strcpy(defSlot->path, "none");
 	strcpy(defSlot->name, "default");
 	defSlot->flags = 0;
+
 	noSlots = 1;
 }
 
@@ -66,18 +67,19 @@ LeMeshCache::~LeMeshCache()
 		deleteSlot(i);
 }
 
-
 /*****************************************************************************/
 LeMesh * LeMeshCache::loadOBJ(const char * path)
 {
-	if (noSlots >= LE_MESHCACHE_SLOTS) return NULL;
+	if (noSlots >= LE_MESHCACHE_SLOTS) {
+        printf("meshCache: no free slots!\n");
+        return NULL;
+	}
 
 	LeObjFile objFile = LeObjFile(path);
 	LeMesh * mesh = objFile.loadMesh(0);
 	if (!mesh) return NULL;
 
-	int slot = createSlot(mesh, path);
-	if (slot < 0) {
+	if (createSlot(mesh, path) < 0) {
 		delete mesh;
 		return NULL;
 	}
@@ -87,22 +89,22 @@ LeMesh * LeMeshCache::loadOBJ(const char * path)
 /*****************************************************************************/
 void LeMeshCache::loadDirectory(const char * path)
 {
-	char ext[LE_MAX_FILE_EXTENSION];
-	char filePath[LE_MAX_FILE_PATH];
+	char ext[LE_MAX_FILE_EXTENSION+1];
+	char filePath[LE_MAX_FILE_PATH+1];
 
     DIR * dir = opendir(path);
     struct dirent * dd;
 
     while ((dd = readdir(dir))) {
     	if (dd->d_name[0] == '.') continue;
-		LeGlobal::getFileExt(ext, LE_MAX_FILE_EXTENSION, dd->d_name);
+		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, dd->d_name);
 
-	// Load a wavefront obj file
     	if (strcmp(ext, "obj") == 0) {
+        // Load a Wavefront obj file
 			snprintf(filePath, LE_MAX_FILE_PATH, "%s/%s", path, dd->d_name);
-			filePath[LE_MAX_FILE_PATH-1] = '\0';
+			filePath[LE_MAX_FILE_PATH] = '\0';
+			printf("meshCache: loading mesh: %s\n", filePath);
 			loadOBJ(filePath);
-			printf("Load mesh: %s\n", filePath);
     	}
 
     }
@@ -118,11 +120,11 @@ int LeMeshCache::createSlot(LeMesh * mesh, const char * path)
 
 	// Register the mesh
 		slot->mesh = mesh;
-		strncpy(slot->path, path, LE_MAX_FILE_PATH - 1);
-		slot->path[LE_MAX_FILE_PATH-1] = '\0';
+		strncpy(slot->path, path, LE_MAX_FILE_PATH);
+		slot->path[LE_MAX_FILE_PATH] = '\0';
 		LeGlobal::getFileName(slot->name, LE_MAX_FILE_NAME, path);
 
-	// Initialise the extra flags
+	// Initialize the flags
 		slot->flags = 0;
 
 		noSlots++;
@@ -138,16 +140,17 @@ void LeMeshCache::deleteSlot(int index)
 
 	delete slot->mesh;
 	slot->mesh = NULL;
-
 	slot->path[0] = '\0';
 	slot->name[0] = '\0';
 	slot->flags = 0;
+
+    noSlots--;
 }
 
 /*****************************************************************************/
 int LeMeshCache::getFromName(const char * path)
 {
-	char name[LE_MAX_FILE_NAME];
+	char name[LE_MAX_FILE_NAME+1];
 	LeGlobal::getFileName(name, LE_MAX_FILE_NAME, path);
 
 // Search for resource
@@ -159,6 +162,6 @@ int LeMeshCache::getFromName(const char * path)
 	}
 
 // Resource not found
+    printf("meshCache: %s not found!\n", path);
 	return 0;
 }
-
