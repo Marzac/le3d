@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -52,9 +52,10 @@ LeMesh::LeMesh() :
 	updateMatrix();
 }
 
-LeMesh::LeMesh(LeVertex vertexes[], int noVertexes, float texCoords[], int noTexCoords,
-		   int vertexList[], int texCoordsList[],
-		   uint32_t colors[], int noTriangles) :
+LeMesh::LeMesh(LeVertex vertexes[], int noVertexes,
+            float texCoords[], int noTexCoords,
+            int vertexList[], int texCoordsList[],
+            uint32_t colors[], int noTriangles) :
 	view(),
 	pos(), scale(1.0f, 1.0f, 1.0f), angle(),
 	vertexes(vertexes), noVertexes(noVertexes),
@@ -86,9 +87,10 @@ void LeMesh::allocate(int noVertexes, int noTexCoords, int noTriangles)
 	vertexList = new int[noTriangles * 3];
 	texCoordsList = new int[noTriangles * 3];
 	texSlotList = new int[noTriangles];
-	colors = new uint32_t[noTriangles];
-	this->noTriangles = noTriangles;
 
+	colors = new uint32_t[noTriangles];
+
+	this->noTriangles = noTriangles;
 	allocated = true;
 }
 
@@ -110,7 +112,9 @@ void LeMesh::deallocate()
 		texSlotList = NULL;
 		if (colors) delete colors;
 		colors = NULL;
+
 		noTriangles = 0;
+		allocated = false;
 	}
 
 // Deallocate temporary data
@@ -159,7 +163,6 @@ void LeMesh::copy(LeMesh * copy) const
 	memcpy(copy->texCoordsList, texCoordsList, noTriangles * sizeof(int) * 3);
 	memcpy(copy->texSlotList, texSlotList, noTriangles * sizeof(int));
 	memcpy(copy->colors, colors, noTriangles * sizeof(uint32_t));
-	copy->allocated = true;
 
 	if (normals) {
 		copy->normals = new LeVertex[noTriangles];
@@ -172,25 +175,15 @@ void LeMesh::copy(LeMesh * copy) const
 }
 
 /*****************************************************************************/
-void LeMesh::setPosition(LeVertex pos)
-{
-	this->pos = pos;
-}
-
-void LeMesh::setScale(LeVertex scale)
-{
-	this->scale = scale;
-}
-
-void LeMesh::setRotation(LeVertex angle)
-{
-	this->angle = angle;
-}
-
 void LeMesh::transform(const LeMatrix &matrix)
 {
 	updateMatrix();
 	view = matrix * view;
+}
+
+void LeMesh::setMatrix(const LeMatrix &matrix)
+{
+	view = matrix;
 }
 
 void LeMesh::updateMatrix()
@@ -199,12 +192,6 @@ void LeMesh::updateMatrix()
 	view.scale(scale);
 	view.rotate(angle * d2r);
 	view.translate(pos);
-}
-
-/*****************************************************************************/
-void LeMesh::setMatrix(const LeMatrix &matrix)
-{
-	view = matrix;
 }
 
 /*****************************************************************************/
