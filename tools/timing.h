@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2017
-	\version 1.3
+	\copyright Frederic Meslin 2015 - 2018
+	\version 1.4
 
 	The MIT License (MIT)
-	Copyright (c) 2017 Frédéric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -38,8 +38,8 @@
 #include <sys/time.h>
 
 /*****************************************************************************/
-#define LE_TIMING_TIMERS		5		/*< Maximum number of timers */
-#define LE_TIMING_FPS			60		/*< Target FPS */
+#define LE_TIMING_FPS			30		/*< Target FPS */
+#define LE_TIMING_GRANULARITY	1       /*< Desired scheduler granularity (in ms) */
 
 /*****************************************************************************/
 class LeTiming {
@@ -48,16 +48,22 @@ public:
 	~LeTiming();
 
 	void firstFrame();
+	void lastFrame();
+
 	bool isNextFrame();
+    void waitNextFrame();
 
 public:
-	float fps;				/*< Current game FPS */
-	float targetFps;		/*< Target game FPS */
+	float fps;				    /*< Current game FPS */
+	float targetFps;		    /*< Target game FPS */
+    bool enableFPSDisplay;      /*< Periodically displays current FPS in console */
 
 private:
 	int64_t countsPerSec;
 	int64_t countsPerFrame;
 	int64_t lastCounter;
+
+    void displayFPS();
 };
 
 #endif // LE_TIMING_H
