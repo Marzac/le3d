@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="1">
+    <builddir>le3d-cppcheck-build-dir</builddir>
+    <analyze-all-vs-configs>true</analyze-all-vs-configs>
+    <includedir>
+        <dir name="engine/"/>
+        <dir name="tools/"/>
+    </includedir>
+    <defines>
+        <define name="LE_RENDERER_MIPMAPS = 1"/>
+        <define name=" LE_USE_SIMD = 1"/>
+        <define name=" LE_USE_SSE2 = 1"/>
+        <define name=""/>
+    </defines>
+    <paths>
+        <dir name="engine"/>
+        <dir name="tools"/>
+    </paths>
+</project>
