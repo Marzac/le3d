@@ -39,6 +39,10 @@
 #include "geometry.h"
 
 /*****************************************************************************/
+/**
+	\class LeVerList
+	\brief Contain and manage vertex lists
+*/
 class LeVerList
 {
 public:

@@ -40,10 +40,14 @@
 
 /*****************************************************************************/
 typedef enum {
-	LE_BSET_EXIST = 0x01,
-} LE_BSET_BSET_FLAGS;
+	LE_BSET_EXIST 		= 0x01,		/**< Billboard exist */
+} LE_BSET_FLAGS;
 
 /*****************************************************************************/
+/**
+	\class LeBSet
+	\brief Contain and manage a billboard set
+*/
 class LeBSet
 {
 public:
@@ -53,8 +57,10 @@ public:
 
 	void shadowCopy(LeBSet * copy) const;
 	void copy(LeBSet * copy) const;
+	
 	void basic();
-
+	void clear();
+	
 	void allocate(int noBillboards);
 	void deallocate();
 
@@ -63,23 +69,23 @@ public:
 	void updateMatrix();
 
 // Overall positioning
-	LeMatrix view;
-	LeVertex pos;
-	LeVertex scale;
-	LeVertex angle;
+	LeMatrix view;			/**< View matrix of billboard set */
+	LeVertex pos;			/**< Position of billboard set */
+	LeVertex scale;			/**< Scaling of billboard set */
+	LeVertex angle;			/**< Absolute angle of billboard set (in degrees) */
 
 // Static billboards data
-	LeVertex * places;
-	float * sizes;
-	uint32_t * colors;
-	int * texSlots;
-	int * flags;
-	int noBillboards;
+	LeVertex * places;		/**< Position per billboard */ 
+	float * sizes;			/**< Size (x, y) per billboard */
+	uint32_t * colors;		/**< Color per billboard */
+	int * texSlots;			/**< Texture slot per billboard */
+	int * flags;			/**< Flag per billboard */
+	
+	int noBillboards;		/**< Number of allocated billboards */
 
 // Computed billboards data
-	uint32_t * shades;
-
-	bool allocated;
+	uint32_t * shades;		/**< Shade color per billboard (lighting) */
+	bool allocated;			/**< Has data been allocated */
 };
 
 #endif // LE_BSET_H

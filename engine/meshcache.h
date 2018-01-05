@@ -40,6 +40,10 @@
 #include "mesh.h"
 
 /*****************************************************************************/
+/**
+	\class LeMeshCache
+	\brief Cache and inventory all meshes loaded
+*/
 class LeMeshCache
 {
 public:
@@ -51,15 +55,19 @@ public:
 	int getFromName(const char * name);
 
 public:
+	/**
+		\struct Slot
+		\brief represents a mesh cache slot
+	**/
 	typedef struct{
-		LeMesh * mesh;
-		char path[LE_MAX_FILE_PATH+1];
-		char name[LE_MAX_FILE_NAME+1];
-		int flags;
+		LeMesh * mesh;						/**< Mesh associated to the slot */
+		char path[LE_MAX_FILE_PATH+1];		/**< Bitmap file full path */
+		char name[LE_MAX_FILE_NAME+1];		/**< Bitmap file name */
+		int flags;							/**< Bitmap format and attributes */
 	}Slot;
 
-	Slot slots[LE_MESHCACHE_SLOTS];
-	int noSlots;
+	Slot slots[LE_MESHCACHE_SLOTS];			/**< Slots in cache */
+	int noSlots;							/**< Number of slots in cache */
 
 private:
 	int createSlot(LeMesh * mesh, const char * path);

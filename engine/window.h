@@ -37,6 +37,10 @@
 #include "config.h"
 
 /*****************************************************************************/
+/**
+	\enum LE_WINDOW_MOUSE_BUTTONS
+	\brief mouse buttons identifiers
+*/
 typedef enum {
 	LE_WINDOW_MOUSE_LEFT		= 0x1,
 	LE_WINDOW_MOUSE_RIGHT		= 0x2,
@@ -45,6 +49,10 @@ typedef enum {
 	LE_WINDOW_MOUSE_WHEEL_DOWN	= 0x8,
 }LE_WINDOW_MOUSE_BUTTONS;
 
+/**
+	\enum LE_WINDOW_KEYBOARD_STATE
+	\brief keyboard keys state and modifiers
+*/
 typedef enum {
 	LE_WINDOW_KEY_UP			= 0x0,
 	LE_WINDOW_KEY_DOWN			= 0x1,
@@ -54,6 +62,10 @@ typedef enum {
 }LE_WINDOW_KEYBOARD_STATE;
 
 /*****************************************************************************/
+/**
+	\class LeWindow
+	\brief Create and handle an OS native window 
+*/
 class LeWindow
 {
 public:
@@ -68,22 +80,20 @@ public:
 	typedef void (* KeyCallback) (int key, int state);
 	typedef void (* MouseCallback) (int x, int y, int buttons);
 
-	void regKeyCallback(KeyCallback callback)
-		{keyCallback = callback;}
-	void regMouseCallback(MouseCallback callback)
-		{mouseCallback = callback;}
+	void registerKeyCallback(KeyCallback callback);
+	void registerMouseCallback(MouseCallback callback);
 
 	void sendKeyEvent(int code, int state);
 	void sendMouseEvent(int x, int y, int buttons);
 
 private:
-	LeHandle hwnd;
-	int width;
-	int height;
-	bool fullScreen;
+	LeHandle hwnd;					/**< OS native window handle */
+	int width;						/**< Width of window client region (in pixels) */
+	int height;						/**< Height of window client region (in pixels) */
+	bool fullScreen;				/**< Fullscreen state of window */
 
-	KeyCallback keyCallback;
-	MouseCallback mouseCallback;
+	KeyCallback keyCallback;		/**< Registrated callback for keyboard events */ 
+	MouseCallback mouseCallback;	/**< Registrated callback for mouse events */ 
 };
 
 #endif // LE_WINDOW_H

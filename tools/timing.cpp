@@ -30,6 +30,8 @@
 	SOFTWARE.
 */
 
+#include "timing.h"
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -37,23 +39,17 @@
 
 #include <windows.h>
 
-#include "timing.h"
+/*****************************************************************************/
+#define TIMING_SCHEDULER_GRANULARITY	1
+LeTiming timing;
 
 /*****************************************************************************/
 LeTiming::LeTiming() :
-	fps(0.0f), targetFps(LE_TIMING_FPS),
+	fps(0.0f),
+    enableDisplay(true),
 	countsPerSec(0), countsPerFrame(0),
-	lastCounter(0),
-	enableFPSDisplay(true)
+	lastCounter(0)
 {
-	LARGE_INTEGER pf;
-	QueryPerformanceFrequency(&pf);
-
-	countsPerSec = pf.QuadPart;
-	countsPerFrame = countsPerSec / targetFps;
-
-	printf("Timing: counts per seconds: %I64d\n", countsPerSec);
-	printf("Timing: counts per frame: %I64d\n", countsPerFrame);
 }
 
 LeTiming::~LeTiming()
@@ -61,61 +57,102 @@ LeTiming::~LeTiming()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeTiming::setup(int targetFPS)
+	\brief targetFPS desired application FPS
+*/
+void LeTiming::setup(int targetFPS)
+{
+    LARGE_INTEGER pf;
+	QueryPerformanceFrequency(&pf);
+
+	countsPerSec = pf.QuadPart;
+	countsPerFrame = countsPerSec / targetFPS;
+	printf("Timing: counts per seconds: %I64d\n", countsPerSec);
+	printf("Timing: counts per frame: %I64d\n", countsPerFrame);
+}
+
+/*****************************************************************************/
+/**
+	\fn void LeTiming::firstFrame()
+	\brief mark the first frame
+*/
 void LeTiming::firstFrame()
 {
 	LARGE_INTEGER pc;
 	QueryPerformanceCounter(&pc);
+
 	lastCounter = pc.QuadPart;
-	timeBeginPeriod(LE_TIMING_GRANULARITY);
+	timeBeginPeriod(TIMING_SCHEDULER_GRANULARITY);
 }
 
+/**
+	\fn void LeTiming::lastFrame()
+	\brief mark the last frame
+*/
 void LeTiming::lastFrame()
 {
-	timeEndPeriod(LE_TIMING_GRANULARITY);
+	timeEndPeriod(TIMING_SCHEDULER_GRANULARITY);
 }
 
+/*****************************************************************************/
+/**
+	\fn bool LeTiming::isNextFrame()
+	\brief is it the time to display the next frame?
+	\return true if it is time, false else
+*/
 bool LeTiming::isNextFrame()
 {
 	LARGE_INTEGER pc;
 	QueryPerformanceCounter(&pc);
+
 	int64_t dt = pc.QuadPart - lastCounter;
 	if (dt < countsPerFrame) return false;
 	lastCounter = pc.QuadPart;
 
-	fps = (float) countsPerSec / dt;
-	if (enableFPSDisplay) displayFPS();
+    fps = (float) countsPerSec / dt;
+    if (enableDisplay) display();
 
 	return true;
 }
 
+/**
+	\fn void LeTiming::waitNextFrame()
+	\brief wait until it is time to display the next frame
+*/
 void LeTiming::waitNextFrame()
 {
 	while(1) {
 		LARGE_INTEGER pc;
 		QueryPerformanceCounter(&pc);
+
 		int64_t dt = pc.QuadPart - lastCounter;
 		int64_t dg = countsPerFrame - dt;
 		if (dg <= 0) break;
 
-		int64_t ms = (1000 * dg) / countsPerSec;
-		ms -= LE_TIMING_GRANULARITY;
+		int64_t ms = (1000 * dg) / countsPerSec - TIMING_SCHEDULER_GRANULARITY;
 		if (ms > 0) Sleep(ms);
 	}
 
 	LARGE_INTEGER pc;
 	QueryPerformanceCounter(&pc);
+
 	int64_t dt = pc.QuadPart - lastCounter;
 	lastCounter = pc.QuadPart;
 
 	fps = (float) countsPerSec / dt;
-	if (enableFPSDisplay) displayFPS();
+	if (enableDisplay) display();
 }
 
 /*****************************************************************************/
-void LeTiming::displayFPS()
+/**
+	\fn void LeTiming::display()
+	\brief display the current application FPS in the console
+*/
+void LeTiming::display()
 {
 	static int ttd = 0;
-	if (ttd++ == LE_TIMING_FPS) {
+	if (ttd++ == 30) {
 		printf("FPS %f\n", fps);
 		ttd = 0;
 	}

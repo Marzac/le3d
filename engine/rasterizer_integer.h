@@ -47,31 +47,28 @@
 #endif
 
 /*****************************************************************************/
+/**
+	\class LeRasterizer
+	\brief Rasterize triangle lists
+*/
 class LeRasterizer
 {
 public:
 	LeRasterizer(int width, int height);
 	~LeRasterizer();
 
-	void setBackground(uint32_t color);
 	void rasterList(LeTriList * trilist);
 	void flush();
 
-	LeBitmap frame;
-
+	LeBitmap frame;				/**< Frame buffer */ 
+	uint32_t background;		/**< Background color */ 
+	
 private:
 	void topTriangleZC(int vt, int vm1, int vm2);
 	void bottomTriangleZC(int vm1, int vm2, int vb);
-	void topTriangle(int vt, int vm1, int vm2);
-	void bottomTriangle(int vm1, int vm2, int vb);
 
 	inline void fillFlatTexZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
 	inline void fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
-	inline void fillFlatTex(int y, int x1, int x2, int u1, int u2, int v1, int v2);
-	inline void fillFlatTexAlpha(int y, int x1, int x2, int u1, int u2, int v1, int v2);
-
-	void f2i32x3(const float * in, int32_t * out);
-	void f2i32sx3(const float * in, int32_t * out, float s);
 
 	uint32_t color;
 	LeBitmap * bmp;
@@ -89,8 +86,6 @@ private:
 	int32_t xs[4], ys[4];
 	int32_t ws[4];
 	int32_t us[4], vs[4];
-
-	uint32_t background;
 };
 
 #endif // LE_RASTERIZER_INTEGER_H

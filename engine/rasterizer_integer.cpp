@@ -46,12 +46,13 @@
 
 /*****************************************************************************/
 LeRasterizer::LeRasterizer(int width, int height) :
+	frame(),
+	background(0),
 	color(0xFFFFFF),
 	bmp(NULL),
 	texPixels(NULL),
 	texSizeU(0), texSizeV(0),
-	texMaskU(0), texMaskV(0),
-	background(0)
+	texMaskU(0), texMaskV(0)
 {
 	memset(xs, 0, sizeof(int32_t) * 4);
 	memset(ys, 0, sizeof(int32_t) * 4);
@@ -73,17 +74,21 @@ LeRasterizer::~LeRasterizer()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeRasterizer::flush()
+	\brief Fill the frame buffer with the background color
+*/
 void LeRasterizer::flush()
 {
 	frame.clear(background);
 }
 
-void LeRasterizer::setBackground(uint32_t color)
-{
-	background = color;
-}
-
 /*****************************************************************************/
+/**
+	\fn void LeRasterizer::rasterList(LeTriList * trilist)
+	\brief Rasterize the given triangle list
+	\param[in] trilist pointer to a triangle list
+*/
 void LeRasterizer::rasterList(LeTriList * trilist)
 {
 	trilist->zSort();

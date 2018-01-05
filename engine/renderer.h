@@ -1,6 +1,6 @@
 /**
 	\file renderer.h
-	\brief LightEngine 3D: Mesh renderer
+	\brief LightEngine 3D: Meshes and billboard sets renderer
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
@@ -51,82 +51,82 @@
 #include "verlist.h"
 
 /*****************************************************************************/
+/**
+	\class LeRenderer
+	\brief Render meshes and billboard set to 2D triangle list
+*/
 class LeRenderer
 {
 public:
 	LeRenderer(int width, int height);
 	~LeRenderer();
 
-	void render(LeMesh * mesh);
-	void render(LeBSet * bset);
+	void render(const LeMesh * mesh);
+	void render(const LeBSet * bset);
 
 	void flush();
 
-	void setViewPosition(float x, float y, float z);
-	void setViewRotation(float ax, float ay, float az);
+	void setViewPosition(const LeVertex &pos);
+	void setViewAngle(const LeVertex &angle);
 	void updateViewMatrix();
-	
+
 	void setViewMatrix(const LeMatrix & view);
 
-	void setViewProjection(float fov);
 	void setViewport(float left, float top, float right, float bottom);
-
-	void setBackculling(bool enable);
+	void setViewProjection(float fov);
 	void setViewOffset(float offset);
 
-	void setTriList(LeTriList * trilist);
-	void setVerList(LeVerList * verlist);
-	LeTriList * getTriList();
-	LeVerList * getVerList();
+	void setBackculling(bool enable);
+
+	void setTriangleList(LeTriList * trilist);
+	LeTriList * getTriangleList();
 
 private:
 	bool checkMemory(int noVertexes, int noTriangles);
 
-	int build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[]);
-	int build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int indices[]);
+	int build(const LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[]);
+	int build(const LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int indices[]);
 
 	void updateFrustrum();
 
-	void transform(LeMatrix view, LeVertex srcVertexes[], LeVertex dstVertexes[], int nb);
-	int project(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb);
-	int clip3D(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb, LePlan &plan);
-	int clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb, LeAxis &axis);
-	int backculling(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb);
-	void zMergeSort(LeTriangle tris[], int indices[], int tmp[], int nb);
+	void transform(const LeMatrix &matrix, const LeVertex srcVertexes[], LeVertex dstVertexes[], int nb);
+	int project(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb);
+	int clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlan &plan);
+	int clip2D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LeAxis &axis);
+	int backculling(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb);
 
-	LeVerList intVerlist;
-	LeTriList intTrilist;
-	LeVerList * usedVerlist;
-	LeTriList * usedTrilist;
+	LeVerList intVerlist;				/**< Internal vertex list */
+	LeTriList intTrilist;				/**< Internal triangle list */
+	LeVerList * usedVerlist;			/**< Current vertex list in use */
+	LeTriList * usedTrilist;			/**< Current triangle list in use */
 
-	int extra;
-	int extraMax;
+	int extra;							/**< Index of extra triangles */
+	int extraMax;						/**< Maximum number of extra triangles */
 
-	uint32_t * colors;
+	uint32_t * colors;					/**< Color table for triangles */
 
-	LeVertex viewPosition;
-	LeVertex viewRotation;
-	LeMatrix viewMatrix;
+	LeVertex viewPosition;				/**< View position of renderer */
+	LeVertex viewAngle;					/**< View angle of renderer (in degrees) */
+	LeMatrix viewMatrix;				/**< View matrix of renderer */
 
-	LePlan viewFrontPlan;
-	LePlan viewBackPlan;
+	LePlan viewFrontPlan;				/**< Front clipping plane */
+	LePlan viewBackPlan;				/**< Back clipping plane */
 
-	LePlan viewLeftPlan;
-	LePlan viewRightPlan;
-	LePlan viewTopPlan;
-	LePlan viewBotPlan;
+	LePlan viewLeftPlan;				/**< 3D frustrum left clipping plane */
+	LePlan viewRightPlan;				/**< 3D frustrum right clipping plane */
+	LePlan viewTopPlan;					/**< 3D frustrum top clipping plane */
+	LePlan viewBotPlan;					/**< 3D frustrum bot clipping plane */
 
-	LeAxis viewLeftAxis;
-	LeAxis viewRightAxis;
-	LeAxis viewTopAxis;
-	LeAxis viewBottomAxis;
+	LeAxis viewLeftAxis;				/**< 2D left clipping axis */
+	LeAxis viewRightAxis;				/**< 2D right clipping axis */
+	LeAxis viewTopAxis;					/**< 2D top clipping axis */
+	LeAxis viewBottomAxis;				/**< 2D bottom clipping axis */
 
-	float width;
-	float height;
-	float ztx, zty;
+	float ztx;							/**< Horizontal projection factor */
+	float zty;							/**< Vertical projection factor */
 
-	bool enableBack;
-	float vOffset;
+	bool enableBack;					/**< Backculling enable state */
+	float vOffset;						/**< Distance view offset */
 };
 
 #endif // LE_RENDERER_H

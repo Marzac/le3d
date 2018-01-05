@@ -43,15 +43,19 @@
 #include <strings.h>
 
 /*****************************************************************************/
+/**
+	\class LeObjMaterial
+	\brief Contain and manage Wavefront object files materials 
+*/
 struct LeObjMaterial
 {
-	char  name[LE_OBJ_MAX_NAME+1];
-	float ambient[4];
-	float diffuse[4];
-	float specular[4];
-	float shininess;
-	float transparency;
-	char  texture[LE_OBJ_MAX_NAME+1];
+	char  name[LE_OBJ_MAX_NAME+1];		/**< Name of the material */
+	float ambient[4];					/**< Ambient color of the material */
+	float diffuse[4];					/**< Diffuse color of the material */
+	float specular[4];					/**< Specular color of the material */
+	float shininess;					/**< Shininess factor of the material */
+	float transparency;					/**< Transparency factor of the material */
+	char  texture[LE_OBJ_MAX_NAME+1];	/**< Name of first texture of the material */
 
 	LeObjMaterial()
 	{
@@ -69,6 +73,10 @@ struct LeObjMaterial
 };
 
 /*****************************************************************************/
+/**
+	\class LeObjFile
+	\brief Load 3D meshes in Wavefront object format 
+*/
 class LeObjFile
 {
 public:
@@ -100,12 +108,12 @@ private:
 	void readTriangle(const char * buffer, LeMesh * mesh, int index);
 	void readTexCoord(const char * buffer, LeMesh * mesh, int index);
 
-	char * path;
-	LeObjMaterial * materials;
-	LeObjMaterial * curMaterial;
-	int noMaterials;
+	char * path;						/**< File path of the mesh */
+	LeObjMaterial * materials;			/**< Materials of the mesh */
+	LeObjMaterial * curMaterial;		/**< Currently selected material */
+	int noMaterials;					/**< Number of materials */
 
-	char line[LE_OBJ_MAX_LINE+1];
+	char line[LE_OBJ_MAX_LINE+1];		/**< Line buffer (for parsing the file) */
 };
 
 #endif // LE_OBJFILE_H

@@ -40,6 +40,10 @@
 #include <stdio.h>
 
 /*****************************************************************************/
+/**
+	\class LeBmpFile
+	\brief Load and store bitmaps in uncompressed MS Windows bitmap format 
+*/
 class LeBmpFile
 {
 public:
@@ -47,11 +51,11 @@ public:
 	~LeBmpFile();
 
 	LeBitmap * load();
-	void save(LeBitmap * bitmap);
+	void save(const LeBitmap * bitmap);
 
 private:
 	int readBitmap(FILE * file, LeBitmap * bitmap);
-	int writeBitmap(FILE * file, LeBitmap * bitmap);
+	int writeBitmap(FILE * file, const LeBitmap * bitmap);
 	char * path;
 };
 

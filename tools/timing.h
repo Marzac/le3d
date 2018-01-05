@@ -1,5 +1,5 @@
 /**
-	\file timing.cpp
+	\file timing.h
 	\brief LightEngine 3D (tools): Native OS time measurement
 	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
@@ -38,14 +38,16 @@
 #include <sys/time.h>
 
 /*****************************************************************************/
-#define LE_TIMING_FPS			30		/*< Target FPS */
-#define LE_TIMING_GRANULARITY	1		/*< Desired scheduler granularity (in ms) */
-
-/*****************************************************************************/
+/**
+	\class LeTiming
+	\brief Abstract OS native time measurement & process yielding
+*/
 class LeTiming {
 public:
 	LeTiming();
 	~LeTiming();
+
+    void setup(int targetFPS);
 
 	void firstFrame();
 	void lastFrame();
@@ -53,17 +55,17 @@ public:
 	bool isNextFrame();
 	void waitNextFrame();
 
-public:
-	float fps;					/*< Current game FPS */
-	float targetFps;			/*< Target game FPS */
-	bool enableFPSDisplay;		/*< Periodically displays current FPS in console */
+	float fps;					/**< current game FPS */
+	bool enableDisplay;			/**< periodically displays FPS in console */
 
 private:
-	int64_t countsPerSec;
-	int64_t countsPerFrame;
-	int64_t lastCounter;
+	int64_t countsPerSec;		/** number of ticks per second */
+	int64_t countsPerFrame;		/** number of ticks per frame */
+	int64_t lastCounter;		/** counter last tick number */
 
-	void displayFPS();
+	void display();
 };
+
+extern LeTiming timing;
 
 #endif // LE_TIMING_H

@@ -1,6 +1,6 @@
 /**
 	\file bitmap.h
-	\brief LightEngine 3D: Bitmap image container / manipulator
+	\brief LightEngine 3D: Bitmap image container & manipulator
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
@@ -37,14 +37,23 @@
 #include "config.h"
 
 /*****************************************************************************/
+/**
+	\enum LE_BITMAP_FLAGS
+	\brief Bitmap format flags
+*/
 typedef enum{
-	LE_BMP_RGB				= 0,	/** Bitmap in 32bit RGB color format */
-	LE_BMP_RGBA				= 1,	/** Bitmap in 32bit RGBA format */
-	LE_BMP_PREMULTIPLIED	= 2		/** Bitmap in 32bit RGBA (alpha pre-multiplied) format */
+	LE_BITMAP_RGB				= 0,	/**< Bitmap in 32bit RGB color format */
+	LE_BITMAP_RGBA				= 1,	/**< Bitmap in 32bit RGBA format */
+	LE_BITMAP_PREMULTIPLIED		= 2		/**< Bitmap in 32bit RGBA (alpha pre-multiplied) format */
 }LE_BITMAP_FLAGS;
 
 /*****************************************************************************/
 class LeBmpFont;
+
+/**
+	\class LeBitmap
+	\brief Contain and manage a RGB or RGBA 32bit bitmap image
+*/
 class LeBitmap
 {
 public:
@@ -65,35 +74,41 @@ public:
 	void preMultiply();
 	void makeMipmaps();
 
-	LeHandle context;
-	LeHandle bitmap;
+	LeHandle context;		/**< Handle available for graphic contexts */
+	LeHandle bitmap;		/**< Handle available for bitmap */
 
-	int tx, ty;
-	int txP2, tyP2;
-	int flags;
+	int tx;					/**< Horizontal size of image in pixels */
+	int ty;					/**< Vertical size of image in pixels */
+	int txP2;				/**< Horizontal size (power of 2) */
+	int tyP2;				/**< Vertical size (power of 2) */
+	int flags;				/**< Image format and attributes */
 
-	void * data;
-	bool dataAllocated;
+	void * data;			/**< Pointer to raw data */
+	bool dataAllocated;		/**< Has data been allocated? */
 
-	LeBitmap * mipmaps[LE_BMP_MIPMAPS];
-	int mmLevels;
+	LeBitmap * mipmaps[LE_BMP_MIPMAPS];		/**< Table of mipmaps (bitmap pointers) */ 
+	int mmLevels;							/**< No of mipmaps */
 };
 
 /*****************************************************************************/
+/**
+	\class LeBmpFont
+	\brief Contain and manage a monospace bitmap font
+*/
 class LeBmpFont
 {
 public:
 	LeBmpFont();
 	~LeBmpFont();
 
-	LeBitmap * font;
+	LeBitmap * font;	/**< Bitmap with character set */
 
-	int charSizeX;
-	int charSizeY;
-	int charBegin;
-	int charEnd;
-	int spaceX;
-	int spaceY;
+	int charSizeX;		/**< Horizontal size of character */
+	int charSizeY;		/**< Vertical size of character */
+	int charBegin;		/**< First character in set (ascii code) */
+	int charEnd;		/**< Last character in set (ascii code) */
+	int spaceX;			/**< Horizontal space between characters */
+	int spaceY;			/**< Vertical space between characters */
 };
 
 #endif // LE_BITMAP_H

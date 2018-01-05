@@ -40,6 +40,10 @@
 #define LE_GAMEPAD_THRESHOLD	4096.0f
 
 /*****************************************************************************/
+/**
+	\enum LE_GAMEPAD_BUTTONS
+	\brief gamepad buttons identifiers (masks)
+*/
 typedef enum{
 	LE_GAMEPAD_DPAD_UP			= 0x0001,
 	LE_GAMEPAD_DPAD_DOWN		= 0x0002,
@@ -58,6 +62,10 @@ typedef enum{
 }LE_GAMEPAD_BUTTONS;
 
 /*****************************************************************************/
+/**
+	\class LeGamePad
+	\brief Handle gamepads through OS native interface 
+*/
 class LeGamePad
 {
 public:
@@ -68,13 +76,13 @@ public:
 	void update();
 	void feedback(float left, float right);
 
-	float stickLeftX;
-	float stickLeftY;
-	float stickRightX;
-	float stickRightY;
+	float stickLeftX;		/**< x coordinate of left stick */
+	float stickLeftY;		/**< y coordinate of left stick */
+	float stickRightX;		/**< x coordinate of right stick */
+	float stickRightY;		/**< y coordinate of right stick */
 
-	int buttons;
-	int toggled;
+	int buttons;			/**< buttons pressed */
+	int toggled;			/**< buttons toggled (since last update) */
 
 	static void setup();
 

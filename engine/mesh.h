@@ -39,6 +39,10 @@
 #include "geometry.h"
 
 /*****************************************************************************/
+/**
+	\class LeMesh
+	\brief Contain and manage a 3D mesh
+*/
 class LeMesh
 {
 public:
@@ -59,31 +63,31 @@ public:
 	void updateMatrix();
 
 	void computeNormals();
-	void allocateShades();
 	void allocateNormals();
-
+	void allocateShades();
+	
 // Overall positioning
-	LeMatrix view;
-	LeVertex pos;
-	LeVertex scale;
-	LeVertex angle;
+	LeMatrix view;			/**< View matrix of the mesh */
+	LeVertex pos;			/**< Position of the mesh */
+	LeVertex scale;			/**< Scaling of the mesh */
+	LeVertex angle;			/**< Absolute angle of the mesh (in degrees) */
 
 // Static mesh data
-	LeVertex * vertexes;
-	int noVertexes;
-	float * texCoords;
-	int noTexCoords;
-	int * vertexList;
-	int * texCoordsList;
-	int * texSlotList;
-	uint32_t * colors;
-	int noTriangles;
+	LeVertex * vertexes;	/**< Vertex positions (x, y, z) of the mesh */
+	int noVertexes;			/**< Number of vertexes in the mesh */
+	float * texCoords;		/**< Texture coordinates (u, v) of the mesh */
+	int noTexCoords;		/**< Number of texture coordinates in the mesh */
+	int * vertexList;		/**< Triangles - vertex indice tripplets */
+	int * texCoordsList;	/**< Triangles - texture coordinate indice tripplets */
+	int * texSlotList;		/**< Triangles - texture slots */
+	uint32_t * colors;		/**< Triangles - colors */
+	int noTriangles;		/**< Number of triangles in the mesh */
 
 // Computed mesh data
-	LeVertex * normals;
-	uint32_t * shades;
+	LeVertex * normals;		/** Normal vector per triangle */
+	uint32_t * shades;		/** Shade color per triangle (lighting) */
 
-	bool allocated;
+	bool allocated;			/** Has data been allocated */
 };
 
 #endif // LE_MESH_H

@@ -39,44 +39,38 @@
 #include <strings.h>
 
 /*****************************************************************************/
-void macColor(uint32_t color1, uint32_t color2, float factor, uint32_t &result);
-
-/*****************************************************************************/
 LeLight::LeLight() :
-	type(LE_LIGHT_AMBIENT), color(0x00CCCCCC), rolloff(1.0f)
+	type(LE_LIGHT_AMBIENT),
+	axis(), color(0x00CCCCCC),
+	rolloff(1.0f)
 {
 }
 
 LeLight::LeLight(LE_LIGHT_TYPES type, uint32_t color) :
-	type(type), color(color), rolloff(1.0f)
+	type(type),
+	axis(), color(color),
+	rolloff(1.0f)
 {
 }
 
 /*****************************************************************************/
-void LeLight::setPosition(const LeVertex & org)
-{
-	pos.origin = org;
-}
-
-void LeLight::setDirection(const LeVertex & axis)
-{
-	pos.axis = axis;
-	pos.axis.normalize();
-}
-
-void LeLight::setColor(uint32_t color)
-{
-	this->color = color;
-}
-
-/*****************************************************************************/
-void LeLight::blackMesh(LeMesh * mesh)
+/**
+	\fn void LeLight::black(LeMesh * mesh)
+	\brief Clear a mesh light information (shades)
+	\param[in] mesh mesh pointer
+*/
+void LeLight::black(LeMesh * mesh)
 {
 	if (!mesh->shades) mesh->allocateShades();
 	memset(mesh->shades, 0, sizeof(uint32_t) * mesh->noTriangles);
 }
 
-void LeLight::shineMesh(LeMesh * mesh)
+/**
+	\fn void LeLight::shine(LeMesh * mesh)
+	\brief Shine a mesh with the light
+	\param[in] mesh mesh pointer
+*/
+void LeLight::shine(LeMesh * mesh)
 {
 	if (!mesh->normals) mesh->computeNormals();
 	if (!mesh->shades) mesh->allocateShades();
@@ -97,7 +91,7 @@ void LeLight::shineMesh(LeMesh * mesh)
 /*****************************************************************************/
 inline void LeLight::shinePoint(LeMesh * mesh)
 {
-	LeVertex o = pos.origin - mesh->pos;
+	LeVertex o = axis.origin - mesh->pos;
 	for (int j = 0; j < mesh->noTriangles; j++) {
 		const float third = 1.0f / 3.0f;
 		LeVertex v1 = mesh->vertexes[mesh->vertexList[j*3]];
@@ -117,7 +111,7 @@ inline void LeLight::shinePoint(LeMesh * mesh)
 inline void LeLight::shineDirectional(LeMesh * mesh)
 {
 	LeMatrix iv = mesh->view.inverse3x3();
-	LeVertex rp = iv * pos.axis;
+	LeVertex rp = iv * axis.axis;
 	rp.normalize();
 
 	for (int j = 0; j < mesh->noTriangles; j++) {
@@ -133,6 +127,14 @@ inline void LeLight::shineAmbient(LeMesh * mesh)
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeLight::blendColors(uint32_t color1, uint32_t color2, float factor, uint32_t &result)
+	\brief Blend two colors together and accumulate the result
+	\param[in] color1 first RGBA 32bit color
+	\param[in] color2 second RGBA 32bit color
+	\param[in] factor blend factor (0.0 - 1.0)
+	\param[in] result accumulated color result
+*/
 void LeLight::blendColors(uint32_t color1, uint32_t color2, float factor, uint32_t &result)
 {
 	uint8_t * c1 = (uint8_t *) &color1;

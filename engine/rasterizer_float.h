@@ -47,18 +47,22 @@
 #endif
 
 /*****************************************************************************/
+/**
+	\class LeRasterizer
+	\brief Rasterize triangle lists
+*/
 class LeRasterizer
 {
 public:
 	LeRasterizer(int width, int height);
 	~LeRasterizer();
 
-	void setBackground(uint32_t color);
 	void rasterList(LeTriList * trilist);
 	void flush();
 
-	LeBitmap frame;
-
+	LeBitmap frame;				/**< Frame buffer */ 
+	uint32_t background;		/**< Background color */ 
+	
 private:
 	void topTriangleZC(int vt, int vm1, int vm2);
 	void bottomTriangleZC(int vm1, int vm2, int vb);
@@ -84,8 +88,6 @@ private:
 
 	float xs[4], ys[4], ws[4];
 	float us[4], vs[4];
-
-	uint32_t background;
 };
 
 #endif // LE_RASTERIZER_FLOAT_H

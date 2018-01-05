@@ -39,14 +39,22 @@
 #include "bitmap.h"
 
 /*****************************************************************************/
+/**
+	\enum LE_BMPCACHE_FLAGS
+	\brief Bitmap cache slot flags
+*/
 typedef enum{
-	LE_BMPCACHE_RGB				= 0,		/** Bitmap in 32bit RGB color format */
-	LE_BMPCACHE_RGBA			= 1,		/** Bitmap in 32bit RGBA (alpha pre-multiplied) format */
-	LE_BMPCACHE_ANIMATION		= 2,		/** Bitmap with animation (uses cursor & extra bitmaps) */
-	LE_BMPCACHE_MIPMAPPED		= 4,		/** Bitmap with computed mipmaps */
+	LE_BMPCACHE_RGB				= 0x00,		/**< Bitmap in 32bit RGB color format */
+	LE_BMPCACHE_RGBA			= 0x01,		/**< Bitmap in 32bit RGBA (alpha pre-multiplied) format */
+	LE_BMPCACHE_ANIMATION		= 0x02,		/**< Bitmap with animation (uses cursor & extra bitmaps) */
+	LE_BMPCACHE_MIPMAPPED		= 0x04,		/**< Bitmap with computed mipmaps */
 }LE_BMPCACHE_FLAGS;
 
 /*****************************************************************************/
+/**
+	\class LeBmpCache
+	\brief Cache and inventory all bitmaps loaded
+*/
 class LeBmpCache
 {
 public:
@@ -58,19 +66,23 @@ public:
 	int getFromName(const char * name);
 
 public:
+	/**
+		\struct Slot
+		\brief represents a bitmap cache slot
+	**/
 	typedef struct{
-		LeBitmap * bitmap;
-		char path[LE_MAX_FILE_PATH+1];
-		char name[LE_MAX_FILE_NAME+1];
-		int flags;
+		LeBitmap * bitmap;					/**< Bitmap associated to the slot */
+		char path[LE_MAX_FILE_PATH+1];		/**< Bitmap file full path */
+		char name[LE_MAX_FILE_NAME+1];		/**< Bitmap file name */
+		int flags;							/**< Bitmap format and attributes */
 
-		LeBitmap * extras;
-		int noExtras;
-		int cursor;
+		LeBitmap * extras;					/**< Extra bitmaps (for animation) */
+		int noExtras;						/**< Number of extra bitmaps */
+		int cursor;							/**< Cursor for animation playback */ 
 	}Slot;
 
-	Slot slots[LE_BMPCACHE_SLOTS];
-	int noSlots;
+	Slot slots[LE_BMPCACHE_SLOTS];			/**< Slots in cache */
+	int noSlots;							/**< Number of slots in cache */
 
 private:
 	int createSlot(LeBitmap * bitmap, const char * path);

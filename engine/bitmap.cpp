@@ -1,6 +1,6 @@
 /**
 	\file bitmap.cpp
-	\brief LightEngine 3D: Bitmap image container / manipulator
+	\brief LightEngine 3D: Bitmap image container & manipulator
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
@@ -42,7 +42,7 @@ LeBitmap::LeBitmap() :
 	context(0), bitmap(0),
 	tx(0), ty(0),
 	txP2(0), tyP2(0),
-	flags(LE_BMP_RGB),
+	flags(LE_BITMAP_RGB),
 	data(NULL), dataAllocated(false),
 	mmLevels(0)
 {
@@ -70,6 +70,11 @@ LeBmpFont::~LeBmpFont()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeBitmap::clear(uint32_t color)
+	\brief Clear the image with the specified color
+	\param[in] color RGBA 32bit color
+*/
 #if LE_USE_SIMD == 1
 void LeBitmap::clear(uint32_t color)
 {
@@ -101,6 +106,15 @@ void LeBitmap::clear(uint32_t color)
 #endif
 
 /*****************************************************************************/
+/**
+	\fn void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
+	\brief Fill a rectangle with the specified color
+	\param[in] x horizontal position of the rectangle (pixels)
+	\param[in] y vertical position of the rectangle (pixels)
+	\param[in] w width of the rectangle (pixels)
+	\param[in] h height of the rectangle (pixels)
+	\param[in] color RGBA 32bit color
+*/
 void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
 {
 	if (x >= tx) return;
@@ -129,6 +143,17 @@ void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
+	\brief Copy an image portion to the image
+	\param[in] xDst horizontal destination position (pixels)
+	\param[in] yDst vertical destination position (pixels)
+	\param[in] src source bitmap image
+	\param[in] xSrc horizontal source position (pixels)
+	\param[in] ySrc vertical source position (pixels)
+	\param[in] w portion width (pixels)
+	\param[in] h portion height (pixels)
+*/
 void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
 {
 	if (xDst >= tx) return;
@@ -166,6 +191,17 @@ void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xS
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
+	\brief Copy an image portion to the image (premultiplied alpha format)
+	\param[in] xDst horizontal destination position (pixels)
+	\param[in] yDst vertical destination position (pixels)
+	\param[in] src source bitmap image
+	\param[in] xSrc horizontal source position (pixels)
+	\param[in] ySrc vertical source position (pixels)
+	\param[in] w portion width (pixels)
+	\param[in] h portion height (pixels)
+*/
 #if LE_USE_SIMD == 1
 void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
 {
@@ -269,6 +305,19 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 #endif // LE_USE_SIMD
 
 /*****************************************************************************/
+/**
+	\fn void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t hDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t wSrc, int32_t hSrc)
+	\brief Copy and scale an image portion to the image (premultiplied alpha format)
+	\param[in] xDst horizontal destination position (pixels)
+	\param[in] yDst vertical destination position (pixels)
+	\param[in] wDst destination width (pixels)
+	\param[in] hDst destination height (pixels)
+	\param[in] src source bitmap image
+	\param[in] xSrc horizontal source position (pixels)
+	\param[in] ySrc vertical source position (pixels)
+	\param[in] wSrc source width (pixels)
+	\param[in] hSrc source height (pixels)
+*/
 #if LE_USE_SIMD == 1
 void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t hDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t wSrc, int32_t hSrc)
 {
@@ -399,6 +448,15 @@ void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t 
 #endif
 
 /*****************************************************************************/
+/**
+	\fn void LeBitmap::text(int x, int y, const char * text, int length, const LeBmpFont * font)
+	\brief Write a short text with the specified bitmap character set
+	\param[in] x horizontal text position (pixels)
+	\param[in] y vertical text position (pixels)
+	\param[in] text ascii string
+	\param[in] length string length
+	\param[in] font monospace bitmap character set
+*/
 void LeBitmap::text(int x, int y, const char * text, int length, const LeBmpFont * font)
 {
 	int cx = font->charSizeX;
@@ -421,6 +479,12 @@ void LeBitmap::text(int x, int y, const char * text, int length, const LeBmpFont
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeBitmap::allocate(int tx, int ty)
+	\brief Allocate bitmap memory
+	\param[in] tx image width (pixels)
+	\param[in] ty image height (pixels)
+*/
 void LeBitmap::allocate(int tx, int ty)
 {
 	data = new uint32_t[tx*ty];
@@ -430,9 +494,13 @@ void LeBitmap::allocate(int tx, int ty)
 	this->ty = ty;
 	txP2 = LeGlobal::log2i32(tx);
 	tyP2 = LeGlobal::log2i32(ty);
-	flags = LE_BMP_RGB;
+	flags = LE_BITMAP_RGB;
 }
 
+/**
+	\fn void LeBitmap::deallocate()
+	\brief Deallocate bitmap memory
+*/
 void LeBitmap::deallocate()
 {
 	if (dataAllocated && data)
@@ -448,6 +516,10 @@ void LeBitmap::deallocate()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeBitmap::preMultiply()
+	\brief Alpha pre-multiply an RGBA bitmap
+*/
 void LeBitmap::preMultiply()
 {
 	size_t noPixels = tx * ty;
@@ -460,11 +532,15 @@ void LeBitmap::preMultiply()
 		c += 4;
 	}
 
-	flags |= LE_BMP_RGBA | LE_BMP_PREMULTIPLIED;
+	flags |= LE_BITMAP_RGBA | LE_BITMAP_PREMULTIPLIED;
 	for (int l = 1; l < mmLevels; l++)
 		mipmaps[l]->preMultiply();
 }
 
+/**
+	\fn void LeBitmap::makeMipmaps()
+	\brief Generate mipmaps from the bitmap
+*/
 void LeBitmap::makeMipmaps()
 {
 	if ((tx & (tx - 1)) != 0 || (ty & (ty - 1)) != 0)

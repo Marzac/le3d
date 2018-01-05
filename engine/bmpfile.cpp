@@ -101,6 +101,11 @@ LeBmpFile::~LeBmpFile()
 }
 
 /*****************************************************************************/
+/**
+	\fn LeBitmap * LeBmpFile::load()
+	\brief Load bitmap data from the file
+	\return pointer to a new loaded bitmap, else NULL (error)
+*/
 LeBitmap * LeBmpFile::load()
 {
 	FILE * file = fopen(path, "rb");
@@ -120,8 +125,12 @@ LeBitmap * LeBmpFile::load()
 	return bitmap;
 }
 
-
-void LeBmpFile::save(LeBitmap * bitmap)
+/**
+	\fn void LeBmpFile::save(LeBitmap * bitmap)
+	\brief Save bitmap data into the file
+	\param[in] bitmap pointer a valid bitmap
+*/
+void LeBmpFile::save(const LeBitmap * bitmap)
 {
 	FILE * file = fopen(path, "wb");
 	if (!file) {
@@ -188,9 +197,9 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	}
 
 // Set bitmap flags
-	bitmap->flags = LE_BMP_RGB;
+	bitmap->flags = LE_BITMAP_RGB;
 	if (info.biBitCount == 32)
-		bitmap->flags |= LE_BMP_RGBA;
+		bitmap->flags |= LE_BITMAP_RGBA;
 
 // Allocate bitmap memory
 	int srcScan;
@@ -251,7 +260,7 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 
 /*****************************************************************************/
 #define HEAD_LEN sizeof(BMPFILEHEADER) + sizeof(BMPINFOHEADER) + sizeof(BMPCOLORMASK)
-int LeBmpFile::writeBitmap(FILE * file, LeBitmap * bitmap)
+int LeBmpFile::writeBitmap(FILE * file, const LeBitmap * bitmap)
 {
 // Prepare the headers
 	size_t size = bitmap->tx * bitmap->ty * sizeof(uint32_t);

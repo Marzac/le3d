@@ -99,12 +99,44 @@ LeWindow::~LeWindow()
 }
 
 /*****************************************************************************/
+/**
+	\fn LeHandle LeWindow::getContext()
+	\brief Retrieve the native OS window handle
+	\return handle to an OS window handle
+*/
 LeHandle LeWindow::getContext()
 {
 	return (LeHandle) GetDC((HWND) hwnd);
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeWindow::registerKeyCallback(KeyCallback callback)
+	\brief Register a callback to receive keyboard events associated to the window 
+	\param[in] callback pointer to a callback function or NULL
+*/
+void LeWindow::registerKeyCallback(KeyCallback callback)
+{
+	keyCallback = callback;
+}
+
+/**
+	\fn void LeWindow::registerMouseCallback(MouseCallback callback)
+	\brief Register a callback to receive mouse events associated to the window 
+	\param[in] callback pointer to a callback function or NULL
+*/
+void LeWindow::registerMouseCallback(MouseCallback callback)
+{
+	mouseCallback = callback;
+}
+	
+/*****************************************************************************/
+/**
+	\fn void LeWindow::sendKeyEvent(int code, int state)
+	\brief Send a keyboard event to the window
+	\param[in] code keyboard event code
+	\param[in] state keyboard event state (mask)	
+*/
 void LeWindow::sendKeyEvent(int code, int state)
 {
 	if (!keyCallback) return;
@@ -118,6 +150,13 @@ void LeWindow::sendKeyEvent(int code, int state)
 	keyCallback(code, tState);
 }
 
+/**
+	\fn void LeWindow::sendMouseEvent(int x, int y, int buttons)
+	\brief Send a mouse event to the window
+	\param[in] x horizontal position of the mouse (in client area and in pixels)
+	\param[in] y vertical position of the mouse (in client area and in pixels)
+	\param[in] buttons buttons state (mask)
+*/
 void LeWindow::sendMouseEvent(int x, int y, int buttons)
 {
 	if (!mouseCallback) return;
@@ -162,6 +201,10 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeWindow::setFullScreen()
+	\brief Set the window to fullscreen mode
+*/
 DEVMODE devMode;
 void LeWindow::setFullScreen()
 {
@@ -184,6 +227,10 @@ void LeWindow::setFullScreen()
 	fullScreen = true;
 }
 
+/**
+	\fn void LeWindow::setWindowed()
+	\brief Set the window to windowed mode
+*/
 void LeWindow::setWindowed()
 {
 	if (!fullScreen) return;

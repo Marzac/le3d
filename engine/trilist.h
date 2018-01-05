@@ -37,19 +37,27 @@
 #include "config.h"
 
 /*****************************************************************************/
+/**
+	\class LeTriangle
+	\brief Represent a rasterizable triangle 
+*/
 struct LeTriangle
 {
-	float xs[4];
-	float ys[4];
-	float zs[4];
-	float us[4];
-	float vs[4];
-	float vd;
-	uint32_t color;
-	int tex;
+	float xs[4];		/**< x coordinate of vertexes */
+	float ys[4];		/**< y coordinate of vertexes */
+	float zs[4];		/**< z coordinate of vertexes */
+	float us[4];		/**< u texture coordinate of vertexes */
+	float vs[4];		/**< v texture coordinate of vertexes */
+	float vd;			/**< average view distance */
+	uint32_t color;		/**< solid color */
+	int tex;			/**< texture slot */
 };
 
 /*****************************************************************************/
+/**
+	\class LeTriList
+	\brief Contain and manage triangle lists
+*/
 class LeTriList
 {
 public:

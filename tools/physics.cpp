@@ -39,7 +39,22 @@
 #include <float.h>
 
 /*****************************************************************************/
-int collideRectRect(float &ansX, float &ansY, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY, float dstW, float dstH)
+/**
+	\fn int LePhysics::collideRectRect(float &ansX, float &ansY, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY, float dstW, float dstH)
+	\brief Compute the intersection between two rectangles
+	\param[out] ansX x coordinate of answer / correction vector
+	\param[out] ansY y coordinate of answer / correction vector
+	\param[in] srcX x coordinate of source rectangle
+	\param[in] srcY y coordinate of source rectangle
+	\param[in] srcW width of source rectangle
+	\param[in] srcH height of source rectangle
+	\param[in] dstX x coordinate of destination rectangle
+	\param[in] dstY y coordinate of destination rectangle
+	\param[in] dstW width of destination rectangle
+	\param[in] dstH height of destination rectangle
+	\return intersection type (see PHYSICS_RECT_RESULT)
+*/
+int LePhysics::collideRectRect(float &ansX, float &ansY, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY, float dstW, float dstH)
 {
 	float mx = (srcW + dstW) * 0.5f;
 	float my = (srcH + dstH) * 0.5f;
@@ -71,93 +86,114 @@ int collideRectRect(float &ansX, float &ansY, float srcX, float srcY, float srcW
 }
 
 /*****************************************************************************/
-int collideSphereSphere(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float radius1, float radius2)
+/**
+	\fn int LePhysics::collideSphereSphere(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float srcRadius, float dstRadius)
+	\brief Compute the intersection between two spheres
+	\param[out] ans answer / correction vector
+	\param[out] contact place of contact vector
+	\param[in] pos relative position of spheres
+	\param[in] srcRadius radius of source sphere
+	\param[in] dstRadius radius of destination sphere
+	\return place of collision (see PHYSICS_SPHERE_RESULT)
+*/
+int LePhysics::collideSphereSphere(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float srcRadius, float dstRadius)
 {
-	float rt = radius1 + radius2;
+	float rt = srcRadius + dstRadius;
 
 	ans = LePrimitives::zero;
 	contact = LePrimitives::zero;
 
 	float n2 = pos.dot(pos);
-	if (n2 > rt * rt) return 0;
-	if (n2 == 0.0f) return 1;
+	if (n2 > rt * rt) return PHYSICS_SPHERE_NO_COL;
+	if (n2 == 0.0f) return PHYSICS_SPHERE_SURFACE;
 
 	float n = sqrtf(n2);
 	LeVertex dir = pos * (1.0f / n);
 	ans = dir * (rt - n);
-	contact = dir * radius1;
-	return 1;
+	contact = dir * srcRadius;
+
+	return PHYSICS_SPHERE_SURFACE;
 }
 
-int traceSphere(const LeVertex &pos, float radius, const LeVertex &axis, float &distance)
+int LePhysics::traceSphere(const LeVertex &pos, float radius, const LeVertex &axis, float &distance)
 {
 	return 0;
 }
 
 /*****************************************************************************/
-int collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float radius, const LeVertex &size)
+/**
+	\fn int LePhysics::collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float srcRadius, const LeVertex &dstSize)
+	\brief Compute the intersection between a sphere and a box
+	\param[out] ans answer / correction vector
+	\param[out] contact place of contact vector
+	\param[in] pos relative position of the sphere to the box center
+	\param[in] srcRadius radius of source sphere
+	\param[in] dstSize size of destination box
+	\return place of collision (see PHYSICS_BOX_RESULT)
+*/
+int LePhysics::collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float srcRadius, const LeVertex &dstSize)
 {
-	const float lx = radius + size.x;
-	const float ly = radius + size.y;
-	const float lz = radius + size.z;
+	const float lx = srcRadius + dstSize.x;
+	const float ly = srcRadius + dstSize.y;
+	const float lz = srcRadius + dstSize.z;
 
 // Outside of the area
 	ans = LePrimitives::zero;
 	contact = LePrimitives::zero;
 
-	if (pos.x > lx)	 return 0;
-	if (pos.x < -lx) return 0;
-	if (pos.y > ly)	 return 0;
-	if (pos.y < -ly) return 0;
-	if (pos.z > lz)	 return 0;
-	if (pos.z < -lz) return 0;
+	if (pos.x > lx)	 return PHYSICS_BOX_NO_COL;
+	if (pos.x < -lx) return PHYSICS_BOX_NO_COL;
+	if (pos.y > ly)	 return PHYSICS_BOX_NO_COL;
+	if (pos.y < -ly) return PHYSICS_BOX_NO_COL;
+	if (pos.z > lz)	 return PHYSICS_BOX_NO_COL;
+	if (pos.z < -lz) return PHYSICS_BOX_NO_COL;
 
 	float dx = fabs(pos.x);
 	float dy = fabs(pos.y);
 	float dz = fabs(pos.z);
 
 // Touching a side
-	if (dx > size.x) {
-		if (dy <= size.y && dz <= size.z) {
+	if (dx > dstSize.x) {
+		if (dy <= dstSize.y && dz <= dstSize.z) {
 			float sx = csgn(pos.x);
 			ans.x = (lx - dx) * sx;
 			contact = pos;
-			contact.x = size.x * sx;
+			contact.x = dstSize.x * sx;
 			return PHYSICS_BOX_SIDE;
 		}
 	}
 
-	if (dy > size.y) {
-		if (dx <= size.x && dz <= size.z) {
+	if (dy > dstSize.y) {
+		if (dx <= dstSize.x && dz <= dstSize.z) {
 			float sy = csgn(pos.y);
 			ans.y = (ly - dy) * sy;
 			contact = pos;
-			contact.y = size.y * sy;
+			contact.y = dstSize.y * sy;
 			return PHYSICS_BOX_SIDE;
 		}
 	}
 
-	if (dz > size.z) {
-		if (dx <= size.x && dy <= size.y) {
+	if (dz > dstSize.z) {
+		if (dx <= dstSize.x && dy <= dstSize.y) {
 			float sz = csgn(pos.z);
 			ans.z = (lz - dz) * sz;
-			contact.z = size.y * sz;
+			contact.z = dstSize.y * sz;
 			return PHYSICS_BOX_SIDE;
 		}
 	}
 
 // Touching an edge
 	int res = PHYSICS_BOX_CORNER;
-	LeVertex corner = size * pos.sign();
-	if (dx < size.x) {
+	LeVertex corner = dstSize * pos.sign();
+	if (dx < dstSize.x) {
 		corner.x = pos.x;
 		res = PHYSICS_BOX_EDGE;
 	}
-	if (dy < size.y) {
+	if (dy < dstSize.y) {
 		corner.y = pos.y;
 		res = PHYSICS_BOX_EDGE;
 	}
-	if (dz < size.z) {
+	if (dz < dstSize.z) {
 		corner.z = pos.z;
 		res = PHYSICS_BOX_EDGE;
 	}
@@ -165,16 +201,26 @@ int collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex &pos, floa
 // Touching a corner
 	LeVertex delta = pos - corner;
 	float r = delta.dot(delta);
-	if (r > radius * radius) return 0;
+	if (r > srcRadius * srcRadius)
+		return PHYSICS_BOX_NO_COL;
 
 	delta.normalize();
-	ans = delta * (radius - sqrtf(r));
-	contact = corner + delta * radius;
+	ans = delta * (srcRadius - sqrtf(r));
+	contact = corner + delta * srcRadius;
 	return res;
 }
 
 /*****************************************************************************/
-int traceBox(const LeVertex &pos, const LeVertex &size, const LeVertex &axis, float &distance)
+/**
+	\fn int LePhysics::traceBox(const LeVertex &pos, const LeVertex &size, const LeVertex &axis, float &distance)
+	\brief Compute the intersection between a casted ray and a box
+	\param[in] pos position of the center of the box
+	\param[in] size size of the box
+	\param[in] axis casted ray axis
+	\param[out] distance distance from axis origin to box surface
+	\return mesh box side or -1 (no intersection) (see)
+*/
+int LePhysics::traceBox(const LeVertex &pos, const LeVertex &size, const LeVertex &axis, float &distance)
 {
 	int result = -1;
 	float dMin = FLT_MAX;
@@ -186,7 +232,8 @@ int traceBox(const LeVertex &pos, const LeVertex &size, const LeVertex &axis, fl
 		if (d >= 0.0f) {
 			if (fabs(h.y) < size.y && fabs(h.z) < size.z) {
 				if (d < dMin) {
-					dMin = d; result = 0;
+					dMin = d;
+					result = PHYSICS_BOX_TRACE_RIGHT;
 				}
 			}
 		}
@@ -195,7 +242,8 @@ int traceBox(const LeVertex &pos, const LeVertex &size, const LeVertex &axis, fl
 		if (d >= 0.0f) {
 			if (fabs(h.y) < size.y && fabs(h.z) < size.z) {
 				if (d < dMin) {
-					dMin = d; result = 1;
+					dMin = d;
+					result = PHYSICS_BOX_TRACE_LEFT;
 				}
 			}
 		}
@@ -208,7 +256,8 @@ int traceBox(const LeVertex &pos, const LeVertex &size, const LeVertex &axis, fl
 		if (d >= 0.0f) {
 			if (fabs(h.x) < size.x && fabs(h.z) < size.z) {
 				if (d < dMin) {
-					dMin = d; result = 2;
+					dMin = d;
+					result = PHYSICS_BOX_TRACE_TOP;
 				}
 			}
 		}
@@ -217,7 +266,8 @@ int traceBox(const LeVertex &pos, const LeVertex &size, const LeVertex &axis, fl
 		if (d >= 0.0f) {
 			if (fabs(h.x) < size.x && fabs(h.z) < size.z) {
 				if (d < dMin) {
-					dMin = d; result = 3;
+					dMin = d;
+					result = PHYSICS_BOX_TRACE_BOTTOM;
 				}
 			}
 		}
@@ -230,7 +280,8 @@ int traceBox(const LeVertex &pos, const LeVertex &size, const LeVertex &axis, fl
 		if (d >= 0.0f) {
 			if (fabs(h.x) < size.x && fabs(h.y) < size.y) {
 				if (d < dMin) {
-					dMin = d; result = 4;
+					dMin = d;
+					result = PHYSICS_BOX_TRACE_FRONT;
 				}
 			}
 		}
@@ -239,37 +290,49 @@ int traceBox(const LeVertex &pos, const LeVertex &size, const LeVertex &axis, fl
 		if (d >= 0.0f) {
 			if (fabs(h.x) < size.x && fabs(h.y) < size.y) {
 				if (d < dMin) {
-					dMin = d; result = 5;
+					dMin = d;
+					result = PHYSICS_BOX_TRACE_BACK;
 				}
 			}
 		}
 	}
+
 	distance = dMin;
 	return result;
 }
 
 /*****************************************************************************/
+/**
+	\fn int LePhysics::collideSphereMesh(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float srcRadius, const LeMesh * dstMesh)
+	\brief Compute the intersection between a sphere and a mesh
+	\param[out] ans answer / correction vector
+	\param[out] contact place of contact vector
+	\param[in] pos relative position of the sphere to the mesh center
+	\param[in] srcRadius radius of source sphere
+	\param[in] dstMesh pointer to a destination mesh
+	\return place of collision (see PHYSICS_MESH_RESULT)
+*/
 int collideCircleSegment(LeVertex &localAns, LeVertex &localContact, const LeVertex &v1, const LeVertex &v2, const LeVertex &c, float radius2);
-int collideSphereMesh(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float radius, const LeMesh * mesh)
+int LePhysics::collideSphereMesh(LeVertex &ans, LeVertex &contact, const LeVertex &pos, float srcRadius, const LeMesh * dstMesh)
 {
 	ans = LePrimitives::zero;
 	contact = LePrimitives::zero;
 
 	LeMatrix mt;
-	mt.scale(mesh->scale);
-	mt.rotate(mesh->angle * d2r);
+	mt.scale(dstMesh->scale);
+	mt.rotate(dstMesh->angle * d2r);
 
-	for (int t = 0; t < mesh->noTriangles; t++) {
+	for (int t = 0; t < dstMesh->noTriangles; t++) {
 	// 1: Compute distance to plan
-		LeVertex n = mesh->normals[t];
-		LeVertex v1 = mt * mesh->vertexes[mesh->vertexList[t*3]];
+		LeVertex n = dstMesh->normals[t];
+		LeVertex v1 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3]];
 		float d = n.dot(pos - v1);
-		if (d > radius || d < 0.0f) continue;
+		if (d > srcRadius || d < 0.0f) continue;
 
 	// 2: Check intersection in triangle
 		LeVertex h = pos - n * d;
-		LeVertex v2 = mt * mesh->vertexes[mesh->vertexList[t*3+1]];
-		LeVertex v3 = mt * mesh->vertexes[mesh->vertexList[t*3+2]];
+		LeVertex v2 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3+1]];
+		LeVertex v3 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3+2]];
 		float n1 = n.dot((v1 - h).cross(v2 - h));
 		if (n1 < 0.0f) continue;
 		float n2 = n.dot((v2 - h).cross(v3 - h));
@@ -277,32 +340,31 @@ int collideSphereMesh(LeVertex &ans, LeVertex &contact, const LeVertex &pos, flo
 		float n3 = n.dot((v3 - h).cross(v1 - h));
 		if (n3 < 0.0f) continue;
 
-		ans = n * (radius - d);
+		ans = n * (srcRadius - d);
 		contact = h;
-		return 1;
+		return PHYSICS_MESH_SIDE;
 	}
 
-	for (int t = 0; t < mesh->noTriangles; t++) {
+	for (int t = 0; t < dstMesh->noTriangles; t++) {
 	// 3: Compute intersection with edges
-		LeVertex v1 = mt * mesh->vertexes[mesh->vertexList[t*3]];
-		LeVertex v2 = mt * mesh->vertexes[mesh->vertexList[t*3+1]];
-		LeVertex v3 = mt * mesh->vertexes[mesh->vertexList[t*3+2]];
+		LeVertex v1 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3]];
+		LeVertex v2 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3+1]];
+		LeVertex v3 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3+2]];
 
 		LeVertex localContact, localAns;
-		int n = collideCircleSegment(localAns, localContact, v1, v2, pos, radius);
-		n += collideCircleSegment(localAns, localContact, v2, v3, pos, radius);
-		n += collideCircleSegment(localAns, localContact, v3, v1, pos, radius);
+		int n = collideCircleSegment(localAns, localContact, v1, v2, pos, srcRadius);
+		n += collideCircleSegment(localAns, localContact, v2, v3, pos, srcRadius);
+		n += collideCircleSegment(localAns, localContact, v3, v1, pos, srcRadius);
 		if (!n) continue;
 
 		float in = 1.0f / n;
 		ans = localAns * in;
 		contact = localContact * in;
-		return 2;
+		return PHYSICS_MESH_EDGE;
 	}
 
-	return 0;
+	return PHYSICS_MESH_NO_COL;
 }
-
 
 int collideCircleSegment(LeVertex &ans, LeVertex &contact, const LeVertex &v1, const LeVertex &v2, const LeVertex &c, float radius)
 {
@@ -333,7 +395,15 @@ int collideCircleSegment(LeVertex &ans, LeVertex &contact, const LeVertex &v1, c
 }
 
 /*****************************************************************************/
-int traceMesh(const LeMesh * mesh, const LeAxis &axis, float &distance)
+/**
+	\fn int LePhysics::traceMesh(const LeMesh * mesh, const LeAxis &axis, float &distance)
+	\brief Compute the intersection between a casted ray and a mesh
+	\param[in] mesh pointer to a mesh
+	\param[in] axis casted ray axis
+	\param[out] distance distance from axis origin to mesh surface
+	\return mesh triangle index or -1 (no intersection)
+*/
+int LePhysics::traceMesh(const LeMesh * mesh, const LeAxis &axis, float &distance)
 {
 	int result = -1;
 	float dMin = FLT_MAX;

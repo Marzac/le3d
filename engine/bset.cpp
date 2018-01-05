@@ -68,6 +68,11 @@ LeBSet::~LeBSet()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeBSet::shadowCopy(LeBSet * copy) const
+	\brief Duplicate the billboard set without copying its static data 
+	\param[out] copy pointer to the copy billboard set
+*/
 void LeBSet::shadowCopy(LeBSet * copy) const
 {
 	if (copy->allocated) copy->deallocate();
@@ -84,6 +89,11 @@ void LeBSet::shadowCopy(LeBSet * copy) const
 	}
 }
 
+/**
+	\fn void LeBSet::copy(LeBSet * copy) const
+	\brief Duplicate the billboard set
+	\param[out] copy pointer to the copy billboard set
+*/
 void LeBSet::copy(LeBSet * copy) const
 {
 	if (copy->allocated) copy->deallocate();
@@ -98,18 +108,37 @@ void LeBSet::copy(LeBSet * copy) const
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeBSet::basic()
+	\brief Set a basic configuration for the billboards
+*/
 void LeBSet::basic()
 {
 	for (int b = 0; b < noBillboards; b++) {
-		sizes[b*2+0] = 32.0f;
-		sizes[b*2+1] = 32.0f;
+		sizes[b*2+0] = 1.0f;
+		sizes[b*2+1] = 1.0f;
 		colors[b] = 0x00FFFFFF;
 		texSlots[b] = 0;
-		flags[b] = 0;
+		flags[b] = LE_BSET_EXIST;
 	}
 }
 
+/**
+	\fn void LeBSet::clear()
+	\brief Clear the billboards flags
+*/
+void LeBSet::clear()
+{
+	for (int b = 0; b < noBillboards; b++)
+		flags[b] = 0;
+}
+
 /*****************************************************************************/
+/**
+	\fn void LeBSet::allocate(int noBillboards)
+	\brief Allocate billboard set memory
+	\param[in] noBillboards number of billboards
+*/
 void LeBSet::allocate(int noBillboards)
 {
 	if (allocated) deallocate();
@@ -124,6 +153,10 @@ void LeBSet::allocate(int noBillboards)
 	allocated = false;
 }
 
+/**
+	\fn void LeBSet::deallocate()
+	\brief Deallocate billboard set memory
+*/
 void LeBSet::deallocate()
 {
 	if (allocated) {
@@ -147,17 +180,31 @@ void LeBSet::deallocate()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeBSet::transform(const LeMatrix &matrix)
+	\brief Apply a transformation matrix to the billboard set view matrix
+	\param[in] matrix transformation matrix
+*/
 void LeBSet::transform(const LeMatrix &matrix)
 {
 	updateMatrix();
 	view = matrix * view;
 }
 
+/**
+	\fn void LeBSet::setMatrix(const LeMatrix &matrix)
+	\brief Set the billboard set view matrix
+	\param[in] matrix view matrix
+*/
 void LeBSet::setMatrix(const LeMatrix &matrix)
 {
 	view = matrix;
 }
 
+/**
+	\fn void LeBSet::updateMatrix()
+	\brief Update the billboard set view matrix with position, scaling and angle vectors
+*/
 void LeBSet::updateMatrix()
 {
 	view.identity();

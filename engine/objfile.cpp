@@ -77,6 +77,11 @@ LeObjFile::~LeObjFile()
 }
 
 /*****************************************************************************/
+/**
+	\fn LeMesh * LeObjFile::loadMesh(int index)
+	\brief Load the mesh of the given index from the file
+	\return pointer to a new loaded mesh, else NULL (error)
+*/	
 LeMesh * LeObjFile::loadMesh(int index)
 {
 	FILE * file = fopen(path, "rb");
@@ -112,6 +117,11 @@ LeMesh * LeObjFile::loadMesh(int index)
 	return mesh;
 }
 
+/**
+	\fn int LeObjFile::getNoMeshes()
+	\brief Get the number of meshes in the file
+	\return number of meshes
+*/	
 int LeObjFile::getNoMeshes()
 {
 	FILE * file = fopen(path, "rb");
@@ -128,6 +138,11 @@ int LeObjFile::getNoMeshes()
 	return nbObjects;
 }
 
+/**
+	\fn const char * LeObjFile::getMeshName(int index)
+	\brief Get the name of the mesh of the given index
+	\return name of the mesh, NULL else (error)
+*/	
 const char * LeObjFile::getMeshName(int index)
 {
 	FILE * file = fopen(path, "rb");

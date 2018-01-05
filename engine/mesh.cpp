@@ -74,6 +74,13 @@ LeMesh::~LeMesh()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeMesh::allocate(int noVertexes, int noTexCoords, int noTriangles)
+	\brief Allocate mesh memory
+	\param[in] noVertexes number of vertexes
+	\param[in] noTexCoords number of texture coordinates
+	\param[in] noTriangles number of triangles
+*/
 void LeMesh::allocate(int noVertexes, int noTexCoords, int noTriangles)
 {
 	if (allocated) deallocate();
@@ -94,6 +101,10 @@ void LeMesh::allocate(int noVertexes, int noTexCoords, int noTriangles)
 	allocated = true;
 }
 
+/**
+	\fn void LeMesh::deallocate()
+	\brief Deallocate mesh memory
+*/
 void LeMesh::deallocate()
 {
 // Deallocate static data
@@ -124,8 +135,12 @@ void LeMesh::deallocate()
 	shades = NULL;
 }
 
-
 /*****************************************************************************/
+/**
+	\fn void LeMesh::shadowCopy(LeMesh * copy) const
+	\brief Duplicate the mesh without copying its static data 
+	\param[out] copy pointer to the copy mesh
+*/
 void LeMesh::shadowCopy(LeMesh * copy) const
 {
 	if (copy->allocated) copy->deallocate();
@@ -151,6 +166,11 @@ void LeMesh::shadowCopy(LeMesh * copy) const
 	}
 }
 
+/**
+	\fn void LeMesh::copy(LeMesh * copy) const
+	\brief Duplicate the mesh
+	\param[out] copy pointer to the copy mesh
+*/
 void LeMesh::copy(LeMesh * copy) const
 {
 	if (copy->allocated) copy->deallocate();
@@ -175,17 +195,31 @@ void LeMesh::copy(LeMesh * copy) const
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeMesh::transform(const LeMatrix &matrix)
+	\brief Apply a transformation matrix to the mesh view matrix
+	\param[in] matrix transformation matrix
+*/
 void LeMesh::transform(const LeMatrix &matrix)
 {
 	updateMatrix();
 	view = matrix * view;
 }
 
+/**
+	\fn void LeMesh::setMatrix(const LeMatrix &matrix)
+	\brief Set the mesh view matrix
+	\param[in] matrix view matrix
+*/
 void LeMesh::setMatrix(const LeMatrix &matrix)
 {
 	view = matrix;
 }
 
+/**
+	\fn void LeMesh::updateMatrix()
+	\brief Update the mesh view matrix with position, scaling and angle vectors
+*/
 void LeMesh::updateMatrix()
 {
 	view.identity();
@@ -195,6 +229,10 @@ void LeMesh::updateMatrix()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeMesh::computeNormals()
+	\brief Compute mesh normals
+*/
 void LeMesh::computeNormals()
 {
 	if (!normals) allocateNormals();
@@ -211,6 +249,10 @@ void LeMesh::computeNormals()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeMesh::allocateNormals()
+	\brief Allocate mesh normals memory
+*/
 void LeMesh::allocateNormals()
 {
 	if (!normals) {
@@ -219,6 +261,10 @@ void LeMesh::allocateNormals()
 	}
 }
 
+/**
+	\fn void LeMesh::allocateShades()
+	\brief Allocate mesh shades memory
+*/
 void LeMesh::allocateShades()
 {
 	if (!shades){

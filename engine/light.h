@@ -40,31 +40,34 @@
 #include "mesh.h"
 
 /*****************************************************************************/
+/**
+	\enum LE_LIGHT_TYPES
+	\brief Available light models
+*/
 typedef enum {
-	LE_LIGHT_POINT = 0,			/** A point light (intensity decrease with distance) */
-	LE_LIGHT_DIRECTIONAL,		/** A directional light (light intensity depends of incidence) */
-	LE_LIGHT_AMBIENT,			/** An ambient light (light influence all triangles) */
+	LE_LIGHT_POINT			= 0,	/**< A point light (intensity decrease with distance) */
+	LE_LIGHT_DIRECTIONAL,			/**< A directional light (light intensity depends of incidence) */
+	LE_LIGHT_AMBIENT,				/**< An ambient light (light influence all triangles) */
 }LE_LIGHT_TYPES;
 
 /*****************************************************************************/
+/**
+	\class LeLight
+	\brief Contain and manage a light object
+*/
 class LeLight
 {
 public:
 	LeLight();
 	LeLight(LE_LIGHT_TYPES type, uint32_t color);
 
-	void setPosition(const LeVertex & org);
-	void setDirection(const LeVertex & axis);
-	void setColor(uint32_t color);
+	static void black(LeMesh * mesh);
+	void shine(LeMesh * mesh);
 
-	static void blackMesh(LeMesh * mesh);
-	void shineMesh(LeMesh * mesh);
-
-	LeAxis pos;
-
-	int type;
-	uint32_t color;
-	float rolloff;
+	LE_LIGHT_TYPES type;		/**< Model of the light */
+	LeAxis axis;				/**< Axis (source and direction) of the light */
+	uint32_t color;				/**< Diffuse color of the light */
+	float rolloff;				/**< Roll off factor (point model) of the light */
 
 private:
 	void shinePoint(LeMesh * mesh);

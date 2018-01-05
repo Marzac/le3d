@@ -1,6 +1,6 @@
 /**
 	\file renderer.cpp
-	\brief LightEngine 3D: LeMesh renderer
+	\brief LightEngine 3D: Meshes and billboard sets renderer
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
@@ -54,12 +54,10 @@ LeRenderer::LeRenderer(int width, int height) :
 {
 // Configure viewport
 	setViewport(0.0f, 0.0f, width, height);
-	this->width = width;
-	this->height = height;
 
 // Configure default camera
-	setViewPosition(0.0f, 0.0f, 0.0f);
-	setViewRotation(0.0f, 0.0f, 0.0f);
+	setViewPosition(LeVertex(0.0f, 0.0f, 0.0f));
+	setViewAngle(LeVertex(0.0f, 0.0f, 0.0f));
 	setViewProjection(LE_RENDERER_FOV);
 
 // Flush the lists
@@ -71,7 +69,12 @@ LeRenderer::~LeRenderer()
 }
 
 /*****************************************************************************/
-void LeRenderer::render(LeMesh * mesh)
+/**
+	\fn void LeRenderer::render(const LeMesh * mesh)
+	\brief Render a 3D mesh
+	\param[in] mesh pointer to a mesh
+*/
+void LeRenderer::render(const LeMesh * mesh)
 {
 // Check vertex memory space
 	if (!checkMemory(mesh->noVertexes, mesh->noTriangles))
@@ -116,7 +119,12 @@ void LeRenderer::render(LeMesh * mesh)
 	usedTrilist->noValid += noTris;
 }
 
-void LeRenderer::render(LeBSet * bset)
+/**
+	\fn void LeRenderer::render(const LeBSet * bset)
+	\brief Render a billboard set
+	\param[in] bset pointer to a billboard set
+*/
+void LeRenderer::render(const LeBSet * bset)
 {
 // Check vertex memory space
 	int noVertexes = bset->noBillboards * 4;
@@ -164,6 +172,13 @@ void LeRenderer::render(LeBSet * bset)
 }
 
 /*****************************************************************************/
+/**
+	\fn bool LeRenderer::checkMemory(int noVertexes, int noTriangles)
+	\brief Check if there is enough memory to render
+	\param[in] noVertexes number of vertexes
+	\param[in] noTriangles number of triangles
+	\return true if enough memory available, false else
+*/
 bool LeRenderer::checkMemory(int noVertexes, int noTriangles)
 {
 	if (noVertexes > usedVerlist->noAllocated) return false;
@@ -177,6 +192,10 @@ bool LeRenderer::checkMemory(int noVertexes, int noTriangles)
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeRenderer::flush()
+	\brief Flush the currently selected triangle list
+*/
 void LeRenderer::flush()
 {
 	usedTrilist->noUsed = 0;
@@ -184,52 +203,75 @@ void LeRenderer::flush()
 }
 
 /*****************************************************************************/
-void LeRenderer::setTriList(LeTriList * trilist)
+/**
+	\fn void LeRenderer::setTriangleList(LeTriList * trilist)
+	\brief Associate an external triangle list (for storage)
+	\param[in] trilist pointer to an allocated triangle list or NULL (for internal triangle list)
+*/
+void LeRenderer::setTriangleList(LeTriList * trilist)
 {
 	if (!trilist) usedTrilist = &intTrilist;
 	else usedTrilist = trilist;
 }
 
-LeTriList * LeRenderer::getTriList()
+/**
+	\fn LeTriList * LeRenderer::getTriangleList()
+	\brief Retrieve the associated triangle list
+	\return pointer to a triangle list
+*/
+LeTriList * LeRenderer::getTriangleList()
 {
 	return usedTrilist;
 }
 
 /*****************************************************************************/
-void LeRenderer::setViewPosition(float x, float y, float z)
+/**
+	\fn void LeRenderer::setViewPosition(const LeVertex &pos)
+	\brief Set the rendering view position
+*/
+void LeRenderer::setViewPosition(const LeVertex &pos)
 {
-	viewPosition.x = x;
-	viewPosition.y = y;
-	viewPosition.z = z;
+	viewPosition = pos;
 }
 
-void LeRenderer::setViewRotation(float ax, float ay, float az)
+/**
+	\fn void LeRenderer::setViewAngle(const LeVertex &angle)
+	\brief Set the rendering view angle (in degrees)
+*/
+void LeRenderer::setViewAngle(const LeVertex &angle)
 {
-	viewRotation.x = ax * d2r;
-	viewRotation.y = ay * d2r;
-	viewRotation.z = az * d2r;
+	viewAngle = angle * d2r;
 }
 
+/**
+	\fn void LeRenderer::updateViewMatrix()
+	\brief Update the rendering view matrix with position, scaling and angle vectors
+*/
 void LeRenderer::updateViewMatrix()
 {
 	viewMatrix.identity();
 	viewMatrix.translate(-viewPosition);
-	viewMatrix.rotate(-viewRotation);
+	viewMatrix.rotate(-viewAngle);
 }
 
-void LeRenderer::setViewMatrix(const LeMatrix & view)
+/**
+	\fn void LeRenderer::setViewMatrix(const LeMatrix &view)
+	\brief Set the rendering view matrix
+*/
+void LeRenderer::setViewMatrix(const LeMatrix &view)
 {
 	viewMatrix = view;
 }
 
-void LeRenderer::setViewProjection(float fov)
-{
-	float ratio = tanf(fov * d2r);
-	ztx = -width / ratio;
-	zty = -width / ratio;
-	updateFrustrum();
-}
-
+/*****************************************************************************/
+/**
+	\fn void LeRenderer::setViewport(float left, float top, float right, float bottom)
+	\brief Set the rendering viewport
+	\param[in] left left viewport position (in pixels)
+	\param[in] top top viewport position (in pixels)
+	\param[in] right right viewport position (in pixels)
+	\param[in] bottom bottom viewport position (in pixels)
+*/
 void LeRenderer::setViewport(float left, float top, float right, float bottom)
 {
 	viewLeftAxis   = LeAxis(LeVertex(left,	top,	0.0f), LeVertex(left,  bottom, 0.0f));
@@ -238,13 +280,45 @@ void LeRenderer::setViewport(float left, float top, float right, float bottom)
 	viewBottomAxis = LeAxis(LeVertex(left,	bottom, 0.0f), LeVertex(right, bottom ,0.0f));
 }
 
+/**
+	\fn void LeRenderer::setViewProjection(float fov)
+	\brief Set the rendering field of view angle (in degrees)
+*/
+void LeRenderer::setViewProjection(float fov)
+{
+	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
+	float ratio = tanf(fov * d2r);
+	ztx = -width / ratio;
+	zty = -width / ratio;
+	updateFrustrum();
+}
+
+/**
+	\fn void LeRenderer::setViewOffset(float offset)
+	\brief Set the renderer view offset (for triangle sorting)
+	\param[in] offset view offset
+*/
+void LeRenderer::setViewOffset(float offset)
+{
+	vOffset = offset * offset * csgn(offset);
+}
+
 /*****************************************************************************/
+/**
+	\fn void LeRenderer::setBackculling(bool enable)
+	\brief Enable or disable the backculling
+	\param[in] enable backculling enable state
+*/
 void LeRenderer::setBackculling(bool enable)
 {
 	enableBack = enable;
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeRenderer::updateFrustrum()
+	\brief Update the frustrum representation
+*/
 void LeRenderer::updateFrustrum()
 {
 	viewFrontPlan.zAxis.origin.z = LE_RENDERER_FRONT;
@@ -252,11 +326,13 @@ void LeRenderer::updateFrustrum()
 	viewFrontPlan.zAxis.axis.z = -1.0f;
 	viewBackPlan.zAxis.axis.z = 1.0f;
 
+	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
 	float hf = height * 0.5f * LE_RENDERER_FRONT / zty;
 	float hb = height * 0.5f * LE_RENDERER_BACK / zty;
 	viewTopPlan = LePlan(LeVertex(0.0f,	 hf, LE_RENDERER_FRONT), LeVertex(1.0f,	 hb, LE_RENDERER_BACK), LeVertex(1.0f, hf, LE_RENDERER_FRONT));
 	viewBotPlan = LePlan(LeVertex(0.0f, -hf, LE_RENDERER_FRONT), LeVertex(1.0f, -hb, LE_RENDERER_BACK), LeVertex(-1.0f, -hf, LE_RENDERER_FRONT));
 
+	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
 	float wf = width * 0.5f * LE_RENDERER_FRONT / ztx;
 	float wb = width * 0.5f * LE_RENDERER_BACK / ztx;
 	viewLeftPlan  = LePlan(LeVertex(-wf, 0.0f, LE_RENDERER_FRONT), LeVertex(-wb, 0.0f, LE_RENDERER_BACK), LeVertex(-wf,	 1.0f, LE_RENDERER_FRONT));
@@ -264,15 +340,23 @@ void LeRenderer::updateFrustrum()
 }
 
 /*****************************************************************************/
-void LeRenderer::transform(LeMatrix view, LeVertex srcVertexes[], LeVertex dstVertexes[], int nb)
+/**
+	\fn void LeRenderer::transform(LeMatrix view, const LeVertex srcVertexes[], LeVertex dstVertexes[], int nb)
+	\brief Transform the vertexes by the specified matrix and the view matrix
+	\param[in] matrix transform matrix
+	\param[in] srcVertexes source vertex buffer
+	\param[out] dstVertexes destination vertex buffer
+	\param[in] nb number of vertexes
+*/
+void LeRenderer::transform(const LeMatrix &matrix, const LeVertex srcVertexes[], LeVertex dstVertexes[], int nb)
 {
-	view = viewMatrix * view;
+	LeMatrix view = viewMatrix * matrix;
 	for (int i = 0; i < nb; i++)
 		dstVertexes[i] = view * srcVertexes[i];
 }
 
 /*****************************************************************************/
-int LeRenderer::build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[])
+int LeRenderer::build(const LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[])
 {
 	int k = 0;
 	float frontZ = viewFrontPlan.zAxis.origin.z;
@@ -327,7 +411,7 @@ int LeRenderer::build(LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int
 	return k;
 }
 
-int LeRenderer::build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int indices[])
+int LeRenderer::build(const LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int indices[])
 {
 	int k = 0;
 	float frontZ = viewFrontPlan.zAxis.origin.z;
@@ -396,11 +480,13 @@ int LeRenderer::build(LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int
 	return k;
 }
 
-
 /*****************************************************************************/
-int LeRenderer::project(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb)
+int LeRenderer::project(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb)
 {
 	int k = 0;
+
+	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
+	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
 	float centerX = width * 0.5f;
 	float centerY = height * 0.5f;
 
@@ -442,7 +528,7 @@ int LeRenderer::project(LeTriangle tris[], int srcIndices[], int dstIndices[], i
 }
 
 /*****************************************************************************/
-int LeRenderer::clip3D(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb, LePlan &plan)
+int LeRenderer::clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlan &plan)
 {
 	int k = 0;
 	for (int i = 0; i < nb; i++) {
@@ -562,7 +648,7 @@ int LeRenderer::clip3D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 }
 
 /*****************************************************************************/
-int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb, LeAxis &axis)
+int LeRenderer::clip2D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LeAxis &axis)
 {
 	int k = 0;
 	for (int i = 0; i < nb; i++) {
@@ -674,7 +760,7 @@ int LeRenderer::clip2D(LeTriangle tris[], int srcIndices[], int dstIndices[], in
 }
 
 /*****************************************************************************/
-int LeRenderer::backculling(LeTriangle tris[], int srcIndices[], int dstIndices[], int nb)
+int LeRenderer::backculling(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb)
 {
 	int k = 0;
 	if (!enableBack) {
@@ -691,8 +777,3 @@ int LeRenderer::backculling(LeTriangle tris[], int srcIndices[], int dstIndices[
 	return k;
 }
 
-/*****************************************************************************/
-void LeRenderer::setViewOffset(float offset)
-{
-	vOffset = offset * offset * csgn(offset);
-}

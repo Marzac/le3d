@@ -39,6 +39,10 @@
 #include <math.h>
 
 /*****************************************************************************/
+/**
+	\struct LeVertex
+	\brief Represent a vertex in 3D space
+**/
 struct LeVertex
 {
 	float x, y, z, w;
@@ -137,7 +141,17 @@ struct LeVertex
 		r.z = z * v;
 		return r;
 	}
-
+	
+	LeVertex operator * (float v) const
+	{
+		float iv = 1.0f / v;
+		LeVertex r;
+		r.x = x * iv;
+		r.y = y * iv;
+		r.z = z * iv;
+		return r;
+	}
+	
 	LeVertex operator *= (LeVertex v)
 	{
 		x *= v.x;
@@ -145,7 +159,15 @@ struct LeVertex
 		z *= v.z;
 		return *this;
 	}
-
+	
+	LeVertex operator /= (LeVertex v)
+	{
+		x /= v.x;
+		y /= v.y;
+		z /= v.z;
+		return *this;
+	}
+	
 	LeVertex operator *= (float v)
 	{
 		x *= v;
@@ -153,7 +175,16 @@ struct LeVertex
 		z *= v;
 		return *this;
 	}
-
+	
+	LeVertex operator /= (float v)
+	{
+		float iv = 1.0f / v;
+		x *= iv;
+		y *= iv;
+		z *= iv;
+		return *this;
+	}
+	
 	bool operator == (LeVertex v)
 	{
 		return x == v.x && y == v.y && z == v.z;
@@ -228,11 +259,15 @@ struct LeVertex
 };
 
 /*****************************************************************************/
+/**
+	\struct LeAxis
+	\brief Represent an axis in 3D space
+**/
 struct LeAxis
 {
-	LeVertex origin;
-	LeVertex axis;
-	float  norm;
+	LeVertex origin;	/**< Origin of the axis */
+	LeVertex axis;		/**< Direction of the axis (normalized) */
+	float norm;			/**< Length of the axis */
 
 	LeAxis()
 	{
@@ -261,6 +296,10 @@ struct LeAxis
 };
 
 /*****************************************************************************/
+/**
+	\struct LePlan
+	\brief Represent a plan in 3D space
+**/
 struct LePlan
 {
 	LeAxis xAxis;
@@ -301,6 +340,10 @@ struct LePlan
 };
 
 /*****************************************************************************/
+/**
+	\struct LeMatrix
+	\brief Represent a 4x4 matrix to handle 3D transforms
+**/
 struct LeMatrix
 {
 	float mat[4][4];

@@ -46,12 +46,13 @@
 
 /*****************************************************************************/
 LeRasterizer::LeRasterizer(int width, int height) :
+	frame(),
+	background(0),
 	color(0xFFFFFF),
 	bmp(NULL),
 	texPixels(NULL),
 	texSizeU(0), texSizeV(0),
-	texMaskU(0), texMaskV(0),
-	background(0)
+	texMaskU(0), texMaskV(0)
 {
 	memset(xs, 0, sizeof(float) * 4);
 	memset(ys, 0, sizeof(float) * 4);
@@ -73,17 +74,21 @@ LeRasterizer::~LeRasterizer()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeRasterizer::flush()
+	\brief Fill the frame buffer with the background color
+*/
 void LeRasterizer::flush()
 {
 	frame.clear(background);
 }
 
-void LeRasterizer::setBackground(uint32_t color)
-{
-	background = color;
-}
-
 /*****************************************************************************/
+/**
+	\fn void LeRasterizer::rasterList(LeTriList * trilist)
+	\brief Rasterize the given triangle list
+	\param[in] trilist pointer to a triangle list
+*/
 void LeRasterizer::rasterList(LeTriList * trilist)
 {
 	trilist->zSort();
@@ -223,7 +228,7 @@ void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 
 	int y1 = (int) ys[vt];
 	int y2 = (int) ys[vm1];
-	if (bmp->flags & LE_BMP_RGBA) {
+	if (bmp->flags & LE_BITMAP_RGBA) {
 		for (int y = y1; y < y2; y++) {
 			fillFlatTexAlphaZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
 			x1 += ax1; x2 += ax2;
@@ -270,7 +275,7 @@ void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 	int y1 = (int) ys[vm1];
 	int y2 = (int) ys[vb];
 
-	if (bmp->flags & LE_BMP_RGBA) {
+	if (bmp->flags & LE_BITMAP_RGBA) {
 		for (int y = y1; y < y2; y++) {
 			fillFlatTexAlphaZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
 			x1 += ax1; x2 += ax2;

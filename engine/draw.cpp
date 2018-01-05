@@ -1,6 +1,6 @@
 /**
 	\file draw.cpp
-	\brief LightEngine 3D: Native OS graphic context
+	\brief LightEngine 3D: OS native graphic context
 	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
@@ -52,7 +52,12 @@ LeDraw::~LeDraw()
 }
 
 /*****************************************************************************/
-void LeDraw::setPixels(void * data)
+/**
+	\fn void LeDraw::setPixels(void * data)
+	\brief Set the graphic content of the context
+	\param[in] data pointer to an array of pixels
+*/
+void LeDraw::setPixels(const void * data)
 {
 	BITMAPV4HEADER info;
 	info.bV4Size = sizeof(BITMAPV4HEADER);

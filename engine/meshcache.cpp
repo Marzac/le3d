@@ -68,6 +68,12 @@ LeMeshCache::~LeMeshCache()
 }
 
 /*****************************************************************************/
+/**
+	\fn LeMesh * LeMeshCache::loadOBJ(const char * path)
+	\brief Load a OBJ file of given path and apply transforms
+	\param[in] path OBJ file path
+	\return pointer to a new mesh
+*/
 LeMesh * LeMeshCache::loadOBJ(const char * path)
 {
 	if (noSlots >= LE_MESHCACHE_SLOTS) {
@@ -87,6 +93,10 @@ LeMesh * LeMeshCache::loadOBJ(const char * path)
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeMeshCache::loadDirectory(const char * path)
+	\brief Load in cache all the recognized mesh files from the given directory
+*/
 void LeMeshCache::loadDirectory(const char * path)
 {
 	char ext[LE_MAX_FILE_EXTENSION+1];
@@ -112,6 +122,13 @@ void LeMeshCache::loadDirectory(const char * path)
 }
 
 /*****************************************************************************/
+/**
+	\fn int LeMeshCache::createSlot(LeMesh * mesh, const char * path)
+	\brief Create a new slot to own the mesh object
+	\param[in] mesh pointer to a valid mesh object
+	\param[in] path mesh full path (directory + name + extension)
+	\return cache slot number or -1 if no space available
+*/
 int LeMeshCache::createSlot(LeMesh * mesh, const char * path)
 {
 	for (int i = 0; i < LE_MESHCACHE_SLOTS; i++) {
@@ -133,6 +150,10 @@ int LeMeshCache::createSlot(LeMesh * mesh, const char * path)
 	return -1;
 }
 
+/**
+	\fn void LeMeshCache::deleteSlot(int index)
+	\brief Free a cache slot of given index
+*/
 void LeMeshCache::deleteSlot(int index)
 {
 	Slot * slot = &slots[index];
@@ -148,6 +169,12 @@ void LeMeshCache::deleteSlot(int index)
 }
 
 /*****************************************************************************/
+/**
+	\fn int LeMeshCache::getFromName(const char * path)
+	\brief Retrieve a mesh slot index from a mesh name or path
+	\param[in] path mesh path or name
+	\return cache slot number or -1 if no space available
+*/
 int LeMeshCache::getFromName(const char * path)
 {
 	char name[LE_MAX_FILE_NAME+1];

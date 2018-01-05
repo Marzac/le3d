@@ -94,6 +94,10 @@ LeGamePad::~LeGamePad()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeGamePad::init()
+	\brief Initialize gamepad state (default state)
+*/
 void LeGamePad::init()
 {
 	stickLeftX = 0.0f;
@@ -106,6 +110,10 @@ void LeGamePad::init()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeGamePad::update()
+	\brief Update gamepad state (call the driver)
+*/
 void LeGamePad::update()
 {
 	XInputState state;
@@ -121,6 +129,13 @@ void LeGamePad::update()
 	buttons = state.gamepad.buttons;
 }
 
+/*****************************************************************************/
+/**
+	\fn void LeGamePad::feedback(float left, float right)
+	\brief Send a force feedback order
+	\param[in] left motor order (0.0 - 1.0)
+	\param[in] right motor order (0.0 - 1.0)
+*/
 void LeGamePad::feedback(float left, float right)
 {
 	XInputVibration vibration;

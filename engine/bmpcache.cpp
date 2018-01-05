@@ -72,6 +72,12 @@ LeBmpCache::~LeBmpCache()
 }
 
 /*****************************************************************************/
+/**
+	\fn LeBitmap * LeBmpCache::loadBMP(const char * path)
+	\brief Load a BMP file of given path and apply transforms
+	\param[in] path BMP file path
+	\return pointer to a new bitmap
+*/
 LeBitmap * LeBmpCache::loadBMP(const char * path)
 {
 	if (noSlots >= LE_BMPCACHE_SLOTS) {
@@ -103,6 +109,10 @@ LeBitmap * LeBmpCache::loadBMP(const char * path)
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeBmpCache::loadDirectory(const char * path)
+	\brief Load in cache all the recognized bitmap files from the given directory
+*/
 void LeBmpCache::loadDirectory(const char * path)
 {
 	char ext[LE_MAX_FILE_EXTENSION+1];
@@ -127,6 +137,13 @@ void LeBmpCache::loadDirectory(const char * path)
 }
 
 /*****************************************************************************/
+/**
+	\fn int LeBmpCache::createSlot(LeBitmap * bitmap, const char * path)
+	\brief Create a new slot to own the bitmap object
+	\param[in] bitmap pointer to a valid bitmap object
+	\param[in] path bitmap full path (directory + name + extension)
+	\return cache slot number or -1 if no space available
+*/
 int LeBmpCache::createSlot(LeBitmap * bitmap, const char * path)
 {
 	for (int i = 0; i < LE_BMPCACHE_SLOTS; i++) {
@@ -151,6 +168,10 @@ int LeBmpCache::createSlot(LeBitmap * bitmap, const char * path)
 	return -1;
 }
 
+/**
+	\fn void LeBmpCache::deleteSlot(int index)
+	\brief Free a cache slot of given index
+*/
 void LeBmpCache::deleteSlot(int index)
 {
 	Slot * slot = &slots[index];
@@ -167,6 +188,12 @@ void LeBmpCache::deleteSlot(int index)
 }
 
 /*****************************************************************************/
+/**
+	\fn int LeBmpCache::getFromName(const char * path)
+	\brief Retrieve a bitmap slot index from a bitmap name or path
+	\param[in] path bitmap path or name
+	\return cache slot number or -1 if no space available
+*/
 int LeBmpCache::getFromName(const char * path)
 {
 	char name[LE_MAX_FILE_NAME+1];

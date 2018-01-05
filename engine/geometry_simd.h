@@ -41,6 +41,10 @@
 #include <malloc.h>
 
 /*****************************************************************************/
+/**
+	\struct LeVertex
+	\brief Represent a vertex in 3D space
+**/
 struct __attribute__ ((aligned (16))) LeVertex
 {
 	union {
@@ -131,26 +135,46 @@ struct __attribute__ ((aligned (16))) LeVertex
 		return r;
 	}
 
+	LeVertex operator / (float v) const
+	{
+		LeVertex r;
+		V4SF vs = {v, v, v, v};
+		r.vf = vf / vs;
+		return r;
+	}
+	
 	LeVertex operator *= (LeVertex v)
 	{
 		vf *= v.vf;
 		return *this;
 	}
-
+	
+	LeVertex operator /= (LeVertex v)
+	{
+		vf /= v.vf;
+		return *this;
+	}
+	
 	LeVertex operator *= (float v)
 	{
 		V4SF vs = {v, v, v, v};
 		vf *= vs;
 		return *this;
 	}
-
+	
+	LeVertex operator /= (float v)
+	{
+		V4SF vs = {v, v, v, v};
+		vf /= vs;
+		return *this;
+	}
+	
 	bool operator == (LeVertex v)
 	{
 		return x == v.x &&
 			   y == v.y &&
 			   z == v.z;
 	}
-
 
 	float dot(LeVertex v) const
 	{
@@ -219,11 +243,15 @@ struct __attribute__ ((aligned (16))) LeVertex
 };
 
 /*****************************************************************************/
+/**
+	\struct LeAxis
+	\brief Represent an axis in 3D space
+**/
 struct __attribute__ ((aligned (16))) LeAxis
 {
-	LeVertex origin;
-	LeVertex axis;
-	float norm;
+	LeVertex origin;	/**< Origin of the axis */
+	LeVertex axis;		/**< Direction of the axis (normalized) */
+	float norm;			/**< Length of the axis */
 
 	LeAxis() :
 		origin(),
@@ -241,6 +269,10 @@ struct __attribute__ ((aligned (16))) LeAxis
 };
 
 /*****************************************************************************/
+/**
+	\struct LePlan
+	\brief Represent a plan in 3D space
+**/
 struct __attribute__ ((aligned (16))) LePlan
 {
 	LeAxis xAxis;
@@ -262,6 +294,10 @@ struct __attribute__ ((aligned (16))) LePlan
 };
 
 /*****************************************************************************/
+/**
+	\struct LeMatrix
+	\brief Represent a 4x4 matrix to handle 3D transforms
+**/
 struct __attribute__ ((aligned (16))) LeMatrix
 {
 	LeVertex lines[4];
