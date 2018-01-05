@@ -22,9 +22,9 @@ const int resoY = 480;
 int main()
 {
 /** Create application objects */
-	LeWindow     window     = LeWindow("Le3d: cube example", resoX, resoY);
-	LeDraw       draw       = LeDraw(window.getContext(), resoX, resoY);
-	LeRenderer   renderer   = LeRenderer(resoX, resoY);
+	LeWindow	 window		= LeWindow("Le3d: cube example", resoX, resoY);
+	LeDraw		 draw		= LeDraw(window.getContext(), resoX, resoY);
+	LeRenderer	 renderer	= LeRenderer(resoX, resoY);
 	LeRasterizer rasterizer = LeRasterizer(resoX, resoY);
 
 /** Load the assets (textures then 3D models) */
@@ -32,8 +32,8 @@ int main()
 	meshCache.loadDirectory("assets");
 
 /** Retrieve the 3D model */
-    int crateSlot = meshCache.getFromName("crate.obj");
-    LeMesh * crate = meshCache.slots[crateSlot].mesh;
+	int crateSlot = meshCache.getFromName("crate.obj");
+	LeMesh * crate = meshCache.slots[crateSlot].mesh;
 
 /** Create three lights */
 	LeLight light1(LE_LIGHT_DIRECTIONAL, 0xFF4040);
@@ -44,34 +44,34 @@ int main()
 	light2.axis = LeAxis(LeVertex(), LeVertex(-1.0f, 0.0f, -1.0f));
 
 /** Set the renderer properties */
-    renderer.setViewPosition(LeVertex(0.0f, 0.0f, 3.0f));
-    renderer.updateViewMatrix();
-    rasterizer.background = 0xC0C0FF;
+	renderer.setViewPosition(LeVertex(0.0f, 0.0f, 3.0f));
+	renderer.updateViewMatrix();
+	rasterizer.background = 0xC0C0FF;
 
 /** Initialize the timing */
-    timing.setup(60);
+	timing.setup(60);
 	timing.firstFrame();
 
 /** Program main loop */
-    MSG msg;
+	MSG msg;
 	msg.message = 0;
 	while(msg.message != WM_QUIT) {
-    /** Process OS messages */
+	/** Process OS messages */
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 
-    /** Wait for next frame */
+	/** Wait for next frame */
 		timing.waitNextFrame();
 
-    /** Copy render frame to window context */
-        draw.setPixels(rasterizer.frame.data);
+	/** Copy render frame to window context */
+		draw.setPixels(rasterizer.frame.data);
 
-    /** Update model transforms */
-        crate->angle += LeVertex(0.1f, 2.0f, 0.0f);
-        crate->updateMatrix();
+	/** Update model transforms */
+		crate->angle += LeVertex(0.1f, 2.0f, 0.0f);
+		crate->updateMatrix();
 
 	/** Light model */
 		LeLight::black(crate);
@@ -79,15 +79,15 @@ int main()
 		light2.shine(crate);
 		light3.shine(crate);
 
-    /** Render the 3D model */
-        renderer.render(crate);
+	/** Render the 3D model */
+		renderer.render(crate);
 
-    /** Draw the triangles */
-        rasterizer.flush();
-        rasterizer.rasterList(renderer.getTriangleList());
-        renderer.flush();
+	/** Draw the triangles */
+		rasterizer.flush();
+		rasterizer.rasterList(renderer.getTriangleList());
+		renderer.flush();
 	}
 
-    timing.lastFrame();
-    return 0;
+	timing.lastFrame();
+	return 0;
 }
