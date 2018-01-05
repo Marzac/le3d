@@ -8,6 +8,19 @@ Code has been designed for resource constrained platforms.
 Source code / examples / documentation  
 Copyright (c) 2015 - 2018 Frédéric Meslin  
 
+**Exceptions:**  
+__Mesh textures__  
+In the example folder, one or more textures on the 3D models  
+have been created with photographs from Textures.com.  
+These photographs may not be redistributed by default;  
+Please visit http://www.textures.com for more information.  
+
+__Skybox texture__  
+In the example folder, the meadow skybox has been created by  
+Emil "Humus" Persson and it is licenced under the Creative Commons  
+Attribution 3.0 Unported License.  
+Please visit http://www.humus.name/index.php?page=Textures for more information.  
+
 **Fred's Lab**  
 http://fredslab.net  
 fred@fredslab.net, @marzacdev  
@@ -43,7 +56,9 @@ The lighting system:
 - Handles ambient lights
 
 
-# Backends
+# Backends  
+window / draw / gamepad / timing  
+
 The backend - Windows version:  
 - Handles windows  
 - Handles mouse events  
