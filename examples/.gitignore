@@ -1,0 +1,12 @@
+# Compiled object files
+*.slo
+*.lo
+*.o
+
+# Precompiled header files
+*.gch
+*.pch
+
+# Assembler files
+*.ii
+*.s

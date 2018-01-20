@@ -1,27 +1,14 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# Windows OS files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# Mac OS files
+.DS_Store
+.AppleDouble
+.LSOverride
 
 # Executables
 *.exe
