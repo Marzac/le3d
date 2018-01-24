@@ -1,9 +1,14 @@
 # le3d  
 **LightEngine 3D**  
+**Version 1.5 - 24/01/2018**
 
 A straightforward C++ 3D software engine for real-time graphics.  
 The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
 Code has been designed for resource constrained platforms.  
+
+Currently supported platforms:
+- Microsoft Windows XP, 7, 8 and 10
+- Linux based operating systems
 
 Source code / examples / documentation  
 Copyright (c) 2015 - 2018 Frédéric Meslin  
@@ -60,18 +65,26 @@ The lighting system:
 window / draw / gamepad / timing  
 
 The backend - Windows version:  
-- Handles windows  
-- Handles mouse events  
-- Handles keyboard events  
-- Handles GDI graphic contexts  
-- Handles joysticks with rumble (needs Microsoft XInput V1.3 drivers installed)  
-- Supports Windows XP / 7 / 8 and 10 OS  
+- Handles windows creation / management
+- Handles mouse events
+- Handles keyboard events
+- Handles graphic contexts with GDI
+- Handles joysticks with rumble support
+  (with Microsoft XInput V1.3 drivers)
+- Supports Windows XP / 7 / 8 and 10 OS
+- Supports fullscreen mode
 
 The backend - Linux version:  
-- Incoming  
+- Handles windows creation / management (with X11)
+- Handles mouse events (with X11)
+- Handles keyboard events (with X11)
+- Handles graphic contexts (with X11)
+- Handles joysticks with rumble support
+  (with evdev interface)
+- Supports many Linux OS
 
 The backend - MacOS version:  
-- Incoming  
+- Incoming (maybe)
 
 # File formats  
 Supported bitmap / texture formats:
