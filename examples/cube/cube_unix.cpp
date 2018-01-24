@@ -1,16 +1,20 @@
 /**
 	\file cube.cpp
 	\brief LightEngine 3D (examples): cube example
-	\brief Windows implementation
+	\brief Unix OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 */
 
+#if defined(__unix__) || defined(__unix)
+
 #include "engine/le3d.h"
 #include "tools/timing.h"
 
-#include <windows.h>
+#include <X11/X.h>
+#include <X11/Xlib.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -21,11 +25,15 @@ const int resoY = 480;
 /*****************************************************************************/
 int main()
 {
+	LeGamePad::setup();
+
 /** Create application objects */
 	LeWindow	 window		= LeWindow("Le3d: cube example", resoX, resoY);
-	LeDraw		 draw		= LeDraw(window.getContext(), resoX, resoY);
+	LeDrawingContext dc     = window.getContext();
+	LeDraw		 draw		= LeDraw(dc, resoX, resoY);
 	LeRenderer	 renderer	= LeRenderer(resoX, resoY);
 	LeRasterizer rasterizer = LeRasterizer(resoX, resoY);
+	LeGamePad pad(0);
 
 /** Load the assets (textures then 3D models) */
 	bmpCache.loadDirectory("assets");
@@ -53,18 +61,16 @@ int main()
 	timing.firstFrame();
 
 /** Program main loop */
-	MSG msg;
-	msg.message = 0;
-	while(msg.message != WM_QUIT) {
-	/** Process OS messages */
-		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
+	while (1) {
+		XEvent event;
+	//	XNextEvent(usedXDisplay, &event);
+
+		if (event.type == KeyPress)
+			break;
 
 	/** Wait for next frame */
 		timing.waitNextFrame();
+		pad.update();
 
 	/** Copy render frame to window context */
 		draw.setPixels(rasterizer.frame.data);
@@ -89,5 +95,10 @@ int main()
 	}
 
 	timing.lastFrame();
+
+	LeGamePad::release();
+
 	return 0;
 }
+
+#endif

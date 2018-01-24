@@ -23,3 +23,13 @@ In the example folder, the meadow skybox has been created by
 Emil "Humus" Persson and it is licenced under the Creative Commons
 Attribution 3.0 Unported License.
 Please visit http://www.humus.name/index.php?page=Textures for more information.
+
+
+For Linux users
+
+Packages needed to compile:
+===========================
+gcc
+g++
+libc6
+xorg-dev
