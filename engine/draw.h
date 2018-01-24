@@ -1,12 +1,12 @@
 /**
 	\file draw.h
-	\brief LightEngine 3D: OS native graphic context
-	\brief Windows OS implementation
+	\brief LightEngine 3D: Native OS graphic context
+	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -37,16 +37,17 @@
 #include "config.h"
 
 #include "bitmap.h"
+#include "window.h"
 
 /*****************************************************************************/
 /**
 	\class LeDraw
-	\brief Create and handle an OS native drawing context 
+	\brief Create and handle an OS native drawing context
 */
 class LeDraw
 {
 public:
-	LeDraw(LeHandle context, int width, int heigth);
+	LeDraw(LeDrawingContext context, int width, int heigth);
 	~LeDraw();
 
 	void setPixels(const void * data);
@@ -55,7 +56,9 @@ public:
 	int height;		/**< Height of context (in pixels) */
 
 private:
-	LeHandle frontContext;
+	LeDrawingContext frontContext;
+	LeHandle bitmap;
+
 };
 
 #endif	//LE_DRAW_H

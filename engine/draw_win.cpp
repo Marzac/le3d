@@ -1,12 +1,12 @@
 /**
 	\file draw_win.cpp
-	\brief LightEngine 3D: OS native graphic context
+	\brief LightEngine 3D: Native OS graphic context
 	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -43,11 +43,15 @@
 #include <windows.h>
 
 /*****************************************************************************/
-LeDraw::LeDraw(LeHandle context, int width, int height) :
+LeDraw::LeDraw(LeDrawingContext context, int width, int height) :
 	width(width), height(height),
-	frontContext(context)
+	frontContext(context),
+	bitmap(0)
 {
-	if (!frontContext) frontContext = (LeHandle) GetDC(NULL);
+	if (!frontContext.gc) {
+		frontContext.window = 0;
+		frontContext.gc = (LeHandle) GetDC(NULL);
+	}
 }
 
 LeDraw::~LeDraw()
@@ -69,7 +73,8 @@ void LeDraw::setPixels(const void * data)
 	info.bV4Planes = 1;
 	info.bV4BitCount = 32;
 	info.bV4V4Compression = BI_RGB;
-	SetDIBitsToDevice((HDC) frontContext, 0, 0, width, height, 0, 0, 0, height, data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
+
+	SetDIBitsToDevice((HDC) frontContext.gc, 0, 0, width, height, 0, 0, 0, height, data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
 }
 
 #endif

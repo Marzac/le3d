@@ -1,12 +1,12 @@
 /**
 	\file draw_unix.cpp
-	\brief LightEngine 3D: OS native graphic context
+	\brief LightEngine 3D: Native OS graphic context
 	\brief Unix OS implementation (with X.Org / XLib)
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -38,20 +38,29 @@
 #include "global.h"
 #include "config.h"
 
-#define WINVER	0x0600
-#include <windef.h>
-#include <windows.h>
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+#include <stdio.h>
 
 /*****************************************************************************/
-LeDraw::LeDraw(LeHandle context, int width, int height) :
+LeDraw::LeDraw(LeDrawingContext context, int width, int height) :
 	width(width), height(height),
-	frontContext(context)
+	frontContext(context),
+	bitmap(0)
 {
-	if (!frontContext) frontContext = (LeHandle) GetDC(NULL);
+	Visual * visual = DefaultVisual((Display *) context.display, 0);
+	if (visual->c_class != TrueColor) {
+		printf("Draw: can only draw on truecolor displays!\n");
+		return;
+	}
+	bitmap = (LeHandle) XCreateImage((Display *) context.display, visual, 24, ZPixmap, 0, (char *) NULL, width, height, 32, 0);
 }
 
 LeDraw::~LeDraw()
 {
+	if (bitmap) XDestroyImage((XImage *) bitmap);
 }
 
 /*****************************************************************************/
@@ -62,14 +71,9 @@ LeDraw::~LeDraw()
 */
 void LeDraw::setPixels(const void * data)
 {
-	BITMAPV4HEADER info;
-	info.bV4Size = sizeof(BITMAPV4HEADER);
-	info.bV4Width = width;
-	info.bV4Height = -height;
-	info.bV4Planes = 1;
-	info.bV4BitCount = 32;
-	info.bV4V4Compression = BI_RGB;
-	SetDIBitsToDevice((HDC) frontContext, 0, 0, width, height, 0, 0, 0, height, data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
+	XImage * image = (XImage *) bitmap;
+	image->data = (char *) data;
+	XPutImage((Display *) frontContext.display, (Drawable) frontContext.window, (GC) frontContext.gc, image, 0, 0, 0, 0, width, height);
 }
 
 #endif
