@@ -1,7 +1,7 @@
 /**
-	\file draw.cpp
+	\file draw_unix.cpp
 	\brief LightEngine 3D: OS native graphic context
-	\brief Windows OS implementation
+	\brief Unix OS implementation (with X.Org / XLib)
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
@@ -30,6 +30,9 @@
 	SOFTWARE.
 */
 
+#if defined(__unix__) || defined(__unix)
+
+/*****************************************************************************/
 #include "draw.h"
 
 #include "global.h"
@@ -68,3 +71,5 @@ void LeDraw::setPixels(const void * data)
 	info.bV4V4Compression = BI_RGB;
 	SetDIBitsToDevice((HDC) frontContext, 0, 0, width, height, 0, 0, 0, height, data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
 }
+
+#endif

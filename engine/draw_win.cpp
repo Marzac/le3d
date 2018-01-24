@@ -1,7 +1,7 @@
 /**
-	\file simd.h
-	\brief LightEngine 3D: SIMD constants / types and intrinsic definitions
-	\brief INTEL based platforms
+	\file draw_win.cpp
+	\brief LightEngine 3D: OS native graphic context
+	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
@@ -30,34 +30,46 @@
 	SOFTWARE.
 */
 
-#ifndef LE_SIMD_H
-#define LE_SIMD_H
-
-/** Intrinsics includes */
-#if LE_USE_SSE2
-	#include "xmmintrin.h"
-	#include "emmintrin.h"
-#endif // LE_USE_SSE2
+#if defined(_WIN32)
 
 /*****************************************************************************/
-/** 4x 32bit float vector */
-	typedef float V4SF __attribute__ ((vector_size (16)));
-	typedef union {V4SF v; float f[4];} v4sf;
+#include "draw.h"
 
-/** 4x 32bit signed integer vector */
-	typedef int32_t V4SI __attribute__ ((vector_size (16)));
-	typedef union {V4SI v; int32_t i[4];} v4si;
+#include "global.h"
+#include "config.h"
 
-/** 4x 32bit unsigned integer vector */
-	typedef uint32_t V4SU __attribute__ ((vector_size (16)));
-	typedef union {V4SU v; uint32_t u[4];} v4su;
+#define WINVER	0x0600
+#include <windef.h>
+#include <windows.h>
 
-/** 8x 16bit signed integer vector */
-	typedef int16_t V8SH __attribute__ ((vector_size (16)));
-	typedef union {V8SH v; int16_t i[8];} v8sh;
+/*****************************************************************************/
+LeDraw::LeDraw(LeHandle context, int width, int height) :
+	width(width), height(height),
+	frontContext(context)
+{
+	if (!frontContext) frontContext = (LeHandle) GetDC(NULL);
+}
 
-/** 8x 16bit unsigned integer vector */
-	typedef uint16_t V8SW __attribute__ ((vector_size (16)));
-	typedef union {V8SW v; uint16_t u[8];} v8sw;
+LeDraw::~LeDraw()
+{
+}
 
-#endif // LE_SIMD_H
+/*****************************************************************************/
+/**
+	\fn void LeDraw::setPixels(void * data)
+	\brief Set the graphic content of the context
+	\param[in] data pointer to an array of pixels
+*/
+void LeDraw::setPixels(const void * data)
+{
+	BITMAPV4HEADER info;
+	info.bV4Size = sizeof(BITMAPV4HEADER);
+	info.bV4Width = width;
+	info.bV4Height = -height;
+	info.bV4Planes = 1;
+	info.bV4BitCount = 32;
+	info.bV4V4Compression = BI_RGB;
+	SetDIBitsToDevice((HDC) frontContext, 0, 0, width, height, 0, 0, 0, height, data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
+}
+
+#endif

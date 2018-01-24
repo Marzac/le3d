@@ -1,7 +1,7 @@
 /**
-	\file window.cpp
+	\file window_unix.cpp
 	\brief LightEngine 3D: Native OS window manager
-	\brief Windows implementation
+	\brief Unix OS implementation (with X.Org / XLib)
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
@@ -30,6 +30,9 @@
 	SOFTWARE.
 */
 
+#if defined(__unix__) || defined(__unix)
+
+/*****************************************************************************/
 #include "window.h"
 
 #include "global.h"
@@ -240,3 +243,5 @@ void LeWindow::setWindowed()
 	ChangeDisplaySettings (&devMode, CDS_RESET);
 	fullScreen = false;
 }
+
+#endif
