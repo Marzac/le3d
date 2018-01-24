@@ -1,12 +1,12 @@
 /**
 	\file gamepad.h
 	\brief LightEngine 3D: Native OS gamepad manager
-	\brief Windows OS implementation (XInput V1.3)
+	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -64,7 +64,7 @@ typedef enum{
 /*****************************************************************************/
 /**
 	\class LeGamePad
-	\brief Handle gamepads through OS native interface 
+	\brief Handle gamepads through OS native interface
 */
 class LeGamePad
 {
@@ -85,6 +85,7 @@ public:
 	int toggled;			/**< buttons toggled (since last update) */
 
 	static void setup();
+	static void release();
 
 private:
 	float normalize(int32_t axis);
