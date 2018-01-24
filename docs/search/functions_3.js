@@ -7,6 +7,6 @@ var searchData=
   ['collidespheremesh',['collideSphereMesh',['../namespace_le_physics.html#ac9468f6731682ba7c21f8ad9e3da3fb9',1,'LePhysics']]],
   ['collidespheresphere',['collideSphereSphere',['../namespace_le_physics.html#ac1bd1be3d08dcbd0b9673079e926138d',1,'LePhysics']]],
   ['computenormals',['computeNormals',['../class_le_mesh.html#ac2b2558d60fd8f16d1532a365a37aee7',1,'LeMesh']]],
-  ['copy',['copy',['../class_le_b_set.html#a9a63582b540d24ab13bc9e05b957d3c2',1,'LeBSet::copy()'],['../class_le_mesh.html#a6438d06e6abca4e01fdccbee92129837',1,'LeMesh::copy()']]],
-  ['cross',['cross',['../struct_le_vertex.html#adff69253d930c678086dbfe2b11aa91c',1,'LeVertex']]]
+  ['copy',['copy',['../class_le_b_set.html#aa0682f08f723775803abfc3982babd75',1,'LeBSet::copy()'],['../class_le_mesh.html#a2f9201ad27631f0829cd1ddc2918414e',1,'LeMesh::copy()']]],
+  ['cross',['cross',['../struct_le_vertex.html#a6381b0b867a4ba95f5857099ab38a3cc',1,'LeVertex']]]
 ];

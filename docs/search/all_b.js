@@ -72,7 +72,8 @@ var searchData=
   ['lebmpfile',['LeBmpFile',['../class_le_bmp_file.html',1,'LeBmpFile'],['../class_le_bmp_file.html#aa125597e525ad93aac090e179cc9e160',1,'LeBmpFile::LeBmpFile()']]],
   ['lebmpfont',['LeBmpFont',['../class_le_bmp_font.html',1,'LeBmpFont'],['../class_le_bmp_font.html#af7f46c7ae298ddb9d14333a02c7f9653',1,'LeBmpFont::LeBmpFont()']]],
   ['lebset',['LeBSet',['../class_le_b_set.html',1,'LeBSet'],['../class_le_b_set.html#a8fa5f9055b5b7d654d90493fb65d93f2',1,'LeBSet::LeBSet()'],['../class_le_b_set.html#a4384987f17db2c65660428a8f5e6382c',1,'LeBSet::LeBSet(int noBillboards)']]],
-  ['ledraw',['LeDraw',['../class_le_draw.html',1,'LeDraw'],['../class_le_draw.html#aa1c4fddd7607d6d66dc7043070d560b3',1,'LeDraw::LeDraw()']]],
+  ['ledraw',['LeDraw',['../class_le_draw.html',1,'LeDraw'],['../class_le_draw.html#a4df4c80bd289b14af8fefd8fa755db80',1,'LeDraw::LeDraw()']]],
+  ['ledrawingcontext',['LeDrawingContext',['../struct_le_drawing_context.html',1,'']]],
   ['left',['left',['../namespace_le_primitives.html#a9784964ab1410478c48df3634305ea08',1,'LePrimitives']]],
   ['legamepad',['LeGamePad',['../class_le_game_pad.html',1,'LeGamePad'],['../class_le_game_pad.html#a51376576aded1ffee96ff8d134953872',1,'LeGamePad::LeGamePad()']]],
   ['leglobal',['LeGlobal',['../namespace_le_global.html',1,'']]],
@@ -102,5 +103,5 @@ var searchData=
   ['loadmesh',['loadMesh',['../class_le_obj_file.html#a9311e0c6a07b03bcbb7efaa6fcaae5c8',1,'LeObjFile']]],
   ['loadobj',['loadOBJ',['../class_le_mesh_cache.html#a2b0dd9a9e040c6161e15298595d910b0',1,'LeMeshCache']]],
   ['log2i32',['log2i32',['../namespace_le_global.html#a847ecd5345e284a3f6a38bcc6bdc16e7',1,'LeGlobal']]],
-  ['le3d',['le3d',['../md__d_1__projects__git_hub_le3d__r_e_a_d_m_e.html',1,'']]]
+  ['le3d',['le3d',['../md__f_1_le3d__r_e_a_d_m_e.html',1,'']]]
 ];

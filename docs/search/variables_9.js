@@ -1,15 +1,15 @@
 var searchData=
 [
-  ['name',['name',['../struct_le_bmp_cache_1_1_slot.html#a5ce06c744ed699a311630154fe6a7059',1,'LeBmpCache::Slot::name()'],['../struct_le_mesh_cache_1_1_slot.html#aaed08588912512c9eccc145cb9d750ec',1,'LeMeshCache::Slot::name()'],['../struct_le_obj_material.html#a9809929e7d2f1609b5a2e3e32621b26e',1,'LeObjMaterial::name()']]],
-  ['noallocated',['noAllocated',['../class_le_tri_list.html#a87aaaac4f333b9aa081bbca212fad849',1,'LeTriList::noAllocated()'],['../class_le_ver_list.html#a22ee8658a4bc65718527d9b74fc1ac84',1,'LeVerList::noAllocated()']]],
-  ['nobillboards',['noBillboards',['../class_le_b_set.html#afc66ec0196b1e7f60110cfb3c98cc5f3',1,'LeBSet']]],
-  ['noextras',['noExtras',['../struct_le_bmp_cache_1_1_slot.html#a1f0ba4ae5d41795a5406004c8e8d015d',1,'LeBmpCache::Slot']]],
-  ['norm',['norm',['../struct_le_axis.html#a0570c1a8e09ca337ea0742b2cc7b715c',1,'LeAxis']]],
-  ['normals',['normals',['../class_le_mesh.html#a1a7e3ecd7ac713773bd49003b89ebecb',1,'LeMesh']]],
-  ['noslots',['noSlots',['../class_le_bmp_cache.html#ae7665042295ce5a3569f7656e8d90c74',1,'LeBmpCache::noSlots()'],['../class_le_mesh_cache.html#ae6a75007e6c2c9bed3d1abdf9157d63e',1,'LeMeshCache::noSlots()']]],
-  ['notexcoords',['noTexCoords',['../class_le_mesh.html#ad78264ce132e55ef57a3270b76145629',1,'LeMesh']]],
-  ['notriangles',['noTriangles',['../class_le_mesh.html#a0172da388a4e3d7a2589a31088ed60b5',1,'LeMesh']]],
-  ['noused',['noUsed',['../class_le_tri_list.html#a56d84b306ebf846b5cf5c5ec052c5a46',1,'LeTriList::noUsed()'],['../class_le_ver_list.html#ace4f5fff6227a759cd6ec0731c52ef78',1,'LeVerList::noUsed()']]],
-  ['novalid',['noValid',['../class_le_tri_list.html#aacd65b046cc2af8ec1f99dcb8ee523ca',1,'LeTriList']]],
-  ['novertexes',['noVertexes',['../class_le_mesh.html#a18d3886c0310ed506f2df7bfac8d405b',1,'LeMesh']]]
+  ['mat',['mat',['../struct_le_matrix.html#aee1e9231f86441d5344e7d9bc8b98c1b',1,'LeMatrix']]],
+  ['matambient',['matAmbient',['../objfile_8cpp.html#a6de1dd8615b608a2e81ed6977a7d8e39',1,'objfile.cpp']]],
+  ['matdiffuse',['matDiffuse',['../objfile_8cpp.html#ab965213b79c6bae4963768a5071d47d6',1,'objfile.cpp']]],
+  ['matmaterial',['matMaterial',['../objfile_8cpp.html#a2ca073a1ffe04884dcd3ff8e44799647',1,'objfile.cpp']]],
+  ['matshininess',['matShininess',['../objfile_8cpp.html#a557c7703b8ef9efe400ff49e84f423b6',1,'objfile.cpp']]],
+  ['matspecular',['matSpecular',['../objfile_8cpp.html#aeaebd73b186c99a8c4027291a2320299',1,'objfile.cpp']]],
+  ['mattexture',['matTexture',['../objfile_8cpp.html#af1f6bbfbecbca3ef2a7ad107ecc39751',1,'objfile.cpp']]],
+  ['mattransparency',['matTransparency',['../objfile_8cpp.html#a6b287c74f548b8cdabb5ad650ffb83eb',1,'objfile.cpp']]],
+  ['mesh',['mesh',['../struct_le_mesh_cache_1_1_slot.html#a4653ba4c0de6873b3faea04b8c97dba7',1,'LeMeshCache::Slot']]],
+  ['meshcache',['meshCache',['../meshcache_8cpp.html#a88437f0f68561accbc559a8ecd21f5d9',1,'meshCache():&#160;meshcache.cpp'],['../meshcache_8h.html#a88437f0f68561accbc559a8ecd21f5d9',1,'meshCache():&#160;meshcache.cpp']]],
+  ['mipmaps',['mipmaps',['../class_le_bitmap.html#a8441de1ef1c4da9c3bed02b14ca2e97b',1,'LeBitmap']]],
+  ['mmlevels',['mmLevels',['../class_le_bitmap.html#a8b1db6d73416e64a62111caa0df8fbce',1,'LeBitmap']]]
 ];

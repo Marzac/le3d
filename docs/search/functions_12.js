@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['xinputenablefb',['XInputEnableFB',['../gamepad_8cpp.html#a7c21e838c5738f932323889e2f308fe5',1,'gamepad.cpp']]],
-  ['xinputgetcapabilitiesfb',['XInputGetCapabilitiesFB',['../gamepad_8cpp.html#a1d70e526fda72877b31bc990a6941e82',1,'gamepad.cpp']]],
-  ['xinputgetstatefb',['XInputGetStateFB',['../gamepad_8cpp.html#a267f5c35a169445d24923ddb9c9f4678',1,'gamepad.cpp']]],
-  ['xinputsetstatefb',['XInputSetStateFB',['../gamepad_8cpp.html#a0be787d49a7f5abcc7f060bd23decc74',1,'gamepad.cpp']]]
+  ['zero',['zero',['../struct_le_matrix.html#ad22fefba6e889c6d9932bad2277ba93b',1,'LeMatrix']]],
+  ['zsort',['zSort',['../class_le_tri_list.html#ac49391ac8ac54a0cd810e6c359098f08',1,'LeTriList']]]
 ];

@@ -6,7 +6,6 @@ var searchData=
   ['charend',['charEnd',['../class_le_bmp_font.html#ae532dc2ac3d381d784c6409d8ddf8ab5',1,'LeBmpFont']]],
   ['charsizex',['charSizeX',['../class_le_bmp_font.html#aa24751861549242317fce3e8547aa984',1,'LeBmpFont']]],
   ['charsizey',['charSizeY',['../class_le_bmp_font.html#a24250efff6f05ef9c06de7f8ab8146b4',1,'LeBmpFont']]],
-  ['classname',['className',['../window_8cpp.html#a43ff489793a22a8e71664f7b5cadf1a3',1,'window.cpp']]],
   ['clear',['clear',['../class_le_bitmap.html#af5022ac6b420fa98a16f1e1049ffcfd4',1,'LeBitmap::clear()'],['../class_le_b_set.html#ab0766868e48e75550134e548fc8b2354',1,'LeBSet::clear()']]],
   ['cmax',['cmax',['../global_8h.html#a649fa829150452ab472d2b363023f5bc',1,'global.h']]],
   ['cmin',['cmin',['../global_8h.html#abd7dee0dcac629c3ec841df47d3582c2',1,'global.h']]],
@@ -22,8 +21,8 @@ var searchData=
   ['computenormals',['computeNormals',['../class_le_mesh.html#ac2b2558d60fd8f16d1532a365a37aee7',1,'LeMesh']]],
   ['config_2eh',['config.h',['../config_8h.html',1,'']]],
   ['context',['context',['../class_le_bitmap.html#a39fe892238947200f92de6b817778cc8',1,'LeBitmap']]],
-  ['copy',['copy',['../class_le_b_set.html#a9a63582b540d24ab13bc9e05b957d3c2',1,'LeBSet::copy()'],['../class_le_mesh.html#a6438d06e6abca4e01fdccbee92129837',1,'LeMesh::copy()']]],
-  ['cross',['cross',['../struct_le_vertex.html#adff69253d930c678086dbfe2b11aa91c',1,'LeVertex']]],
+  ['copy',['copy',['../class_le_b_set.html#aa0682f08f723775803abfc3982babd75',1,'LeBSet::copy()'],['../class_le_mesh.html#a2f9201ad27631f0829cd1ddc2918414e',1,'LeMesh::copy()']]],
+  ['cross',['cross',['../struct_le_vertex.html#a6381b0b867a4ba95f5857099ab38a3cc',1,'LeVertex']]],
   ['csgn',['csgn',['../global_8h.html#a6781e046b44b9470f7ea04c539037e35',1,'global.h']]],
   ['cthr',['cthr',['../global_8h.html#abc5250d67da014607a0076c2de697846',1,'global.h']]],
   ['cursor',['cursor',['../struct_le_bmp_cache_1_1_slot.html#adfd59f445d21dcba3a416596a2a1309e',1,'LeBmpCache::Slot']]]
