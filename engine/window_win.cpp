@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -41,17 +41,24 @@
 #include <windows.h>
 #include <wingdi.h>
 
+#include <stdio.h>
+#include <string.h>
+
+/*****************************************************************************/
 LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 /*****************************************************************************/
-const char * className = "LightEngine";
 LeWindow::LeWindow(const char * name, int width, int height) :
+	handle(0),
 	width(width),
 	height(height),
 	fullScreen(false),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {
+	static const char * className = "LightEngine";
+	memset(&dc, 0, sizeof(LeDrawingContext));
+
 // Create the window class
 	WNDCLASSEX wincl;
 	memset(&wincl, 0, sizeof(WNDCLASSEX));
@@ -78,7 +85,7 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	AdjustWindowRect(&size, WS_OVERLAPPEDWINDOW, 0);
 
 // Create and display window
-	if ((hwnd = (LeHandle) CreateWindowEx(
+	if ((handle = (LeHandle) CreateWindowEx(
 		   0,
 		   wincl.lpszClassName,
 		   name,
@@ -93,29 +100,53 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 		   NULL
 	)) == 0) return;
 
-	SetWindowLongPtr((HWND) hwnd, 0, (long long) this);
+	SetWindowLongPtr((HWND) handle, 0, (long long) this);
+
+	dc.display = 0;
+	dc.window = handle;
+	dc.gc = (LeHandle) GetDC((HWND) handle);
 }
 
 LeWindow::~LeWindow()
 {
-	if (hwnd) DestroyWindow((HWND) hwnd);
+	if (handle) DestroyWindow((HWND) handle);
 }
 
 /*****************************************************************************/
 /**
-	\fn LeHandle LeWindow::getContext()
+	\fn void LeWindow::update()
+	\brief Update window state and process events
+*/
+void LeWindow::update()
+{
+	// On MS Windows OS, this is done via callbacks
+}
+
+/*****************************************************************************/
+/**
+	\fn LeHandle LeWindow::getWindowHandle()
 	\brief Retrieve the native OS window handle
 	\return handle to an OS window handle
 */
-LeHandle LeWindow::getContext()
+LeHandle LeWindow::getHandle()
 {
-	return (LeHandle) GetDC((HWND) hwnd);
+	return handle;
+}
+
+/**
+	\fn LeDrawingContext LeWindow::getWindowContext()
+	\brief Retrieve the native OS window graphic context
+	\return handle to an OS window handle
+*/
+LeDrawingContext LeWindow::getContext()
+{
+	return dc;
 }
 
 /*****************************************************************************/
 /**
 	\fn void LeWindow::registerKeyCallback(KeyCallback callback)
-	\brief Register a callback to receive keyboard events associated to the window 
+	\brief Register a callback to receive keyboard events associated to the window
 	\param[in] callback pointer to a callback function or NULL
 */
 void LeWindow::registerKeyCallback(KeyCallback callback)
@@ -125,32 +156,25 @@ void LeWindow::registerKeyCallback(KeyCallback callback)
 
 /**
 	\fn void LeWindow::registerMouseCallback(MouseCallback callback)
-	\brief Register a callback to receive mouse events associated to the window 
+	\brief Register a callback to receive mouse events associated to the window
 	\param[in] callback pointer to a callback function or NULL
 */
 void LeWindow::registerMouseCallback(MouseCallback callback)
 {
 	mouseCallback = callback;
 }
-	
+
 /*****************************************************************************/
 /**
 	\fn void LeWindow::sendKeyEvent(int code, int state)
 	\brief Send a keyboard event to the window
 	\param[in] code keyboard event code
-	\param[in] state keyboard event state (mask)	
+	\param[in] state keyboard event state (mask)
 */
 void LeWindow::sendKeyEvent(int code, int state)
 {
 	if (!keyCallback) return;
-	int tState = 0;
-	if (state & 0x80000000)
-		tState = LE_WINDOW_KEY_UP;
-	else tState = LE_WINDOW_KEY_DOWN;
-	if (GetKeyState(VK_SHIFT) & 0x8000)	  tState |= LE_WINDOW_KEY_SHIFT;
-	if (GetKeyState(VK_CONTROL) & 0x8000) tState |= LE_WINDOW_KEY_CTRL;
-	if (GetKeyState(VK_MENU) & 0x8000)	  tState |= LE_WINDOW_KEY_ALT;
-	keyCallback(code, tState);
+	keyCallback(code, state);
 }
 
 /**
@@ -163,18 +187,14 @@ void LeWindow::sendKeyEvent(int code, int state)
 void LeWindow::sendMouseEvent(int x, int y, int buttons)
 {
 	if (!mouseCallback) return;
-	int tButtons = 0;
-	if (buttons & MK_LBUTTON) tButtons |= LE_WINDOW_MOUSE_LEFT;
-	if (buttons & MK_RBUTTON) tButtons |= LE_WINDOW_MOUSE_RIGHT;
-	if (buttons & MK_MBUTTON) tButtons |= LE_WINDOW_MOUSE_MIDDLE;
-	mouseCallback(x, y, tButtons);
+	mouseCallback(x, y, buttons);
 }
 
 /*****************************************************************************/
 LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-// Process window messages
 	LeWindow * window = (LeWindow *) GetWindowLongPtr(hwnd, 0);
+
 	switch (msg) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -187,7 +207,20 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	case WM_SYSKEYUP:
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
-		window->sendKeyEvent(wParam, lParam);
+		{
+			int uniState = 0;
+			int uniCode = wParam;
+
+			if (lParam & 0x80000000)
+				uniState = LE_WINDOW_KEY_UP;
+			else uniState = LE_WINDOW_KEY_DOWN;
+
+			if (GetKeyState(VK_SHIFT) & 0x8000) uniState |= LE_WINDOW_KEY_SHIFT;
+			if (GetKeyState(VK_CONTROL) & 0x8000) uniState |= LE_WINDOW_KEY_CTRL;
+			if (GetKeyState(VK_MENU) & 0x8000) uniState |= LE_WINDOW_KEY_ALT;
+
+			window->sendKeyEvent(uniCode, uniState);
+		}
 		break;
 
 	case WM_MOUSEMOVE:
@@ -197,9 +230,20 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	case WM_RBUTTONUP:
 	case WM_MBUTTONDOWN:
 	case WM_MBUTTONUP:
-		window->sendMouseEvent(lParam & 0xFFFF, lParam >> 16, wParam);
+		{
+			int uniButtons = 0;
+			int uniX = lParam & 0xFFFF;
+			int uniY = lParam >> 16;
+
+			if (wParam & MK_LBUTTON) uniButtons |= LE_WINDOW_MOUSE_LEFT;
+			if (wParam & MK_RBUTTON) uniButtons |= LE_WINDOW_MOUSE_RIGHT;
+			if (wParam & MK_MBUTTON) uniButtons |= LE_WINDOW_MOUSE_MIDDLE;
+
+			window->sendMouseEvent(uniX, uniY, uniButtons);
+		}
 		break;
 	}
+
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
@@ -208,7 +252,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	\fn void LeWindow::setFullScreen()
 	\brief Set the window to fullscreen mode
 */
-DEVMODE devMode;
+static DEVMODE devMode;
 void LeWindow::setFullScreen()
 {
 	DEVMODE newMode;
@@ -221,11 +265,11 @@ void LeWindow::setFullScreen()
 	newMode.dmPelsHeight = height;
 	newMode.dmFields = DM_PELSHEIGHT | DM_PELSWIDTH;
 
-// Change windows position
-	SetWindowPos((HWND) hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
-	ShowWindow((HWND) hwnd, SW_MAXIMIZE);
+// Change window state
+	SetWindowPos((HWND) handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
+	ShowWindow((HWND) handle, SW_MAXIMIZE);
 
-// Switch to full screen
+// Change display mode
 	ChangeDisplaySettings (&newMode, CDS_FULLSCREEN);
 	fullScreen = true;
 }
@@ -238,8 +282,11 @@ void LeWindow::setWindowed()
 {
 	if (!fullScreen) return;
 
-	SetWindowPos((HWND) hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-	ShowWindow((HWND) hwnd, SW_NORMAL);
+// Revert window state
+	SetWindowPos((HWND) handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+	ShowWindow((HWND) handle, SW_NORMAL);
+
+// Revert display mode
 	ChangeDisplaySettings (&devMode, CDS_RESET);
 	fullScreen = false;
 }

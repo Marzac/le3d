@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -38,84 +38,144 @@
 #include "global.h"
 #include "config.h"
 
-#include <windows.h>
-#include <wingdi.h>
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
-LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#include <stdio.h>
+#include <string.h>
 
 /*****************************************************************************/
-const char * className = "LightEngine";
+static Display * usedXDisplay = NULL;
+static int usedXDisplayCount = 0;
+static const int xEventMask = KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | PointerMotionMask;
+
+/*****************************************************************************/
 LeWindow::LeWindow(const char * name, int width, int height) :
+	handle(0),
 	width(width),
 	height(height),
 	fullScreen(false),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {
-// Create the window class
-	WNDCLASSEX wincl;
-	memset(&wincl, 0, sizeof(WNDCLASSEX));
-	wincl.hInstance = NULL;
-	wincl.lpszClassName = className;
-	wincl.lpfnWndProc = windowProcedure;
-	wincl.style = CS_DBLCLKS;
-	wincl.cbSize = sizeof(WNDCLASSEX);
-	wincl.hIcon = LoadIcon (NULL, IDI_APPLICATION);
-	wincl.hIconSm = LoadIcon (NULL, IDI_APPLICATION);
-	wincl.hCursor = LoadCursor (NULL, IDC_ARROW);
-	wincl.lpszMenuName = NULL;
-	wincl.cbClsExtra = 0;
-	wincl.cbWndExtra = 32;
-	wincl.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
-	if (!RegisterClassEx (&wincl)) return;
+	memset(&dc, 0, sizeof(LeDrawingContext));
 
-// Compute the client size
-	RECT size;
-	size.top	= 0;
-	size.left	= 0;
-	size.right	= width;
-	size.bottom = height;
-	AdjustWindowRect(&size, WS_OVERLAPPEDWINDOW, 0);
+	if (!usedXDisplay) {
+		usedXDisplay = XOpenDisplay(NULL);
+		if (!usedXDisplay) {
+			printf("window: unable to connect to X Server\n");
+			return;
+		}
+	}
+	usedXDisplayCount ++;
 
-// Create and display window
-	if ((hwnd = (LeHandle) CreateWindowEx(
-		   0,
-		   wincl.lpszClassName,
-		   name,
-		   WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-		   CW_USEDEFAULT,
-		   CW_USEDEFAULT,
-		   size.right - size.left,
-		   size.bottom - size.top,
-		   HWND_DESKTOP,
-		   NULL,
-		   NULL,
-		   NULL
-	)) == 0) return;
+	handle = (LeHandle) XCreateSimpleWindow(usedXDisplay, RootWindow(usedXDisplay, 0), 0, 0, width, height, 1, 0, 0);
+	XStoreName(usedXDisplay, (Window) handle, name);
 
-	SetWindowLongPtr((HWND) hwnd, 0, (long long) this);
+
+	XSelectInput(usedXDisplay, (Window) handle, ExposureMask | xEventMask);
+	XMapWindow(usedXDisplay, (Window) handle);
+
+	dc.display = (LeHandle) usedXDisplay;
+	dc.window = handle;
+	dc.gc = (LeHandle) DefaultGC(usedXDisplay, 0);
 }
 
 LeWindow::~LeWindow()
 {
-	if (hwnd) DestroyWindow((HWND) hwnd);
+	if (handle) XDestroyWindow(usedXDisplay, (Window) handle);
+
+	usedXDisplayCount --;
+	if (usedXDisplayCount) return;
+	if (usedXDisplay) XCloseDisplay(usedXDisplay);
 }
 
 /*****************************************************************************/
 /**
-	\fn LeHandle LeWindow::getContext()
+	\fn void LeWindow::update()
+	\brief Update window state and process events
+*/
+void LeWindow::update()
+{
+	if (!handle) return;
+
+	XEvent event;
+	while (XCheckWindowEvent((Display *) dc.display, (Window) dc.window, xEventMask, &event) > 0) {
+		if (event.type == KeyPress ||
+			event.type == KeyRelease) {
+
+			int uniState = 0;
+			if (event.type == KeyPress)
+				uniState = LE_WINDOW_KEY_DOWN;
+			else uniState = LE_WINDOW_KEY_UP;
+
+			if (event.xkey.state & ShiftMask) uniState |= LE_WINDOW_KEY_SHIFT;
+			if (event.xkey.state & ControlMask) uniState |= LE_WINDOW_KEY_CTRL;
+
+			sendKeyEvent(event.xkey.keycode, uniState);
+		}else
+		if (event.type == ButtonPress ||
+		    event.type == ButtonRelease) {
+
+			int uniState = 0;
+			if (event.xbutton.state & Button1Mask)
+				uniState |= LE_WINDOW_MOUSE_LEFT;
+			if (event.xbutton.state & Button2Mask)
+				uniState |= LE_WINDOW_MOUSE_MIDDLE;
+			if (event.xbutton.state & Button3Mask)
+				uniState |= LE_WINDOW_MOUSE_RIGHT;
+			if (event.xbutton.state & Button4Mask)
+				uniState |= LE_WINDOW_MOUSE_WHEEL_UP;
+            if (event.xbutton.state & Button5Mask)
+				uniState |= LE_WINDOW_MOUSE_WHEEL_DOWN;
+
+			sendMouseEvent(event.xbutton.x, event.xbutton.y, uniState);
+		}else
+		if (event.type == MotionNotify) {
+
+			int uniState = 0;
+			if (event.xmotion.state & Button1Mask)
+				uniState |= LE_WINDOW_MOUSE_LEFT;
+			if (event.xmotion.state & Button2Mask)
+				uniState |= LE_WINDOW_MOUSE_MIDDLE;
+			if (event.xmotion.state & Button3Mask)
+				uniState |= LE_WINDOW_MOUSE_RIGHT;
+			if (event.xmotion.state & Button4Mask)
+				uniState |= LE_WINDOW_MOUSE_WHEEL_UP;
+            if (event.xmotion.state & Button5Mask)
+				uniState |= LE_WINDOW_MOUSE_WHEEL_DOWN;
+
+			sendMouseEvent(event.xmotion.x, event.xmotion.y, uniState);
+		}
+	}
+}
+
+/*****************************************************************************/
+/**
+	\fn LeHandle LeWindow::getHandle()
 	\brief Retrieve the native OS window handle
 	\return handle to an OS window handle
 */
-LeHandle LeWindow::getContext()
+LeHandle LeWindow::getHandle()
 {
-	return (LeHandle) GetDC((HWND) hwnd);
+	return handle;
+}
+
+/**
+	\fn LeDrawingContext LeWindow::getContext()
+	\brief Retrieve the native OS window graphic context
+	\return handle to an OS window handle
+*/
+LeDrawingContext LeWindow::getContext()
+{
+	return dc;
 }
 
 /*****************************************************************************/
 /**
 	\fn void LeWindow::registerKeyCallback(KeyCallback callback)
-	\brief Register a callback to receive keyboard events associated to the window 
+	\brief Register a callback to receive keyboard events associated to the window
 	\param[in] callback pointer to a callback function or NULL
 */
 void LeWindow::registerKeyCallback(KeyCallback callback)
@@ -125,32 +185,25 @@ void LeWindow::registerKeyCallback(KeyCallback callback)
 
 /**
 	\fn void LeWindow::registerMouseCallback(MouseCallback callback)
-	\brief Register a callback to receive mouse events associated to the window 
+	\brief Register a callback to receive mouse events associated to the window
 	\param[in] callback pointer to a callback function or NULL
 */
 void LeWindow::registerMouseCallback(MouseCallback callback)
 {
 	mouseCallback = callback;
 }
-	
+
 /*****************************************************************************/
 /**
 	\fn void LeWindow::sendKeyEvent(int code, int state)
 	\brief Send a keyboard event to the window
 	\param[in] code keyboard event code
-	\param[in] state keyboard event state (mask)	
+	\param[in] state keyboard event state (mask)
 */
 void LeWindow::sendKeyEvent(int code, int state)
 {
 	if (!keyCallback) return;
-	int tState = 0;
-	if (state & 0x80000000)
-		tState = LE_WINDOW_KEY_UP;
-	else tState = LE_WINDOW_KEY_DOWN;
-	if (GetKeyState(VK_SHIFT) & 0x8000)	  tState |= LE_WINDOW_KEY_SHIFT;
-	if (GetKeyState(VK_CONTROL) & 0x8000) tState |= LE_WINDOW_KEY_CTRL;
-	if (GetKeyState(VK_MENU) & 0x8000)	  tState |= LE_WINDOW_KEY_ALT;
-	keyCallback(code, tState);
+	keyCallback(code, state);
 }
 
 /**
@@ -163,44 +216,7 @@ void LeWindow::sendKeyEvent(int code, int state)
 void LeWindow::sendMouseEvent(int x, int y, int buttons)
 {
 	if (!mouseCallback) return;
-	int tButtons = 0;
-	if (buttons & MK_LBUTTON) tButtons |= LE_WINDOW_MOUSE_LEFT;
-	if (buttons & MK_RBUTTON) tButtons |= LE_WINDOW_MOUSE_RIGHT;
-	if (buttons & MK_MBUTTON) tButtons |= LE_WINDOW_MOUSE_MIDDLE;
-	mouseCallback(x, y, tButtons);
-}
-
-/*****************************************************************************/
-LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-// Process window messages
-	LeWindow * window = (LeWindow *) GetWindowLongPtr(hwnd, 0);
-	switch (msg) {
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-
-	case WM_CLOSE:
-		break;
-
-	case WM_KEYUP:
-	case WM_SYSKEYUP:
-	case WM_KEYDOWN:
-	case WM_SYSKEYDOWN:
-		window->sendKeyEvent(wParam, lParam);
-		break;
-
-	case WM_MOUSEMOVE:
-	case WM_LBUTTONDOWN:
-	case WM_LBUTTONUP:
-	case WM_RBUTTONDOWN:
-	case WM_RBUTTONUP:
-	case WM_MBUTTONDOWN:
-	case WM_MBUTTONUP:
-		window->sendMouseEvent(lParam & 0xFFFF, lParam >> 16, wParam);
-		break;
-	}
-	return DefWindowProc(hwnd, msg, wParam, lParam);
+	mouseCallback(x, y, buttons);
 }
 
 /*****************************************************************************/
@@ -208,26 +224,9 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	\fn void LeWindow::setFullScreen()
 	\brief Set the window to fullscreen mode
 */
-DEVMODE devMode;
 void LeWindow::setFullScreen()
 {
-	DEVMODE newMode;
-	if (fullScreen) return;
-
-// Retrieve display characteristics
-	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devMode);
-	memcpy(&newMode, &devMode, sizeof(DEVMODE));
-	newMode.dmPelsWidth = width;
-	newMode.dmPelsHeight = height;
-	newMode.dmFields = DM_PELSHEIGHT | DM_PELSWIDTH;
-
-// Change windows position
-	SetWindowPos((HWND) hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
-	ShowWindow((HWND) hwnd, SW_MAXIMIZE);
-
-// Switch to full screen
-	ChangeDisplaySettings (&newMode, CDS_FULLSCREEN);
-	fullScreen = true;
+	printf("Window: fullscreen mode is only supported for Windows OS\n!");
 }
 
 /**
@@ -237,11 +236,6 @@ void LeWindow::setFullScreen()
 void LeWindow::setWindowed()
 {
 	if (!fullScreen) return;
-
-	SetWindowPos((HWND) hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-	ShowWindow((HWND) hwnd, SW_NORMAL);
-	ChangeDisplaySettings (&devMode, CDS_RESET);
-	fullScreen = false;
 }
 
 #endif

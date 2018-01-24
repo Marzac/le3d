@@ -1,12 +1,12 @@
 /**
 	\file window.h
 	\brief LightEngine 3D: Native OS window manager
-	\brief Windows OS implementation
+	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -61,10 +61,22 @@ typedef enum {
 	LE_WINDOW_KEY_ALT			= 0x8,
 }LE_WINDOW_KEYBOARD_STATE;
 
+
+/*****************************************************************************/
+/**
+	\struct LeDrawingContext
+	\brief represent a complete OS specific drawing context
+*/
+typedef struct {
+	LeHandle display;
+	LeHandle window;
+	LeHandle gc;
+}LeDrawingContext;
+
 /*****************************************************************************/
 /**
 	\class LeWindow
-	\brief Create and handle an OS native window 
+	\brief Create and handle an OS native window
 */
 class LeWindow
 {
@@ -72,10 +84,13 @@ public:
 	LeWindow(const char * name, int width, int height);
 	~LeWindow();
 
+	void update();
+	
 	void setFullScreen();
 	void setWindowed();
 
-	LeHandle getContext();
+	LeHandle getHandle();
+	LeDrawingContext getContext();
 
 	typedef void (* KeyCallback) (int key, int state);
 	typedef void (* MouseCallback) (int x, int y, int buttons);
@@ -87,13 +102,15 @@ public:
 	void sendMouseEvent(int x, int y, int buttons);
 
 private:
-	LeHandle hwnd;					/**< OS native window handle */
+	LeHandle handle;				/**< OS native window handle */
+	LeDrawingContext dc;			/**< OS native drawing context handle */
+
 	int width;						/**< Width of window client region (in pixels) */
 	int height;						/**< Height of window client region (in pixels) */
 	bool fullScreen;				/**< Fullscreen state of window */
 
-	KeyCallback keyCallback;		/**< Registrated callback for keyboard events */ 
-	MouseCallback mouseCallback;	/**< Registrated callback for mouse events */ 
+	KeyCallback keyCallback;		/**< Registrated callback for keyboard events */
+	MouseCallback mouseCallback;	/**< Registrated callback for mouse events */
 };
 
 #endif // LE_WINDOW_H
