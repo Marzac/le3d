@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -40,12 +40,12 @@
 #include "mesh.h"
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 /*****************************************************************************/
 /**
 	\class LeObjMaterial
-	\brief Contain and manage Wavefront object files materials 
+	\brief Contain and manage Wavefront object files materials
 */
 struct LeObjMaterial
 {
@@ -75,7 +75,7 @@ struct LeObjMaterial
 /*****************************************************************************/
 /**
 	\class LeObjFile
-	\brief Load 3D meshes in Wavefront object format 
+	\brief Load 3D meshes in Wavefront object format
 */
 class LeObjFile
 {

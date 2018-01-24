@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -34,6 +34,21 @@
 
 #if LE_USE_SIMD == 1
 
+/******************************************************************************/
+#include <stdlib.h>
+
+#if defined(__unix__) || defined(__unix)
+
+	#ifndef _aligned_malloc
+		#define _aligned_malloc(s, a) aligned_alloc(a, s)
+	#endif
+	#ifndef _aligned_free
+		#define _aligned_free(p) free(p)
+	#endif
+
+#endif
+
+/******************************************************************************/
 /** 128Bit aligned allocators / deallocators */
 void * operator new(size_t size)
 {

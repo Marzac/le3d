@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -36,7 +36,7 @@
 #include "config.h"
 
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 /*****************************************************************************/
 LeMesh::LeMesh() :
@@ -138,7 +138,7 @@ void LeMesh::deallocate()
 /*****************************************************************************/
 /**
 	\fn void LeMesh::shadowCopy(LeMesh * copy) const
-	\brief Duplicate the mesh without copying its static data 
+	\brief Duplicate the mesh without copying its static data
 	\param[out] copy pointer to the copy mesh
 */
 void LeMesh::shadowCopy(LeMesh * copy) const

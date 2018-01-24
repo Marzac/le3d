@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -37,7 +37,7 @@
 #include "config.h"
 
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 /*****************************************************************************/
 const char * objMaterialLib		= "mtllib ";
@@ -81,7 +81,7 @@ LeObjFile::~LeObjFile()
 	\fn LeMesh * LeObjFile::loadMesh(int index)
 	\brief Load the mesh of the given index from the file
 	\return pointer to a new loaded mesh, else NULL (error)
-*/	
+*/
 LeMesh * LeObjFile::loadMesh(int index)
 {
 	FILE * file = fopen(path, "rb");
@@ -121,7 +121,7 @@ LeMesh * LeObjFile::loadMesh(int index)
 	\fn int LeObjFile::getNoMeshes()
 	\brief Get the number of meshes in the file
 	\return number of meshes
-*/	
+*/
 int LeObjFile::getNoMeshes()
 {
 	FILE * file = fopen(path, "rb");
@@ -142,7 +142,7 @@ int LeObjFile::getNoMeshes()
 	\fn const char * LeObjFile::getMeshName(int index)
 	\brief Get the name of the mesh of the given index
 	\return name of the mesh, NULL else (error)
-*/	
+*/
 const char * LeObjFile::getMeshName(int index)
 {
 	FILE * file = fopen(path, "rb");

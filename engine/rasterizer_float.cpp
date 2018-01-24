@@ -8,7 +8,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.4
+	\version 1.5
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -42,7 +42,7 @@
 #include "bmpcache.h"
 
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 /*****************************************************************************/
 LeRasterizer::LeRasterizer(int width, int height) :
