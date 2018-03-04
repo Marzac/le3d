@@ -142,7 +142,7 @@ struct LeVertex
 		return r;
 	}
 	
-	LeVertex operator * (float v) const
+	LeVertex operator / (float v) const
 	{
 		float iv = 1.0f / v;
 		LeVertex r;
