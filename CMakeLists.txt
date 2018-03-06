@@ -1,7 +1,6 @@
-project(le3d C CXX)
+project(le3d CXX)
 cmake_minimum_required(VERSION 3.4)
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_C_STANDARD 11)
 
 option(LE3D_BUILD_EXAMPLES "Build the example programs" ON)
 
