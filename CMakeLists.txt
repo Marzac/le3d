@@ -29,6 +29,10 @@ set(ENGINE_FILES
 set(LINK_LIBRARIES)
 
 if (WIN32)
+    list(APPEND LINK_LIBRARIES
+        gdi32
+        winmm
+    )
     list(APPEND ENGINE_FILES
         engine/draw_win.cpp
         engine/gamepad_win.cpp
