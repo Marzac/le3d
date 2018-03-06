@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.4)
 set(CMAKE_CXX_STANDARD 11)
 
 option(LE3D_BUILD_EXAMPLES "Build the example programs" ON)
+option(LE3D_FAST_MATH "Faster floating point but less precise" ON)
 
 SET(le3d_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -66,6 +67,14 @@ target_link_libraries(
     PUBLIC
     ${LINK_LIBRARIES}
 )
+
+if (LE3D_FAST_MATH)
+	if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
+		target_compile_options(le3d PUBLIC -ffast-math)
+	elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+		target_compile_options(le3d PUBLIC /fp:fast)
+	endif()
+endif()
 
 if (LE3D_BUILD_EXAMPLES)
     add_subdirectory(examples)   
