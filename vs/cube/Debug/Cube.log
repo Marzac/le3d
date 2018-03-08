@@ -1,0 +1,22 @@
+﻿  bitmap.cpp
+  bmpcache.cpp
+  bmpfile.cpp
+  bset.cpp
+  draw_win.cpp
+  gamepad_win.cpp
+  geometry.cpp
+  global.cpp
+  light.cpp
+  mesh.cpp
+  meshcache.cpp
+  objfile.cpp
+  rasterizer_float.cpp
+  rasterizer_integer.cpp
+  renderer.cpp
+  trilist.cpp
+  verlist.cpp
+  window_win.cpp
+  physics.cpp
+  cube_win.cpp
+  Generating Code...
+  Cube.vcxproj -> C:\Users\Fred\Documents\Projects\le3d\vs\cube\Debug\Cube.exe

@@ -44,7 +44,11 @@
 
 /*****************************************************************************/
 #if LE_USE_SIMD == 1
-	#include "geometry_simd.h"
+	#ifdef __GNUC_
+		#include "geometry_simd.h"
+	#else
+		#include "geometry_scalar.h"
+	#endif
 #else
 	#include "geometry_scalar.h"
 #endif // LE_USE_SIMD

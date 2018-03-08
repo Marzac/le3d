@@ -53,7 +53,7 @@ LeRenderer::LeRenderer(int width, int height) :
 	enableBack(true), vOffset(0.0f)
 {
 // Configure viewport
-	setViewport(0.0f, 0.0f, width, height);
+	setViewport(0.0f, 0.0f, (float) width, (float) height);
 
 // Configure default camera
 	setViewPosition(LeVertex(0.0f, 0.0f, 0.0f));

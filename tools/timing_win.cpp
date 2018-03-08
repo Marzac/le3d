@@ -134,7 +134,7 @@ void LeTiming::waitNextFrame()
 		if (dg <= 0) break;
 
 		int64_t ms = (1000 * dg) / countsPerSec - TIMING_SCHEDULER_GRANULARITY;
-		if (ms > 0) Sleep(ms);
+		if (ms > 0) Sleep((uint16_t) ms);
 	}
 
 	LARGE_INTEGER pc;

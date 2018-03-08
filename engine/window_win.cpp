@@ -60,13 +60,13 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	memset(&dc, 0, sizeof(LeDrawingContext));
 
 // Create the window class
-	WNDCLASSEX wincl;
-	memset(&wincl, 0, sizeof(WNDCLASSEX));
+	WNDCLASSEXA wincl;
+	memset(&wincl, 0, sizeof(WNDCLASSEXA));
 	wincl.hInstance = NULL;
 	wincl.lpszClassName = className;
 	wincl.lpfnWndProc = windowProcedure;
 	wincl.style = CS_DBLCLKS;
-	wincl.cbSize = sizeof(WNDCLASSEX);
+	wincl.cbSize = sizeof(WNDCLASSEXA);
 	wincl.hIcon = LoadIcon (NULL, IDI_APPLICATION);
 	wincl.hIconSm = LoadIcon (NULL, IDI_APPLICATION);
 	wincl.hCursor = LoadCursor (NULL, IDC_ARROW);
@@ -74,7 +74,7 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	wincl.cbClsExtra = 0;
 	wincl.cbWndExtra = 32;
 	wincl.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
-	if (!RegisterClassEx (&wincl)) return;
+	if (!RegisterClassExA(&wincl)) return;
 
 // Compute the client size
 	RECT size;
@@ -85,7 +85,7 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	AdjustWindowRect(&size, WS_OVERLAPPEDWINDOW, 0);
 
 // Create and display window
-	if ((handle = (LeHandle) CreateWindowEx(
+	if ((handle = (LeHandle) CreateWindowExA(
 		   0,
 		   wincl.lpszClassName,
 		   name,
@@ -100,7 +100,7 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 		   NULL
 	)) == 0) return;
 
-	SetWindowLongPtr((HWND) handle, 0, (long long) this);
+	SetWindowLongPtrA((HWND) handle, 0, (long long) this);
 
 	dc.display = 0;
 	dc.window = handle;
@@ -244,7 +244,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		break;
 	}
 
-	return DefWindowProc(hwnd, msg, wParam, lParam);
+	return DefWindowProcA(hwnd, msg, wParam, lParam);
 }
 
 /*****************************************************************************/

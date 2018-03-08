@@ -92,7 +92,7 @@ typedef struct {
 LeBmpFile::LeBmpFile(const char * filename) :
 	path(NULL)
 {
-	if (filename) path = strdup(filename);
+	if (filename) path = _strdup(filename);
 }
 
 LeBmpFile::~LeBmpFile()
@@ -210,7 +210,7 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	bitmap->dataAllocated = true;
 
 // Load bitmap data
-	uint8_t buffer[srcScan];
+	uint8_t * buffer = (uint8_t *) alloca(srcScan);
 	uint8_t * data = (uint8_t *) bitmap->data;
 
 	int dstScan = bitmap->tx * sizeof(uint32_t);

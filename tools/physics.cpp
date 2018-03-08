@@ -58,8 +58,8 @@ int LePhysics::collideRectRect(float &ansX, float &ansY, float srcX, float srcY,
 {
 	float mx = (srcW + dstW) * 0.5f;
 	float my = (srcH + dstH) * 0.5f;
-	float dx = fabs(dstX - srcX);
-	float dy = fabs(dstY - srcY);
+	float dx = fabsf(dstX - srcX);
+	float dy = fabsf(dstY - srcY);
 
 	if (dx < mx && dy < my) {
 		float px = mx - dx;
@@ -148,9 +148,9 @@ int LePhysics::collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex
 	if (pos.z > lz)	 return PHYSICS_BOX_NO_COL;
 	if (pos.z < -lz) return PHYSICS_BOX_NO_COL;
 
-	float dx = fabs(pos.x);
-	float dy = fabs(pos.y);
-	float dz = fabs(pos.z);
+	float dx = fabsf(pos.x);
+	float dy = fabsf(pos.y);
+	float dz = fabsf(pos.z);
 
 // Touching a side
 	if (dx > dstSize.x) {

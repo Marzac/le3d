@@ -67,8 +67,8 @@ private:
 	void topTriangleZC(int vt, int vm1, int vm2);
 	void bottomTriangleZC(int vm1, int vm2, int vb);
 
-	inline void fillFlatTexZC(float y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2);
-	inline void fillFlatTexAlphaZC(float y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2);
+	inline void fillFlatTexZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2);
+	inline void fillFlatTexAlphaZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2);
 
 	uint32_t color;
 	LeBitmap * bmp;

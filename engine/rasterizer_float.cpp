@@ -145,9 +145,9 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 			float ubot = tri->us[vb] / tri->zs[vb];
 			float vtop = tri->vs[vt] / tri->zs[vt];
 			float vbot = tri->vs[vb] / tri->zs[vb];
-			float d = cmax(fabs(utop - ubot), fabs(vtop - vbot));
+			float d = cmax(fabsf(utop - ubot), fabsf(vtop - vbot));
 
-			int r = (d * bmp->ty + dy * 0.5f) / dy;
+			int r = (int) ((d * bmp->ty + dy * 0.5f) / dy);
 			int l = LeGlobal::log2i32(r);
 			l = cmin(l, bmp->mmLevels - 1);
 			bmp = bmp->mipmaps[l];
@@ -192,7 +192,7 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		vs[3] = (vs[vb] - vs[vt]) * n + vs[vt];
 
 	// Sort vertexes horizontally
-		int dx = xs[vm2] - xs[vm1];
+		int dx = (int) (xs[vm2] - xs[vm1]);
 		if (dx < 0) {int t = vm1; vm1 = vm2; vm2 = t;}
 
 	// Render the triangle
@@ -296,7 +296,7 @@ void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 
 /*****************************************************************************/
 #if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
-inline void LeRasterizer::fillFlatTexZC(float y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
+inline void LeRasterizer::fillFlatTexZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
 {
 	float d = x2 - x1;
 	if (d == 0.0f) return;
@@ -395,7 +395,7 @@ inline void LeRasterizer::fillFlatTexZC(float y, float x1, float x2, float w1, f
 	*p++ = _mm_cvtsi128_si32((__m128i)tp.v);
 }
 
-inline void LeRasterizer::fillFlatTexAlphaZC(float y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
+inline void LeRasterizer::fillFlatTexAlphaZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
 {
 	float d = x2 - x1;
 	if (d == 0.0f) return;
@@ -554,7 +554,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(float y, float x1, float x2, float 
 
 #else
 
-inline void LeRasterizer::fillFlatTexZC(float y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
+inline void LeRasterizer::fillFlatTexZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
 {
 	uint8_t * c = (uint8_t *) &color;
 
@@ -586,7 +586,7 @@ inline void LeRasterizer::fillFlatTexZC(float y, float x1, float x2, float w1, f
 	}
 }
 
-inline void LeRasterizer::fillFlatTexAlphaZC(float y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
+inline void LeRasterizer::fillFlatTexAlphaZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
 {
 	uint8_t * c = (uint8_t *) &color;
 
