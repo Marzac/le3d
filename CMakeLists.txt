@@ -79,6 +79,8 @@ if (LE3D_FAST_MATH)
 	endif()
 endif()
 
+target_compile_options(le3d PRIVATE -march=pentium4 -m32 -mfpmath=sse)
+
 if (LE3D_BUILD_EXAMPLES)
     add_subdirectory(examples)   
 endif()
