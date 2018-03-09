@@ -71,15 +71,11 @@ target_link_libraries(
     ${LINK_LIBRARIES}
 )
 
-if (LE3D_FAST_MATH)
-	if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR (CMAKE_CXX_COMPILER_ID MATCHES "GNU"))
-		target_compile_options(le3d PUBLIC -ffast-math)
-	elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-		target_compile_options(le3d PUBLIC /fp:fast)
-	endif()
-endif()
+target_compile_options(le3d PRIVATE -march=pentium4 -Wall -m32 -ffast-math -mfpmath=sse -fno-exceptions -fno-rtti -fno-stack-protector -fno-math-errno -fno-ident -ffunction-sections)
 
-target_compile_options(le3d PRIVATE -march=pentium4 -m32 -mfpmath=sse)
+if (WIN32)
+    target_compile_options(le3d PRIVATE -D__MSVCRT_VERSION__=0x0700)
+endif()
 
 if (LE3D_BUILD_EXAMPLES)
     add_subdirectory(examples)   
