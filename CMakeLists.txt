@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.4)
 set(CMAKE_CXX_STANDARD 11)
 
 option(LE3D_BUILD_EXAMPLES "Build the example programs" ON)
-option(LE3D_FAST_MATH "Faster floating point but less precise" ON)
 
 SET(le3d_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
 
