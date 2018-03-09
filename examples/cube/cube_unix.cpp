@@ -7,8 +7,6 @@
 	\website http://fredslab.net
 */
 
-#if defined(__unix__) || defined(__unix)
-
 #include "engine/le3d.h"
 #include "tools/timing.h"
 
@@ -25,7 +23,9 @@ const int resoY = 480;
 /*****************************************************************************/
 int main()
 {
+#ifndef __APPLE__
 	LeGamePad::setup();
+#endif
 
 /** Create application objects */
 	LeWindow	 window		= LeWindow("Le3d: cube example", resoX, resoY);
@@ -33,7 +33,9 @@ int main()
 	LeDraw		 draw		= LeDraw(dc, resoX, resoY);
 	LeRenderer	 renderer	= LeRenderer(resoX, resoY);
 	LeRasterizer rasterizer = LeRasterizer(resoX, resoY);
+#ifndef __APPLE__
 	LeGamePad pad(0);
+#endif
 
 /** Load the assets (textures then 3D models) */
 	bmpCache.loadDirectory("assets");
@@ -70,7 +72,9 @@ int main()
 
 	/** Wait for next frame */
 		timing.waitNextFrame();
+#ifndef __APPLE__
 		pad.update();
+#endif
 
 	/** Copy render frame to window context */
 		draw.setPixels(rasterizer.frame.data);
@@ -96,9 +100,9 @@ int main()
 
 	timing.lastFrame();
 
+#ifndef __APPLE__
 	LeGamePad::release();
+#endif
 
 	return 0;
 }
-
-#endif

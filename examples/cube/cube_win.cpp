@@ -7,8 +7,6 @@
 	\website http://fredslab.net
 */
 
-#if defined(_WIN32)
-
 #include "engine/le3d.h"
 #include "tools/timing.h"
 
@@ -97,5 +95,3 @@ int main()
 
 	return 0;
 }
-
-#endif
