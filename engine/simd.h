@@ -40,6 +40,8 @@
 #endif // LE_USE_SSE2
 
 /*****************************************************************************/
+/** Vector extensions - specific to gcc based compilers */
+#ifdef __GNUC_
 /** 4x 32bit float vector */
 	typedef float V4SF __attribute__ ((vector_size (16)));
 	typedef union {V4SF v; float f[4];} v4sf;
@@ -59,5 +61,6 @@
 /** 8x 16bit unsigned integer vector */
 	typedef uint16_t V8SW __attribute__ ((vector_size (16)));
 	typedef union {V8SW v; uint16_t u[8];} v8sw;
+#endif
 
 #endif // LE_SIMD_H

@@ -82,8 +82,8 @@ void LeBitmap::clear(uint32_t color)
 	int b = size >> 2;
 	int r = size & 0x3;
 
-	v4su color_4 = {color, color, color, color};
-	v4su * p_4 = (v4su *) data;
+	__m128i color_4 = _mm_set_epi32(color, color, color, color);
+	__m128i * p_4 = (__m128i *) data;
 	for (int t = 0; t < b; t ++)
 		*p_4++ = color_4;
 
@@ -231,25 +231,25 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 	int stepDst = tx - w;
 	int stepSrc = src->tx - w;
 
-	v4si zv = {0, 0, 0, 0};
-	v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
+	__m128i zv = _mm_set_epi32(0, 0, 0, 0);
+	__m128i sc = _mm_set_epi32(0x01000100, 0x01000100, 0x01000100, 0x01000100);
 
 	for (int y = 0; y < h; y++){
 		for (int x = 0; x < w; x++){
-			v4si dp, sp;
-			dp.v = (V4SI) _mm_loadl_epi64((__m128i *) d);
-			sp.v = (V4SI) _mm_loadl_epi64((__m128i *) s++);
-			dp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)dp.v);
-			sp.v = (V4SI) _mm_unpacklo_epi8((__m128i)sp.v, (__m128i)zv.v);
+			__m128i dp, sp;
+			dp = _mm_loadl_epi64((__m128i *) d);
+			sp = _mm_loadl_epi64((__m128i *) s++);
+			dp = _mm_unpacklo_epi8(zv, dp);
+			sp = _mm_unpacklo_epi8(sp, zv);
 
-			v4si ap;
-			ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)sp.v, 0xFF);
-			ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
-			dp.v = (V4SI) _mm_mulhi_epu16((__m128i)dp.v, (__m128i)ap.v);
-			dp.v = (V4SI) _mm_adds_epu16((__m128i)sp.v, (__m128i)dp.v);
-			dp.v = (V4SI) _mm_packus_epi16((__m128i)dp.v, (__m128i)zv.v);
+			__m128i ap;
+			ap = _mm_shufflelo_epi16(sp, 0xFF);
+			ap = _mm_sub_epi16(sc, ap);
+			dp = _mm_mulhi_epu16(dp, ap);
+			dp = _mm_adds_epu16(sp, dp);
+			dp = _mm_packus_epi16(dp, zv);
 
-			*d++ = _mm_cvtsi128_si32((__m128i)dp.v);
+			*d++ = _mm_cvtsi128_si32(dp);
 		}
 
 		s += stepSrc;
@@ -355,8 +355,8 @@ void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t 
 	hDst = yeDst - yDst;
 	int stepDst = tx - wDst;
 
-	v4si zv = {0, 0, 0, 0};
-	v4si sc = {0x01000100, 0x01000100, 0x01000100, 0x01000100};
+	__m128i zv = _mm_set_epi32(0, 0, 0, 0);
+	__m128i sc = _mm_set_epi32(0x01000100, 0x01000100, 0x01000100, 0x01000100);
 
 	int32_t u = ub;
 	int32_t v = vb;
@@ -365,19 +365,19 @@ void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t 
 			uint32_t * p = &s[(u >> 16) + (v >> 16) * src->tx];
 			u += us;
 
-			v4si dp, sp;
-			dp.v = (V4SI) _mm_loadl_epi64((__m128i *) d);
-			sp.v = (V4SI) _mm_loadl_epi64((__m128i *) p);
-			dp.v = (V4SI) _mm_unpacklo_epi8((__m128i)zv.v, (__m128i)dp.v);
-			sp.v = (V4SI) _mm_unpacklo_epi8((__m128i)sp.v, (__m128i)zv.v);
+			__m128i dp, sp;
+			dp = _mm_loadl_epi64((__m128i *) d);
+			sp = _mm_loadl_epi64((__m128i *) p);
+			dp = _mm_unpacklo_epi8(zv, dp);
+			sp = _mm_unpacklo_epi8(sp, zv);
 
-			v4si ap;
-			ap.v = (V4SI) _mm_shufflelo_epi16((__m128i)sp.v, 0xFF);
-			ap.v = (V4SI) _mm_sub_epi16((__m128i)sc.v, (__m128i)ap.v);
-			dp.v = (V4SI) _mm_mulhi_epu16((__m128i)dp.v, (__m128i)ap.v);
-			dp.v = (V4SI) _mm_adds_epu16((__m128i)sp.v, (__m128i)dp.v);
-			dp.v = (V4SI) _mm_packus_epi16((__m128i)dp.v, (__m128i)zv.v);
-			*d++ = _mm_cvtsi128_si32((__m128i)dp.v);
+			__m128i ap;
+			ap = _mm_shufflelo_epi16(sp, 0xFF);
+			ap = _mm_sub_epi16(sc, ap);
+			dp = _mm_mulhi_epu16(dp, ap);
+			dp = _mm_adds_epu16(sp, dp);
+			dp = _mm_packus_epi16(dp, zv);
+			*d++ = _mm_cvtsi128_si32(dp);
 		}
 
 		u = ub;

@@ -67,4 +67,14 @@
 		int log2i32(int n);																	/** Compute the log2 of a 32bit integer */
 	};
 
+/*****************************************************************************/
+/** Compatibility functions */
+
+/************************ MS Visual Studio compiler **************************/
+#ifdef _MSC_VER
+	#include <intrin.h>
+	int __builtin_ffs(int x);
+#endif
+
+
 #endif // LE_GLOBAL_H

@@ -37,7 +37,12 @@
 #include "config.h"
 
 #include <string.h>
-#include <dirent.h>
+
+#ifdef _MSC_VER
+	#include "vs-dirent.h"
+#else
+	#include <dirent.h>
+#endif
 
 /*****************************************************************************/
 LeBmpCache bmpCache;

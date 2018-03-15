@@ -39,7 +39,6 @@
 #include "config.h"
 
 #define WINVER	0x0600
-#include <windef.h>
 #include <windows.h>
 
 /*****************************************************************************/

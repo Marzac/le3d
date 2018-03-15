@@ -37,7 +37,11 @@
 #include "config.h"
 
 #include <string.h>
+#ifdef _MSC_VER
+#include "vs-dirent.h"
+#else
 #include <dirent.h>
+#endif
 
 /*****************************************************************************/
 LeMeshCache meshCache;

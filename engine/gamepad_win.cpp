@@ -73,17 +73,17 @@ typedef struct {
 }XInputCaps;
 
 /** XInput driver function types */
-typedef __stdcall void DLLXInputEnable(bool enable);
-typedef __stdcall uint32_t DLLXInputGetCapabilities(uint32_t userIndex, uint32_t flags, XInputCaps * capabilities);
-typedef __stdcall uint32_t DLLXInputGetState(uint32_t userIndex, XInputState * state);
-typedef __stdcall uint32_t DLLXInputSetState(uint32_t userIndex, XInputVibration * vibration);
+typedef void __stdcall DLLXInputEnable(bool enable);
+typedef uint32_t __stdcall DLLXInputGetCapabilities(uint32_t userIndex, uint32_t flags, XInputCaps * capabilities);
+typedef uint32_t __stdcall DLLXInputGetState(uint32_t userIndex, XInputState * state);
+typedef uint32_t __stdcall DLLXInputSetState(uint32_t userIndex, XInputVibration * vibration);
 
 /*****************************************************************************/
 /** XInput driver fallback functions */
-__stdcall void XInputEnableFB(bool enable){}
-__stdcall uint32_t XInputGetCapabilitiesFB(uint32_t userIndex, uint32_t flags, XInputCaps * capabilities){return 0;}
-__stdcall uint32_t XInputGetStateFB(uint32_t userIndex, XInputState * state){return 0;}
-__stdcall uint32_t XInputSetStateFB(uint32_t userIndex, XInputVibration * vibration){return 0;}
+void __stdcall XInputEnableFB(bool enable){}
+uint32_t __stdcall XInputGetCapabilitiesFB(uint32_t userIndex, uint32_t flags, XInputCaps * capabilities){return 0;}
+uint32_t __stdcall XInputGetStateFB(uint32_t userIndex, XInputState * state){return 0;}
+uint32_t __stdcall XInputSetStateFB(uint32_t userIndex, XInputVibration * vibration){return 0;}
 
 /** XInput driver entry points	*/
 static HMODULE XInputModule = 0;
@@ -150,8 +150,8 @@ void LeGamePad::update()
 void LeGamePad::feedback(float left, float right)
 {
 	XInputVibration vibration;
-	vibration.leftMotorSpeed = left * 0xFFFF;
-	vibration.rightMotorSpeed = right * 0xFFFF;
+	vibration.leftMotorSpeed = (uint16_t) (left * 0xFFFF);
+	vibration.rightMotorSpeed = (uint16_t) (right * 0xFFFF);
 	XInputSetState(pad, &vibration);
 }
 
@@ -169,7 +169,7 @@ inline float LeGamePad::normalize(int32_t axis)
 /** XInput driver init */
 void LeGamePad::setup()
 {
-	XInputModule = LoadLibrary("xinput1_3.dll");
+	XInputModule = LoadLibraryA("xinput1_3.dll");
 	if (XInputModule) {
 		void * pa;
 		pa = (void *) GetProcAddress(XInputModule, "XInputEnable");
