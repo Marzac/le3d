@@ -1,4 +1,4 @@
-project(le3d CXX)
+project(le3d C CXX)
 cmake_minimum_required(VERSION 3.4)
 set(CMAKE_CXX_STANDARD 11)
 

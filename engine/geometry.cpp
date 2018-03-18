@@ -37,7 +37,9 @@
 /******************************************************************************/
 #include <stdlib.h>
 
-#if defined(__unix__) || defined(__unix)
+#ifdef __MINGW32__
+#include <malloc.h>
+#elif defined(__unix__) || defined(__unix)
 
 	#ifndef _aligned_malloc
 		#define _aligned_malloc(s, a) aligned_alloc(a, s)
@@ -45,10 +47,7 @@
 	#ifndef _aligned_free
 		#define _aligned_free(p) free(p)
 	#endif
-
-#endif
-
-#ifdef __APPLE__
+#elif __APPLE__
 	void * _aligned_malloc(size_t size, size_t alignment) {
 	void *buffer;
 	posix_memalign(&buffer, alignment, size);
