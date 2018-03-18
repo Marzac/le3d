@@ -71,7 +71,9 @@ target_link_libraries(
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(le3d PRIVATE -march=pentium4 -Wall -m32 -ffast-math -mfpmath=sse -fno-exceptions -fno-rtti -fno-stack-protector -fno-math-errno -fno-ident -ffunction-sections)
+    set_target_properties(le3d PROPERTIES LINK_FLAGS "-m32")
+    target_compile_options(le3d PUBLIC -m32) 
+    target_compile_options(le3d PRIVATE -march=pentium4 -Wall -ffast-math -mfpmath=sse -fno-exceptions -fno-rtti -fno-stack-protector -fno-math-errno -fno-ident -ffunction-sections)
     if (WIN32)
         target_compile_options(le3d PRIVATE -D__MSVCRT_VERSION__=0x0700)
     endif()

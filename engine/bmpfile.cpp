@@ -92,7 +92,11 @@ typedef struct {
 LeBmpFile::LeBmpFile(const char * filename) :
 	path(NULL)
 {
+#ifdef _MSC_VER
 	if (filename) path = _strdup(filename);
+#else
+	if (filename) path = strdup(filename);
+#endif
 }
 
 LeBmpFile::~LeBmpFile()

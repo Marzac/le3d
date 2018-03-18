@@ -8,6 +8,7 @@ else()
     )
 endif()
 
+set_target_properties(cube PROPERTIES LINK_FLAGS "-m32")
 target_link_libraries(
     cube
     PRIVATE
