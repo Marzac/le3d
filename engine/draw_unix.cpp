@@ -60,7 +60,14 @@ LeDraw::LeDraw(LeDrawingContext context, int width, int height) :
 
 LeDraw::~LeDraw()
 {
-	if (bitmap) XDestroyImage((XImage *) bitmap);
+	// interestingly XDestroyImage works differently than XCreateImage. XCreateImage will not allocate
+	// the data pointer but XDestroyImage will free it
+	// as the data has already been freed we need to prevent a double free here
+	XImage * image = (XImage *) bitmap;
+	if (image) {
+		image->data = NULL;
+		XDestroyImage(image);
+	}
 }
 
 /*****************************************************************************/
