@@ -11,7 +11,7 @@
 	\version 1.5
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -228,7 +228,7 @@ void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
 	int y2 = ys[vm1];
 	x2 += 0xFFFF;
 
-	if (bmp->flags & LE_BMP_RGBA) {
+	if (bmp->flags & LE_BITMAP_RGBA) {
 		for (int y = y1; y < y2; y++) {
 			fillFlatTexAlphaZC(y, x1 >> 16, x2 >> 16, w1, w2, u1, u2, v1, v2);
 			x1 += ax1; x2 += ax2;
@@ -276,7 +276,7 @@ void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
 	int y2 = ys[vb];
 	x2 += 0xFFFF;
 
-	if (bmp->flags & LE_BMP_RGBA) {
+	if (bmp->flags & LE_BITMAP_RGBA) {
 		for (int y = y1; y < y2; y++) {
 			fillFlatTexAlphaZC(y, x1 >> 16, x2 >> 16, w1, w2, u1, u2, v1, v2);
 			x1 += ax1; x2 += ax2;
