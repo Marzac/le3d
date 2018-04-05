@@ -9,7 +9,7 @@
 	\version 1.5
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,9 @@
 /******************************************************************************/
 #include <stdlib.h>
 
-#if defined(__unix__) || defined(__unix)
+#ifdef __MINGW32__
+#include <malloc.h>
+#elif defined(__unix__) || defined(__unix)
 
 	#ifndef _aligned_malloc
 		#define _aligned_malloc(s, a) aligned_alloc(a, s)
@@ -45,7 +47,13 @@
 	#ifndef _aligned_free
 		#define _aligned_free(p) free(p)
 	#endif
-
+#elif __APPLE__
+	void * _aligned_malloc(size_t size, size_t alignment) {
+	void *buffer;
+	posix_memalign(&buffer, alignment, size);
+	return buffer;
+}
+#define _aligned_free  free
 #endif
 
 /******************************************************************************/

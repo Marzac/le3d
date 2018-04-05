@@ -67,7 +67,11 @@ LeObjFile::LeObjFile(const char * filename) :
 	materials(NULL), curMaterial(&defMaterial), noMaterials(0)
 {
 	memset(line, 0, LE_OBJ_MAX_LINE+1);
+#ifdef _MSC_VER
 	if (filename) path = _strdup(filename);
+#else
+	if (filename) path = strdup(filename);
+#endif
 }
 
 LeObjFile::~LeObjFile()
