@@ -43,7 +43,7 @@ int main()
 
 /** Retrieve the 3D model */
 	int crateSlot = meshCache.getFromName("crate.obj");
-	LeMesh * crate = meshCache.slots[crateSlot].mesh;
+	LeMesh * crate = meshCache.cacheSlots[crateSlot].mesh;
 
 /** Create three lights */
 	LeLight light1(LE_LIGHT_DIRECTIONAL, 0xFF4040);
