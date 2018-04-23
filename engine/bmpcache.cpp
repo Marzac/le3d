@@ -51,7 +51,7 @@ LeBmpCache bmpCache;
 LeBmpCache::LeBmpCache() :
 	noSlots(0)
 {
-	memset(slots, 0, sizeof(Slot) * LE_BMPCACHE_SLOTS);
+	memset(cacheSlots, 0, sizeof(Slot) * LE_BMPCACHE_SLOTS);
 
 // Create the default bitmap (32x32 all white)
 	LeBitmap * defBitmap = new LeBitmap();
@@ -59,7 +59,7 @@ LeBmpCache::LeBmpCache() :
 	memset(defBitmap->data, 0xFF, 32 * 32 * sizeof(uint32_t));
 
 // Register the default bitmap
-	Slot * defSlot = &slots[0];
+	Slot * defSlot = &cacheSlots[0];
 	defSlot->bitmap = defBitmap;
 	strcpy(defSlot->path, "none");
 	strcpy(defSlot->name, "default");
@@ -72,8 +72,19 @@ LeBmpCache::LeBmpCache() :
 
 LeBmpCache::~LeBmpCache()
 {
+	clean();
+}
+
+/*****************************************************************************/
+/**
+	\fn void LeBmpCache::clean()
+	\brief Unload all resources in cache and remove entries
+*/
+void LeBmpCache::clean()
+{
 	for (int i = 0; i < LE_BMPCACHE_SLOTS; i++)
 		deleteSlot(i);
+	noSlots = 0;
 }
 
 /*****************************************************************************/
@@ -86,7 +97,7 @@ LeBmpCache::~LeBmpCache()
 LeBitmap * LeBmpCache::loadBMP(const char * path)
 {
 	if (noSlots >= LE_BMPCACHE_SLOTS) {
-		printf("bmpCache: no free slots!\n");
+		printf("bmpCache: no free cacheSlots!\n");
 		return NULL;
 	}
 
@@ -102,12 +113,12 @@ LeBitmap * LeBmpCache::loadBMP(const char * path)
 
 #if LE_RENDERER_MIPMAPS == 1
 	bitmap->makeMipmaps();
-	slots[slot].flags |= LE_BMPCACHE_MIPMAPPED;
+	cacheSlots[slot].flags |= LE_BMPCACHE_MIPMAPPED;
 #endif
 
 	if (bitmap->flags & LE_BMPCACHE_RGBA) {
 		bitmap->preMultiply();
-		slots[slot].flags |= LE_BMPCACHE_RGBA;
+		cacheSlots[slot].flags |= LE_BMPCACHE_RGBA;
 	}
 
 	return bitmap;
@@ -152,7 +163,7 @@ void LeBmpCache::loadDirectory(const char * path)
 int LeBmpCache::createSlot(LeBitmap * bitmap, const char * path)
 {
 	for (int i = 0; i < LE_BMPCACHE_SLOTS; i++) {
-		Slot * slot = &slots[i];
+		Slot * slot = &cacheSlots[i];
 		if (slot->bitmap) continue;
 
 	// Register the bitmap
@@ -179,16 +190,10 @@ int LeBmpCache::createSlot(LeBitmap * bitmap, const char * path)
 */
 void LeBmpCache::deleteSlot(int index)
 {
-	Slot * slot = &slots[index];
-	if (!slot->bitmap) return;
-
-	delete slot->bitmap;
-	slot->bitmap = NULL;
-	slot->path[0] = '\0';
-	slot->name[0] = '\0';
-	slot->cursor = 0;
-	slot->flags = 0;
-
+	Slot * slot = &cacheSlots[index];
+	if (slot->bitmap) delete slot->bitmap;
+	if (slot->extras) delete [] slot->extras;
+	memset(slot, 0, sizeof(Slot));
 	noSlots--;
 }
 
@@ -206,7 +211,7 @@ int LeBmpCache::getFromName(const char * path)
 
 // Search for resource
 	for (int i = 0; i < noSlots; i++) {
-		Slot * slot = &slots[i];
+		Slot * slot = &cacheSlots[i];
 		if (!slot->bitmap) continue;
 		if (strcmp(slot->name, name) == 0)
 			return i;

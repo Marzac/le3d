@@ -61,6 +61,8 @@ public:
 	LeBmpCache();
 	~LeBmpCache();
 
+	void clean();
+	
 	void loadDirectory(const char * path);
 	LeBitmap * loadBMP(const char * path);
 	int getFromName(const char * name);
@@ -81,8 +83,8 @@ public:
 		int cursor;							/**< Cursor for animation playback */ 
 	}Slot;
 
-	Slot slots[LE_BMPCACHE_SLOTS];			/**< Slots in cache */
-	int noSlots;							/**< Number of slots in cache */
+	Slot cacheSlots[LE_BMPCACHE_SLOTS];			/**< Slots in cache */
+	int noSlots;							/**< Number of cacheSlots in cache */
 
 private:
 	int createSlot(LeBitmap * bitmap, const char * path);

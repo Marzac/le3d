@@ -97,7 +97,7 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		LeTriangle * tri = &trilist->triangles[trilist->srcIndices[i]];
 
 	// Retrieve the material
-		LeBmpCache::Slot * slot = &bmpCache.slots[tri->tex];
+		LeBmpCache::Slot * slot = &bmpCache.cacheSlots[tri->tex];
 		if (slot->flags & LE_BMPCACHE_ANIMATION)
 			bmp = &slot->extras[slot->cursor];
 		else bmp = slot->bitmap;

@@ -79,7 +79,7 @@ public:
 	int noTexCoords;		/**< Number of texture coordinates in the mesh */
 	int * vertexList;		/**< Triangles - vertex indice tripplets */
 	int * texCoordsList;	/**< Triangles - texture coordinate indice tripplets */
-	int * texSlotList;		/**< Triangles - texture slots */
+	int * texSlotList;		/**< Triangles - texture cacheSlots */
 	uint32_t * colors;		/**< Triangles - colors */
 	int noTriangles;		/**< Number of triangles in the mesh */
 

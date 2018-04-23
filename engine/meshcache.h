@@ -49,6 +49,8 @@ class LeMeshCache
 public:
 	LeMeshCache();
 	~LeMeshCache();
+	
+	void clean();
 
 	void loadDirectory(const char * path);
 	LeMesh * loadOBJ(const char * path);
@@ -66,8 +68,8 @@ public:
 		int flags;							/**< Bitmap format and attributes */
 	}Slot;
 
-	Slot slots[LE_MESHCACHE_SLOTS];			/**< Slots in cache */
-	int noSlots;							/**< Number of slots in cache */
+	Slot cacheSlots[LE_MESHCACHE_SLOTS];			/**< Slots in cache */
+	int noSlots;							/**< Number of cacheSlots in cache */
 
 private:
 	int createSlot(LeMesh * mesh, const char * path);

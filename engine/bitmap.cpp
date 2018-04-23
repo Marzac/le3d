@@ -55,7 +55,6 @@ LeBitmap::~LeBitmap()
 	deallocate();
 }
 
-
 /*****************************************************************************/
 LeBmpFont::LeBmpFont() :
 	font(NULL),
