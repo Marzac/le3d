@@ -69,7 +69,7 @@ int main()
 		timing.waitNextFrame();
 
 	/** Copy render frame to window context */
-		draw.setPixels(rasterizer.frame.data);
+		draw.setPixels(rasterizer.getPixels());
 
 	/** Update model transforms */
 		crate->angle += LeVertex(0.1f, 2.0f, 0.0f);
