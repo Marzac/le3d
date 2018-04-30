@@ -1,3 +1,13 @@
+# MSVS project files
+*.vcxproj
+*.vcxproj.filters
+*.sln
+
+# CMAKE intermediary files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
 # Windows OS files
 Thumbs.db
 ehthumbs.db
