@@ -74,7 +74,7 @@ LeBmpFont::~LeBmpFont()
 	\brief Clear the image with the specified color
 	\param[in] color RGBA 32bit color
 */
-#if LE_USE_SIMD == 1
+#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
 void LeBitmap::clear(uint32_t color)
 {
 	int size = tx * ty;
@@ -94,7 +94,9 @@ void LeBitmap::clear(uint32_t color)
 	if (r == 2) return;
 	*p++ = color;
 }
+
 #else
+
 void LeBitmap::clear(uint32_t color)
 {
 	size_t size = tx * ty;
@@ -102,7 +104,7 @@ void LeBitmap::clear(uint32_t color)
 	for (size_t t = 0; t < size; t ++)
 		p[t] = color;
 }
-#endif
+#endif	// LE_USE_SIMD && LE_USE_SSE2
 
 /*****************************************************************************/
 /**
@@ -201,7 +203,7 @@ void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xS
 	\param[in] w portion width (pixels)
 	\param[in] h portion height (pixels)
 */
-#if LE_USE_SIMD == 1
+#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
 void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)
 {
 	if (xDst >= tx) return;
@@ -301,7 +303,7 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 		d += stepDst;
 	}
 }
-#endif // LE_USE_SIMD
+#endif // LE_USE_SIMD && LE_USE_SSE2
 
 /*****************************************************************************/
 /**
