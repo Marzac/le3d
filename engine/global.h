@@ -88,25 +88,25 @@
 	#endif
 	
 	#if LE_USE_SIMD == 1
-		void * operator new(size_t size)
+		void * operator new(size_t size) {
 			return _aligned_malloc(size, 16);
-		void * operator new[](size_t size)
+		}
+		void * operator new[](size_t size) {
 			return _aligned_malloc(size, 16);
-		void operator delete(void * ptr)
+		}
+		void operator delete(void * ptr) {
 			_aligned_free(ptr);
-		void operator delete[](void * ptr)
+		}
+		void operator delete[](void * ptr) {
 			_aligned_free(ptr);
+		}
 	#endif
 	
 /*****************************************************************************/
 /** Intrinsic equivalent functions */
 #ifdef _MSC_VER
 	#include <intrin.h>
-	int __builtin_ffs(int x) {
-		unsigned long index;
-		_BitScanReverse(&index, x);
-		return (int) index;
-	}
+	int __builtin_ffs(int x);
 #endif
 
 #endif // LE_GLOBAL_H

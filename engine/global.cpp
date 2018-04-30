@@ -113,3 +113,12 @@ int LeGlobal::log2i32(int n)
 	if (n >= 0x2) {r |= 0x1;}
 	return r;
 }
+
+/*****************************************************************************/
+#ifdef _MSC_VER
+int __builtin_ffs(int x) {
+	unsigned long index;
+	_BitScanForward(&index, x);
+	return (int) index + 1;
+}
+#endif
