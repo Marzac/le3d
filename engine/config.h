@@ -34,6 +34,8 @@
 #define LE_CONFIG_H
 
 /** Engine configuration */
+	#define LE_RESOX_DEFAULT			640						/** Default horizontal resolution */
+	#define LE_RESOY_DEFAULT			480						/** Default vertical resolution */
 	#define LE_MAX_FILE_EXTENSION		8						/** Maximum file extension string length */
 	#define LE_MAX_FILE_NAME			128						/** Maximum file name string length */
 	#define LE_MAX_FILE_PATH			256						/** Maximum file path string length */
