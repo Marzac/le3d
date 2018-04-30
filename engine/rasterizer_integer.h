@@ -54,10 +54,11 @@
 class LeRasterizer
 {
 public:
-	LeRasterizer(int width, int height);
+	LeRasterizer(int width = LE_RESOX_DEFAULT, int height = LE_RESOY_DEFAULT);
 	~LeRasterizer();
 
 	void rasterList(LeTriList * trilist);
+	const void * getPixels() {return pixels;}
 	void flush();
 
 	LeBitmap frame;				/**< Frame buffer */ 
@@ -73,6 +74,7 @@ private:
 	uint32_t color;
 	LeBitmap * bmp;
 
+	uint32_t * pixels;
 	uint32_t * texPixels;
 	uint32_t texSizeU;
 	uint32_t texSizeV;

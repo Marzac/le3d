@@ -61,15 +61,12 @@ LeRasterizer::LeRasterizer(int width, int height) :
 	memset(vs, 0, sizeof(int32_t) * 4);
 
 	frame.allocate(width, height + 2);
-	frame.data = ((uint32_t *) frame.data) + frame.tx;
-	frame.ty -= 2;
 	frame.clear(0);
+	pixels = ((uint32_t *) frame.data) + frame.tx;
 }
 
 LeRasterizer::~LeRasterizer()
 {
-	frame.data = ((uint32_t *) frame.data) - frame.tx;
-	frame.ty += 2;
 	frame.deallocate();
 }
 
@@ -305,7 +302,7 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 	int au = (u2 - u1) / d;
 	int av = (v2 - v1) / d;
 	int aw = (w2 - w1) / d;
-	uint32_t * p = x1 + y * frame.tx + (uint32_t *) frame.data;
+	uint32_t * p = x1 + y * frame.tx + pixels;
 
 	for (int x = x1; x <= x2; x ++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
@@ -336,7 +333,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 	int av = (v2 - v1) / d;
 	int aw = (w2 - w1) / d;
 
-	uint32_t * p = x1 + y * frame.tx + (uint32_t *) frame.data;
+	uint32_t * p = x1 + y * frame.tx + pixels;
 
 	for (int x = x1; x <= x2; x ++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
@@ -378,7 +375,7 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 	int av = (v2 - v1) / d;
 	int aw = (w2 - w1) / d;
 
-	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + (uint32_t *) frame.data);
+	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + pixels);
 	for (int x = x1; x <= x2; x++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
 		uint32_t tu = ((u1 * z) >> 24) & texMaskU;
@@ -407,7 +404,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 	int av = (v2 - v1) / d;
 	int aw = (w2 - w1) / d;
 
-	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + (uint32_t *) frame.data);
+	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + pixels);
 
 	for (int x = x1; x <= x2; x++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
