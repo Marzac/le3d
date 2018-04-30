@@ -49,6 +49,7 @@ LeMesh::LeMesh() :
 	normals(NULL), shades(NULL),
 	allocated(false)
 {
+	memset(name, 0, LE_OBJ_MAX_NAME+1);
 	updateMatrix();
 }
 
@@ -65,6 +66,7 @@ LeMesh::LeMesh(LeVertex vertexes[], int noVertexes,
 	normals(NULL), shades(NULL),
 	allocated(false)
 {
+	memset(name, 0, LE_OBJ_MAX_NAME+1);
 	updateMatrix();
 }
 

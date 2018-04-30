@@ -85,7 +85,9 @@ public:
 
 	int getNoMeshes();
 	const char * getMeshName(int index);
-	LeMesh * loadMesh(int index);
+	
+	LeMesh * load(int index);
+	void save(const LeMesh * mesh);
 
 private:
 	int countTokens(FILE * file, const char * token);
@@ -94,6 +96,12 @@ private:
 	void importTexCoords(FILE * file, LeMesh * mesh);
 	void importNormals(FILE * file, LeMesh * mesh);
 	void importTriangles(FILE * file, LeMesh * mesh);
+
+	void exportHeader(FILE * file, const LeMesh * mesh);
+	void exportVertexes(FILE * file, const LeMesh * mesh);
+	void exportTexCoords(FILE * file, const LeMesh * mesh);
+	void exportTriangles(FILE * file, const LeMesh * mesh);
+	void exportMaterials(FILE * file, const LeMesh * mesh);
 
 	void importMatLib(FILE * file);
 	int	 countMatLib(FILE * file);

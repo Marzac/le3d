@@ -97,7 +97,7 @@ LeMesh * LeMeshCache::loadOBJ(const char * path)
 	}
 
 	LeObjFile objFile = LeObjFile(path);
-	LeMesh * mesh = objFile.loadMesh(0);
+	LeMesh * mesh = objFile.load(0);
 	if (!mesh) return NULL;
 
 	if (createSlot(mesh, path) < 0) {

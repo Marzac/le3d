@@ -67,27 +67,28 @@ public:
 	void allocateShades();
 	
 // Overall positioning
-	LeMatrix view;			/**< View matrix of the mesh */
-	LeVertex pos;			/**< Position of the mesh */
-	LeVertex scale;			/**< Scaling of the mesh */
-	LeVertex angle;			/**< Absolute angle of the mesh (in degrees) */
+	LeMatrix view;						/**< View matrix of the mesh */
+	LeVertex pos;						/**< Position of the mesh */
+	LeVertex scale;						/**< Scaling of the mesh */
+	LeVertex angle;						/**< Absolute angle of the mesh (in degrees) */
 
 // Static mesh data
-	LeVertex * vertexes;	/**< Vertex positions (x, y, z) of the mesh */
-	int noVertexes;			/**< Number of vertexes in the mesh */
-	float * texCoords;		/**< Texture coordinates (u, v) of the mesh */
-	int noTexCoords;		/**< Number of texture coordinates in the mesh */
-	int * vertexList;		/**< Triangles - vertex indice tripplets */
-	int * texCoordsList;	/**< Triangles - texture coordinate indice tripplets */
-	int * texSlotList;		/**< Triangles - texture cacheSlots */
-	uint32_t * colors;		/**< Triangles - colors */
-	int noTriangles;		/**< Number of triangles in the mesh */
+	char name[LE_OBJ_MAX_NAME+1];		/**< Mesh name */
+	LeVertex * vertexes;				/**< Vertex positions (x, y, z) of the mesh */
+	int noVertexes;						/**< Number of vertexes in the mesh */
+	float * texCoords;					/**< Texture coordinates (u, v) of the mesh */
+	int noTexCoords;					/**< Number of texture coordinates in the mesh */
+	int * vertexList;					/**< Triangles - vertex indexes tripplets */
+	int * texCoordsList;				/**< Triangles - texture coordinate indexes tripplets */
+	int * texSlotList;					/**< Triangles - texture slots */
+	uint32_t * colors;					/**< Triangles - colors */
+	int noTriangles;					/**< Number of triangles in the mesh */
 
 // Computed mesh data
-	LeVertex * normals;		/** Normal vector per triangle */
-	uint32_t * shades;		/** Shade color per triangle (lighting) */
+	LeVertex * normals;					/** Normal vector per triangle */
+	uint32_t * shades;					/** Shade color per triangle (lighting) */
 
-	bool allocated;			/** Has data been allocated */
+	bool allocated;						/** Has data been allocated */
 };
 
 #endif // LE_MESH_H
