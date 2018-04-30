@@ -81,7 +81,7 @@ typedef struct {
 class LeWindow
 {
 public:
-	LeWindow(const char * name, int width, int height);
+	LeWindow(const char * name, int width = LE_RESOX_DEFAULT, int height = LE_RESOY_DEFAULT);
 	~LeWindow();
 
 	void update();

@@ -47,7 +47,7 @@
 class LeDraw
 {
 public:
-	LeDraw(LeDrawingContext context, int width, int heigth);
+	LeDraw(LeDrawingContext context, int width = LE_RESOX_DEFAULT, int heigth = LE_RESOY_DEFAULT);
 	~LeDraw();
 
 	void setPixels(const void * data);
