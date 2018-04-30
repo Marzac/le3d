@@ -58,7 +58,7 @@
 class LeRenderer
 {
 public:
-	LeRenderer(int width, int height);
+	LeRenderer(int width = LE_RESOX_DEFAULT, int height = LE_RESOY_DEFAULT);
 	~LeRenderer();
 
 	void render(const LeMesh * mesh);
