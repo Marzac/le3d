@@ -81,12 +81,12 @@ private:
 	uint32_t texMaskU;
 	uint32_t texMaskV;
 
-#if LE_USE_SIMD == 1
+#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
 	__m128  texScale_4;
 	__m128i texMaskU_4;
 	__m128i texMaskV_4;
 	__m128i color_1;
-#endif // LE_USE_SIMD
+#endif // LE_USE_SIMD && LE_USE_SSE2
 
 	float xs[4], ys[4], ws[4];
 	float us[4], vs[4];
