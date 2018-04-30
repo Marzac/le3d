@@ -17,10 +17,6 @@
 #include <stdio.h>
 
 /*****************************************************************************/
-const int resoX = 640;
-const int resoY = 480;
-
-/*****************************************************************************/
 int main()
 {
 #ifndef __APPLE__
@@ -28,11 +24,11 @@ int main()
 #endif
 
 /** Create application objects */
-	LeWindow	 window		= LeWindow("Le3d: cube example", resoX, resoY);
+	LeWindow	 window		= LeWindow("Le3d: cube example");
 	LeDrawingContext dc     = window.getContext();
-	LeDraw		 draw		= LeDraw(dc, resoX, resoY);
-	LeRenderer	 renderer	= LeRenderer(resoX, resoY);
-	LeRasterizer rasterizer = LeRasterizer(resoX, resoY);
+	LeDraw		 draw		= LeDraw(dc);
+	LeRenderer	 renderer	= LeRenderer();
+	LeRasterizer rasterizer = LeRasterizer();
 #ifndef __APPLE__
 	LeGamePad pad(0);
 #endif

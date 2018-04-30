@@ -15,19 +15,15 @@
 #include <stdio.h>
 
 /*****************************************************************************/
-const int resoX = 640;
-const int resoY = 480;
-
-/*****************************************************************************/
 int main()
 {
 	LeGamePad::setup();
 
 /** Create application objects */
-	LeWindow	 window		= LeWindow("Le3d: cube example", resoX, resoY);
-	LeDraw		 draw		= LeDraw(window.getContext(), resoX, resoY);
-	LeRenderer	 renderer	= LeRenderer(resoX, resoY);
-	LeRasterizer rasterizer = LeRasterizer(resoX, resoY);
+	LeWindow	 window		= LeWindow("Le3d: cube example");
+	LeDraw		 draw		= LeDraw(window.getContext());
+	LeRenderer	 renderer	= LeRenderer();
+	LeRasterizer rasterizer = LeRasterizer();
 
 /** Load the assets (textures then 3D models) */
 	bmpCache.loadDirectory("assets");
