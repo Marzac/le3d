@@ -96,7 +96,8 @@ void LeMesh::allocate(int noVertexes, int noTexCoords, int noTriangles)
 	texSlotList = new int[noTriangles];
 
 	colors = new uint32_t[noTriangles];
-
+	memset(colors, 0xFF, sizeof(uint32_t) * noTriangles);
+	
 	this->noTriangles = noTriangles;
 	allocated = true;
 }
