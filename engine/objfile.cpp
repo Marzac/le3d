@@ -192,7 +192,6 @@ void LeObjFile::exportMaterials(FILE * file, const LeMesh * mesh)
 	fprintf(file, "Ks 0.5 0.5 0.5\n\n");
 
 	if (!mesh->texSlotList) return;
-	int noTextures = 0;
 	
 	for (int i = 0; i < mesh->noTriangles; i++) {
 		bool texNew = true;
