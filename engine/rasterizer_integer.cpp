@@ -161,9 +161,10 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		texMaskV = (1 << bmp->tyP2) - 1;
 
 	#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
-		v4si zv = {0, 0, 0, 0};
-		color_4.v = (V4SI) _mm_load_ss((float *) &color);
-		color_4.v = (V4SI) _mm_unpacklo_epi8((__m128i)color_4.v, (__m128i)zv.v);
+		__m128i zv = _mm_set1_epi32(0);
+		color_4 = _mm_loadu_si128((__m128i *) &color);
+		color_4 = _mm_unpacklo_epi32(color_4, color_4);
+		color_4 = _mm_unpacklo_epi8(color_4, zv);
 	#endif
 
 	// Convert texture coordinates
@@ -306,17 +307,17 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 
 	for (int x = x1; x <= x2; x ++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
-		uint32_t tu = ((u1 * z) >> 24) & texMaskU;
-		uint32_t tv = ((v1 * z) >> 24) & texMaskV;
+		uint32_t tu = (((int64_t) u1 * z) >> 24) & texMaskU;
+		uint32_t tv = (((int64_t) v1 * z) >> 24) & texMaskV;
 
-		v4si zv = {0, 0, 0, 0};
-		v4si tp;
-		tp.v = (V4SI) _mm_load_ss((float *) &texPixels[tu + (tv << texSizeU)]);
-		tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)tp.v, (__m128i)zv.v);
-		tp.v = (V4SI) _mm_mullo_epi16((__m128i)tp.v, (__m128i)color_4.v);
-		tp.v = (V4SI) _mm_srli_epi16((__m128i)tp.v, 8);
-		tp.v = (V4SI) _mm_packus_epi16((__m128i)tp.v, (__m128i)zv.v);
-		*p++ = _mm_cvtsi128_si32((__m128i)tp.v);
+		__m128i zv = _mm_set1_epi32(0);
+		__m128i tp;
+		tp = _mm_loadl_epi64((__m128i *) &texPixels[tu + (tv << texSizeU)]);
+		tp = _mm_unpacklo_epi8(tp, zv);
+		tp = _mm_mullo_epi16(tp, color_4);
+		tp = _mm_srli_epi16(tp, 8);
+		tp = _mm_packus_epi16(tp, zv);
+		*p++ = _mm_cvtsi128_si32(tp);
 
 		u1 += au;
 		v1 += av;
@@ -335,26 +336,29 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 
 	uint32_t * p = x1 + y * frame.tx + pixels;
 
+	__m128i sc = _mm_set1_epi32(0x01000100);
 	for (int x = x1; x <= x2; x ++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
-		uint32_t tu = ((u1 * z) >> 24) & texMaskU;
-		uint32_t tv = ((v1 * z) >> 24) & texMaskV;
+		uint32_t tu = (((int64_t) u1 * z) >> 24) & texMaskU;
+		uint32_t tv = (((int64_t) v1 * z) >> 24) & texMaskV;
 
-		v4si zv = {0, 0, 0, 0};
-		v4si tp;
-		v4si fp;
-		fp.v = (V4SI) _mm_load_ss((float *) p);
-		tp.v = (V4SI) _mm_load_ss((float *) &texPixels[tu + (tv << texSizeU)]);
-		fp.v = (V4SI) _mm_unpacklo_epi8((__m128i)fp.v, (__m128i)zv.v);
-		tp.v = (V4SI) _mm_unpacklo_epi8((__m128i)tp.v, (__m128i)zv.v);
-		v4si ap;
-		ap.v = (V4SI) _mm_set1_epi16(256 - (tp.i[1] >> 16));
-		tp.v = (V4SI) _mm_mullo_epi16((__m128i)tp.v, (__m128i)color_4.v);
-		fp.v = (V4SI) _mm_mullo_epi16((__m128i)fp.v, (__m128i)ap.v);
-		tp.v = (V4SI) _mm_adds_epu16((__m128i)tp.v, (__m128i)fp.v);
-		tp.v = (V4SI) _mm_srli_epi16((__m128i)tp.v, 8);
-		tp.v = (V4SI) _mm_packus_epi16((__m128i)tp.v, (__m128i)zv.v);
-		*p++ = _mm_cvtsi128_si32((__m128i)tp.v);
+		__m128i zv = _mm_set1_epi32(0);
+		__m128i tp, fp;
+		fp = _mm_loadl_epi64((__m128i *) p);
+		tp = _mm_loadl_epi64((__m128i *) &texPixels[tu + (tv << texSizeU)]);
+		fp = _mm_unpacklo_epi8(fp, zv);
+		tp = _mm_unpacklo_epi8(tp, zv);
+
+		__m128i ap;
+		ap = _mm_shufflelo_epi16(tp, 0xFF);
+		ap = _mm_sub_epi16(sc, ap);
+
+		tp = _mm_mullo_epi16(tp, color_4);
+		fp = _mm_mullo_epi16(fp, ap);
+		tp = _mm_adds_epu16(tp, fp);
+		tp = _mm_srli_epi16(tp, 8);
+		tp = _mm_packus_epi16(tp, zv);
+		*p++ = _mm_cvtsi128_si32(tp);
 
 		u1 += au;
 		v1 += av;
@@ -378,8 +382,8 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + pixels);
 	for (int x = x1; x <= x2; x++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
-		uint32_t tu = ((u1 * z) >> 24) & texMaskU;
-		uint32_t tv = ((v1 * z) >> 24) & texMaskV;
+		uint32_t tu = (((int64_t) u1 * z) >> 24) & texMaskU;
+		uint32_t tv = (((int64_t) v1 * z) >> 24) & texMaskV;
 		uint8_t * t = (uint8_t *) &texPixels[tu + (tv << texSizeU)];
 
 		p[0] = (t[0] * c[0]) >> 8;
@@ -408,8 +412,8 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 
 	for (int x = x1; x <= x2; x++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
-		uint32_t tu = ((u1 * z) >> 24) & texMaskU;
-		uint32_t tv = ((v1 * z) >> 24) & texMaskV;
+		uint32_t tu = (((int64_t) u1 * z) >> 24) & texMaskU;
+		uint32_t tv = (((int64_t) v1 * z) >> 24) & texMaskV;
 		uint8_t * t = (uint8_t *) &texPixels[tu + (tv << texSizeU)];
 
 		uint16_t a = 256 - t[3];

@@ -81,12 +81,11 @@ private:
 	uint32_t texMaskU;
 	uint32_t texMaskV;
 
-#if LE_USE_SIMD == 1
-	v4si color_4;
-#endif // LE_USE_SIMD
+#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
+	__m128i color_4;
+#endif // LE_USE_SIMD && LE_USE_SSE2
 
-	int32_t xs[4], ys[4];
-	int32_t ws[4];
+	int32_t xs[4], ys[4], ws[4];
 	int32_t us[4], vs[4];
 };
 
