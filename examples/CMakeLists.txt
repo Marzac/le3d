@@ -8,7 +8,10 @@ else()
     )
 endif()
 
-set_target_properties(cube PROPERTIES LINK_FLAGS "-m32")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+	set_target_properties(cube PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)cube")
+endif()	
+
 target_link_libraries(
     cube
     PRIVATE
