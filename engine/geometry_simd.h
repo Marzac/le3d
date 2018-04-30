@@ -46,6 +46,15 @@
 
 /*****************************************************************************/
 /**
+	\brief Aligned memory allocator
+*/
+void * operator new(size_t size);
+void * operator new[](size_t size);
+void operator delete(void * ptr);
+void operator delete[](void * ptr);
+	
+/*****************************************************************************/
+/**
 	\struct LeVertex
 	\brief Represent a vertex in 3D space
 **/

@@ -33,6 +33,7 @@
 #include "global.h"
 #include "config.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 /*****************************************************************************/
@@ -112,18 +113,3 @@ int LeGlobal::log2i32(int n)
 	if (n >= 0x2) {r |= 0x1;}
 	return r;
 }
-
-
-/*****************************************************************************/
-/** Compatibility functions */
-
-/************************ MS Visual Studio compiler **************************/
-#ifdef _MSC_VER
-	#include <intrin.h>
-	int __builtin_ffs(int x) 
-	{
-		unsigned long index;
-		_BitScanReverse(&index, x);
-		return (int)index;
-	}
-#endif
