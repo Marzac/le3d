@@ -13,26 +13,28 @@ Currently supported platforms:
 
 Source code / examples / documentation  
 Copyright (c) 2015 - 2018 Frédéric Meslin  
-Twitter: @marzacdev
-Email: fred@fredslab.net
+Twitter: @marzacdev  
+Email: fred@fredslab.net  
 
-CMake scripts / MacOS support
+CMake scripts / MacOS support  
 Andreas Streichard  
 Twitter: @m0ppers  
 Email: andreas@mop.koeln  
 
 **Exceptions:**  
 __Mesh textures__  
-In the example folder, one or more textures on the 3D models  
-have been created with photographs from Textures.com.  
+In the example folder, one or more textures on the 3D models have been created with photographs from Textures.com.  
 These photographs may not be redistributed by default;  
-Please visit http://www.textures.com for more information.  
+Please visit:  
+http://www.textures.com  
+for more information.  
 
 __Skybox texture__  
-In the example folder, the meadow skybox has been created by  
-Emil "Humus" Persson and it is licenced under the Creative Commons  
+In the example folder, the meadow skybox has been created by Emil "Humus" Persson and it is licenced under the Creative Commons  
 Attribution 3.0 Unported License.  
-Please visit http://www.humus.name/index.php?page=Textures for more information.  
+Please visit:  
+http://www.humus.name/index.php?page=Textures  
+for more information.  
 
 **Fred's Lab:**  
 A project maintained by Fred's Lab  
