@@ -17,9 +17,9 @@ Twitter: @marzacdev
 Email: fred@fredslab.net
 
 CMake scripts / MacOS support
-Andreas Streichard - 
-Twitter: @m0ppers
-Email: andreas@mop.koeln
+Andreas Streichard  
+Twitter: @m0ppers  
+Email: andreas@mop.koeln  
 
 **Exceptions:**  
 __Mesh textures__  
@@ -34,9 +34,9 @@ Emil "Humus" Persson and it is licenced under the Creative Commons
 Attribution 3.0 Unported License.  
 Please visit http://www.humus.name/index.php?page=Textures for more information.  
 
-**Fred's Lab**  
+**Fred's Lab:**  
+A project maintained by Fred's Lab  
 http://fredslab.net  
-fred@fredslab.net, @marzacdev  
 
 This is open source software released under the MIT License, please refer to LICENCE file for more information.  
 
