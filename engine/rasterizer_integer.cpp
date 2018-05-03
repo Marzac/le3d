@@ -48,7 +48,7 @@
 LeRasterizer::LeRasterizer(int width, int height) :
 	frame(),
 	background(0),
-	color(0xFFFFFF),
+	color(0xFFFFFF00),
 	bmp(NULL),
 	texPixels(NULL),
 	texSizeU(0), texSizeV(0),
@@ -62,7 +62,8 @@ LeRasterizer::LeRasterizer(int width, int height) :
 
 	frame.allocate(width, height + 2);
 	frame.clear(0);
-	pixels = ((uint32_t *) frame.data) + frame.tx;
+
+	pixels = ((LeColor *) frame.data) + frame.tx;
 }
 
 LeRasterizer::~LeRasterizer()
@@ -98,6 +99,7 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		if (slot->flags & LE_BMPCACHE_ANIMATION)
 			bmp = &slot->extras[slot->cursor];
 		else bmp = slot->bitmap;
+		
 		color = tri->color;
 
 	// Convert position coordinates
@@ -107,7 +109,7 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		ys[0] = (int32_t) (tri->ys[0]);
 		ys[1] = (int32_t) (tri->ys[1]);
 		ys[2] = (int32_t) (tri->ys[2]);
-
+		
 		const float sw = 65536.0f * 4096.0f;
 		ws[0] = (int32_t) (tri->zs[0] * sw);
 		ws[1] = (int32_t) (tri->zs[1] * sw);
@@ -152,9 +154,8 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 			bmp = bmp->mipmaps[l];
 		}
 	#endif
-
 	// Retrieve texture information
-		texPixels = (uint32_t *) bmp->data;
+		texPixels = (LeColor *) bmp->data;
 		texSizeU = bmp->txP2;
 		texSizeV = bmp->tyP2;
 		texMaskU = (1 << bmp->txP2) - 1;
@@ -166,7 +167,6 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		color_4 = _mm_unpacklo_epi32(color_4, color_4);
 		color_4 = _mm_unpacklo_epi8(color_4, zv);
 	#endif
-
 	// Convert texture coordinates
 		const float su = (float) (65536 << bmp->txP2);
 		us[0] = (int32_t) (tri->us[0] * su);
@@ -303,7 +303,7 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 	int au = (u2 - u1) / d;
 	int av = (v2 - v1) / d;
 	int aw = (w2 - w1) / d;
-	uint32_t * p = x1 + y * frame.tx + pixels;
+	LeColor * p = x1 + y * frame.tx + pixels;
 
 	for (int x = x1; x <= x2; x ++) {
 		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
@@ -334,7 +334,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 	int av = (v2 - v1) / d;
 	int aw = (w2 - w1) / d;
 
-	uint32_t * p = x1 + y * frame.tx + pixels;
+	LeColor * p = x1 + y * frame.tx + pixels;
 
 	__m128i sc = _mm_set1_epi32(0x01000100);
 	for (int x = x1; x <= x2; x ++) {
@@ -365,19 +365,18 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 		w1 += aw;
 	}
 }
-
 #else
-
 inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2)
 {
 	uint8_t * c = (uint8_t *) &color;
 
-	int d = x2 - x1;
+	short d = x2 - x1;
 	if (d == 0) return;
 
 	int au = (u2 - u1) / d;
 	int av = (v2 - v1) / d;
 	int aw = (w2 - w1) / d;
+	
 
 	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + pixels);
 	for (int x = x1; x <= x2; x++) {
@@ -385,10 +384,10 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 		uint32_t tu = (((int64_t) u1 * z) >> 24) & texMaskU;
 		uint32_t tv = (((int64_t) v1 * z) >> 24) & texMaskV;
 		uint8_t * t = (uint8_t *) &texPixels[tu + (tv << texSizeU)];
-
 		p[0] = (t[0] * c[0]) >> 8;
 		p[1] = (t[1] * c[1]) >> 8;
 		p[2] = (t[2] * c[2]) >> 8;
+
 		p += 4;
 
 		u1 += au;
@@ -427,7 +426,7 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 		w1 += aw;
 	}
 }
+#endif
 
-#endif //LE_USE_SIMD && LE_USE_SSE2
 
 #endif // LE_RENDERER_INTRASTER == 1

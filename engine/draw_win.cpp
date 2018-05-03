@@ -71,7 +71,11 @@ void LeDraw::setPixels(const void * data)
 	info.bV4Height = -height;
 	info.bV4Planes = 1;
 	info.bV4BitCount = 32;
-	info.bV4V4Compression = BI_RGB;
+	info.bV4V4Compression = BI_BITFIELDS;
+	info.bV4RedMask = 0xFF;
+	info.bV4GreenMask = 0xFF00;
+	info.bV4BlueMask = 0xFF0000;
+	info.bV4AlphaMask = 0xFF000000;
 
 	SetDIBitsToDevice((HDC) frontContext.gc, 0, 0, width, height, 0, 0, 0, height, data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
 }

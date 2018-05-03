@@ -36,6 +36,8 @@
 #include "global.h"
 #include "config.h"
 
+#include "color.h"
+
 /*****************************************************************************/
 /**
 	\class LeTriangle
@@ -49,7 +51,7 @@ struct LeTriangle
 	float us[4];		/**< u texture coordinate of vertexes */
 	float vs[4];		/**< v texture coordinate of vertexes */
 	float vd;			/**< average view distance */
-	uint32_t color;		/**< solid color */
+	LeColor color;		/**< solid color */
 	int tex;			/**< texture slot */
 };
 

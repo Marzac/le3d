@@ -86,8 +86,8 @@ void LeBSet::shadowCopy(LeBSet * copy) const
 	copy->flags = flags;
 
 	if (shades) {
-		copy->shades = new uint32_t[noBillboards];
-		memcpy(copy->shades, shades, noBillboards * sizeof(uint32_t));
+		copy->shades = new LeColor[noBillboards];
+		memcpy(copy->shades, shades, noBillboards * sizeof(LeColor));
 	}
 }
 
@@ -147,7 +147,7 @@ void LeBSet::allocate(int noBillboards)
 
 	places = new LeVertex[noBillboards];
 	sizes = new float[noBillboards * 2];
-	colors = new uint32_t[noBillboards];
+	colors = new LeColor[noBillboards];
 	texSlots = new int[noBillboards];
 	flags = new int[noBillboards];
 

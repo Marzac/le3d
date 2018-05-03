@@ -481,10 +481,10 @@ void LeObjFile::importTriangles(FILE * file, LeMesh * mesh)
 	memset(mesh->texCoordsList, 0, 3 * nb * sizeof(int));
 	mesh->texSlotList = new int[nb];
 	memset(mesh->texSlotList, 0, nb * sizeof(int));
-	mesh->colors = new uint32_t[nb];
-	memset(mesh->colors, 0, nb * sizeof(uint32_t));
+	mesh->colors = new LeColor[nb];
+	memset(mesh->colors, 0, nb * sizeof(LeColor));
 	mesh->noTriangles = nb;
-
+	static bool doit = true;
 // Import the triangles
 	int start = ftell(file);
 	int len = readLine(file, line, LE_OBJ_MAX_LINE);
@@ -492,10 +492,9 @@ void LeObjFile::importTriangles(FILE * file, LeMesh * mesh)
 	while (len) {
 		if (strncmp(line, objFace, 2) == 0) {
 			readTriangle(line, mesh, index);
-			uint32_t r = (uint32_t) cbound(curMaterial->diffuse[0] * 255.0f, 0.0f, 255.0f);
-			uint32_t g = (uint32_t) cbound(curMaterial->diffuse[1] * 255.0f, 0.0f, 255.0f);
-			uint32_t b = (uint32_t) cbound(curMaterial->diffuse[2] * 255.0f, 0.0f, 255.0f);
-			mesh->colors[index] = r | (g << 8) | (b << 16);
+			mesh->colors[index].r = cbound(curMaterial->diffuse[0] * 255.0f, 0.0f, 255.0f);
+			mesh->colors[index].g = cbound(curMaterial->diffuse[1] * 255.0f, 0.0f, 255.0f);
+			mesh->colors[index].b = cbound(curMaterial->diffuse[2] * 255.0f, 0.0f, 255.0f);
 
 			int slot = 0;
 			const char * texName = curMaterial->texture;

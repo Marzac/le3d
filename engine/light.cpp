@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -41,12 +41,12 @@
 /*****************************************************************************/
 LeLight::LeLight() :
 	type(LE_LIGHT_AMBIENT),
-	axis(), color(0x00CCCCCC),
+	axis(), color(0xCCCCCC00),
 	rolloff(1.0f)
 {
 }
 
-LeLight::LeLight(LE_LIGHT_TYPES type, uint32_t color) :
+LeLight::LeLight(LE_LIGHT_TYPES type, LeColor color) :
 	type(type),
 	axis(), color(color),
 	rolloff(1.0f)
@@ -62,7 +62,7 @@ LeLight::LeLight(LE_LIGHT_TYPES type, uint32_t color) :
 void LeLight::black(LeMesh * mesh)
 {
 	if (!mesh->shades) mesh->allocateShades();
-	memset(mesh->shades, 0, sizeof(uint32_t) * mesh->noTriangles);
+	memset(mesh->shades, 0, sizeof(LeColor) * mesh->noTriangles);
 }
 
 /**
@@ -116,7 +116,7 @@ inline void LeLight::shineDirectional(LeMesh * mesh)
 
 	for (int j = 0; j < mesh->noTriangles; j++) {
 		float p = -rp.dot(mesh->normals[j]);
-		if (p > 0.0f) blendColors(0xFFFFFF, color, p, mesh->shades[j]);
+		if (p > 0.0f) blendColors(0xFFFFFF00, color, p, mesh->shades[j]);
 	}
 }
 
@@ -135,7 +135,7 @@ inline void LeLight::shineAmbient(LeMesh * mesh)
 	\param[in] factor blend factor (0.0 - 1.0)
 	\param[in] result accumulated color result
 */
-void LeLight::blendColors(uint32_t color1, uint32_t color2, float factor, uint32_t &result)
+void LeLight::blendColors(LeColor color1, LeColor color2, float factor, LeColor &result)
 {
 	uint8_t * c1 = (uint8_t *) &color1;
 	uint8_t * c2 = (uint8_t *) &color2;
