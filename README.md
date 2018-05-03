@@ -1,6 +1,6 @@
 # le3d  
 **LightEngine 3D**  
-**Version 1.5 - 24/01/2018**
+**Version 1.6 - 03/05/2018**
 
 A straightforward C++ 3D software engine for real-time graphics.  
 The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
@@ -9,9 +9,17 @@ Code has been designed for resource constrained platforms.
 Currently supported platforms:
 - Microsoft Windows XP, 7, 8 and 10
 - Linux based operating systems
+- MacOS X
 
 Source code / examples / documentation  
 Copyright (c) 2015 - 2018 Frédéric Meslin  
+Twitter: @marzacdev
+Email: fred@fredslab.net
+
+CMake scripts / MacOS support
+Andreas Streichard - 
+Twitter: @m0ppers
+Email: andreas@mop.koeln
 
 **Exceptions:**  
 __Mesh textures__  
@@ -32,7 +40,7 @@ fred@fredslab.net, @marzacdev
 
 This is open source software released under the MIT License, please refer to LICENCE file for more information.  
 
-# Specifications  
+# Renderer (Portable C++ / ASM (SSE2)  
 The renderer:  
 - Renders meshes  
 - Renders billboard sets  
@@ -57,11 +65,11 @@ The rasterizer:
 
 The lighting system:
 - Handles point lights
-- Handles directionnal lights
+- Handles directional lights
 - Handles ambient lights
 
 
-# Backends  
+# Backends (Native OS code)  
 window / draw / gamepad / timing  
 
 The backend - Windows version:  
@@ -84,20 +92,28 @@ The backend - Linux version:
 - Supports many Linux OS
 
 The backend - MacOS version:  
-- Incoming (maybe)
+- Similar to Linux version
+- Needs X11 (XQuartz) for MacOS
+- No native COCOA support
+- No joysticks support yet (soon)
 
 # File formats  
 Supported bitmap / texture formats:
-- Uncompressed 24bit RGB windows bitmap  
-- Uncompressed 32bit RGBA windows bitmap  
+- Uncompressed 24bit RGB windows bitmap
+- Uncompressed 32bit RGBA windows bitmap
+- Import & export functions
 
 Supported 3D model formats:
-- Wavefront OBJ  
+- Wavefront OBJ
+- Import & export functions
 
 # Limitations  
 - No Z-buffer  
-- No lightmaps  
+- No multilayer texturing  
 - No shaders  
+- No fog
+- No antialiasing
+- Single core support
 
 # Comparison  
 It renders graphics a bit better than a Sony Playstation one.  
