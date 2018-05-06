@@ -42,9 +42,9 @@ int main()
 	LeMesh * crate = meshCache.cacheSlots[crateSlot].mesh;
 
 /** Create three lights */
-	LeLight light1(LE_LIGHT_DIRECTIONAL, 0xFF4040);
-	LeLight light2(LE_LIGHT_DIRECTIONAL, 0x4040FF);
-	LeLight light3(LE_LIGHT_AMBIENT, 0x404040);
+	LeLight light1(LE_LIGHT_DIRECTIONAL, 0xFF404000);
+	LeLight light2(LE_LIGHT_DIRECTIONAL, 0x4040FF00);
+	LeLight light3(LE_LIGHT_AMBIENT, 0x40404000);
 
 	light1.axis = LeAxis(LeVertex(), LeVertex(1.0f, 0.0f, -1.0f));
 	light2.axis = LeAxis(LeVertex(), LeVertex(-1.0f, 0.0f, -1.0f));
@@ -52,7 +52,7 @@ int main()
 /** Set the renderer properties */
 	renderer.setViewPosition(LeVertex(0.0f, 0.0f, 3.0f));
 	renderer.updateViewMatrix();
-	rasterizer.background = 0xC0C0FF;
+	rasterizer.background = 0xC0C0FF00;
 
 /** Initialize the timing */
 	timing.setup(60);

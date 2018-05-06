@@ -42,12 +42,15 @@
 
 #include <stdio.h>
 
+static char* translated = 0;
+
 /*****************************************************************************/
 LeDraw::LeDraw(LeDrawingContext context, int width, int height) :
 	width(width), height(height),
 	frontContext(context),
 	bitmap(0)
 {
+	translated = (char*) malloc(width * height * 4 * sizeof(char));
 	Visual * visual = DefaultVisual((Display *) context.display, 0);
 	if (visual->c_class != TrueColor) {
 		printf("Draw: can only draw on truecolor displays!\n");
@@ -66,6 +69,7 @@ LeDraw::~LeDraw()
 		image->data = NULL;
 		XDestroyImage(image);
 	}
+	free(translated);
 }
 
 /*****************************************************************************/
@@ -76,7 +80,16 @@ LeDraw::~LeDraw()
 */
 void LeDraw::setPixels(const void * data)
 {
+	char* src = (char*) data;
+	char* dest = (char*) translated;
+
+	for (int i=0;i<width*height*4;i+=4) {
+		dest[i]   = src[i+2];
+		dest[i+1] = src[i+1];
+		dest[i+2] = src[i];
+		dest[i+3] = src[i+3];
+	}
 	XImage * image = (XImage *) bitmap;
-	image->data = (char *) data;
+	image->data = dest;
 	XPutImage((Display *) frontContext.display, (Drawable) frontContext.window, (GC) frontContext.gc, image, 0, 0, 0, 0, width, height);
 }
