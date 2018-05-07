@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -119,7 +119,7 @@ void LeBSet::basic()
 	for (int b = 0; b < noBillboards; b++) {
 		sizes[b*2+0] = 1.0f;
 		sizes[b*2+1] = 1.0f;
-		colors[b] = 0x00FFFFFF;
+		colors[b] = LeColor::rgb(0xFFFFFF);
 		texSlots[b] = 0;
 		flags[b] = LE_BSET_EXIST;
 	}

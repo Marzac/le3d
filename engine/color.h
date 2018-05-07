@@ -35,30 +35,43 @@
 
 #include <stdint.h>
 
-struct LeColor {
+class LeColor {
+public:
     LeColor(): r(0), g(0), b(0), a(0) {}
-    LeColor(uint32_t color) :
-		r(color >> 24),
-		g(color >> 16),
-		b(color >> 8),
-		a(color) {
-    }
-
-	LeColor& operator=(LeColor color) {
+	LeColor(uint8_t const& _r, uint8_t const& _g, uint8_t const& _b, uint8_t const& _a): r(_r), g(_g), b(_b), a(_a) {} 
+	LeColor& operator=(LeColor const& color) {
         r = color.r;
         g = color.g;
         b = color.b;
         a = color.a;
         return *this;
     }
+	explicit LeColor(int const& color): r(color >> 16), g(color >> 8), b(color), a(color >> 24) {};
+	LeColor& operator=(int const& color) {
+		r = color >> 16;
+		g = color >> 8;
+		b = color;
+		a = color >> 24;
 
-	operator int() {
-		return (r << 24) | (g << 16) | (b << 8) << a;
+		return *this;
+	}
+    operator int() {
+	    return (r << 16) | (g << 8) | b | (a << 24);
 	}
 
-    uint8_t r;
-    uint8_t g;
+public:
+    static LeColor rgba(uint32_t const& rgba) {
+		return LeColor(rgba >> 16, rgba >> 8, rgba, rgba >> 24);
+    }
+    
+	static LeColor rgb(uint32_t const& rgb) {
+		return LeColor(rgb >> 16, rgb >> 8, rgb, 1);
+    }
+
+public:
     uint8_t b;
+    uint8_t g;
+    uint8_t r;
     uint8_t a;
 };
 

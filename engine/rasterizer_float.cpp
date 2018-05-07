@@ -61,7 +61,7 @@ LeRasterizer::LeRasterizer(int width, int height) :
 	memset(vs, 0, sizeof(float) * 4);
 
 	frame.allocate(width, height + 2);
-	frame.clear(0);
+	frame.clear(background);
 	pixels = ((LeColor *) frame.data) + frame.tx;
 }
 

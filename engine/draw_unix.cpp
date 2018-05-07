@@ -90,6 +90,6 @@ void LeDraw::setPixels(const void * data)
 		dest[i+3] = src[i+3];
 	}
 	XImage * image = (XImage *) bitmap;
-	image->data = dest;
+	image->data = (char*) data;
 	XPutImage((Display *) frontContext.display, (Drawable) frontContext.window, (GC) frontContext.gc, image, 0, 0, 0, 0, width, height);
 }

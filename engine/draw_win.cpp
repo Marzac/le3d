@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -71,11 +71,7 @@ void LeDraw::setPixels(const void * data)
 	info.bV4Height = -height;
 	info.bV4Planes = 1;
 	info.bV4BitCount = 32;
-	info.bV4V4Compression = BI_BITFIELDS;
-	info.bV4RedMask = 0xFF;
-	info.bV4GreenMask = 0xFF00;
-	info.bV4BlueMask = 0xFF0000;
-	info.bV4AlphaMask = 0xFF000000;
+	info.bV4V4Compression = BI_RGB;
 
 	SetDIBitsToDevice((HDC) frontContext.gc, 0, 0, width, height, 0, 0, 0, height, data, (BITMAPINFO *) &info, DIB_RGB_COLORS);
 }

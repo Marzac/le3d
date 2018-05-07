@@ -47,8 +47,8 @@
 /*****************************************************************************/
 LeRasterizer::LeRasterizer(int width, int height) :
 	frame(),
-	background(0),
-	color(0xFFFFFF00),
+	background(LeColor()),
+	color(LeColor::rgb(0xFFFFFF)),
 	bmp(NULL),
 	texPixels(NULL),
 	texSizeU(0), texSizeV(0),
@@ -61,7 +61,7 @@ LeRasterizer::LeRasterizer(int width, int height) :
 	memset(vs, 0, sizeof(int32_t) * 4);
 
 	frame.allocate(width, height + 2);
-	frame.clear(0);
+	frame.clear(LeColor());
 
 	pixels = ((LeColor *) frame.data) + frame.tx;
 }

@@ -41,7 +41,7 @@
 /*****************************************************************************/
 LeLight::LeLight() :
 	type(LE_LIGHT_AMBIENT),
-	axis(), color(0xCCCCCC00),
+	axis(), color(LeColor::rgb(0xCCCCCC)),
 	rolloff(1.0f)
 {
 }
@@ -116,7 +116,7 @@ inline void LeLight::shineDirectional(LeMesh * mesh)
 
 	for (int j = 0; j < mesh->noTriangles; j++) {
 		float p = -rp.dot(mesh->normals[j]);
-		if (p > 0.0f) blendColors(0xFFFFFF00, color, p, mesh->shades[j]);
+		if (p > 0.0f) blendColors(LeColor::rgb(0xFFFFFF), color, p, mesh->shades[j]);
 	}
 }
 
