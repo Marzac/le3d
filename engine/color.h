@@ -37,8 +37,8 @@
 
 class LeColor {
 public:
-    LeColor(): r(0), g(0), b(0), a(0) {}
-	LeColor(uint8_t const& _r, uint8_t const& _g, uint8_t const& _b, uint8_t const& _a): r(_r), g(_g), b(_b), a(_a) {} 
+    LeColor(): b(0), g(0), r(0), a(0) {}
+	LeColor(uint8_t const& _r, uint8_t const& _g, uint8_t const& _b, uint8_t const& _a): b(_b), g(_g), r(_r), a(_a) {} 
 	LeColor& operator=(LeColor const& color) {
         r = color.r;
         g = color.g;
@@ -46,7 +46,7 @@ public:
         a = color.a;
         return *this;
     }
-	explicit LeColor(int const& color): r(color >> 16), g(color >> 8), b(color), a(color >> 24) {};
+	explicit LeColor(int const& color): b(color), g(color >> 8), r(color >> 16), a(color >> 24) {};
 	LeColor& operator=(int const& color) {
 		r = color >> 16;
 		g = color >> 8;
