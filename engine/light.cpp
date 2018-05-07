@@ -137,11 +137,8 @@ inline void LeLight::shineAmbient(LeMesh * mesh)
 */
 void LeLight::blendColors(LeColor color1, LeColor color2, float factor, LeColor &result)
 {
-	uint8_t * c1 = (uint8_t *) &color1;
-	uint8_t * c2 = (uint8_t *) &color2;
-	uint8_t * r	 = (uint8_t *) &result;
 	uint32_t f = (uint32_t) (factor * 65536.0f);
-	r[0] = cbound(r[0] + ((c1[0] * c2[0] * f) >> 24), 0, 255);
-	r[1] = cbound(r[1] + ((c1[1] * c2[1] * f) >> 24), 0, 255);
-	r[2] = cbound(r[2] + ((c1[2] * c2[2] * f) >> 24), 0, 255);
+	result.r = cbound(result.r + ((color1.r * color2.r * f) >> 24), 0, 255);
+	result.g = cbound(result.g + ((color1.g * color2.g * f) >> 24), 0, 255);
+	result.b = cbound(result.b + ((color1.b * color2.b * f) >> 24), 0, 255);
 }
