@@ -564,11 +564,14 @@ void LeBitmap::makeMipmaps()
 
 		for (int y = 0; y < mty; y++) {
 			for (int x = 0; x < mtx; x++) {
-				uint8_t * s = (uint8_t *) o;
-				int r = (s[0] + s[0+4] + s[0+mtx*2*4] + s[0+4+mtx*2*4]) >> 2;
-				int g = (s[1] + s[1+4] + s[1+mtx*2*4] + s[1+4+mtx*2*4]) >> 2;
-				int b = (s[2] + s[2+4] + s[2+mtx*2*4] + s[2+4+mtx*2*4]) >> 2;
-				int a = (s[3] + s[3+4] + s[3+mtx*2*4] + s[3+4+mtx*2*4]) >> 2;
+				LeColor * s1 = o;
+				LeColor * s2 = o+1;
+				LeColor * s3 = o + mtx*2*4;
+				LeColor * s4 = o + mtx*2*4+1;
+				int r = (s1->r + s2->r + s3->r + s4->r) >> 2;
+				int g = (s1->g + s2->g + s3->g + s4->g) >> 2;
+				int b = (s1->b + s2->b + s3->b + s4->b) >> 2;
+				int a = (s1->a + s2->a + s3->a + s4->a) >> 2;
 				* p++ = LeColor(r, g, b, a);
 				o += 2;
 			}
