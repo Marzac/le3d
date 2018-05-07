@@ -70,14 +70,14 @@ target_link_libraries(
     ${LINK_LIBRARIES}
 )
 
-#if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-#    set_target_properties(le3d PROPERTIES LINK_FLAGS "-m32")
-#    target_compile_options(le3d PUBLIC -m32) 
-#    target_compile_options(le3d PRIVATE -march=pentium4 -Wall -ffast-math -mfpmath=sse -fno-exceptions -fno-rtti -fno-stack-protector #-fno-math-errno -fno-ident -ffunction-sections)
-#    if (WIN32)
-#        target_compile_options(le3d PRIVATE -D__MSVCRT_VERSION__=0x0700)
-#    endif()
-#endif()
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set_target_properties(le3d PROPERTIES LINK_FLAGS "-m32")
+    target_compile_options(le3d PUBLIC -m32) 
+    target_compile_options(le3d PRIVATE -march=pentium4 -Wall -ffast-math -mfpmath=sse -fno-exceptions -fno-rtti -fno-stack-protector -fno-math-errno -fno-ident -ffunction-sections)
+    if (WIN32)
+        target_compile_options(le3d PRIVATE -D__MSVCRT_VERSION__=0x0700)
+    endif()
+endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(le3d PRIVATE -D__MSVCRT_VERSION__=0x0700 -D_CRT_SECURE_NO_WARNINGS=1 -D_USE_MATH_DEFINES=1)
