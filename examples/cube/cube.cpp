@@ -1,7 +1,7 @@
 /**
 	\file cube.cpp
 	\brief LightEngine 3D (examples): cube example
-	\brief Unix OS implementation
+	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
@@ -10,28 +10,21 @@
 #include "engine/le3d.h"
 #include "tools/timing.h"
 
-#include <X11/X.h>
-#include <X11/Xlib.h>
-
 #include <stdlib.h>
 #include <stdio.h>
 
 /*****************************************************************************/
 int main()
 {
+	sys.initialize();
 #ifndef __APPLE__
 	LeGamePad::setup();
 #endif
-
 /** Create application objects */
 	LeWindow	 window		= LeWindow("Le3d: cube example");
-	LeDrawingContext dc     = window.getContext();
-	LeDraw		 draw		= LeDraw(dc);
+	LeDraw		 draw		= LeDraw(window.getContext());
 	LeRenderer	 renderer	= LeRenderer();
 	LeRasterizer rasterizer = LeRasterizer();
-#ifndef __APPLE__
-	LeGamePad pad(0);
-#endif
 
 /** Load the assets (textures then 3D models) */
 	bmpCache.loadDirectory("assets");
@@ -59,18 +52,14 @@ int main()
 	timing.firstFrame();
 
 /** Program main loop */
-	while (1) {
-		XEvent event;
-	//	XNextEvent(usedXDisplay, &event);
-
-		if (event.type == KeyPress)
-			break;
+	
+	while (sys.running && window.visible) {
+	/** Process OS messages */
+		sys.update();
+		window.update();
 
 	/** Wait for next frame */
 		timing.waitNextFrame();
-#ifndef __APPLE__
-		pad.update();
-#endif
 
 	/** Copy render frame to window context */
 		draw.setPixels(rasterizer.getPixels());
@@ -95,10 +84,9 @@ int main()
 	}
 
 	timing.lastFrame();
-
-#ifndef __APPLE__
+#ifndef __APPLE__	
 	LeGamePad::release();
 #endif
-
+	sys.terminate();
 	return 0;
 }

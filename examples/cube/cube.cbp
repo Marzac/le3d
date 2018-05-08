@@ -140,8 +140,7 @@
 		<Unit filename="../../tools/timing.h" />
 		<Unit filename="../../tools/timing_unix.cpp" />
 		<Unit filename="../../tools/timing_win.cpp" />
-		<Unit filename="cube_unix.cpp" />
-		<Unit filename="cube_win.cpp" />
+		<Unit filename="cube.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
