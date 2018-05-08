@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -70,12 +70,12 @@ LeBmpFont::~LeBmpFont()
 
 /*****************************************************************************/
 /**
-	\fn void LeBitmap::clear(uint32_t color)
+	\fn void LeBitmap::clear(LeColor color)
 	\brief Clear the image with the specified color
 	\param[in] color RGBA 32bit color
 */
 #if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
-void LeBitmap::clear(uint32_t color)
+void LeBitmap::clear(LeColor color)
 {
 	int size = tx * ty;
 	int b = size >> 2;
@@ -86,7 +86,7 @@ void LeBitmap::clear(uint32_t color)
 	for (int t = 0; t < b; t ++)
 		*p_4++ = color_4;
 
-	uint32_t * p = (uint32_t *) p_4;
+	LeColor * p = (LeColor *) p_4;
 	if (r == 0) return;
 	*p++ = color;
 	if (r == 1) return;
@@ -94,13 +94,12 @@ void LeBitmap::clear(uint32_t color)
 	if (r == 2) return;
 	*p++ = color;
 }
-
 #else
 
-void LeBitmap::clear(uint32_t color)
+void LeBitmap::clear(LeColor color)
 {
 	size_t size = tx * ty;
-	uint32_t * p = (uint32_t *) data;
+	LeColor * p = (LeColor *) data;
 	for (size_t t = 0; t < size; t ++)
 		p[t] = color;
 }
@@ -108,7 +107,7 @@ void LeBitmap::clear(uint32_t color)
 
 /*****************************************************************************/
 /**
-	\fn void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
+	\fn void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, LeColor color)
 	\brief Fill a rectangle with the specified color
 	\param[in] x horizontal position of the rectangle (pixels)
 	\param[in] y vertical position of the rectangle (pixels)
@@ -116,7 +115,7 @@ void LeBitmap::clear(uint32_t color)
 	\param[in] h height of the rectangle (pixels)
 	\param[in] color RGBA 32bit color
 */
-void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
+void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, LeColor color)
 {
 	if (x >= tx) return;
 	if (y >= ty) return;
@@ -130,7 +129,7 @@ void LeBitmap::rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)
 	if (xe > tx) xe = tx;
 	if (ye > ty) ye = ty;
 
-	uint32_t * d = (uint32_t *) data;
+	LeColor * d = (LeColor *) data;
 	d += x + y * tx;
 	w = xe - x;
 	h = ye - y;
@@ -173,8 +172,8 @@ void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xS
 	if (xeDst > tx) xeDst = tx;
 	if (yeDst > ty) yeDst = ty;
 
-	uint32_t * d = (uint32_t *) data;
-	uint32_t * s = (uint32_t *) src->data;
+	LeColor * d = (LeColor *) data;
+	LeColor * s = (LeColor *) src->data;
 	d += xDst + yDst * tx;
 	s += xSrc + ySrc * src->tx;
 	w = xeDst - xDst;
@@ -222,8 +221,8 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 	if (xeDst > tx) xeDst = tx;
 	if (yeDst > ty) yeDst = ty;
 
-	uint32_t * d = (uint32_t *) data;
-	uint32_t * s = (uint32_t *) src->data;
+	LeColor * d = (LeColor *) data;
+	LeColor * s = (LeColor *) src->data;
 	d += xDst + yDst * tx;
 	s += xSrc + ySrc * src->tx;
 	w = xeDst - xDst;
@@ -278,8 +277,8 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 	if (xeDst > tx) xeDst = tx;
 	if (yeDst > ty) yeDst = ty;
 
-	uint32_t * d = (uint32_t *) data;
-	uint32_t * s = (uint32_t *) src->data;
+	LeColor * d = (LeColor *) data;
+	LeColor * s = (LeColor *) src->data;
 	d += xDst + yDst * tx;
 	s += xSrc + ySrc * src->tx;
 	w = xeDst - xDst;
@@ -348,8 +347,8 @@ void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t 
 	if (xeDst > tx) xeDst = tx;
 	if (yeDst > ty) yeDst = ty;
 
-	uint32_t * d = (uint32_t *) data;
-	uint32_t * s = (uint32_t *) src->data;
+	LeColor * d = (LeColor *) data;
+	LeColor * s = (LeColor *) src->data;
 	d += xDst + yDst * tx;
 
 	wDst = xeDst - xDst;
@@ -363,7 +362,7 @@ void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t 
 	int32_t v = vb;
 	for (int y = 0; y < hDst; y++){
 		for (int x = 0; x < wDst; x++){
-			uint32_t * p = &s[(u >> 16) + (v >> 16) * src->tx];
+			LeColor * p = &s[(u >> 16) + (v >> 16) * src->tx];
 			u += us;
 
 			__m128i dp, sp;
@@ -417,8 +416,8 @@ void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t 
 	if (xeDst > tx) xeDst = tx;
 	if (yeDst > ty) yeDst = ty;
 
-	uint32_t * d = (uint32_t *) data;
-	uint32_t * s = (uint32_t *) src->data;
+	LeColor * d = (LeColor *) data;
+	LeColor * s = (LeColor *) src->data;
 	d += xDst + yDst * tx;
 
 	wDst = xeDst - xDst;
@@ -488,7 +487,7 @@ void LeBitmap::text(int x, int y, const char * text, int length, const LeBmpFont
 */
 void LeBitmap::allocate(int tx, int ty)
 {
-	data = new uint32_t[tx*ty];
+	data = new LeColor[tx*ty];
 	dataAllocated = true;
 
 	this->tx = tx;
@@ -505,7 +504,7 @@ void LeBitmap::allocate(int tx, int ty)
 void LeBitmap::deallocate()
 {
 	if (dataAllocated && data)
-		delete[] (uint32_t *) data;
+		delete[] (LeColor *) data;
 	dataAllocated = false;
 
 	for (int l = 1; l < mmLevels; l++)
@@ -553,7 +552,7 @@ void LeBitmap::makeMipmaps()
 	int mtx = tx / 2;
 	int mty = ty / 2;
 
-	uint32_t * o = (uint32_t *) data;
+	LeColor * o = (LeColor *) data;
 
 	for (int l = 0; l < LE_BMP_MIPMAPS; l++) {
 		if (mtx < 4 || mty < 4) break;
@@ -561,16 +560,19 @@ void LeBitmap::makeMipmaps()
 		LeBitmap * bmp = new LeBitmap();
 		bmp->allocate(mtx, mty);
 
-		uint32_t * p = (uint32_t *) bmp->data;
+		LeColor * p = (LeColor *) bmp->data;
 
 		for (int y = 0; y < mty; y++) {
 			for (int x = 0; x < mtx; x++) {
-				uint8_t * s = (uint8_t *) o;
-				int r = (s[0] + s[0+4] + s[0+mtx*2*4] + s[0+4+mtx*2*4]) >> 2;
-				int g = (s[1] + s[1+4] + s[1+mtx*2*4] + s[1+4+mtx*2*4]) >> 2;
-				int b = (s[2] + s[2+4] + s[2+mtx*2*4] + s[2+4+mtx*2*4]) >> 2;
-				int a = (s[3] + s[3+4] + s[3+mtx*2*4] + s[3+4+mtx*2*4]) >> 2;
-				* p++ = (a << 24) | (b << 16) | (g << 8) | r;
+				LeColor * s1 = o;
+				LeColor * s2 = o+1;
+				LeColor * s3 = o + mtx*2*4;
+				LeColor * s4 = o + mtx*2*4+1;
+				int r = (s1->r + s2->r + s3->r + s4->r) >> 2;
+				int g = (s1->g + s2->g + s3->g + s4->g) >> 2;
+				int b = (s1->b + s2->b + s3->b + s4->b) >> 2;
+				int a = (s1->a + s2->a + s3->a + s4->a) >> 2;
+				* p++ = LeColor(r, g, b, a);
 				o += 2;
 			}
 			o += mtx * 2;
@@ -578,7 +580,7 @@ void LeBitmap::makeMipmaps()
 
 		mtx /= 2;
 		mty /= 2;
-		o = (uint32_t *) bmp->data;
+		o = (LeColor *) bmp->data;
 
 		mipmaps[mmLevels++] = bmp;
 	}

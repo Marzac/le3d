@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@
 #define LE_BITMAP_H
 
 #include "global.h"
+#include "color.h"
 #include "config.h"
 
 /*****************************************************************************/
@@ -60,8 +61,8 @@ public:
 	LeBitmap();
 	~LeBitmap();
 
-	void clear(uint32_t color);
-	void rect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color);
+	void clear(LeColor color);
+	void rect(int32_t x, int32_t y, int32_t w, int32_t h, LeColor color);
 	void blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h);
 	void alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h);
 	void alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t hDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t wSrc, int32_t hSrc);

@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -79,11 +79,7 @@
 			#define _aligned_free(p) free(p)
 		#endif
 	#elif __APPLE__
-		void * _aligned_malloc(size_t size, size_t alignment) {
-			void * buffer;
-			posix_memalign(&buffer, alignment, size);
-			return buffer;
-		}
+		void * _aligned_malloc(size_t size, size_t alignment);
 		#define _aligned_free  free
 	#endif
 	

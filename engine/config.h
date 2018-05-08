@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,7 @@
 	#define LE_RENDERER_3DFRUSTRUM		1						/** Use a 3D frustrum to clip triangles */
 	#define LE_RENDERER_2DFRAME			0						/** Use a 2D frame to clip triangles */
 
-	#define LE_RENDERER_INTRASTER		0						/** Enable fixed point or floating point rasterizing */
+	#define LE_RENDERER_INTRASTER		1						/** Enable fixed point or floating point rasterizing */
 	#define LE_RENDERER_MIPMAPS			1						/** Enable mipmapping on textures */
 
 	#define LE_TRILIST_MAX				50000					/** Maximum number of triangles in display list */

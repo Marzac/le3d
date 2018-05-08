@@ -36,6 +36,7 @@
 #include "global.h"
 #include "config.h"
 
+#include "color.h"
 #include "geometry.h"
 
 /*****************************************************************************/
@@ -49,7 +50,7 @@ public:
 	LeMesh();
 	LeMesh(LeVertex vertexes[], int noVertexes, float texCoords[], int noTexCoords,
 		 int vertexList[], int texCoordsList[],
-		 uint32_t colors[], int noTriangles);
+		 LeColor colors[], int noTriangles);
 	virtual ~LeMesh();
 
 	void shadowCopy(LeMesh * copy) const;
@@ -81,12 +82,12 @@ public:
 	int * vertexList;					/**< Triangles - vertex indexes tripplets */
 	int * texCoordsList;				/**< Triangles - texture coordinate indexes tripplets */
 	int * texSlotList;					/**< Triangles - texture slots */
-	uint32_t * colors;					/**< Triangles - colors */
+	LeColor * colors;					/**< Triangles - colors */
 	int noTriangles;					/**< Number of triangles in the mesh */
 
 // Computed mesh data
 	LeVertex * normals;					/** Normal vector per triangle */
-	uint32_t * shades;					/** Shade color per triangle (lighting) */
+	LeColor * shades;					/** Shade color per triangle (lighting) */
 
 	bool allocated;						/** Has data been allocated */
 };

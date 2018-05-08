@@ -56,7 +56,7 @@ LeBmpCache::LeBmpCache() :
 // Create the default bitmap (32x32 all white)
 	LeBitmap * defBitmap = new LeBitmap();
 	defBitmap->allocate(32, 32);
-	memset(defBitmap->data, 0xFF, 32 * 32 * sizeof(uint32_t));
+	memset(defBitmap->data, 0xFF, 32 * 32 * sizeof(LeColor));
 
 // Register the default bitmap
 	Slot * defSlot = &cacheSlots[0];

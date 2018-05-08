@@ -210,7 +210,7 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	srcScan = bitmap->tx * (info.biBitCount >> 3);
 	srcScan = (srcScan + 0x3) & ~0x3;
 
-	bitmap->data = new uint32_t[bitmap->tx * bitmap->ty];
+	bitmap->data = new LeColor[bitmap->tx * bitmap->ty];
 	bitmap->dataAllocated = true;
 
 // Load bitmap data
@@ -248,14 +248,13 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	// Parse a 24 bits image
 		for (int y = 0; y < bitmap->ty; y ++) {
 			fread(buffer, srcScan, 1, file);
-			uint32_t * d = (uint32_t *) data;
+			LeColor * d = (LeColor *) data;
 			uint8_t	 * s = buffer;
 			for (int i = 0; i < bitmap->tx; i ++) {
-				uint32_t r, g, b;
-				b = * s++;
-				g = * s++;
-				r = * s++;
-				* d++ = (r << 16) | (g << 8) | b;
+				d->b = * s++;
+				d->g = * s++;
+				d->r = * s++;
+				d++;
 			}
 			if (upsidedown) data -= dstScan;
 			else data += dstScan;

@@ -77,6 +77,6 @@ LeDraw::~LeDraw()
 void LeDraw::setPixels(const void * data)
 {
 	XImage * image = (XImage *) bitmap;
-	image->data = (char *) data;
+	image->data = (char*) data;
 	XPutImage((Display *) frontContext.display, (Drawable) frontContext.window, (GC) frontContext.gc, image, 0, 0, 0, 0, width, height);
 }

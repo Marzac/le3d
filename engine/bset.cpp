@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -86,8 +86,8 @@ void LeBSet::shadowCopy(LeBSet * copy) const
 	copy->flags = flags;
 
 	if (shades) {
-		copy->shades = new uint32_t[noBillboards];
-		memcpy(copy->shades, shades, noBillboards * sizeof(uint32_t));
+		copy->shades = new LeColor[noBillboards];
+		memcpy(copy->shades, shades, noBillboards * sizeof(LeColor));
 	}
 }
 
@@ -119,7 +119,7 @@ void LeBSet::basic()
 	for (int b = 0; b < noBillboards; b++) {
 		sizes[b*2+0] = 1.0f;
 		sizes[b*2+1] = 1.0f;
-		colors[b] = 0x00FFFFFF;
+		colors[b] = LeColor::rgb(0xFFFFFF);
 		texSlots[b] = 0;
 		flags[b] = LE_BSET_EXIST;
 	}
@@ -147,7 +147,7 @@ void LeBSet::allocate(int noBillboards)
 
 	places = new LeVertex[noBillboards];
 	sizes = new float[noBillboards * 2];
-	colors = new uint32_t[noBillboards];
+	colors = new LeColor[noBillboards];
 	texSlots = new int[noBillboards];
 	flags = new int[noBillboards];
 

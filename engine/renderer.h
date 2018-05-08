@@ -43,6 +43,7 @@
 #include "global.h"
 #include "config.h"
 
+#include "color.h"
 #include "geometry.h"
 #include "mesh.h"
 #include "bset.h"
@@ -103,7 +104,7 @@ private:
 	int extra;							/**< Index of extra triangles */
 	int extraMax;						/**< Maximum number of extra triangles */
 
-	uint32_t * colors;					/**< Color table for triangles */
+	LeColor * colors;					/**< Color table for triangles */
 
 	LeVertex viewPosition;				/**< View position of renderer */
 	LeVertex viewAngle;					/**< View angle of renderer (in degrees) */
