@@ -141,4 +141,5 @@ void LeLight::blendColors(LeColor color1, LeColor color2, float factor, LeColor 
 	result.r = cbound(result.r + ((color1.r * color2.r * f) >> 24), 0, 255);
 	result.g = cbound(result.g + ((color1.g * color2.g * f) >> 24), 0, 255);
 	result.b = cbound(result.b + ((color1.b * color2.b * f) >> 24), 0, 255);
+	result.a = 0;
 }
