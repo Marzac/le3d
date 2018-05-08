@@ -91,7 +91,7 @@ public:
 
 	LeHandle getHandle();
 	LeDrawingContext getContext();
-
+	
 	typedef void (* KeyCallback) (int key, int state);
 	typedef void (* MouseCallback) (int x, int y, int buttons);
 
@@ -101,6 +101,8 @@ public:
 	void sendKeyEvent(int code, int state);
 	void sendMouseEvent(int x, int y, int buttons);
 
+	bool visible;					/**< Is the window open or closed */
+
 private:
 	LeHandle handle;				/**< OS native window handle */
 	LeDrawingContext dc;			/**< OS native drawing context handle */
@@ -108,7 +110,7 @@ private:
 	int width;						/**< Width of window client region (in pixels) */
 	int height;						/**< Height of window client region (in pixels) */
 	bool fullScreen;				/**< Fullscreen state of window */
-
+	
 	KeyCallback keyCallback;		/**< Registrated callback for keyboard events */
 	MouseCallback mouseCallback;	/**< Registrated callback for mouse events */
 };

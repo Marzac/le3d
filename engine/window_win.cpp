@@ -49,6 +49,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 
 /*****************************************************************************/
 LeWindow::LeWindow(const char * name, int width, int height) :
+	visible(false),
 	handle(0),
 	width(width),
 	height(height),
@@ -89,7 +90,7 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 		   0,
 		   wincl.lpszClassName,
 		   name,
-		   WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+		   WS_OVERLAPPEDWINDOW,
 		   CW_USEDEFAULT,
 		   CW_USEDEFAULT,
 		   size.right - size.left,
@@ -105,6 +106,9 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	dc.display = 0;
 	dc.window = handle;
 	dc.gc = (LeHandle) GetDC((HWND) handle);
+	
+	ShowWindow((HWND) handle, SW_SHOW);
+	visible = true;
 }
 
 LeWindow::~LeWindow()
@@ -197,12 +201,9 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 
 	switch (msg) {
 	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-
-	case WM_CLOSE:
+		window->visible = false;
 		break;
-
+		
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
 	case WM_KEYDOWN:

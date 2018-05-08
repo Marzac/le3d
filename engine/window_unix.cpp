@@ -54,6 +54,7 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	width(width),
 	height(height),
 	fullScreen(false),
+	openwin(false),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {
@@ -71,13 +72,14 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	handle = (LeHandle) XCreateSimpleWindow(usedXDisplay, RootWindow(usedXDisplay, 0), 0, 0, width, height, 1, 0, 0);
 	XStoreName(usedXDisplay, (Window) handle, name);
 
-
 	XSelectInput(usedXDisplay, (Window) handle, ExposureMask | xEventMask);
 	XMapWindow(usedXDisplay, (Window) handle);
 
 	dc.display = (LeHandle) usedXDisplay;
 	dc.window = handle;
 	dc.gc = (LeHandle) DefaultGC(usedXDisplay, 0);
+	
+	openwin = true;
 }
 
 LeWindow::~LeWindow()
@@ -145,7 +147,11 @@ void LeWindow::update()
 				uniState |= LE_WINDOW_MOUSE_WHEEL_DOWN;
 
 			sendMouseEvent(event.xmotion.x, event.xmotion.y, uniState);
+		}else
+		if (event.type == DestroyNotify) {
+			visible = false;
 		}
+		
 	}
 }
 
