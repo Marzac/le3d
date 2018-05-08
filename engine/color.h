@@ -6,7 +6,7 @@
 	\twitter @m0ppers
 	\website https://mop.koeln
 	\copyright Andreas Streichardt 2018
-	\version 1.5
+	\version 1.6
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
