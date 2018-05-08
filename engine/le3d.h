@@ -39,6 +39,7 @@
 	#include "global.h"
 	#include "config.h"
 
+	#include "system.h"
 	#include "window.h"
 	#include "draw.h"
 	#include "renderer.h"
