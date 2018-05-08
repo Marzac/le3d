@@ -43,7 +43,8 @@ if (WIN32)
         winmm
     )
     list(APPEND ENGINE_FILES
-        engine/draw_win.cpp
+		engine/system_win.cpp
+		engine/draw_win.cpp
         engine/gamepad_win.cpp
         engine/window_win.cpp
         tools/timing_win.cpp
@@ -57,6 +58,7 @@ else()
         ${X11_INCLUDE_DIR}
     )
     list(APPEND ENGINE_FILES
+		engine/system_unix.cpp
         engine/draw_unix.cpp
         engine/gamepad_unix.cpp
         engine/window_unix.cpp

@@ -8,15 +8,9 @@
 # CMakeLists.txt - root directory 
 ############################################################################### 
 
-if (WIN32)
-    add_executable(cube
-        cube/cube_win.cpp
-    )
-else()
-    add_executable(cube
-        cube/cube_unix.cpp
-    )
-endif()
+add_executable(cube
+	cube/cube.cpp
+)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set_target_properties(cube PROPERTIES LINK_FLAGS "-m32 -s -Wl,--gc-sections")
