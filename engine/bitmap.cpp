@@ -566,8 +566,8 @@ void LeBitmap::makeMipmaps()
 			for (int x = 0; x < mtx; x++) {
 				LeColor * s1 = o;
 				LeColor * s2 = o+1;
-				LeColor * s3 = o + mtx*2*4;
-				LeColor * s4 = o + mtx*2*4+1;
+				LeColor * s3 = o + mtx*2;
+				LeColor * s4 = o + mtx*2+1;
 				int r = (s1->r + s2->r + s3->r + s4->r) >> 2;
 				int g = (s1->g + s2->g + s3->g + s4->g) >> 2;
 				int b = (s1->b + s2->b + s3->b + s4->b) >> 2;
