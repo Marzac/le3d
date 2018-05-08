@@ -1,12 +1,31 @@
+###############################################################################
+# le3d - LightEngine 3D 
+# A straightforward C++ 3D software engine for real-time graphics.  
+# .gitignore - examples directory
+###############################################################################
+# CMake generated files
+Makefile
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+
+###############################################################################
 # Compiled object files
 *.slo
 *.lo
 *.o
 
-# Precompiled header files
+# Generated header files
 *.gch
 *.pch
 
-# Assembler files
+# Generated assembler files
 *.ii
 *.s
+
+###############################################################################
+# Executables and binaries
+*.a
+*.exe
+*.out
+*.app
