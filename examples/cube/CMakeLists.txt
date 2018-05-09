@@ -24,7 +24,7 @@ endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(cube PRIVATE -D__MSVCRT_VERSION__=0x0700 -D_CRT_SECURE_NO_WARNINGS=1 -D_USE_MATH_DEFINES=1)
     target_include_directories(cube PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/vs)
-    set_target_properties(cube PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)cube")
+    set_target_properties(cube PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)")
 endif()	
 
 target_link_libraries(
