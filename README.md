@@ -1,6 +1,6 @@
 # le3d  
 **LightEngine 3D**  
-**Version 1.6 - 03/05/2018**
+**Version 1.6 - 09/05/2018**
 
 A straightforward C++ 3D software engine for real-time graphics.  
 The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
@@ -13,13 +13,13 @@ Currently supported platforms:
 
 Source code / examples / documentation  
 Copyright (c) 2015 - 2018 Frédéric Meslin  
-Twitter: @marzacdev  
-Email: fred@fredslab.net  
+**Twitter:** @marzacdev  
+**Email:** fred@fredslab.net  
 
 CMake scripts / MacOS support  
 Andreas Streichard  
-Twitter: @m0ppers  
-Email: andreas@mop.koeln  
+**Twitter:** @m0ppers  
+**Email:** andreas@mop.koeln  
 
 **Exceptions:**  
 __Mesh textures__  
@@ -42,7 +42,7 @@ http://fredslab.net
 
 This is open source software released under the MIT License, please refer to LICENCE file for more information.  
 
-# Renderer (Portable C++ / ASM (SSE2)  
+# Renderer (Portable C++ / ASM (SSE2))  
 The renderer:  
 - Renders meshes  
 - Renders billboard sets  
@@ -72,7 +72,7 @@ The lighting system:
 
 
 # Backends (Native OS code)  
-window / draw / gamepad / timing  
+window / draw / gamepad / timing / system  
 
 The backend - Windows version:  
 - Handles windows creation / management
@@ -91,7 +91,7 @@ The backend - Linux version:
 - Handles graphic contexts (with X11)
 - Handles joysticks with rumble support
   (with evdev interface)
-- Supports many Linux OS
+- Supports virtually all Linux based OS
 
 The backend - MacOS version:  
 - Similar to Linux version
