@@ -109,9 +109,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0715df852557363c65acefa65ced252"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_obj_file.html#aa0715df852557363c65acefa65ced252">getMeshName</a> (int index)</td></tr>
 <tr class="memdesc:aa0715df852557363c65acefa65ced252"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the mesh of the given index.  <a href="#aa0715df852557363c65acefa65ced252">More...</a><br /></td></tr>
 <tr class="separator:aa0715df852557363c65acefa65ced252"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9311e0c6a07b03bcbb7efaa6fcaae5c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_le_mesh.html">LeMesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_obj_file.html#a9311e0c6a07b03bcbb7efaa6fcaae5c8">loadMesh</a> (int index)</td></tr>
-<tr class="memdesc:a9311e0c6a07b03bcbb7efaa6fcaae5c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the mesh of the given index from the file.  <a href="#a9311e0c6a07b03bcbb7efaa6fcaae5c8">More...</a><br /></td></tr>
-<tr class="separator:a9311e0c6a07b03bcbb7efaa6fcaae5c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed3e6029a9364eecf19f56dc8e6b7a25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_le_mesh.html">LeMesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_obj_file.html#aed3e6029a9364eecf19f56dc8e6b7a25">load</a> (int index)</td></tr>
+<tr class="memdesc:aed3e6029a9364eecf19f56dc8e6b7a25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the mesh of the given index from the file.  <a href="#aed3e6029a9364eecf19f56dc8e6b7a25">More...</a><br /></td></tr>
+<tr class="separator:aed3e6029a9364eecf19f56dc8e6b7a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0fad812a31ee6753180047e51d9aace"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_obj_file.html#aa0fad812a31ee6753180047e51d9aace">save</a> (const <a class="el" href="class_le_mesh.html">LeMesh</a> *mesh)</td></tr>
+<tr class="memdesc:aa0fad812a31ee6753180047e51d9aace"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the mesh of the given index from the file.  <a href="#aa0fad812a31ee6753180047e51d9aace">More...</a><br /></td></tr>
+<tr class="separator:aa0fad812a31ee6753180047e51d9aace"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Load 3D meshes in Wavefront object format. </p>
@@ -185,15 +188,34 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9311e0c6a07b03bcbb7efaa6fcaae5c8"></a>
+<a class="anchor" id="aed3e6029a9364eecf19f56dc8e6b7a25"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_le_mesh.html">LeMesh</a> * LeObjFile::loadMesh </td>
+          <td class="memname"><a class="el" href="class_le_mesh.html">LeMesh</a> * LeObjFile::load </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Load the mesh of the given index from the file. </p>
+<dl class="section return"><dt>Returns</dt><dd>pointer to a new loaded mesh, else NULL (error) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa0fad812a31ee6753180047e51d9aace"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LeObjFile::save </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_le_mesh.html">LeMesh</a> *&#160;</td>
+          <td class="paramname"><em>mesh</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

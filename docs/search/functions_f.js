@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['terminate',['terminate',['../class_le_system.html#aa6e1f592a798e49c93b7d7646229cb1d',1,'LeSystem']]],
   ['text',['text',['../class_le_bitmap.html#a813ec6918d1d7d46b7429d2f5337f106',1,'LeBitmap']]],
   ['tolower',['toLower',['../namespace_le_global.html#aa40aeec7c15df8a2bd393117e627cf12',1,'LeGlobal']]],
   ['toupper',['toUpper',['../namespace_le_global.html#acb50a1084e783fb1fb4b1bc6b9f44938',1,'LeGlobal']]],

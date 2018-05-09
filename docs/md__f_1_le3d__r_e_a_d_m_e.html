@@ -81,18 +81,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">le3d </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><b>LightEngine 3D</b> <b>Version 1.5 - 24/01/2018</b></p>
+<div class="textblock"><p><b>LightEngine 3D</b> <b>Version 1.6 - 09/05/2018</b></p>
 <p>A straightforward C++ 3D software engine for real-time graphics. The engine aims to be a minimal and clear implementation of a simplified fixed pipeline. Code has been designed for resource constrained platforms.</p>
 <p>Currently supported platforms:</p><ul>
 <li>Microsoft Windows XP, 7, 8 and 10</li>
 <li>Linux based operating systems</li>
+<li>MacOS X</li>
 </ul>
-<p>Source code / examples / documentation Copyright (c) 2015 - 2018 Frédéric Meslin</p>
-<p><b>Exceptions:</b> <b>Mesh textures</b> In the example folder, one or more textures on the 3D models have been created with photographs from Textures.com. These photographs may not be redistributed by default; Please visit <a href="http://www.textures.com">http://www.textures.com</a> for more information.</p>
-<p><b>Skybox texture</b> In the example folder, the meadow skybox has been created by Emil "Humus" Persson and it is licenced under the Creative Commons Attribution 3.0 Unported License. Please visit <a href="http://www.humus.name/index.php?page=Textures">http://www.humus.name/index.php?page=Textures</a> for more information.</p>
-<p><b>Fred's Lab</b> <a href="http://fredslab.net">http://fredslab.net</a> <a href="#" onclick="location.href='mai'+'lto:'+'fre'+'d@'+'fre'+'ds'+'lab'+'.n'+'et'; return false;">fred@<span style="display: none;">.nosp@m.</span>fred<span style="display: none;">.nosp@m.</span>slab.<span style="display: none;">.nosp@m.</span>net</a>, </p>
+<p>Source code / examples / documentation Copyright (c) 2015 - 2018 Frédéric Meslin <b>Twitter:</b>  <b>Email:</b> <a href="#" onclick="location.href='mai'+'lto:'+'fre'+'d@'+'fre'+'ds'+'lab'+'.n'+'et'; return false;">fred@<span style="display: none;">.nosp@m.</span>fred<span style="display: none;">.nosp@m.</span>slab.<span style="display: none;">.nosp@m.</span>net</a></p>
+<p>CMake scripts / MacOS support Andreas Streichard <b>Twitter:</b>  <b>Email:</b> <a href="#" onclick="location.href='mai'+'lto:'+'and'+'re'+'as@'+'mo'+'p.k'+'oe'+'ln'; return false;">andre<span style="display: none;">.nosp@m.</span>as@m<span style="display: none;">.nosp@m.</span>op.ko<span style="display: none;">.nosp@m.</span>eln</a></p>
+<p><b>Exceptions:</b> <b>Mesh textures</b> In the example folder, one or more textures on the 3D models have been created with photographs from Textures.com. These photographs may not be redistributed by default; Please visit: <a href="http://www.textures.com">http://www.textures.com</a> for more information.</p>
+<p><b>Skybox texture</b> In the example folder, the meadow skybox has been created by Emil "Humus" Persson and it is licenced under the Creative Commons Attribution 3.0 Unported License. Please visit: <a href="http://www.humus.name/index.php?page=Textures">http://www.humus.name/index.php?page=Textures</a> for more information.</p>
+<p><b>Fred's Lab:</b> A project maintained by Fred's Lab <a href="http://fredslab.net">http://fredslab.net</a></p>
 <p>This is open source software released under the MIT License, please refer to LICENCE file for more information.</p>
-<h1>Specifications</h1>
+<h1>Renderer (Portable C++ / ASM (SSE2))</h1>
 <p>The renderer:</p><ul>
 <li>Renders meshes</li>
 <li>Renders billboard sets</li>
@@ -115,11 +117,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </ul>
 <p>The lighting system:</p><ul>
 <li>Handles point lights</li>
-<li>Handles directionnal lights</li>
+<li>Handles directional lights</li>
 <li>Handles ambient lights</li>
 </ul>
-<h1>Backends</h1>
-<p>window / draw / gamepad / timing</p>
+<h1>Backends (Native OS code)</h1>
+<p>window / draw / gamepad / timing / system</p>
 <p>The backend - Windows version:</p><ul>
 <li>Handles windows creation / management</li>
 <li>Handles mouse events</li>
@@ -135,24 +137,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>Handles keyboard events (with X11)</li>
 <li>Handles graphic contexts (with X11)</li>
 <li>Handles joysticks with rumble support (with evdev interface)</li>
-<li>Supports many Linux OS</li>
+<li>Supports virtually all Linux based OS</li>
 </ul>
 <p>The backend - MacOS version:</p><ul>
-<li>Incoming (maybe)</li>
+<li>Similar to Linux version</li>
+<li>Needs X11 (XQuartz) for MacOS</li>
+<li>No native COCOA support</li>
+<li>No joysticks support yet (soon)</li>
 </ul>
 <h1>File formats</h1>
 <p>Supported bitmap / texture formats:</p><ul>
 <li>Uncompressed 24bit RGB windows bitmap</li>
 <li>Uncompressed 32bit RGBA windows bitmap</li>
+<li>Import &amp; export functions</li>
 </ul>
 <p>Supported 3D model formats:</p><ul>
 <li>Wavefront OBJ</li>
+<li>Import &amp; export functions</li>
 </ul>
 <h1>Limitations</h1>
 <ul>
 <li>No Z-buffer</li>
-<li>No lightmaps</li>
+<li>No multilayer texturing</li>
 <li>No shaders</li>
+<li>No fog</li>
+<li>No antialiasing</li>
+<li>Single core support</li>
 </ul>
 <h1>Comparison</h1>
 <p>It renders graphics a bit better than a Sony Playstation one. </p>

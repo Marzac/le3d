@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['terminate',['terminate',['../class_le_system.html#aa6e1f592a798e49c93b7d7646229cb1d',1,'LeSystem']]],
   ['tex',['tex',['../struct_le_triangle.html#a879a9c4a9179cad7b0077369b62d162c',1,'LeTriangle']]],
   ['texcoords',['texCoords',['../class_le_mesh.html#aef46f2d98bc3285005a012cb1ff096fe',1,'LeMesh']]],
   ['texcoordslist',['texCoordsList',['../class_le_mesh.html#a08687ce15829ab697147d63f76fba0d2',1,'LeMesh']]],
@@ -7,8 +8,9 @@ var searchData=
   ['texslots',['texSlots',['../class_le_b_set.html#a2fc612a38e9a66145a252a814d5ab39a',1,'LeBSet']]],
   ['text',['text',['../class_le_bitmap.html#a813ec6918d1d7d46b7429d2f5337f106',1,'LeBitmap']]],
   ['texture',['texture',['../struct_le_obj_material.html#a41cd3e2e9ae12902c2d3fea2e1326c3f',1,'LeObjMaterial']]],
-  ['timing',['timing',['../timing_8h.html#af99cbd72f7e589165ed81405139fbffa',1,'timing.h']]],
+  ['timing',['timing',['../timing_8h.html#af99cbd72f7e589165ed81405139fbffa',1,'timing():&#160;timing_unix.cpp'],['../timing__unix_8cpp.html#af99cbd72f7e589165ed81405139fbffa',1,'timing():&#160;timing_unix.cpp']]],
   ['timing_2eh',['timing.h',['../timing_8h.html',1,'']]],
+  ['timing_5fscheduler_5fgranularity',['TIMING_SCHEDULER_GRANULARITY',['../timing__unix_8cpp.html#a68b155c6798ac3874bc0491fb8a27775',1,'timing_unix.cpp']]],
   ['timing_5funix_2ecpp',['timing_unix.cpp',['../timing__unix_8cpp.html',1,'']]],
   ['timing_5fwin_2ecpp',['timing_win.cpp',['../timing__win_8cpp.html',1,'']]],
   ['toggled',['toggled',['../class_le_game_pad.html#a20f43344ed569760f8eb0b92ac4bd75e',1,'LeGamePad']]],

@@ -104,12 +104,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adb6406c7b7433509af3af1ec62bdd795"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58c4b05db5168c661e924daaae7dc2e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bitmap.html#a58c4b05db5168c661e924daaae7dc2e4">~LeBitmap</a> ()</td></tr>
 <tr class="separator:a58c4b05db5168c661e924daaae7dc2e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5022ac6b420fa98a16f1e1049ffcfd4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bitmap.html#af5022ac6b420fa98a16f1e1049ffcfd4">clear</a> (uint32_t color)</td></tr>
-<tr class="memdesc:af5022ac6b420fa98a16f1e1049ffcfd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the image with the specified color.  <a href="#af5022ac6b420fa98a16f1e1049ffcfd4">More...</a><br /></td></tr>
-<tr class="separator:af5022ac6b420fa98a16f1e1049ffcfd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67614faa6f3c532bc2e99dcc22a52727"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bitmap.html#a67614faa6f3c532bc2e99dcc22a52727">rect</a> (int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color)</td></tr>
-<tr class="memdesc:a67614faa6f3c532bc2e99dcc22a52727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill a rectangle with the specified color.  <a href="#a67614faa6f3c532bc2e99dcc22a52727">More...</a><br /></td></tr>
-<tr class="separator:a67614faa6f3c532bc2e99dcc22a52727"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3b260f05112d75ad56dbcc7d9878155"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bitmap.html#ab3b260f05112d75ad56dbcc7d9878155">clear</a> (<a class="el" href="class_le_color.html">LeColor</a> color)</td></tr>
+<tr class="memdesc:ab3b260f05112d75ad56dbcc7d9878155"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the image with the specified color.  <a href="#ab3b260f05112d75ad56dbcc7d9878155">More...</a><br /></td></tr>
+<tr class="separator:ab3b260f05112d75ad56dbcc7d9878155"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9927d3bd96158bf054e228c8434835db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bitmap.html#a9927d3bd96158bf054e228c8434835db">rect</a> (int32_t x, int32_t y, int32_t w, int32_t h, <a class="el" href="class_le_color.html">LeColor</a> color)</td></tr>
+<tr class="memdesc:a9927d3bd96158bf054e228c8434835db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill a rectangle with the specified color.  <a href="#a9927d3bd96158bf054e228c8434835db">More...</a><br /></td></tr>
+<tr class="separator:a9927d3bd96158bf054e228c8434835db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae757af009f6522a39afd5970bdc4f2e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bitmap.html#ae757af009f6522a39afd5970bdc4f2e8">blit</a> (int32_t xDst, int32_t yDst, const <a class="el" href="class_le_bitmap.html">LeBitmap</a> *src, int32_t xSrc, int32_t ySrc, int32_t w, int32_t h)</td></tr>
 <tr class="memdesc:ae757af009f6522a39afd5970bdc4f2e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy an image portion to the image.  <a href="#ae757af009f6522a39afd5970bdc4f2e8">More...</a><br /></td></tr>
 <tr class="separator:ae757af009f6522a39afd5970bdc4f2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -453,14 +453,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af5022ac6b420fa98a16f1e1049ffcfd4"></a>
+<a class="anchor" id="ab3b260f05112d75ad56dbcc7d9878155"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void LeBitmap::clear </td>
           <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramtype"><a class="el" href="class_le_color.html">LeColor</a>&#160;</td>
           <td class="paramname"><em>color</em></td><td>)</td>
           <td></td>
         </tr>
@@ -528,7 +528,7 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a67614faa6f3c532bc2e99dcc22a52727"></a>
+<a class="anchor" id="a9927d3bd96158bf054e228c8434835db"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -559,7 +559,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramtype"><a class="el" href="class_le_color.html">LeColor</a>&#160;</td>
           <td class="paramname"><em>color</em>&#160;</td>
         </tr>
         <tr>

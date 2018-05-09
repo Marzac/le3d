@@ -110,55 +110,60 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">class </span><a class="code" href="class_le_rasterizer.html">LeRasterizer</a></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;{</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="class_le_rasterizer.html#aee79b0675e314c8afe1444522ccfd620">LeRasterizer</a>(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="class_le_rasterizer.html#a37ecfdab5eef457ae769ff345b042bb1">LeRasterizer</a>(<span class="keywordtype">int</span> width = <a class="code" href="config_8h.html#a0e23fe71df13725c6b696a54d264b252">LE_RESOX_DEFAULT</a>, <span class="keywordtype">int</span> height = <a class="code" href="config_8h.html#a59236b29cfb5747fdce2159e7dfb14c3">LE_RESOY_DEFAULT</a>);</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="class_le_rasterizer.html#a862d10d67175f69219e530ea5830a873">~LeRasterizer</a>();</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_le_rasterizer.html#af1e6feb0b823065f7bb94fb7771d3b31">rasterList</a>(<a class="code" href="class_le_tri_list.html">LeTriList</a> * trilist);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_le_rasterizer.html#a3fe5429758dca00997c000ec5861ed5c">flush</a>();</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="class_le_bitmap.html">LeBitmap</a> <a class="code" href="class_le_rasterizer.html#a835403531d7dc07519152ff26d59b489">frame</a>;             </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    uint32_t <a class="code" href="class_le_rasterizer.html#aa62687ead468d5bcdf72340739596038">background</a>;        </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">void</span> topTriangleZC(<span class="keywordtype">int</span> vt, <span class="keywordtype">int</span> vm1, <span class="keywordtype">int</span> vm2);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> bottomTriangleZC(<span class="keywordtype">int</span> vm1, <span class="keywordtype">int</span> vm2, <span class="keywordtype">int</span> vb);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> fillFlatTexZC(<span class="keywordtype">int</span> y, <span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> w1, <span class="keywordtype">int</span> w2, <span class="keywordtype">int</span> u1, <span class="keywordtype">int</span> u2, <span class="keywordtype">int</span> v1, <span class="keywordtype">int</span> v2);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> fillFlatTexAlphaZC(<span class="keywordtype">int</span> y, <span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> w1, <span class="keywordtype">int</span> w2, <span class="keywordtype">int</span> u1, <span class="keywordtype">int</span> u2, <span class="keywordtype">int</span> v1, <span class="keywordtype">int</span> v2);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    uint32_t color;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="class_le_bitmap.html">LeBitmap</a> * bmp;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    uint32_t * texPixels;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    uint32_t texSizeU;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    uint32_t texSizeV;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    uint32_t texMaskU;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    uint32_t texMaskV;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">#if LE_USE_SIMD == 1</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    v4si color_4;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#endif // LE_USE_SIMD</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    int32_t xs[4], ys[4];</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    int32_t ws[4];</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    int32_t us[4], vs[4];</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;};</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor">#endif // LE_RASTERIZER_INTEGER_H</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="class_le_rasterizer.html#a3852570e89c2827b2a1ffe9353c9efe5">   61</a></span>&#160;    <span class="keyword">const</span> <span class="keywordtype">void</span> * <a class="code" href="class_le_rasterizer.html#a3852570e89c2827b2a1ffe9353c9efe5">getPixels</a>() {<span class="keywordflow">return</span> pixels;}</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_le_rasterizer.html#a3fe5429758dca00997c000ec5861ed5c">flush</a>();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <a class="code" href="class_le_bitmap.html">LeBitmap</a> <a class="code" href="class_le_rasterizer.html#a835403531d7dc07519152ff26d59b489">frame</a>;             </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <a class="code" href="class_le_color.html">LeColor</a> <a class="code" href="class_le_rasterizer.html#ae4c8f3c01b5c68d68ba37c75aebaf906">background</a>;     </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> topTriangleZC(<span class="keywordtype">int</span> vt, <span class="keywordtype">int</span> vm1, <span class="keywordtype">int</span> vm2);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">void</span> bottomTriangleZC(<span class="keywordtype">int</span> vm1, <span class="keywordtype">int</span> vm2, <span class="keywordtype">int</span> vb);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> fillFlatTexZC(<span class="keywordtype">int</span> y, <span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> w1, <span class="keywordtype">int</span> w2, <span class="keywordtype">int</span> u1, <span class="keywordtype">int</span> u2, <span class="keywordtype">int</span> v1, <span class="keywordtype">int</span> v2);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> fillFlatTexAlphaZC(<span class="keywordtype">int</span> y, <span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> w1, <span class="keywordtype">int</span> w2, <span class="keywordtype">int</span> u1, <span class="keywordtype">int</span> u2, <span class="keywordtype">int</span> v1, <span class="keywordtype">int</span> v2);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="class_le_color.html">LeColor</a> color;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="class_le_bitmap.html">LeBitmap</a> * bmp;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="class_le_color.html">LeColor</a> * pixels;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="class_le_color.html">LeColor</a> * texPixels;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    uint32_t texSizeU;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    uint32_t texSizeV;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    uint32_t texMaskU;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    uint32_t texMaskV;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#if LE_USE_SIMD == 1 &amp;&amp; LE_USE_SSE2 == 1</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    __m128i color_4;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif // LE_USE_SIMD &amp;&amp; LE_USE_SSE2</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    int32_t xs[4], ys[4], ws[4];</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    int32_t us[4], vs[4];</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;};</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">#endif // LE_RASTERIZER_INTEGER_H</span></div>
 <div class="ttc" id="draw_8h_html"><div class="ttname"><a href="draw_8h.html">draw.h</a></div><div class="ttdoc">LightEngine 3D: Native OS graphic context. </div></div>
-<div class="ttc" id="class_le_rasterizer_html_aee79b0675e314c8afe1444522ccfd620"><div class="ttname"><a href="class_le_rasterizer.html#aee79b0675e314c8afe1444522ccfd620">LeRasterizer::LeRasterizer</a></div><div class="ttdeci">LeRasterizer(int width, int height)</div><div class="ttdef"><b>Definition:</b> rasterizer_float.cpp:48</div></div>
 <div class="ttc" id="config_8h_html"><div class="ttname"><a href="config_8h.html">config.h</a></div><div class="ttdoc">LightEngine 3D: General engine configuration file. </div></div>
 <div class="ttc" id="trilist_8h_html"><div class="ttname"><a href="trilist_8h.html">trilist.h</a></div><div class="ttdoc">LightEngine 3D: Triangle lists. </div></div>
 <div class="ttc" id="global_8h_html"><div class="ttname"><a href="global_8h.html">global.h</a></div><div class="ttdoc">LightEngine 3D: Global helpers and definitions. </div></div>
 <div class="ttc" id="class_le_rasterizer_html"><div class="ttname"><a href="class_le_rasterizer.html">LeRasterizer</a></div><div class="ttdoc">Rasterize triangle lists. </div><div class="ttdef"><b>Definition:</b> rasterizer_float.h:54</div></div>
-<div class="ttc" id="class_le_tri_list_html"><div class="ttname"><a href="class_le_tri_list.html">LeTriList</a></div><div class="ttdoc">Contain and manage triangle lists. </div><div class="ttdef"><b>Definition:</b> trilist.h:61</div></div>
-<div class="ttc" id="class_le_rasterizer_html_a835403531d7dc07519152ff26d59b489"><div class="ttname"><a href="class_le_rasterizer.html#a835403531d7dc07519152ff26d59b489">LeRasterizer::frame</a></div><div class="ttdeci">LeBitmap frame</div><div class="ttdef"><b>Definition:</b> rasterizer_float.h:63</div></div>
-<div class="ttc" id="class_le_bitmap_html"><div class="ttname"><a href="class_le_bitmap.html">LeBitmap</a></div><div class="ttdoc">Contain and manage a RGB or RGBA 32bit bitmap image. </div><div class="ttdef"><b>Definition:</b> bitmap.h:57</div></div>
-<div class="ttc" id="class_le_rasterizer_html_aa62687ead468d5bcdf72340739596038"><div class="ttname"><a href="class_le_rasterizer.html#aa62687ead468d5bcdf72340739596038">LeRasterizer::background</a></div><div class="ttdeci">uint32_t background</div><div class="ttdef"><b>Definition:</b> rasterizer_float.h:64</div></div>
-<div class="ttc" id="class_le_rasterizer_html_a3fe5429758dca00997c000ec5861ed5c"><div class="ttname"><a href="class_le_rasterizer.html#a3fe5429758dca00997c000ec5861ed5c">LeRasterizer::flush</a></div><div class="ttdeci">void flush()</div><div class="ttdoc">Fill the frame buffer with the background color. </div><div class="ttdef"><b>Definition:</b> rasterizer_float.cpp:81</div></div>
+<div class="ttc" id="class_le_tri_list_html"><div class="ttname"><a href="class_le_tri_list.html">LeTriList</a></div><div class="ttdoc">Contain and manage triangle lists. </div><div class="ttdef"><b>Definition:</b> trilist.h:63</div></div>
+<div class="ttc" id="class_le_rasterizer_html_a835403531d7dc07519152ff26d59b489"><div class="ttname"><a href="class_le_rasterizer.html#a835403531d7dc07519152ff26d59b489">LeRasterizer::frame</a></div><div class="ttdeci">LeBitmap frame</div><div class="ttdef"><b>Definition:</b> rasterizer_float.h:64</div></div>
+<div class="ttc" id="class_le_bitmap_html"><div class="ttname"><a href="class_le_bitmap.html">LeBitmap</a></div><div class="ttdoc">Contain and manage a RGB or RGBA 32bit bitmap image. </div><div class="ttdef"><b>Definition:</b> bitmap.h:58</div></div>
+<div class="ttc" id="config_8h_html_a0e23fe71df13725c6b696a54d264b252"><div class="ttname"><a href="config_8h.html#a0e23fe71df13725c6b696a54d264b252">LE_RESOX_DEFAULT</a></div><div class="ttdeci">#define LE_RESOX_DEFAULT</div><div class="ttdef"><b>Definition:</b> config.h:37</div></div>
+<div class="ttc" id="class_le_color_html"><div class="ttname"><a href="class_le_color.html">LeColor</a></div><div class="ttdef"><b>Definition:</b> color.h:38</div></div>
+<div class="ttc" id="config_8h_html_a59236b29cfb5747fdce2159e7dfb14c3"><div class="ttname"><a href="config_8h.html#a59236b29cfb5747fdce2159e7dfb14c3">LE_RESOY_DEFAULT</a></div><div class="ttdeci">#define LE_RESOY_DEFAULT</div><div class="ttdef"><b>Definition:</b> config.h:38</div></div>
+<div class="ttc" id="class_le_rasterizer_html_a3fe5429758dca00997c000ec5861ed5c"><div class="ttname"><a href="class_le_rasterizer.html#a3fe5429758dca00997c000ec5861ed5c">LeRasterizer::flush</a></div><div class="ttdeci">void flush()</div><div class="ttdoc">Fill the frame buffer with the background color. </div><div class="ttdef"><b>Definition:</b> rasterizer_integer.cpp:79</div></div>
 <div class="ttc" id="geometry_8h_html"><div class="ttname"><a href="geometry_8h.html">geometry.h</a></div><div class="ttdoc">LightEngine 3D: Vertex / axis / plan / matrix objects. </div></div>
-<div class="ttc" id="class_le_rasterizer_html_af1e6feb0b823065f7bb94fb7771d3b31"><div class="ttname"><a href="class_le_rasterizer.html#af1e6feb0b823065f7bb94fb7771d3b31">LeRasterizer::rasterList</a></div><div class="ttdeci">void rasterList(LeTriList *trilist)</div><div class="ttdoc">Rasterize the given triangle list. </div><div class="ttdef"><b>Definition:</b> rasterizer_float.cpp:92</div></div>
+<div class="ttc" id="class_le_rasterizer_html_af1e6feb0b823065f7bb94fb7771d3b31"><div class="ttname"><a href="class_le_rasterizer.html#af1e6feb0b823065f7bb94fb7771d3b31">LeRasterizer::rasterList</a></div><div class="ttdeci">void rasterList(LeTriList *trilist)</div><div class="ttdoc">Rasterize the given triangle list. </div><div class="ttdef"><b>Definition:</b> rasterizer_integer.cpp:90</div></div>
 <div class="ttc" id="simd_8h_html"><div class="ttname"><a href="simd_8h.html">simd.h</a></div><div class="ttdoc">LightEngine 3D: SIMD constants / types and intrinsic definitions. </div></div>
-<div class="ttc" id="class_le_rasterizer_html_a862d10d67175f69219e530ea5830a873"><div class="ttname"><a href="class_le_rasterizer.html#a862d10d67175f69219e530ea5830a873">LeRasterizer::~LeRasterizer</a></div><div class="ttdeci">~LeRasterizer()</div><div class="ttdef"><b>Definition:</b> rasterizer_float.cpp:69</div></div>
+<div class="ttc" id="class_le_rasterizer_html_a37ecfdab5eef457ae769ff345b042bb1"><div class="ttname"><a href="class_le_rasterizer.html#a37ecfdab5eef457ae769ff345b042bb1">LeRasterizer::LeRasterizer</a></div><div class="ttdeci">LeRasterizer(int width=LE_RESOX_DEFAULT, int height=LE_RESOY_DEFAULT)</div><div class="ttdef"><b>Definition:</b> rasterizer_integer.cpp:48</div></div>
+<div class="ttc" id="class_le_rasterizer_html_ae4c8f3c01b5c68d68ba37c75aebaf906"><div class="ttname"><a href="class_le_rasterizer.html#ae4c8f3c01b5c68d68ba37c75aebaf906">LeRasterizer::background</a></div><div class="ttdeci">LeColor background</div><div class="ttdef"><b>Definition:</b> rasterizer_float.h:65</div></div>
+<div class="ttc" id="class_le_rasterizer_html_a3852570e89c2827b2a1ffe9353c9efe5"><div class="ttname"><a href="class_le_rasterizer.html#a3852570e89c2827b2a1ffe9353c9efe5">LeRasterizer::getPixels</a></div><div class="ttdeci">const void * getPixels()</div><div class="ttdef"><b>Definition:</b> rasterizer_integer.h:61</div></div>
+<div class="ttc" id="class_le_rasterizer_html_a862d10d67175f69219e530ea5830a873"><div class="ttname"><a href="class_le_rasterizer.html#a862d10d67175f69219e530ea5830a873">LeRasterizer::~LeRasterizer</a></div><div class="ttdeci">~LeRasterizer()</div><div class="ttdef"><b>Definition:</b> rasterizer_integer.cpp:69</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

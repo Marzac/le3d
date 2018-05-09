@@ -101,23 +101,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#endif // LE_USE_SSE2</span></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="simd_8h.html#a0ff9bbf349ca34ca44a010a2680498b6">   44</a></span>&#160;    <span class="keyword">typedef</span> <span class="keywordtype">float</span> V4SF <a class="code" href="simd_8h.html#a0ff9bbf349ca34ca44a010a2680498b6">__attribute__</a> ((vector_size (16)));</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V4SF v; <span class="keywordtype">float</span> f[4];} v4sf;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">typedef</span> int32_t V4SI <a class="code" href="simd_8h.html#a0ff9bbf349ca34ca44a010a2680498b6">__attribute__</a> ((vector_size (16)));</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V4SI v; int32_t i[4];} v4si;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">typedef</span> uint32_t V4SU <a class="code" href="simd_8h.html#a0ff9bbf349ca34ca44a010a2680498b6">__attribute__</a> ((vector_size (16)));</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V4SU v; uint32_t u[4];} v4su;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">typedef</span> int16_t V8SH <a class="code" href="simd_8h.html#a0ff9bbf349ca34ca44a010a2680498b6">__attribute__</a> ((vector_size (16)));</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V8SH v; int16_t i[8];} v8sh;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">typedef</span> uint16_t V8SW <a class="code" href="simd_8h.html#a0ff9bbf349ca34ca44a010a2680498b6">__attribute__</a> ((vector_size (16)));</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V8SW v; uint16_t u[8];} v8sw;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#endif // LE_SIMD_H</span></div>
-<div class="ttc" id="simd_8h_html_a0ff9bbf349ca34ca44a010a2680498b6"><div class="ttname"><a href="simd_8h.html#a0ff9bbf349ca34ca44a010a2680498b6">__attribute__</a></div><div class="ttdeci">float V4SF __attribute__((vector_size(16)))</div><div class="ttdef"><b>Definition:</b> simd.h:44</div></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#ifdef __GNUC_</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">typedef</span> <span class="keywordtype">float</span> V4SF <a class="code" href="geometry__simd_8h.html#a8e8bafc85405bbf1d6c3d2806c2c3bd8">__attribute__</a> ((vector_size (16)));</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V4SF v; <span class="keywordtype">float</span> f[4];} v4sf;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">typedef</span> int32_t V4SI <a class="code" href="geometry__simd_8h.html#a8e8bafc85405bbf1d6c3d2806c2c3bd8">__attribute__</a> ((vector_size (16)));</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V4SI v; int32_t i[4];} v4si;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">typedef</span> uint32_t V4SU <a class="code" href="geometry__simd_8h.html#a8e8bafc85405bbf1d6c3d2806c2c3bd8">__attribute__</a> ((vector_size (16)));</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V4SU v; uint32_t u[4];} v4su;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">typedef</span> int16_t V8SH <a class="code" href="geometry__simd_8h.html#a8e8bafc85405bbf1d6c3d2806c2c3bd8">__attribute__</a> ((vector_size (16)));</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V8SH v; int16_t i[8];} v8sh;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">typedef</span> uint16_t V8SW <a class="code" href="geometry__simd_8h.html#a8e8bafc85405bbf1d6c3d2806c2c3bd8">__attribute__</a> ((vector_size (16)));</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">union </span>{V8SW v; uint16_t u[8];} v8sw;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#endif // LE_SIMD_H</span></div>
+<div class="ttc" id="geometry__simd_8h_html_a8e8bafc85405bbf1d6c3d2806c2c3bd8"><div class="ttname"><a href="geometry__simd_8h.html#a8e8bafc85405bbf1d6c3d2806c2c3bd8">__attribute__</a></div><div class="ttdeci">struct __attribute__((aligned(16))) LeVertex</div><div class="ttdef"><b>Definition:</b> geometry_simd.h:61</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

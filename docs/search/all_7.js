@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['g',['g',['../class_le_color.html#aaeb9006e6e05cd46063f281363da511a',1,'LeColor']]],
   ['gamepad_2eh',['gamepad.h',['../gamepad_8h.html',1,'']]],
   ['gamepad_5funix_2ecpp',['gamepad_unix.cpp',['../gamepad__unix_8cpp.html',1,'']]],
   ['gamepad_5fwin_2ecpp',['gamepad_win.cpp',['../gamepad__win_8cpp.html',1,'']]],
@@ -16,6 +17,8 @@ var searchData=
   ['gethandle',['getHandle',['../class_le_window.html#a65b08dc591f5d31e735d5fe9617b5801',1,'LeWindow']]],
   ['getmeshname',['getMeshName',['../class_le_obj_file.html#aa0715df852557363c65acefa65ced252',1,'LeObjFile']]],
   ['getnomeshes',['getNoMeshes',['../class_le_obj_file.html#ac47c5c60a19ff39588074c56d11bb3d6',1,'LeObjFile']]],
+  ['getpixels',['getPixels',['../class_le_rasterizer.html#a3852570e89c2827b2a1ffe9353c9efe5',1,'LeRasterizer::getPixels()'],['../class_le_rasterizer.html#a3852570e89c2827b2a1ffe9353c9efe5',1,'LeRasterizer::getPixels()']]],
+  ['getstatus',['getStatus',['../class_le_system.html#a168e5048c2078eb03ef234d1c711cbe9',1,'LeSystem']]],
   ['gettrianglelist',['getTriangleList',['../class_le_renderer.html#a31b7ac261ce850e503760ae35cf486d0',1,'LeRenderer']]],
   ['global_2ecpp',['global.cpp',['../global_8cpp.html',1,'']]],
   ['global_2eh',['global.h',['../global_8h.html',1,'']]]

@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['bi_5falphabitfields',['BI_ALPHABITFIELDS',['../bmpfile_8cpp.html#a8b1a6ded7f0e4e771669205bc668571a',1,'bmpfile.cpp']]],
-  ['bi_5fbitfields',['BI_BITFIELDS',['../bmpfile_8cpp.html#a0e10b199170996b8388f8b86f4a6495e',1,'bmpfile.cpp']]],
-  ['bi_5frgb',['BI_RGB',['../bmpfile_8cpp.html#a30c89822a72c59b21109955f16d74e29',1,'bmpfile.cpp']]]
+  ['architecture_5fid',['ARCHITECTURE_ID',['../_c_make_c_compiler_id_8c.html#aba35d0d200deaeb06aee95ca297acb28',1,'ARCHITECTURE_ID():&#160;CMakeCCompilerId.c'],['../_c_make_c_x_x_compiler_id_8cpp.html#aba35d0d200deaeb06aee95ca297acb28',1,'ARCHITECTURE_ID():&#160;CMakeCXXCompilerId.cpp']]]
 ];

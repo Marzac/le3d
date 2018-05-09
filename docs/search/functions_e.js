@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['save',['save',['../class_le_bmp_file.html#ac34ce439639cdb9814560471c1771c16',1,'LeBmpFile']]],
+  ['save',['save',['../class_le_bmp_file.html#ac34ce439639cdb9814560471c1771c16',1,'LeBmpFile::save()'],['../class_le_obj_file.html#aa0fad812a31ee6753180047e51d9aace',1,'LeObjFile::save()']]],
   ['scale',['scale',['../struct_le_matrix.html#adea418f216933767e724825ccbee1b79',1,'LeMatrix']]],
   ['sendkeyevent',['sendKeyEvent',['../class_le_window.html#aa5bf9afc1549356a00bc5e90e6b15a7b',1,'LeWindow']]],
   ['sendmouseevent',['sendMouseEvent',['../class_le_window.html#aeafa5196abff2be2e3d4ba46c9c5575d',1,'LeWindow']]],
@@ -20,5 +20,6 @@ var searchData=
   ['shadowcopy',['shadowCopy',['../class_le_b_set.html#aca431f1923b1465de6aab721e6c2862e',1,'LeBSet::shadowCopy()'],['../class_le_mesh.html#af0542894eda55eb6f4266f54839dd781',1,'LeMesh::shadowCopy()']]],
   ['shine',['shine',['../class_le_light.html#ad979379889c66408e36c2fd6a2ed1787',1,'LeLight']]],
   ['sign',['sign',['../struct_le_vertex.html#a71dcaf4bbd51e4b3abc3d1d7023f319f',1,'LeVertex']]],
+  ['signalhandler',['SignalHandler',['../system__unix_8cpp.html#a01af5df9d4270d594f2a4391b5a775ec',1,'system_unix.cpp']]],
   ['spherical',['spherical',['../struct_le_vertex.html#a89bac5adf384b1ec0c7c24c31f16090b',1,'LeVertex']]]
 ];

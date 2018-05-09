@@ -111,6 +111,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae6ca213847aa9f23c5e3eb06348442f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fa7d0d5b9f2011ff9816974daaf1d04"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#a9fa7d0d5b9f2011ff9816974daaf1d04">~LeMeshCache</a> ()</td></tr>
 <tr class="separator:a9fa7d0d5b9f2011ff9816974daaf1d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0199bd60f930eca559806dd948fe252e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#a0199bd60f930eca559806dd948fe252e">clean</a> ()</td></tr>
+<tr class="memdesc:a0199bd60f930eca559806dd948fe252e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unload all resources in cache and remove entries.  <a href="#a0199bd60f930eca559806dd948fe252e">More...</a><br /></td></tr>
+<tr class="separator:a0199bd60f930eca559806dd948fe252e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1707534071a0bfc2ea15d10ca0c8541"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#ad1707534071a0bfc2ea15d10ca0c8541">loadDirectory</a> (const char *path)</td></tr>
 <tr class="memdesc:ad1707534071a0bfc2ea15d10ca0c8541"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load in cache all the recognized mesh files from the given directory.  <a href="#ad1707534071a0bfc2ea15d10ca0c8541">More...</a><br /></td></tr>
 <tr class="separator:ad1707534071a0bfc2ea15d10ca0c8541"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,8 +126,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:af40057892ab74c6e9276060592096c7a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_le_mesh_cache_1_1_slot.html">Slot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#af40057892ab74c6e9276060592096c7a">slots</a> [<a class="el" href="config_8h.html#aaafe0993f8ecc0301c271efb1452d354">LE_MESHCACHE_SLOTS</a>]</td></tr>
-<tr class="separator:af40057892ab74c6e9276060592096c7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1db272f895d16e05e809814640639fb4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_le_mesh_cache_1_1_slot.html">Slot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#a1db272f895d16e05e809814640639fb4">cacheSlots</a> [<a class="el" href="config_8h.html#aaafe0993f8ecc0301c271efb1452d354">LE_MESHCACHE_SLOTS</a>]</td></tr>
+<tr class="separator:a1db272f895d16e05e809814640639fb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6a75007e6c2c9bed3d1abdf9157d63e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#ae6a75007e6c2c9bed3d1abdf9157d63e">noSlots</a></td></tr>
 <tr class="separator:ae6a75007e6c2c9bed3d1abdf9157d63e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -162,6 +165,23 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a0199bd60f930eca559806dd948fe252e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LeMeshCache::clean </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unload all resources in cache and remove entries. </p>
+
+</div>
+</div>
 <a class="anchor" id="a83a84683ff11bfcf420d9751836ddaa9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -231,6 +251,19 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a1db272f895d16e05e809814640639fb4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_le_mesh_cache_1_1_slot.html">Slot</a> LeMeshCache::cacheSlots[<a class="el" href="config_8h.html#aaafe0993f8ecc0301c271efb1452d354">LE_MESHCACHE_SLOTS</a>]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Slots in cache </p>
+
+</div>
+</div>
 <a class="anchor" id="ae6a75007e6c2c9bed3d1abdf9157d63e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -240,20 +273,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Number of slots in cache </p>
-
-</div>
-</div>
-<a class="anchor" id="af40057892ab74c6e9276060592096c7a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="struct_le_mesh_cache_1_1_slot.html">Slot</a> LeMeshCache::slots[<a class="el" href="config_8h.html#aaafe0993f8ecc0301c271efb1452d354">LE_MESHCACHE_SLOTS</a>]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Slots in cache </p>
+<p>Number of cacheSlots in cache </p>
 
 </div>
 </div>

@@ -122,15 +122,51 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="namespace_le_global.html#a847ecd5345e284a3f6a38bcc6bdc16e7">log2i32</a>(<span class="keywordtype">int</span> n);                                                                 </div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    };</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#endif // LE_GLOBAL_H</span></div>
-<div class="ttc" id="namespace_le_global_html_a847ecd5345e284a3f6a38bcc6bdc16e7"><div class="ttname"><a href="namespace_le_global.html#a847ecd5345e284a3f6a38bcc6bdc16e7">LeGlobal::log2i32</a></div><div class="ttdeci">int log2i32(int n)</div><div class="ttdef"><b>Definition:</b> global.cpp:105</div></div>
-<div class="ttc" id="namespace_le_global_html_acb50a1084e783fb1fb4b1bc6b9f44938"><div class="ttname"><a href="namespace_le_global.html#acb50a1084e783fb1fb4b1bc6b9f44938">LeGlobal::toUpper</a></div><div class="ttdeci">void toUpper(char *txt)</div><div class="ttdef"><b>Definition:</b> global.cpp:49</div></div>
-<div class="ttc" id="namespace_le_global_html_aa40aeec7c15df8a2bd393117e627cf12"><div class="ttname"><a href="namespace_le_global.html#aa40aeec7c15df8a2bd393117e627cf12">LeGlobal::toLower</a></div><div class="ttdeci">void toLower(char *txt)</div><div class="ttdef"><b>Definition:</b> global.cpp:39</div></div>
-<div class="ttc" id="namespace_le_global_html_a01030a0674f081009852fab444be61cf"><div class="ttname"><a href="namespace_le_global.html#a01030a0674f081009852fab444be61cf">LeGlobal::getFileExtention</a></div><div class="ttdeci">void getFileExtention(char *ext, const int extSize, const char *path)</div><div class="ttdef"><b>Definition:</b> global.cpp:60</div></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">    #ifdef __MINGW32__</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">        #include &lt;malloc.h&gt;</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">    #elif defined(__unix__) || defined(__unix)</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">        #ifndef _aligned_malloc</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">            #define _aligned_malloc(s, a) aligned_alloc(a, s)</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">        #endif</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">        #ifndef _aligned_free</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">            #define _aligned_free(p) free(p)</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor">        #endif</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">    #elif __APPLE__</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordtype">void</span> * _aligned_malloc(<span class="keywordtype">size_t</span> size, <span class="keywordtype">size_t</span> alignment);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">        #define _aligned_free  free</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">    #endif</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">    #if LE_USE_SIMD == 1</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordtype">void</span> * <span class="keyword">operator</span> <span class="keyword">new</span>(<span class="keywordtype">size_t</span> size) {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordflow">return</span> _aligned_malloc(size, 16);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        }</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordtype">void</span> * <span class="keyword">operator</span> <span class="keyword">new</span>[](<span class="keywordtype">size_t</span> size) {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordflow">return</span> _aligned_malloc(size, 16);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordtype">void</span> <span class="keyword">operator</span> <span class="keyword">delete</span>(<span class="keywordtype">void</span> * ptr) {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            _aligned_free(ptr);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        }</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">void</span> <span class="keyword">operator</span> <span class="keyword">delete</span>[](<span class="keywordtype">void</span> * ptr) {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            _aligned_free(ptr);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">    #endif</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">    #include &lt;intrin.h&gt;</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">int</span> __builtin_ffs(<span class="keywordtype">int</span> x);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">#endif // LE_GLOBAL_H</span></div>
+<div class="ttc" id="namespace_le_global_html_a847ecd5345e284a3f6a38bcc6bdc16e7"><div class="ttname"><a href="namespace_le_global.html#a847ecd5345e284a3f6a38bcc6bdc16e7">LeGlobal::log2i32</a></div><div class="ttdeci">int log2i32(int n)</div><div class="ttdef"><b>Definition:</b> global.cpp:115</div></div>
+<div class="ttc" id="namespace_le_global_html_acb50a1084e783fb1fb4b1bc6b9f44938"><div class="ttname"><a href="namespace_le_global.html#acb50a1084e783fb1fb4b1bc6b9f44938">LeGlobal::toUpper</a></div><div class="ttdeci">void toUpper(char *txt)</div><div class="ttdef"><b>Definition:</b> global.cpp:59</div></div>
+<div class="ttc" id="namespace_le_global_html_aa40aeec7c15df8a2bd393117e627cf12"><div class="ttname"><a href="namespace_le_global.html#aa40aeec7c15df8a2bd393117e627cf12">LeGlobal::toLower</a></div><div class="ttdeci">void toLower(char *txt)</div><div class="ttdef"><b>Definition:</b> global.cpp:49</div></div>
+<div class="ttc" id="namespace_le_global_html_a01030a0674f081009852fab444be61cf"><div class="ttname"><a href="namespace_le_global.html#a01030a0674f081009852fab444be61cf">LeGlobal::getFileExtention</a></div><div class="ttdeci">void getFileExtention(char *ext, const int extSize, const char *path)</div><div class="ttdef"><b>Definition:</b> global.cpp:70</div></div>
 <div class="ttc" id="global_8h_html_a68874d437ae2bcb75bc28fd1b158340a"><div class="ttname"><a href="global_8h.html#a68874d437ae2bcb75bc28fd1b158340a">LeHandle</a></div><div class="ttdeci">unsigned long long LeHandle</div><div class="ttdef"><b>Definition:</b> global.h:41</div></div>
-<div class="ttc" id="namespace_le_global_html_ae2a7af7bacf51993db69dd3112d5a32e"><div class="ttname"><a href="namespace_le_global.html#ae2a7af7bacf51993db69dd3112d5a32e">LeGlobal::getFileDirectory</a></div><div class="ttdeci">void getFileDirectory(char *dir, int dirSize, const char *path)</div><div class="ttdef"><b>Definition:</b> global.cpp:89</div></div>
+<div class="ttc" id="namespace_le_global_html_ae2a7af7bacf51993db69dd3112d5a32e"><div class="ttname"><a href="namespace_le_global.html#ae2a7af7bacf51993db69dd3112d5a32e">LeGlobal::getFileDirectory</a></div><div class="ttdeci">void getFileDirectory(char *dir, int dirSize, const char *path)</div><div class="ttdef"><b>Definition:</b> global.cpp:99</div></div>
 <div class="ttc" id="namespace_le_global_html"><div class="ttname"><a href="namespace_le_global.html">LeGlobal</a></div><div class="ttdef"><b>Definition:</b> global.h:59</div></div>
-<div class="ttc" id="namespace_le_global_html_ac93649d3280cdf96c632fcf646632dca"><div class="ttname"><a href="namespace_le_global.html#ac93649d3280cdf96c632fcf646632dca">LeGlobal::getFileName</a></div><div class="ttdeci">void getFileName(char *name, const int nameSize, const char *path)</div><div class="ttdef"><b>Definition:</b> global.cpp:74</div></div>
+<div class="ttc" id="namespace_le_global_html_ac93649d3280cdf96c632fcf646632dca"><div class="ttname"><a href="namespace_le_global.html#ac93649d3280cdf96c632fcf646632dca">LeGlobal::getFileName</a></div><div class="ttdeci">void getFileName(char *name, const int nameSize, const char *path)</div><div class="ttdef"><b>Definition:</b> global.cpp:84</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

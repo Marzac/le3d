@@ -1,7 +1,8 @@
 var searchData=
 [
+  ['b',['b',['../class_le_color.html#ad293ab20eee13caa8986190e4731391f',1,'LeColor']]],
   ['back',['back',['../namespace_le_primitives.html#afaf849812a030b9d24bddb8b1277cf49',1,'LePrimitives']]],
-  ['background',['background',['../class_le_rasterizer.html#aa62687ead468d5bcdf72340739596038',1,'LeRasterizer']]],
+  ['background',['background',['../class_le_rasterizer.html#ae4c8f3c01b5c68d68ba37c75aebaf906',1,'LeRasterizer']]],
   ['basic',['basic',['../class_le_b_set.html#add139736208b936d46c695eee44490b4',1,'LeBSet']]],
   ['bi_5falphabitfields',['BI_ALPHABITFIELDS',['../bmpfile_8cpp.html#a8b1a6ded7f0e4e771669205bc668571a',1,'bmpfile.cpp']]],
   ['bi_5fbitfields',['BI_BITFIELDS',['../bmpfile_8cpp.html#a0e10b199170996b8388f8b86f4a6495e',1,'bmpfile.cpp']]],
@@ -10,7 +11,7 @@ var searchData=
   ['bitmap_2ecpp',['bitmap.cpp',['../bitmap_8cpp.html',1,'']]],
   ['bitmap_2eh',['bitmap.h',['../bitmap_8h.html',1,'']]],
   ['black',['black',['../class_le_light.html#ad6d4f5489d437e48a49beeeb1dbdc2c3',1,'LeLight']]],
-  ['blendcolors',['blendColors',['../class_le_light.html#a916f402364cd9bfb79a320a56ba7a33e',1,'LeLight']]],
+  ['blendcolors',['blendColors',['../class_le_light.html#a5383558df0c9d529884cdb0ee0d2fea1',1,'LeLight']]],
   ['blit',['blit',['../class_le_bitmap.html#ae757af009f6522a39afd5970bdc4f2e8',1,'LeBitmap']]],
   ['bmpcache',['bmpCache',['../bmpcache_8cpp.html#a5f18fe4b7d82aab4b261bf19da5ba02e',1,'bmpCache():&#160;bmpcache.cpp'],['../bmpcache_8h.html#a5f18fe4b7d82aab4b261bf19da5ba02e',1,'bmpCache():&#160;bmpcache.cpp']]],
   ['bmpcache_2ecpp',['bmpcache.cpp',['../bmpcache_8cpp.html',1,'']]],
