@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['x',['x',['../struct_le_vertex.html#ad36a63add87210b7964f794078bbeedb',1,'LeVertex']]],
-  ['xaxis',['xAxis',['../struct_le_plan.html#aea775374b290f2b12e0a12ab3d67ec7e',1,'LePlan']]],
-  ['xs',['xs',['../struct_le_triangle.html#a1a9fe78d162b356a9c8a117a739ce669',1,'LeTriangle']]]
+  ['y',['y',['../struct_le_vertex.html#a65a0d487b77a502142a3d72d7d90d934',1,'LeVertex']]],
+  ['yaxis',['yAxis',['../struct_le_plan.html#ad9f173d861eda0cb1e209ba36e983377',1,'LePlan']]],
+  ['ys',['ys',['../struct_le_triangle.html#aa6057da433dbc54316b4db7c81b71cc3',1,'LeTriangle']]]
 ];

@@ -860,7 +860,8 @@ RECURSIVE              = YES
 
 EXCLUDE                = ../examples/buckguy/buckguy.cpp \
                          ../examples/cube/cube.cpp \
-                         ../engine/vs/vs-dirent.h
+                         ../engine/vs/vs-dirent.h \
+                         ../CMakeFiles
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

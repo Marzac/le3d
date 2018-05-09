@@ -36,8 +36,6 @@ var searchData=
   ['sticklefty',['stickLeftY',['../class_le_game_pad.html#a5a64a388b735684be806e488024ddd4b',1,'LeGamePad']]],
   ['stickrightx',['stickRightX',['../class_le_game_pad.html#a5fb2a8eee56dbe00900f998f610553f3',1,'LeGamePad']]],
   ['stickrighty',['stickRightY',['../class_le_game_pad.html#a1cf89a8afe6ff02b3560035da33a2b10',1,'LeGamePad']]],
-  ['stringify',['STRINGIFY',['../_c_make_c_compiler_id_8c.html#a43e1cad902b6477bec893cb6430bd6c8',1,'STRINGIFY():&#160;CMakeCCompilerId.c'],['../_c_make_c_x_x_compiler_id_8cpp.html#a43e1cad902b6477bec893cb6430bd6c8',1,'STRINGIFY():&#160;CMakeCXXCompilerId.cpp']]],
-  ['stringify_5fhelper',['STRINGIFY_HELPER',['../_c_make_c_compiler_id_8c.html#a2ae9b72bb13abaabfcf2ee0ba7d3fa1d',1,'STRINGIFY_HELPER():&#160;CMakeCCompilerId.c'],['../_c_make_c_x_x_compiler_id_8cpp.html#a2ae9b72bb13abaabfcf2ee0ba7d3fa1d',1,'STRINGIFY_HELPER():&#160;CMakeCXXCompilerId.cpp']]],
   ['sys',['sys',['../system_8h.html#a2f7a2d48359f0c86a7db7bdbd8da5cae',1,'sys():&#160;system_unix.cpp'],['../system__unix_8cpp.html#a2f7a2d48359f0c86a7db7bdbd8da5cae',1,'sys():&#160;system_unix.cpp']]],
   ['system_2eh',['system.h',['../system_8h.html',1,'']]],
   ['system_5funix_2ecpp',['system_unix.cpp',['../system__unix_8cpp.html',1,'']]],
