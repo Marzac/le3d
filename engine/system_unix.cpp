@@ -1,5 +1,5 @@
 /**
-	\file system_win.cpp
+	\file system_unix.cpp
 	\brief LightEngine 3D: Native OS / HW system manager
 	\brief Unix OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
