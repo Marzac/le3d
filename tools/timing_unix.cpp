@@ -1,5 +1,5 @@
 /**
-	\file timing.cpp
+	\file timing_unix.cpp
 	\brief LightEngine 3D (tools): Native OS time measurement
 	\brief Windows OS implementation
 	\author Frederic Meslin (fred@fredslab.net)
