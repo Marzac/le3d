@@ -50,11 +50,11 @@ static const int xEventMask = KeyPressMask | KeyReleaseMask | ButtonPressMask | 
 
 /*****************************************************************************/
 LeWindow::LeWindow(const char * name, int width, int height) :
+	visible(false),
 	handle(0),
 	width(width),
 	height(height),
 	fullScreen(false),
-	openwin(false),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {
@@ -79,7 +79,7 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	dc.window = handle;
 	dc.gc = (LeHandle) DefaultGC(usedXDisplay, 0);
 	
-	openwin = true;
+	visible = true;
 }
 
 LeWindow::~LeWindow()

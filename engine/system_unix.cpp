@@ -40,7 +40,7 @@
 #include <stdio.h>
 
 /*****************************************************************************/
-LeSystem system;
+LeSystem sys;
 void SignalHandler(int signal);
 
 /*****************************************************************************/
@@ -105,10 +105,10 @@ void SignalHandler(int signal)
 {  
     switch (signal) {
 //		case SIGQUIT:	status = LE_SYSTEM_EXIT_QUIT; break;
-		case SIGTERM:	status = LE_SYSTEM_EXIT_QUIT; break;
-		case SIGABRT:	status = LE_SYSTEM_EXIT_ABORT; break;
-		case SIGINT:	status = LE_SYSTEM_EXIT_ABORT; break;
-		default: 		status = LE_SYSTEM_UNKNOWN; break;
+		case SIGTERM:	sys.status = LE_SYSTEM_EXIT_QUIT; break;
+		case SIGABRT:	sys.status = LE_SYSTEM_EXIT_ABORT; break;
+		case SIGINT:	sys.status = LE_SYSTEM_EXIT_ABORT; break;
+		default: 		sys.status = LE_SYSTEM_UNKNOWN; break;
     }
-	running = false;
+	sys.running = false;
 }  

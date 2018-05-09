@@ -42,10 +42,10 @@
 	\brief application current status
 */
 typedef enum {
-	LE_SYSTEM_UNKNOWN			= 0x0,
-	LE_SYSTEM_ALRIGHT			= 0x01,
-	LE_SYSTEM_EXIT_QUIT			= 0x02,
-	LE_SYSTEM_EXIT_ABORT		= 0x04,
+	LE_SYSTEM_UNKNOWN			= 0x0,		/**< The status is unknown */
+	LE_SYSTEM_ALRIGHT			= 0x01,		/**< The application is running  */
+	LE_SYSTEM_EXIT_QUIT			= 0x02,		/**< The application is shutting down */
+	LE_SYSTEM_EXIT_ABORT		= 0x04,		/**< The application has been aborted */
 }LE_SYSTEM_STATUS;
 
 /*****************************************************************************/

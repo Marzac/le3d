@@ -68,14 +68,22 @@
 /**
 * \mainpage le3d - LightEngine 3D
 * \section intro_sec C++ 3D software engine
-* **Version 1.5 - 24/01/2018**
+* **Version 1.6 - 09/05/2018**
 *
 * Currently supported platforms:
 * - Microsoft Windows XP, 7, 8 and 10
 * - Linux based operating systems
+* - MacOS X
 *
-* Source code / examples / documentation<br>
-* Copyright (c) 2015-2018 Fr&eacute;d&eacute;ric Meslin
+* **Source code / examples / documentation**<br>
+* Copyright (c) 2015-2018 Fr&eacute;d&eacute;ric Meslin<br>
+* **Twitter:**  marzacdev<br>
+* **Email:**  fred@fredslab.net<br>
+*
+* **CMake scripts / MacOS support**<br>
+* Andreas Streichard<br>
+* **Twitter:** m0ppers<br>
+* **Email:** andreas@mop.koeln<br>
 *
 * **Exceptions:**<br>
 * __Mesh textures__<br>
@@ -91,13 +99,12 @@
 * Please visit http://www.humus.name/index.php?page=Textures for more information.
 *
 * **Fred's Lab:**<br>
+* A project maintained by Fred's Lab<br>
 * **Website:** www.fredslab.net <br>
-* **Email:** fred@fredslab.net <br>
-* **Twitter:** \@marzacdev <br>
 *
 * This is open source software released under the MIT License, please refer to LICENCE file for more information.
 *
-* # Specifications
+* # Renderer (Portable C++ / ASM (SSE2))
 * The renderer:
 * - Renders meshes
 * - Renders billboard sets
@@ -126,8 +133,8 @@
 * - Handles ambient lights
 *
 *
-* # Backends
-* window / draw / gamepad / timing
+* # Backends (Native OS code)
+* window / draw / gamepad / timing / system
 *
 * The backend - Windows version:
 * - Handles windows creation / management
@@ -146,24 +153,32 @@
 * - Handles graphic contexts (with X11)
 * - Handles joysticks with rumble support
 *   (with evdev interface)
-* - Supports many Linux OS
-
+* - Supports virtually all Linux based OS
+*
 *
 * The backend - MacOS version:
-* - Incoming (maybe)
+* - Similar to Linux version
+* - Needs X11 (XQuartz) for MacOS
+* - No native COCOA support
+* - No joysticks support yet (soon)
 *
 * # File formats
 * Supported bitmap / texture formats:
 * - Uncompressed 24bit RGB windows bitmap
 * - Uncompressed 32bit RGBA windows bitmap
+* - Import & export functions
 *
 * Supported 3D model formats:
 * - Wavefront OBJ
+* - Import & export functions
 *
 * # Limitations
 * - No Z-buffer
-* - No lightmaps
+* - No multilayer texturing
 * - No shaders
+* - No fog
+* - No antialiasing
+* - Single core support
 *
 * # Comparison
 * It renders graphics a bit better than a Sony Playstation one.
