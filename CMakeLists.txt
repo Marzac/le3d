@@ -1,5 +1,5 @@
 ############################################################################### 
-# le3d - LightEngine 3D  
+# le3d - LightEngine 3D
 # Andreas Streichardt <andreas@mop.koeln>
 # twitter: @m0ppers
 # website: https://mop.koeln
@@ -83,9 +83,10 @@ target_link_libraries(
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set_target_properties(le3d PROPERTIES LINK_FLAGS "-m32 -s -Wl,--gc-sections")
-    target_compile_options(le3d PUBLIC -m32) 
-    target_compile_options(le3d PRIVATE -march=pentium4 -Wall -ffast-math -mfpmath=sse -fno-exceptions -fno-rtti -fno-stack-protector -fno-math-errno -fno-ident -ffunction-sections)
+    set_target_properties(le3d PROPERTIES LINK_FLAGS "-s -Wl,--gc-sections")
+#   target_compile_options(le3d PUBLIC -m32) 
+    target_compile_options(le3d PRIVATE -Wall -Wno-unused-value -Wno-unused-result)
+    target_compile_options(le3d PRIVATE -ffast-math -mfpmath=sse -fno-exceptions -fno-rtti -fno-stack-protector -fno-math-errno -fno-ident -ffunction-sections)
     target_compile_options(le3d PRIVATE -O2 -s)
     if (WIN32)
         target_compile_options(le3d PRIVATE -D__MSVCRT_VERSION__=0x0700)
