@@ -82,21 +82,27 @@ target_link_libraries(
     ${LINK_LIBRARIES}
 )
 
+
+set(LE3D_CXX_FLAGS_SUGGESTION "")
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set_target_properties(le3d PROPERTIES LINK_FLAGS "-s -Wl,--gc-sections")
-#   target_compile_options(le3d PUBLIC -m32) 
-    target_compile_options(le3d PRIVATE -Wall -Wno-unused-value -Wno-unused-result)
-    target_compile_options(le3d PRIVATE -ffast-math -mfpmath=sse -fno-exceptions -fno-rtti -fno-stack-protector -fno-math-errno -fno-ident -ffunction-sections)
-    target_compile_options(le3d PRIVATE -O2 -s)
+    # we always want these...not user configurable
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-value -Wno-unused-result")
+    set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -ffast-math -mfpmath=sse -fno-exceptions")
+    set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -fno-rtti -fno-stack-protector -fno-math-errno")
+    set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -fno-ident -ffunction-sections")
     if (WIN32)
-        target_compile_options(le3d PRIVATE -D__MSVCRT_VERSION__=0x0700)
+        set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -D__MSVCRT_VERSION__=0x0700")
     endif()
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(le3d PRIVATE -D__MSVCRT_VERSION__=0x0700 -D_CRT_SECURE_NO_WARNINGS=1 -D_USE_MATH_DEFINES=1)
+    set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -D__MSVCRT_VERSION__=0x0700 -D_CRT_SECURE_NO_WARNINGS=1 -D_USE_MATH_DEFINES=1")
     target_include_directories(le3d PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/vs)
 endif()
+
+set(LE3D_CXX_FLAGS "${LE3D_CXX_FLAGS_SUGGESTION}" CACHE STRING "le3d compile flags")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LE3D_CXX_FLAGS}")
 
 if (LE3D_BUILD_EXAMPLES)
     add_subdirectory(examples)   
