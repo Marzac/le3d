@@ -37,12 +37,6 @@
 #include "config.h"
 
 /*****************************************************************************/
-#ifndef LE_USE_SIMD
-	#error LE_USE_SIMD undefined.
-	#error Use LE_USE_SIMD in (config.h) to enable or disable SIMD acceleration for calculations.
-#endif // LE_USE_SIMD
-
-/*****************************************************************************/
 #if LE_USE_SIMD == 1
 	#ifdef __GNUC_
 		#include "geometry_simd.h"
