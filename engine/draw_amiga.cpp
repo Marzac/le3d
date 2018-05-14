@@ -74,6 +74,6 @@ LeDraw::~LeDraw()
 */
 void LeDraw::setPixels(const void * data)
 {
-	auto window = (Window*) frontContext.window;
+	Window* window = (Window*) frontContext.window;
 	WritePixelArray((APTR) data, 0, 0, 4 * width, window->RPort, window->BorderLeft, window->BorderTop, width, height, RECTFMT_RGBA);
 }
