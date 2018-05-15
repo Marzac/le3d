@@ -65,7 +65,9 @@ public:
 	
 	void loadDirectory(const char * path);
 	LeBitmap * loadBMP(const char * path);
-	int getFromName(const char * name);
+
+	int getSlotFromName(const char * name);
+	LeBitmap * getBitmapFromName(const char * name);
 
 public:
 	/**

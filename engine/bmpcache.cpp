@@ -202,9 +202,9 @@ void LeBmpCache::deleteSlot(int index)
 	\fn int LeBmpCache::getFromName(const char * path)
 	\brief Retrieve a bitmap slot index from a bitmap name or path
 	\param[in] path bitmap path or name
-	\return cache slot number or -1 if no space available
+	\return cache slot number or 0 (default slot) if not found
 */
-int LeBmpCache::getFromName(const char * path)
+int LeBmpCache::getSlotFromName(const char * path)
 {
 	char name[LE_MAX_FILE_NAME+1];
 	LeGlobal::getFileName(name, LE_MAX_FILE_NAME, path);
@@ -220,4 +220,16 @@ int LeBmpCache::getFromName(const char * path)
 // Resource not found
 	printf("bmpCache: %s not found!\n", path);
 	return 0;
+}
+
+/**
+	\fn LeBitmap * LeBmpCache::getBitmapFromName(const char * path)
+	\brief Retrieve a bitmap object from its name or path
+	\param[in] path bitmap path or name
+	\return bitmap object or default bitmap if not found
+*/
+LeBitmap * LeBmpCache::getBitmapFromName(const char * path)
+{
+	int slot = getSlotFromName(path);
+	return cacheSlots[slot].bitmap;
 }

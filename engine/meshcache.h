@@ -54,7 +54,9 @@ public:
 
 	void loadDirectory(const char * path);
 	LeMesh * loadOBJ(const char * path);
-	int getFromName(const char * name);
+
+	int getSlotFromName(const char * name);
+	LeMesh * getMeshFromName(const char * path);
 
 public:
 	/**

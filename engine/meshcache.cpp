@@ -179,12 +179,12 @@ void LeMeshCache::deleteSlot(int index)
 
 /*****************************************************************************/
 /**
-	\fn int LeMeshCache::getFromName(const char * path)
+	\fn int LeMeshCache::getSlotFromName(const char * path)
 	\brief Retrieve a mesh slot index from a mesh name or path
 	\param[in] path mesh path or name
-	\return cache slot number or -1 if no space available
+	\return cache slot number or 0 (default slot) if not found
 */
-int LeMeshCache::getFromName(const char * path)
+int LeMeshCache::getSlotFromName(const char * path)
 {
 	char name[LE_MAX_FILE_NAME+1];
 	LeGlobal::getFileName(name, LE_MAX_FILE_NAME, path);
@@ -200,4 +200,16 @@ int LeMeshCache::getFromName(const char * path)
 // Resource not found
 	printf("meshCache: %s not found!\n", path);
 	return 0;
+}
+
+/**
+	\fn LeMesh * LeMeshCache::getMeshFromName(const char * path)
+	\brief Retrieve a mesh object from its name or path
+	\param[in] path mesh path or name
+	\return mesh object or default mesh if not found
+*/
+LeMesh * LeMeshCache::getMeshFromName(const char * path)
+{
+	int slot = getSlotFromName(path);
+	return cacheSlots[slot].mesh;
 }
