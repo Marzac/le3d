@@ -17,8 +17,8 @@ Copyright (c) 2015 - 2018 Frédéric Meslin
 **Twitter:** @marzacdev  
 **Email:** fred@fredslab.net  
 
-CMake scripts / Amiga+MacOS support
-Andreas Streichardt
+CMake scripts / Amiga+MacOS support  
+Andreas Streichardt  
 **Twitter:** @m0ppers  
 **Email:** andreas@mop.koeln  
 
