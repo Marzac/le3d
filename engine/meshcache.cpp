@@ -5,7 +5,7 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2018
+	\copyright Frédéric Meslin 2015 - 2018
 	\version 1.6
 
 	The MIT License (MIT)
