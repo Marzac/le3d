@@ -498,7 +498,7 @@ void LeObjFile::importTriangles(FILE * file, LeMesh * mesh)
 			int slot = 0;
 			const char * texName = curMaterial->texture;
 			if (texName[0]) {
-				slot = bmpCache.getFromName(texName);
+				slot = bmpCache.getSlotFromName(texName);
 				if (!slot) printf("objFile: using default texture (instead of %s)!\n", texName);
 			}
 			mesh->texSlotList[index++] = slot;

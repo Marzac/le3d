@@ -31,8 +31,7 @@ int main()
 	meshCache.loadDirectory("assets");
 
 /** Retrieve the 3D model */
-	int crateSlot = meshCache.getFromName("crate.obj");
-	LeMesh * crate = meshCache.cacheSlots[crateSlot].mesh;
+	LeMesh * crate = meshCache.getMeshFromName("crate.obj");
 
 /** Create three lights */
 	LeLight light1(LE_LIGHT_DIRECTIONAL, LeColor::rgb(0xFF4040));
