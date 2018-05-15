@@ -173,6 +173,36 @@ void LeRenderer::render(const LeBSet * bset)
 
 /*****************************************************************************/
 /**
+	\fn int LeRenderer::getViewportCoordinates(const LeVertex & pos, float & x, float & y)
+	\brief Return the viewport coordinates of a 3D vertex
+	\param[in] pos vertex position in 3D space
+	\param[in] viewCoords viewport coordinates (if within viewport)
+	\return 1 if vertex inside viewport, 0 otherwise
+*/
+int LeRenderer::getViewportCoordinates(const LeVertex & pos, LeVertex & viewCoords)
+{
+	float centerX = (viewRightAxis.origin.x - viewLeftAxis.origin.x) * 0.5f;
+	float centerY = (viewBottomAxis.origin.y - viewTopAxis.origin.y) * 0.5f;
+
+	LeVertex p = viewMatrix * pos;
+	if (p.z > viewFrontPlan.zAxis.origin.z) return 0;
+	if (p.z <= viewBackPlan.zAxis.origin.z) return 0;
+
+	float w = 1.0f / p.z;
+	viewCoords.x = p.x * ztx * w + centerX;
+	viewCoords.y = centerY - p.y * zty * w;
+	viewCoords.z = p.z;
+
+	if (viewCoords.x < viewLeftAxis.origin.x) return 0;
+	if (viewCoords.x >= viewRightAxis.origin.x) return 0;
+	if (viewCoords.y < viewTopAxis.origin.y) return 0;
+	if (viewCoords.y >= viewBottomAxis.origin.y) return 0;
+
+	return 1;
+}
+
+/*****************************************************************************/
+/**
 	\fn bool LeRenderer::checkMemory(int noVertexes, int noTriangles)
 	\brief Check if there is enough memory to render
 	\param[in] noVertexes number of vertexes
@@ -348,7 +378,7 @@ void LeRenderer::updateFrustrum()
 	\param[out] dstVertexes destination vertex buffer
 	\param[in] nb number of vertexes
 */
-void LeRenderer::transform(const LeMatrix &matrix, const LeVertex srcVertexes[], LeVertex dstVertexes[], int nb)
+void LeRenderer::transform(const LeMatrix & matrix, const LeVertex srcVertexes[], LeVertex dstVertexes[], int nb)
 {
 	LeMatrix view = viewMatrix * matrix;
 	for (int i = 0; i < nb; i++)

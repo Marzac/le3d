@@ -65,10 +65,12 @@ public:
 	void render(const LeMesh * mesh);
 	void render(const LeBSet * bset);
 
+	int getViewportCoordinates(const LeVertex & pos, LeVertex & viewCoords);
+
 	void flush();
 
-	void setViewPosition(const LeVertex &pos);
-	void setViewAngle(const LeVertex &angle);
+	void setViewPosition(const LeVertex & pos);
+	void setViewAngle(const LeVertex & angle);
 	void updateViewMatrix();
 
 	void setViewMatrix(const LeMatrix & view);
