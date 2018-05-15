@@ -38,6 +38,42 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef AMIGA
+inline void from_little_endian(uint16_t &v) {
+	v = (v << 8) | (v >> 8);
+}
+
+inline void from_little_endian(uint32_t &v) {
+	v = (v<<24) | ((v<<8) & 0x00ff0000) |
+          ((v>>8) & 0x0000ff00) | (v>>24);
+}
+
+// probably ineffecient but should work for now :)
+inline void from_little_endian(int16_t &v) {
+	uint16_t v1 = (uint16_t) v;
+	from_little_endian(v1);
+	v = (int16_t) v1;
+}
+
+inline void from_little_endian(int32_t &v) {
+	uint32_t v1 = (uint32_t) v;
+	from_little_endian(v1);
+	v = (int32_t) v1;
+}
+#else
+inline void from_little_endian(uint16_t &v) {
+}
+
+inline void from_little_endian(uint32_t &v) {
+}
+
+inline void from_little_endian(int16_t &v) {
+}
+
+inline void from_little_endian(int32_t &v) {
+}
+#endif
+
 /*****************************************************************************/
 #pragma pack(push, 1)
 typedef struct {
@@ -54,8 +90,8 @@ typedef struct {
 	uint32_t biSize;
 	int32_t	 biWidth;
 	int32_t	 biHeight;
-	int16_t	 biPlanes;
-	int16_t	 biBitCount;
+	uint16_t	 biPlanes;
+	uint16_t	 biBitCount;
 	uint32_t biCompression;
 	uint32_t biSizeImage;
 	int32_t	 biXPelsPerMeter;
@@ -157,9 +193,26 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 		0x000000FF,
 		0xFF000000
 	};
+
+
 // Read the headers
 	fread(&header, sizeof(BMPFILEHEADER), 1, file);
+	from_little_endian(header.bfSize);
+	from_little_endian(header.bfReserved1);
+	from_little_endian(header.bfReserved2);
+	from_little_endian(header.bfOffBits);
 	fread(&info, sizeof(BMPINFOHEADER), 1, file);
+	from_little_endian(info.biSize);
+	from_little_endian(info.biWidth);
+	from_little_endian(info.biHeight);
+	from_little_endian(info.biPlanes);
+	from_little_endian(info.biBitCount);
+	from_little_endian(info.biCompression);
+	from_little_endian(info.biSizeImage);
+	from_little_endian(info.biXPelsPerMeter);
+	from_little_endian(info.biYPelsPerMeter);
+	from_little_endian(info.biClrUsed);
+	from_little_endian(info.biClrImportant);
 
 // Check bitmap format
 	if (strncmp((char *) &header.bfType, "BM", 2)){
@@ -167,7 +220,7 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 		return 0;
 	}
 	if (info.biBitCount != 24 && info.biBitCount != 32) {
-		printf("bmpFile: only 24bit or 32bit bitmaps are supported!\n");
+		printf("bmpFile: only 24bit or 32bit bitmaps are supported %d %ld!\n", info.biBitCount, info.biWidth);
 		return 0;
 	}
 	if (info.biCompression != BI_RGB && info.biCompression != BI_BITFIELDS){
@@ -182,6 +235,10 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	int shiftB = 0;
 	if (info.biCompression == BI_BITFIELDS) {
 		fread(&mask, sizeof(BMPCOLORMASK), 1, file);
+		from_little_endian(mask.mR);
+		from_little_endian(mask.mG);
+		from_little_endian(mask.mB);
+		from_little_endian(mask.mA);
 		shiftR = __builtin_ffs(mask.mR) - 1;
 		shiftG = __builtin_ffs(mask.mG) - 1;
 		shiftB = __builtin_ffs(mask.mB) - 1;
@@ -226,6 +283,7 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	if (upsidedown)
 		data += dstScan * (bitmap->ty - 1);
 
+	bool doit = true;
 	if (info.biBitCount == 32) {
 	// Parse a 32 bits image
 		for (int y = 0; y < bitmap->ty; y ++) {

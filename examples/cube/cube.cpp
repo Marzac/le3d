@@ -17,7 +17,7 @@
 int main()
 {
 	sys.initialize();
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(AMIGA)
 	LeGamePad::setup();
 #endif
 /** Create application objects */
@@ -83,7 +83,7 @@ int main()
 	}
 
 	timing.lastFrame();
-#ifndef __APPLE__	
+#if !defined(__APPLE__) && !defined(AMIGA)
 	LeGamePad::release();
 #endif
 	sys.terminate();

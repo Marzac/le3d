@@ -49,7 +49,7 @@ if (WIN32)
         engine/window_win.cpp
         tools/timing_win.cpp
     )
-else()
+elseif (UNIX)
     find_package(X11 REQUIRED)
     list(APPEND LINK_LIBRARIES
         ${X11_LIBRARIES}
@@ -63,6 +63,13 @@ else()
         engine/gamepad_unix.cpp
         engine/window_unix.cpp
         tools/timing_unix.cpp
+    )
+elseif (AMIGA)
+    list(APPEND ENGINE_FILES
+        engine/system_amiga.cpp
+        engine/draw_amiga.cpp
+        engine/window_amiga.cpp
+        tools/timing_amiga.cpp
     )
 endif()
 
@@ -84,21 +91,23 @@ target_link_libraries(
 
 
 set(LE3D_CXX_FLAGS_SUGGESTION "")
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set_target_properties(le3d PROPERTIES LINK_FLAGS "-s -Wl,--gc-sections")
-    # we always want these...not user configurable
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-value -Wno-unused-result")
-    set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -ffast-math -mfpmath=sse -fno-exceptions")
-    set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -fno-rtti -fno-stack-protector -fno-math-errno")
-    set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -fno-ident -ffunction-sections")
-    if (WIN32)
-        set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -D__MSVCRT_VERSION__=0x0700")
+if (NOT(AMIGA))
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set_target_properties(le3d PROPERTIES LINK_FLAGS "-s -Wl,--gc-sections")
+        # we always want these...not user configurable
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-value -Wno-unused-result")
+        set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -ffast-math -mfpmath=sse -fno-exceptions")
+        set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -fno-rtti -fno-stack-protector -fno-math-errno")
+        set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -fno-ident -ffunction-sections")
+        if (WIN32)
+            set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -D__MSVCRT_VERSION__=0x0700")
+        endif()
     endif()
-endif()
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -D__MSVCRT_VERSION__=0x0700 -D_CRT_SECURE_NO_WARNINGS=1 -D_USE_MATH_DEFINES=1")
-    target_include_directories(le3d PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/vs)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -D__MSVCRT_VERSION__=0x0700 -D_CRT_SECURE_NO_WARNINGS=1 -D_USE_MATH_DEFINES=1")
+        target_include_directories(le3d PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/vs)
+    endif()
 endif()
 
 set(LE3D_CXX_FLAGS "${LE3D_CXX_FLAGS_SUGGESTION}" CACHE STRING "le3d compile flags")
