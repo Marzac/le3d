@@ -103,7 +103,9 @@
 #ifdef _MSC_VER
 	#include <intrin.h>
 	int __builtin_ffs(int x);
-	#define strdup	_strdup
+	#ifndef strdup 
+		#define strdup _strdup
+	#endif
 #endif
 
 /*****************************************************************************/
