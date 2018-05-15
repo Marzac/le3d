@@ -98,7 +98,7 @@ void LeWindow::update()
 {
 	Window* window = (Window*) handle;
 
-	struct IntuiMessage* msg = nullptr;
+	struct IntuiMessage* msg = 0;
 	ULONG cls;
 	while ((msg = GT_GetIMsg(window->UserPort)) != 0) {
 		cls = msg->Class;

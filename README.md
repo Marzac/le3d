@@ -130,3 +130,7 @@ Supported 3D model formats:
 
 # Comparison  
 It renders graphics a bit better than a Sony Playstation one.  
+
+# Building
+
+Please refer to BUILDING.md
