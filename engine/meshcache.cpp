@@ -122,7 +122,7 @@ void LeMeshCache::loadDirectory(const char * path)
 
 	while ((dd = readdir(dir))) {
 		if (dd->d_name[0] == '.') continue;
-		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, dd->d_name);
+		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, (const char*) dd->d_name);
 
 		if (strcmp(ext, "obj") == 0) {
 		// Load a Wavefront obj file
