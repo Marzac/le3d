@@ -84,13 +84,14 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	size.right	= width;
 	size.bottom = height;
 	AdjustWindowRect(&size, WS_OVERLAPPEDWINDOW, 0);
-
+	//AdjustWindowRect(&size, WS_POPUP | WS_VISIBLE | WS_SYSMENU, 0);
 // Create and display window
 	if ((handle = (LeHandle) CreateWindowExA(
 		   0,
 		   wincl.lpszClassName,
 		   name,
 		   WS_OVERLAPPEDWINDOW,
+		   //WS_POPUP | WS_VISIBLE | WS_SYSMENU,
 		   CW_USEDEFAULT,
 		   CW_USEDEFAULT,
 		   size.right - size.left,
