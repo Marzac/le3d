@@ -5,7 +5,7 @@
 	\author Andreas Streichardt (andreas@mop.koeln)
 	\twitter @m0ppers
 	\website https://mop.koeln
-	\copyright Frederic Meslin 2015 - 2018
+	\copyright Frédéric Meslin 2015 - 2018
 	\version 1.6
 
 	The MIT License (MIT)
@@ -58,18 +58,18 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	memset(&dc, 0, sizeof(LeDrawingContext));
 
 	struct TagItem win_tags[] = {
-        {WA_Left,       250},
-        {WA_Top,        40},
-        {WA_InnerWidth,      (ULONG) width},
-        {WA_InnerHeight,     (ULONG) height},
-        {WA_CloseGadget,true},
-		{WA_AutoAdjust, true},
-		{WA_DragBar, true},
-		{WA_DepthGadget, true},
-		{WA_Title,		(ULONG) name},
-        {WA_IDCMP,      IDCMP_CLOSEWINDOW},
-        {TAG_END, 0},
-    };
+		{WA_Left,			250},
+		{WA_Top,			40},
+		{WA_InnerWidth,		(ULONG) width},
+		{WA_InnerHeight,	(ULONG) height},
+		{WA_CloseGadget,	true},
+		{WA_AutoAdjust,		true},
+		{WA_DragBar,		true},
+		{WA_DepthGadget,	true},
+		{WA_Title,			(ULONG) name},
+		{WA_IDCMP,			IDCMP_CLOSEWINDOW},
+		{TAG_END, 0},
+	};
 
 	Window* window = OpenWindowTagList(NULL, win_tags);
 	dc.display = (LeHandle) window->WScreen;

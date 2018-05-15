@@ -5,7 +5,7 @@
 	\author Andreas Streichardt (andreas@mop.koeln)
 	\twitter @m0ppers
 	\website https://mop.koeln
-	\copyright Frederic Meslin 2015 - 2018
+	\copyright Frédéric Meslin 2015 - 2018
 	\version 1.6
 
 	The MIT License (MIT)
@@ -53,7 +53,7 @@ LeDraw::LeDraw(LeDrawingContext context, int width, int height) :
 {
 	CyberGfxBase = OpenLibrary("cybergraphics.library", 41);
 	if (!CyberGfxBase) {
-	    printf("ERROR: can`t open cybergraphics.library V41.\n");	
+		printf("ERROR: can`t open cybergraphics.library V41.\n");	
 	}
 
 	// TODO check that the display supports our depth/resolution requirements

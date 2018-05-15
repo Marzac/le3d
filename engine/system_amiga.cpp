@@ -5,7 +5,7 @@
 	\author Andreas Streichardt (andreas@mop.koeln)
 	\twitter @m0ppers
 	\website https://mop.koeln
-	\copyright Frederic Meslin 2015 - 2018
+	\copyright Frédéric Meslin 2015 - 2018
 	\version 1.6
 
 	The MIT License (MIT)
@@ -67,8 +67,8 @@ void LeSystem::initialize()
 	running = true;
 	status = LE_SYSTEM_ALRIGHT;
 
-    signal(SIGABRT, SignalHandler);  
-    signal(SIGINT, SignalHandler);
+	signal(SIGABRT, SignalHandler);  
+	signal(SIGINT, SignalHandler);
 }
 
 /**
@@ -104,10 +104,10 @@ int LeSystem::getStatus()
 /*****************************************************************************/
 void SignalHandler(int signal)  
 {
-    switch (signal) {
+	switch (signal) {
 		case SIGABRT:	sys.status = LE_SYSTEM_EXIT_ABORT; break;
 		case SIGINT:	sys.status = LE_SYSTEM_EXIT_ABORT; break;
 		default: 		sys.status = LE_SYSTEM_UNKNOWN; break;
-    }
+	}
 	sys.running = false;
 }  
