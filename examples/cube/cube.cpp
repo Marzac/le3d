@@ -82,6 +82,10 @@ int main()
 		renderer.flush();
 	}
 
+/** Make a screenshot */
+	LeBmpFile screenshot("screenshot.bmp");
+	screenshot.save(&rasterizer.frame);
+
 	timing.lastFrame();
 #if !defined(__APPLE__) && !defined(AMIGA)
 	LeGamePad::release();
