@@ -1,0 +1,7 @@
+function(bool2int varname)
+    if(${${varname}})
+        set(${varname} 1 PARENT_SCOPE)
+    else()
+        set(${varname} 0 PARENT_SCOPE)
+    endif()
+endfunction()
