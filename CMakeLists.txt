@@ -30,6 +30,7 @@ bool2int(LE3D_RENDERER_INTRASTER)
 bool2int(LE3D_RENDERER_MIPMAPS)
 bool2int(LE3D_USE_SIMD)
 bool2int(LE3D_USE_SSE2)
+bool2int(LE3D_USE_AMMX)
 
 configure_file(engine/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
@@ -92,6 +93,15 @@ elseif (AMIGA)
         engine/window_amiga.cpp
         tools/timing_amiga.cpp
     )
+    if(LE3D_USE_AMMX)
+        enable_language(ASM-VASM)
+        add_library(ammx_support STATIC
+            engine/ammx/ammx.s
+        )
+        list(APPEND LINK_LIBRARIES
+            ammx_support
+        )
+    endif()
 endif()
 
 add_library(le3d
