@@ -30,6 +30,10 @@
 	SOFTWARE.
 */
 
+/*****************************************************************************/
+#if defined(__unix__) || defined(__unix) || \
+    defined(__APPLE__) && defined(__MACH__)
+	
 #include "system.h"
 
 #include "global.h"
@@ -112,3 +116,5 @@ void SignalHandler(int signal)
     }
 	sys.running = false;
 }  
+
+#endif

@@ -78,7 +78,7 @@
 		#ifndef _aligned_free
 			#define _aligned_free(p) free(p)
 		#endif
-	#elif __APPLE__
+	#elif defined(__APPLE__)
 		#include <malloc.h>
 		void * _aligned_malloc(size_t size, size_t alignment);
 		#ifndef _aligned_free
@@ -111,10 +111,10 @@
 #ifdef _MSC_VER
 	#include <intrin.h>
 	int __builtin_ffs(int x);
-	#ifndef _strdup 
-		#define _strdup strdup
-	#endif
-#elif defined __WATCOMC__
+	//#ifndef _strdup 
+	//	#define _strdup strdup
+	//#endif
+#elif defined (__WATCOMC__)
 	int __builtin_ffs(int x);
 	#define copysign(x, y)	(cmabs(x) * cmsgn(y))
 	#define copysignf(x, y)	((float) copysign(x, y))

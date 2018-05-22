@@ -35,6 +35,7 @@
 
 #include "global.h"
 #include "config.h"
+#include "simd.h"
 
 /*****************************************************************************/
 #if LE_USE_SIMD == 1

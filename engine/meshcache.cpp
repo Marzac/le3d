@@ -39,8 +39,8 @@
 #include <string.h>
 
 #ifdef _MSC_VER
-	#include "vs-dirent.h"
-#elif defined __WATCOMC__
+	#include "vs/vs-dirent.h"
+#elif defined(__WATCOMC__)
 	#include <direct.h>
 #else
 	#include <dirent.h>

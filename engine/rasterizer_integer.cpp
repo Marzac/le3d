@@ -44,10 +44,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if LE_USE_AMMX == 1
-#include "ammx/ammx.h"
-#endif
-
 /*****************************************************************************/
 LeRasterizer::LeRasterizer(int width, int height) :
 	frame(),

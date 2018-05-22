@@ -115,11 +115,6 @@ LeBitmap * LeBmpFile::load()
 	}
 
 	LeBitmap * bitmap = new LeBitmap();
-	if (!bitmap) {
-		fclose(file);
-		return NULL;
-	}
-
 	readBitmap(file, bitmap);
 	fclose(file);
 	return bitmap;

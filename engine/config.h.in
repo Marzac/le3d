@@ -34,23 +34,26 @@
 #define LE_CONFIG_H
 
 /** Engine configuration */
-	#define LE_RESOX_DEFAULT			${LE3D_RESOX_DEFAULT}						/** Default horizontal resolution */
-	#define LE_RESOY_DEFAULT			${LE3D_RESOY_DEFAULT}						/** Default vertical resolution */
-	#define LE_MAX_FILE_EXTENSION		${LE3D_MAX_FILE_EXTENSION}				/** Maximum file extension string length */
-	#define LE_MAX_FILE_NAME			${LE3D_MAX_FILE_NAME}						/** Maximum file name string length */
-	#define LE_MAX_FILE_PATH			${LE3D_MAX_FILE_PATH}						/** Maximum file path string length */
+	#define LE_RESOX_DEFAULT			${LE3D_RESOX_DEFAULT}				/** Default horizontal resolution */
+	#define LE_RESOY_DEFAULT			${LE3D_RESOY_DEFAULT}				/** Default vertical resolution */
+	#define LE_MAX_FILE_EXTENSION		${LE3D_MAX_FILE_EXTENSION}			/** Maximum file extension string length */
+	#define LE_MAX_FILE_NAME			${LE3D_MAX_FILE_NAME}				/** Maximum file name string length */
+	#define LE_MAX_FILE_PATH			${LE3D_MAX_FILE_PATH}				/** Maximum file path string length */
+	
+/** Windows manager */
+	#define LE_WINDOW_EXTENDED_KEYS		${LE3D_WINDOW_EXTENDED_KEYS}		/** Enable events for extended keyboard keys */
 
 /** Data caches */
-	#define LE_BMPCACHE_SLOTS			${LE3D_BMPCACHE_SLOTS}					/** Maximum number of bitmaps in cache */
-	#define LE_MESHCACHE_SLOTS			${LE3D_MESHCACHE_SLOTS}					/** Maximum number of meshes in cache */
+	#define LE_BMPCACHE_SLOTS			${LE3D_BMPCACHE_SLOTS}				/** Maximum number of bitmaps in cache */
+	#define LE_MESHCACHE_SLOTS			${LE3D_MESHCACHE_SLOTS}				/** Maximum number of meshes in cache */
 
 /** Wavefront object parser */
-	#define LE_OBJ_MAX_NAME				${LE3D_OBJ_MAX_NAME}					/** Wavefront object maximum name string length */
-	#define LE_OBJ_MAX_LINE				${LE3D_OBJ_MAX_LINE}					/** Wavefront object maximum file line length */
-	#define LE_OBJ_MAX_PATH				${LE3D_OBJ_MAX_PATH}					/** Wavefront object maximum path string length */
+	#define LE_OBJ_MAX_NAME				${LE3D_OBJ_MAX_NAME}				/** Wavefront object maximum name string length */
+	#define LE_OBJ_MAX_LINE				${LE3D_OBJ_MAX_LINE}				/** Wavefront object maximum file line length */
+	#define LE_OBJ_MAX_PATH				${LE3D_OBJ_MAX_PATH}				/** Wavefront object maximum path string length */
 
 /** Bitmap manipulator */
-	#define LE_BMP_MIPMAPS				${LE3D_BMP_MIPMAPS}						/** Maximum number of mipmaps per bitmap */
+	#define LE_BMP_MIPMAPS				${LE3D_BMP_MIPMAPS}					/** Maximum number of mipmaps per bitmap */
 
 /** Renderer configuration */
 	#define LE_RENDERER_FRONT			${LE3D_RENDERER_FRONT}				/** Front clipping plane */
@@ -67,10 +70,10 @@
 
 /** Performance optimizations */
 #ifndef AMIGA
-	#define LE_USE_SIMD					${LE3D_USE_SIMD}						/** Use SIMD instructions & vectors */
-	#define LE_USE_SSE2					${LE3D_USE_SSE2}						/** Use Intel SSE2 instructions */
+	#define LE_USE_SIMD					${LE3D_USE_SIMD}					/** Use SIMD instructions & vectors */
+	#define LE_USE_SSE2					${LE3D_USE_SSE2}					/** Use Intel SSE2 instructions */
 #else
-	#define LE_USE_AMMX					${LE3D_USE_AMMX}						/** Use Apollo AMMX instructions */
+	#define LE_USE_AMMX					${LE3D_USE_AMMX}					/** Use Apollo AMMX instructions */
 #endif // AMIGA
 
 #endif // LE_CONFIG_H

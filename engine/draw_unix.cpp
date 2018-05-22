@@ -31,6 +31,9 @@
 */
 
 /*****************************************************************************/
+#if defined(__unix__) || defined(__unix) || \
+    defined(__APPLE__) && defined(__MACH__)
+	
 #include "draw.h"
 
 #include "global.h"
@@ -90,3 +93,5 @@ void LeDraw::setPixels(const void * data)
 	image->data = (char*) data;
 	XPutImage((Display *) frontContext.display, (Drawable) frontContext.window, (GC) frontContext.gc, image, 0, 0, 0, 0, width, height);
 }
+
+#endif

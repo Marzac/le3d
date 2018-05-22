@@ -37,7 +37,7 @@
 #include <string.h>
 
 /*****************************************************************************/
-#if __APPLE__
+#ifdef __APPLE__
 void * _aligned_malloc(size_t size, size_t alignment) {
 	void * buffer;
 	posix_memalign(&buffer, alignment, size);

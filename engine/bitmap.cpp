@@ -34,12 +34,9 @@
 
 #include "global.h"
 #include "config.h"
-
-#if LE_USE_AMMX == 1
-#include "ammx/ammx.h"
-#else
 #include "simd.h"
-#endif
+
+#include <string.h>
 
 /*****************************************************************************/
 LeBitmap::LeBitmap() :
@@ -497,6 +494,7 @@ void LeBitmap::text(int x, int y, const char * text, int length, const LeBmpFont
 void LeBitmap::allocate(int tx, int ty)
 {
 	data = new LeColor[tx*ty];
+	memset(data, 0, sizeof(LeColor));
 	dataAllocated = true;
 
 	this->tx = tx;

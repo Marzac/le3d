@@ -33,11 +33,24 @@
 #ifndef LE_SIMD_H
 #define LE_SIMD_H
 
+/*****************************************************************************/
+#ifndef LE_USE_SIMD
+	#error LE_USE_SIMD undefined. 
+	#error Use LE_USE_SIMD in (config.h) to enable or disable SIMD acceleration for calculations. 
+#endif // LE_USE_SIMD 
+
+#if LE_USE_SIMD == 1
+
+/*****************************************************************************/
 /** Intrinsics includes */
-#if LE_USE_SSE2
+#if LE_USE_SSE2 == 1
 	#include "xmmintrin.h"
 	#include "emmintrin.h"
 #endif // LE_USE_SSE2
+
+#if LE_USE_AMMX == 1
+	#include "ammx/ammx.h"
+#endif // LE_USE_AMMX
 
 /*****************************************************************************/
 /** Vector extensions - specific to gcc based compilers */
@@ -61,6 +74,8 @@
 /** 8x 16bit unsigned integer vector */
 	typedef uint16_t V8SW __attribute__ ((vector_size (16)));
 	typedef union {V8SW v; uint16_t u[8];} v8sw;
+#endif
+
 #endif
 
 #endif // LE_SIMD_H

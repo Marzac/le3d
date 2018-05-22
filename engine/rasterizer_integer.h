@@ -41,10 +41,7 @@
 #include "draw.h"
 #include "geometry.h"
 #include "trilist.h"
-
-#if LE_USE_SIMD == 1
-	#include "simd.h"
-#endif
+#include "simd.h"
 
 /*****************************************************************************/
 /**
