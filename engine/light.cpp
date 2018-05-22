@@ -94,9 +94,9 @@ inline void LeLight::shinePoint(LeMesh * mesh)
 	LeVertex o = axis.origin - mesh->pos;
 	for (int j = 0; j < mesh->noTriangles; j++) {
 		const float third = 1.0f / 3.0f;
-		LeVertex v1 = mesh->vertexes[mesh->vertexList[j*3]];
-		LeVertex v2 = mesh->vertexes[mesh->vertexList[j*3+1]];
-		LeVertex v3 = mesh->vertexes[mesh->vertexList[j*3+2]];
+		LeVertex v1 = mesh->vertexes[mesh->vertexesList[j*3]];
+		LeVertex v2 = mesh->vertexes[mesh->vertexesList[j*3+1]];
+		LeVertex v3 = mesh->vertexes[mesh->vertexesList[j*3+2]];
 		LeVertex m = (v1 + v2 + v3) * third - o;
 		LeVertex n = mesh->normals[j];
 

@@ -366,9 +366,9 @@ int LeRenderer::build(const LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[
 	else colors = mesh->colors;
 
 	for (int i = 0; i < mesh->noTriangles; i++) {
-		LeVertex * v1 = &vertexes[mesh->vertexList[i*3]];
-		LeVertex * v2 = &vertexes[mesh->vertexList[i*3+1]];
-		LeVertex * v3 = &vertexes[mesh->vertexList[i*3+2]];
+		LeVertex * v1 = &vertexes[mesh->vertexesList[i*3]];
+		LeVertex * v2 = &vertexes[mesh->vertexesList[i*3+1]];
+		LeVertex * v3 = &vertexes[mesh->vertexesList[i*3+2]];
 
 	// Hard clip
 		if (v1->z > frontZ && v2->z > frontZ && v3->z > frontZ) continue;

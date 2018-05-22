@@ -37,6 +37,7 @@
 #include "config.h"
 
 #include "geometry.h"
+#include "color.h"
 #include "mesh.h"
 
 #include <stdio.h>
@@ -49,23 +50,20 @@
 */
 struct LeObjMaterial
 {
-	char  name[LE_OBJ_MAX_NAME+1];		/**< Name of the material */
-	float ambient[4];					/**< Ambient color of the material */
-	float diffuse[4];					/**< Diffuse color of the material */
-	float specular[4];					/**< Specular color of the material */
+	char name[LE_OBJ_MAX_NAME+1];		/**< Name of the material */
+	LeColor ambient;					/**< Ambient color of the material */
+	LeColor diffuse;					/**< Diffuse color of the material */
+	LeColor specular;					/**< Specular color of the material */
 	float shininess;					/**< Shininess factor of the material */
 	float transparency;					/**< Transparency factor of the material */
-	char  texture[LE_OBJ_MAX_NAME+1];	/**< Name of first texture of the material */
+	char texture[LE_OBJ_MAX_NAME+1];	/**< Name of first texture of the material */
 
 	LeObjMaterial()
 	{
 		strcpy(name, "default");
-
-		float color[4] = {1.0f, 1.0f, 1.0f, 0.0f};
-		memcpy(ambient, color, sizeof(float) * 4);
-		memcpy(diffuse, color, sizeof(float) * 4);
-		memcpy(specular, color, sizeof(float) * 4);
-
+		ambient = LeColor(255, 255, 255, 0);
+		diffuse = LeColor(255, 255, 255, 0);
+		specular = LeColor(255, 255, 255, 0);
 		shininess = 0.0f;
 		transparency = 0.0f;
 		texture[0] = '\0';
@@ -90,37 +88,37 @@ public:
 	void save(const LeMesh * mesh);
 
 private:
-	int countTokens(FILE * file, const char * token);
-
-	void importVertexes(FILE * file, LeMesh * mesh);
-	void importTexCoords(FILE * file, LeMesh * mesh);
-	void importNormals(FILE * file, LeMesh * mesh);
-	void importTriangles(FILE * file, LeMesh * mesh);
+	void importMeshAllocate(FILE * file, LeMesh * mesh);
+	void importMeshData(FILE * file, LeMesh * mesh);
 
 	void exportHeader(FILE * file, const LeMesh * mesh);
 	void exportVertexes(FILE * file, const LeMesh * mesh);
+	void exportNormals(FILE * file, const LeMesh * mesh);
 	void exportTexCoords(FILE * file, const LeMesh * mesh);
 	void exportTriangles(FILE * file, const LeMesh * mesh);
 	void exportMaterials(FILE * file, const LeMesh * mesh);
 
-	void importMatLib(FILE * file);
-	int	 countMatLib(FILE * file);
-	void readColor(const char * buffer, float * color);
+	void loadMaterialLibraries(FILE * file);
+	void importMaterialAllocate(FILE * file);
+	void importMaterialData(FILE * file);
+	LeObjMaterial * getMaterialFromName(const char * name);
 
-	int	 getNoMaterials(FILE * file);
-	void loadMaterials(FILE * file);
-	LeObjMaterial * findMaterial(const char * name);
-
-	int	 readLine(FILE * file, char * buffer, int len);
-	void readVertex(const char * buffer, LeMesh * mesh, int index);
-	void readTriangle(const char * buffer, LeMesh * mesh, int index);
-	void readTexCoord(const char * buffer, LeMesh * mesh, int index);
+	void readVertex(LeMesh * mesh, int index);
+	void readNormal(LeMesh * mesh, int index);
+	void readTriangle(LeMesh * mesh, int index);
+	void readTexCoord(LeMesh * mesh, int index);
+	void readColor(const char * buffer, LeColor & color);
 
 	char * path;						/**< File path of the mesh */
-	LeObjMaterial * materials;			/**< Materials of the mesh */
+	
+	LeObjMaterial * materials;			/**< Internal - file materials */
 	LeObjMaterial * curMaterial;		/**< Currently selected material */
-	int noMaterials;					/**< Number of materials */
+	int noMaterials;					/**< Internal - number of materials */
+	
+	LeVertex * normals;					/**< Internal - object normals */
+	int noNormals;						/**< Internal - number of normals */ 
 
+	int	readLine(FILE * file);	
 	char line[LE_OBJ_MAX_LINE+1];		/**< Line buffer (for parsing the file) */
 };
 

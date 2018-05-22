@@ -39,32 +39,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*****************************************************************************/
-const char * objMaterialLib		= "mtllib ";
-const char * objMaterialSet		= "usemtl ";
-const char * objGroup			= "g ";
-const char * objSmoothingGroup	= "s ";
-const char * objObject			= "o ";
-
-const char * objGeoVertex		= "v ";
-const char * objTexCoords		= "vt ";
-const char * objVertexNormals	= "vn ";
-const char * objFace			= "f ";
-
-const char * matMaterial		= "newmtl ";
-const char * matAmbient			= "Ka ";
-const char * matDiffuse			= "Kd ";
-const char * matSpecular		= "Ks ";
-const char * matShininess		= "Ns ";
-const char * matTransparency	= "d ";
-const char * matTexture			= "map_Kd ";
-
 LeObjMaterial defMaterial;
 
 /*****************************************************************************/
 LeObjFile::LeObjFile(const char * filename) :
 	path(NULL),
-	materials(NULL), curMaterial(&defMaterial), noMaterials(0)
+	materials(NULL), curMaterial(&defMaterial), noMaterials(0),
+	normals(NULL), noNormals(0)
 {
 	memset(line, 0, LE_OBJ_MAX_LINE+1);
 #ifdef _MSC_VER
@@ -90,6 +71,7 @@ LeMesh * LeObjFile::load(int index)
 {
 	FILE * file = fopen(path, "rb");
 	if (!file) return NULL;
+	if (!materials)	loadMaterials(file);
 
 	LeMesh * mesh = new LeMesh();
 	if (!mesh) {
@@ -97,29 +79,22 @@ LeMesh * LeObjFile::load(int index)
 		return NULL;
 	}
 
-	mesh->allocated = true;
-	if (!materials)	loadMaterials(file);
-	curMaterial = &defMaterial;
-
-	mesh->name[0] = '\0';
-	strncpy(mesh->name, getMeshName(index), LE_OBJ_MAX_NAME);
-	mesh->name[LE_OBJ_MAX_NAME] = '\0';
-	
 	fseek(file, 0, SEEK_SET);
-	int object = 0;
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
+	int noObjects = 0;
+	int len = readLine(file);
 	while (len) {
-		if (strncmp(line, objObject, 2) == 0) {
-			if (object == index) {
-				importVertexes(file, mesh);
-				importTriangles(file, mesh);
-				importTexCoords(file, mesh);
+		if (strncmp(line, "o ", 2) == 0) {
+			if (noObjects ++ == index) {
+				strncpy(mesh->name, line[2], LE_OBJ_MAX_NAME);
+				mesh->name[LE_OBJ_MAX_NAME] = '\0';
+				importMeshAllocate(file, mesh);
+				importMeshData(file, mesh);
 				break;
-			}else object ++;
+			}
 		}
-		len = readLine(file, line, LE_OBJ_MAX_LINE);
+		len = readLine(file);
 	}
-
+	
 	fclose(file);
 	return mesh;
 }
@@ -229,10 +204,18 @@ void LeObjFile::exportTexCoords(FILE * file, const LeMesh * mesh)
 		fprintf(file, "vt %f %f\n", mesh->texCoords[i*2+0], mesh->texCoords[i*2+1]);
 	fprintf(file, "\n");
 }
+
+void LeObjFile::exportNormals(FILE * file, const LeMesh * mesh)
+{
+	if (!mesh->normals) return;
+	for (int i = 0; i < mesh->noVertexes; i++)
+		fprintf(file, "vn %f %f %f\n", mesh->normals[i].x, mesh->normals[i].y, mesh->normals[i].z);
+	fprintf(file, "\n");
+}
 	
 void LeObjFile::exportTriangles(FILE * file, const LeMesh * mesh)
 {
-	if (!mesh->vertexList) return;
+	if (!mesh->vertexesList) return;
 	if (!mesh->texCoordsList) return;
 	if (!mesh->texSlotList) return;
 	
@@ -249,11 +232,32 @@ void LeObjFile::exportTriangles(FILE * file, const LeMesh * mesh)
 			fprintf(file, "s off\n");
 			texLast = tex;
 		}
-		fprintf(file, "f %i/%i %i/%i %i/%i\n",
-			mesh->vertexList[i*3+0]+1, mesh->texCoordsList[i*3+0]+1,
-			mesh->vertexList[i*3+1]+1, mesh->texCoordsList[i*3+1]+1,
-			mesh->vertexList[i*3+2]+1, mesh->texCoordsList[i*3+2]+1
-		);
+		
+		if (mesh->texCoordsList && mesh->normals) {
+			fprintf(file, "f %i/%i/%i %i/%i/%i %i/%i/%i\n",
+				mesh->vertexesList[i * 3 + 0] + 1, mesh->texCoordsList[i * 3 + 0] + 1, i * 3 + 1,
+				mesh->vertexesList[i * 3 + 1] + 1, mesh->texCoordsList[i * 3 + 1] + 1, i * 3 + 2,
+				mesh->vertexesList[i * 3 + 2] + 1, mesh->texCoordsList[i * 3 + 2] + 1, i * 3 + 3,
+			);
+		}else if (mesh->texCoordsList) {
+			fprintf(file, "f %i/%i %i/%i %i/%i\n",
+				mesh->vertexesList[i * 3 + 0] + 1, mesh->texCoordsList[i * 3 + 0] + 1,
+				mesh->vertexesList[i * 3 + 1] + 1, mesh->texCoordsList[i * 3 + 1] + 1,
+				mesh->vertexesList[i * 3 + 2] + 1, mesh->texCoordsList[i * 3 + 2] + 1,
+			);
+		}else if (mesh->normals) {
+			fprintf(file, "f %i//%i %i//%i %i//%i\n",
+				mesh->vertexesList[i * 3 + 0] + 1, i * 3 + 1,
+				mesh->vertexesList[i * 3 + 1] + 1, i * 3 + 2,
+				mesh->vertexesList[i * 3 + 2] + 1, i * 3 + 3,
+			);
+		}else{
+			fprintf(file, "f %i %i %i\n",
+				mesh->vertexesList[i * 3 + 0] + 1,
+				mesh->vertexesList[i * 3 + 1] + 1,
+				mesh->vertexesList[i * 3 + 2] + 1,
+			);
+		}
 	}
 	fprintf(file, "\n");
 }
@@ -269,15 +273,15 @@ int LeObjFile::getNoMeshes()
 	FILE * file = fopen(path, "rb");
 	if (!file) return 0;
 
-	int nbObjects = 0;
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
+	int noObjects = 0;
+	int len = readLine(file);
 	while (len) {
-		if (strncmp(line, objObject, 2) == 0) nbObjects ++;
-		len = readLine(file, line, LE_OBJ_MAX_LINE);
+		if (strncmp(line, "o ", 2) == 0) noObjects ++;
+		len = readLine(file);
 	}
 
 	fclose(file);
-	return nbObjects;
+	return noObjects;
 }
 
 /**
@@ -290,17 +294,16 @@ const char * LeObjFile::getMeshName(int index)
 	FILE * file = fopen(path, "rb");
 	if (!file) return NULL;
 
-	int object = 0;
-	int readLen = readLine(file, line, LE_OBJ_MAX_LINE);
-	while (readLen) {
-		if (strncmp(line, objObject, 2) == 0) {
-			if (object == index) {
-				line[LE_OBJ_MAX_LINE] = '\0';
+	int noObjects = 0;
+	int len = readLine(file);
+	while (len) {
+		if (strncmp(line, "o ", 2) == 0) {
+			if (noObjects ++ == index) {
 				fclose(file);
 				return &line[2];
-			}else object ++;
+			}
 		}
-		readLen = readLine(file, line, LE_OBJ_MAX_LINE);
+		len = readLine(file);
 	}
 
 	fclose(file);
@@ -308,9 +311,8 @@ const char * LeObjFile::getMeshName(int index)
 }
 
 /*****************************************************************************/
-void LeObjFile::loadMaterials(FILE * file)
+void LeObjFile::loadMaterialLibraries(FILE * file)
 {
-	FILE * libFile;
 	char filename[LE_OBJ_MAX_PATH+1];
 	char libName[LE_OBJ_MAX_PATH+LE_OBJ_MAX_NAME+1];
 
@@ -321,93 +323,74 @@ void LeObjFile::loadMaterials(FILE * file)
 
 	fseek(file, 0, SEEK_SET);
 
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
+	int len = readLine(file);
 	while (len) {
-		if (strncmp(line, objMaterialLib, 7) == 0) {
+		if (strncmp(line, "mtllib ", 7) == 0) {
 			strncpy(libName, &line[7], LE_OBJ_MAX_NAME);
 			libName[LE_OBJ_MAX_NAME] = '\0';
 			LeGlobal::getFileDirectory(filename, LE_OBJ_MAX_PATH, path);
 			strcat(filename, libName);
 
-			libFile = fopen(filename, "rb");
-			if (libFile) {
-				importMatLib(libFile);
-				fclose(libFile);
-			}
+			FILE * libFile = fopen(filename, "rb");
+			if (!libFile) continue;
+			importMaterialAllocate(libFile);
+			importMaterialData(libFile);
+			fclose(libFile);
 		}
-		len = readLine(file, line, LE_OBJ_MAX_LINE);
+		len = readLine(file);
 	}
-}
-
-int LeObjFile::getNoMaterials(FILE * file)
-{
-	FILE * libFile;
-	char filename[LE_OBJ_MAX_PATH+1];
-	char libName[LE_OBJ_MAX_PATH+LE_OBJ_MAX_NAME+1];
-
-	int nbMats = 0;
-	fseek(file, 0, SEEK_SET);
-
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
-	while (len) {
-		if (strncmp(line, objMaterialLib, 7) == 0) {
-			strncpy(libName, &line[7], LE_OBJ_MAX_NAME);
-			libName[LE_OBJ_MAX_NAME] = '\0';
-			LeGlobal::getFileDirectory(filename, LE_OBJ_MAX_PATH, path);
-			strcat(filename, libName);
-
-			libFile = fopen(filename, "rb");
-			if (libFile) {
-				nbMats += countMatLib(libFile);
-				fclose(libFile);
-			}
-		}
-		len = readLine(file, line, LE_OBJ_MAX_LINE);
-	}
-	return nbMats;
 }
 
 /*****************************************************************************/
-void LeObjFile::importMatLib(FILE * file)
+void LeObjFile::importMaterialAllocate(FILE * file)
 {
-	int mat = -1;
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
+	noMaterials = 0;
+
+	int start = ftell(file);
+	int len = readLine(file);
 	while (len) {
-		if (strncmp(line, matMaterial, 7) == 0) {
-			mat = noMaterials++;
-			strncpy(materials[mat].name, &line[7], LE_OBJ_MAX_NAME);
-			materials[mat].name[LE_OBJ_MAX_NAME] = '\0';
-		}else if (strncmp(line, matAmbient, 3) == 0) {
-			readColor(&line[3], materials[mat].ambient);
-		}else if (strncmp(line, matDiffuse, 3) == 0) {
-			readColor(&line[3], materials[mat].diffuse);
-		}else if (strncmp(line, matSpecular, 3) == 0) {
-			readColor(&line[3], materials[mat].specular);
-		}else if (strncmp(line, matShininess, 3) == 0) {
-			sscanf(&line[3], "%f", &materials[mat].shininess);
-		}else if (strncmp(line, matTransparency, 2) == 0) {
-			sscanf(&line[2], "%f", &materials[mat].transparency);
-		}else if (strncmp(line, matTexture, 7) == 0) {
-			strncpy(materials[mat].texture, &line[7], LE_OBJ_MAX_NAME);
-			materials[mat].texture[LE_OBJ_MAX_NAME] = '\0';
+		if (strncmp(line, "newmtl ", 7) == 0) noMaterials ++;
+		len = readLine(file);
+	}
+	
+	fseek(file, start, SEEK_SET);
+	materials = new LeObjMaterial[noMaterials];
+}
+
+void LeObjFile::importMaterialData(FILE * file)
+{
+	int materialIndex = -1;
+	int start = ftell(file);
+	int len = readLine(file);
+	while (len) {
+		if (strncmp(line, "newmtl ", 7) == 0) {
+			materialIndex ++;
+			strncpy(materials[materialIndex].name, &line[7], LE_OBJ_MAX_NAME);
+			materials[materialIndex].name[LE_OBJ_MAX_NAME] = '\0';
+		}else{
+			if (materialIndex < 0) continue;
+			if (strncmp(line, "Ka ", 3) == 0) {
+				readColor(&line[3], materials[materialIndex].ambient);
+			}else if (strncmp(line, "Kd ", 3) == 0) {
+				readColor(&line[3], materials[materialIndex].diffuse);
+			}else if (strncmp(line, "Ks ", 3) == 0) {
+				readColor(&line[3], materials[materialIndex].specular);
+			}else if (strncmp(line, "Ns ", 3) == 0) {
+				sscanf(&line[3], "%f", &materials[materialIndex].shininess);
+			}else if (strncmp(line, "d ", 2) == 0) {
+				sscanf(&line[2], "%f", &materials[materialIndex].transparency);
+			}else if (strncmp(line, "map_Kd ", 7) == 0) {
+				strncpy(materials[materialIndex].texture, &line[7], LE_OBJ_MAX_NAME);
+				materials[materialIndex].texture[LE_OBJ_MAX_NAME] = '\0';
+			}
 		}
-		len = readLine(file, line, LE_OBJ_MAX_LINE);
+		len = readLine(file);
 	}
+	
+	fseek(file, start, SEEK_SET);
 }
 
-int LeObjFile::countMatLib(FILE * file)
-{
-	int nb = 0;
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
-	while (len) {
-		if (strncmp(line, matMaterial, 7) == 0) nb ++;
-		len = readLine(file, line, LE_OBJ_MAX_LINE);
-	}
-	return nb;
-}
-
-/*****************************************************************************/
-LeObjMaterial * LeObjFile::findMaterial(const char * name)
+LeObjMaterial * LeObjFile::getMaterialFromName(const char * name)
 {
 	for (int i = 0; i < noMaterials; i++)
 		if (strcmp(name, materials[i].name) == 0)
@@ -416,141 +399,129 @@ LeObjMaterial * LeObjFile::findMaterial(const char * name)
 }
 
 /*****************************************************************************/
-void LeObjFile::importVertexes(FILE * file, LeMesh * mesh)
+void LeObjFile::importMeshAllocate(FILE * file, LeMesh * mesh)
 {
-// Count number of vertexes
-	int nb = countTokens(file, objGeoVertex);
-	if (!nb) return;
-
-// Allocate memory
-	mesh->vertexes = (LeVertex *) new LeVertex[nb];
-	if (!mesh->vertexes) return;
-	mesh->noVertexes = nb;
-
-// Import vertexes
 	int start = ftell(file);
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
-	int index = 0;
+	int len = readLine(file);
 	while (len) {
-		if (strncmp(line, objGeoVertex, 2) == 0) {
-			readVertex(line, mesh, index);
-			index ++;
-		}else if (strncmp(line, objObject, 2) == 0) break;
+		if (strncmp(line, "v ", 2) == 0) mesh->noVertexes ++;
+		else if (strncmp(line, "vt ", 2) == 0) mesh->noTexCoords ++;
+		else if (strncmp(line, "vn ", 2) == 0) noNormals ++;
+		else if (strncmp(line, "f ", 2) == 0) mesh->noTriangles ++;
+		else if (strncmp(line, "o ", 2) == 0) break;
 		len = readLine(file, line, LE_OBJ_MAX_LINE);
 	}
+	
 	fseek(file, start, SEEK_SET);
+	mesh->allocate(mesh->noVertexes, mesh->noTexCoords, mesh->noTriangles);
+	normals = new LeVertex[noNormals];
 }
 
-
-void LeObjFile::importTexCoords(FILE * file, LeMesh * mesh)
+void LeObjFile::importMeshData(FILE * file, LeMesh * mesh)
 {
-// Count number of tex coords
-	int nb = countTokens(file, objTexCoords);
-	if (!nb) return;
-
-// Allocate memory
-	mesh->texCoords = (float *) new float[nb * 2];
-	if (!mesh->texCoords) return;
-	mesh->noTexCoords = nb;
-
-// Import tex coords
+	curMaterial = &defMaterial;
+	int vertexesIndex = 0;
+	int texCoordsIndex = 0;
+	int normalsIndex = 0;
+	int trianglesIndex = 0;
+	
 	int start = ftell(file);
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
-	int index = 0;
+	int len = readLine(file);
 	while (len) {
-		if (strncmp(line, objTexCoords, 3) == 0) {
-			readTexCoord(line, mesh, index);
-			index ++;
-		}else if (strncmp(line, objObject, 2) == 0) break;
-		len = readLine(file, line, LE_OBJ_MAX_LINE);
-	}
-	fseek(file, start, SEEK_SET);
-}
-
-/*****************************************************************************/
-void LeObjFile::importTriangles(FILE * file, LeMesh * mesh)
-{
-// Count number of triangles
-	int nb = countTokens(file, objFace);
-	if (!nb) return;
-
-// Allocate memory
-	mesh->vertexList = new int[3 * nb];
-	memset(mesh->vertexList, 0, 3 * nb * sizeof(int));
-	mesh->texCoordsList = new int[3 * nb];
-	memset(mesh->texCoordsList, 0, 3 * nb * sizeof(int));
-	mesh->texSlotList = new int[nb];
-	memset(mesh->texSlotList, 0, nb * sizeof(int));
-	mesh->colors = new LeColor[nb];
-	memset(mesh->colors, 0, nb * sizeof(LeColor));
-	mesh->noTriangles = nb;
-// Import the triangles
-	int start = ftell(file);
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
-	int index = 0;
-	while (len) {
-		if (strncmp(line, objFace, 2) == 0) {
-			readTriangle(line, mesh, index);
-			mesh->colors[index].r = (uint8_t) cbound(curMaterial->diffuse[0] * 255.0f, 0.0f, 255.0f);
-			mesh->colors[index].g = (uint8_t) cbound(curMaterial->diffuse[1] * 255.0f, 0.0f, 255.0f);
-			mesh->colors[index].b = (uint8_t) cbound(curMaterial->diffuse[2] * 255.0f, 0.0f, 255.0f);
-			mesh->colors[index].a = 0;
+		if (strncmp(line, "v ", 2) == 0) readVertex(mesh, vertexesIndex++);
+		else if (strncmp(line, "vt ", 2) == 0) readTexCoord(mesh, texCoordsIndex++);
+		else if (strncmp(line, "vn ", 2) == 0) readNormal(mesh, normalsIndex++);
+		else if (strncmp(line, "f ", 2) == 0) {
+			readTriangle(mesh, trianglesIndex);
+			LeColor & c = mesh->colors[trianglesIndex];
+			c.r = (uint8_t) cbound(curMaterial->diffuse[0] * 255.0f, 0.0f, 255.0f);
+			c.g = (uint8_t) cbound(curMaterial->diffuse[1] * 255.0f, 0.0f, 255.0f);
+			c.b = (uint8_t) cbound(curMaterial->diffuse[2] * 255.0f, 0.0f, 255.0f);
+			c.a = 0;
 			int slot = 0;
-			const char * texName = curMaterial->texture;
-			if (texName[0]) {
-				slot = bmpCache.getFromName(texName);
-				if (!slot) printf("objFile: using default texture (instead of %s)!\n", texName);
+			if (curMaterial->texture[0]) {
+				slot = bmpCache.getFromName(curMaterial->texture);
+				if (!slot) printf("objFile: using default texture (instead of %s)!\n", curMaterial->texture);
 			}
-			mesh->texSlotList[index++] = slot;
-		}else if (strncmp(line, objMaterialSet, 7) == 0) {
-			curMaterial = findMaterial(&line[7]);
-		}else if (strncmp(line, objObject, 2) == 0) break;
-		len = readLine(file, line, LE_OBJ_MAX_LINE);
+			mesh->texSlotList[trianglesIndex ++] = slot;
+		}else if (strncmp(line, "usemtl ", 7) == 0) {
+			curMaterial = getMaterialFromName(&line[7]);
+		}else if (strncmp(line, "o ", 2) == 0) break;
+		len = readLine(file);
 	}
+	
 	fseek(file, start, SEEK_SET);
+	if (normals) {
+		delete[] normals;
+		noNormals = 0;
+	}
 }
 
 /*****************************************************************************/
-int LeObjFile::countTokens(FILE * file, const char * token)
+void LeObjFile::readVertex(LeMesh * mesh, int index)
 {
-	int start = ftell(file);
-	int nb = 0;
-	int tl = strlen(token);
-
-	int len = readLine(file, line, LE_OBJ_MAX_LINE);
-	while (len) {
-		if (strncmp(line, token, tl) == 0) nb ++;
-		else if (strncmp(line, objObject, 2) == 0) break;
-		len = readLine(file, line, LE_OBJ_MAX_LINE);
-	}
-	fseek(file, start, SEEK_SET);
-	return nb;
+	LeVertex v;
+	sscanf(line, "v %f %f %f %f", &v.x, &v.y, &v.z, &v.w);
+	mesh->vertexes[index] = v;
 }
 
-/*****************************************************************************/
-void LeObjFile::readVertex(const char * buffer, LeMesh * mesh, int index)
+void LeObjFile::readTexCoord(LeMesh * mesh, int index)
 {
-	sscanf(&line[2], "%f %f %f", &mesh->vertexes[index].x, &mesh->vertexes[index].y, &mesh->vertexes[index].z);
+	float u = 0.0f, v = 0.0f;
+	sscanf(line, "vt %f %f %f", &u, &v, &w);
+	mesh->texCoords[index * 2] = u;
+	mesh->texCoords[index * 2 + 1] = 1.0f - v;
 }
 
-void LeObjFile::readTexCoord(const char * buffer, LeMesh * mesh, int index)
+void LeObjFile::readTriangle(LeMesh * mesh, int index)
 {
-	float u, v;
-	sscanf(&line[2], "%f %f", &u, &v);
-	mesh->texCoords[index*2]   = u;
-	mesh->texCoords[index*2+1] = 1.0f - v;
-}
-
-void LeObjFile::readTriangle(const char * buffer, LeMesh * mesh, int index)
-{
-	buffer = &buffer[2];
-	int * vList = &mesh->vertexList[index * 3];
+	int * vList = &mesh->vertexesList[index * 3];
 	int * tList = &mesh->texCoordsList[index * 3];
+	
+	const * buffer = &line[2];
 	for (int i = 0; i < 3; i++) {
-		int v, t, n;
-		sscanf(buffer, "%i/%i/%i", &v, &t, &n);
-		vList[i] = v - 1;
-		tList[i] = t - 1;
+		int v = 0, t = 0, n = 0;
+		bool vOk = true, tOk = true, nOk = true;
+		int r = sscanf(buffer, "%i/%i/%i", &v, &t, &n);
+		if (r != 3) {
+			vOk = true, tOk = true, nOk = false;
+			r = sscanf(buffer, "%i/%i", &v, &t);
+			if (r != 2) {
+				vOk = true, tOk = false, nOk = true;
+				r = sscanf(buffer, "%i//%i", &v, &n);
+				if (r != 2) {	
+					vOk = true, tOk = false, nOk = false;
+					r = sscanf(buffer, "%i", &v);
+				}else{
+					vOk = false, tOk = false, nOk = false;
+				}
+			}
+		}
+
+		if (vOk) {
+			if (v <= 0 || v > mesh->noVertexes) {
+				printf("objFile: error detected in vertex indices!\n");
+				continue;
+			}
+			vList[i] = v - 1;
+		}
+		
+		if (tOk) {
+			if (t <= 0 || t > mesh->noTexCoords) {
+				printf("objFile: error detected in texture coordinate indices!\n");
+				continue;
+			}
+			tList[i] = t - 1;
+		}
+		
+		if (nOk) {
+			if (n < 0 || n >= noNormals) {
+				printf("objFile: error detected in normal indices!\n");
+				continue;
+			}
+			mesh->normals[index] = normals[n];
+		}
+			
 		buffer = strchr(buffer, ' ');
 		if (!buffer) break;
 		buffer ++;
@@ -558,41 +529,36 @@ void LeObjFile::readTriangle(const char * buffer, LeMesh * mesh, int index)
 }
 
 /*****************************************************************************/
-void LeObjFile::readColor(const char * buffer, float * color)
+void LeObjFile::readColor(const char * buffer, LeColor & color)
 {
-	sscanf(buffer, "%f %f %f", &color[0], &color[1], &color[2]);
+	sscanf(buffer, "%f %f %f", &color->r, &color->g, &color->b);
 }
 
 /*****************************************************************************/
-int LeObjFile::readLine(FILE * file, char * buffer, int len)
+int LeObjFile::readLine(FILE * file)
 {
-	bool skipLine = false;
-	int readLen = 0;
+	int len = 0;
+	bool skip = false;
+
 	while(!feof(file)) {
 		int c = fgetc(file);
 		if (c =='\n' || c == '\r') {
-			if (readLen != 0) {
-				buffer[readLen] = '\0';
-				return readLen;
-			}else {
-				skipLine = false;
+			if (len != 0) break;
+			else {
+				skip = false;
 				continue;
 			}
 		}
-		if (skipLine) continue;
-		if (c =='#') {
-			skipLine = true;
+
+		if (skip || c == '#') {
+			skip = true;
 			continue;
 		}
-		if (readLen < len - 1) {
-			buffer[readLen ++] = c;
-		}else{
-			buffer[len-1] = '\0';
-			return readLen;
-		}
+		
+		if (len < LE_OBJ_MAX_LINE)
+			line[len ++] = c;
 	}
-	buffer[readLen] = '\0';
-	return readLen;
+	
+	line[len] = '\0';
+	return len;
 }
-
-/*****************************************************************************/

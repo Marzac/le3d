@@ -81,7 +81,7 @@
 * **Email:**  fred@fredslab.net<br>
 *
 * **CMake scripts / MacOS support**<br>
-* Andreas Streichard<br>
+* Andreas Streichardt<br>
 * **Twitter:** m0ppers<br>
 * **Email:** andreas@mop.koeln<br>
 *

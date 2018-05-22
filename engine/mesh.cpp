@@ -44,7 +44,7 @@ LeMesh::LeMesh() :
 	pos(), scale(1.0f, 1.0f, 1.0f), angle(),
 	vertexes(NULL), noVertexes(0),
 	texCoords(NULL), noTexCoords(0),
-	vertexList(NULL), texCoordsList(NULL), texSlotList(NULL),
+	vertexesList(NULL), texCoordsList(NULL), texSlotList(NULL),
 	colors(NULL), noTriangles(0),
 	normals(NULL), shades(NULL),
 	allocated(false)
@@ -55,13 +55,13 @@ LeMesh::LeMesh() :
 
 LeMesh::LeMesh(LeVertex vertexes[], int noVertexes,
 			float texCoords[], int noTexCoords,
-			int vertexList[], int texCoordsList[],
+			int vertexesList[], int texCoordsList[],
 			LeColor colors[], int noTriangles) :
 	view(),
 	pos(), scale(1.0f, 1.0f, 1.0f), angle(),
 	vertexes(vertexes), noVertexes(noVertexes),
 	texCoords(texCoords), noTexCoords(noTexCoords),
-	vertexList(NULL), texCoordsList(NULL), texSlotList(NULL),
+	vertexesList(NULL), texCoordsList(NULL), texSlotList(NULL),
 	colors(colors), noTriangles(noTriangles),
 	normals(NULL), shades(NULL),
 	allocated(false)
@@ -91,13 +91,17 @@ void LeMesh::allocate(int noVertexes, int noTexCoords, int noTriangles)
 	this->noVertexes = noVertexes;
 
 	texCoords = new float[noTexCoords * 2];
+	memset(texCoords, 0, sizeof(float) * noTexCoords * 2);
 	this->noTexCoords = noTexCoords;
 
-	vertexList = new int[noTriangles * 3];
+	vertexesList = new int[noTriangles * 3];
 	texCoordsList = new int[noTriangles * 3];
 	texSlotList = new int[noTriangles];
-
 	colors = new LeColor[noTriangles];
+	
+	memset(vertexesList, 0, sizeof(int) * noTriangles * 3);
+	memset(texCoordsList, 0, sizeof(int) * noTriangles * 3);
+	memset(texSlotList, 0, sizeof(int) * noTriangles);
 	memset(colors, 0xFF, sizeof(LeColor) * noTriangles);
 	
 	this->noTriangles = noTriangles;
@@ -118,8 +122,8 @@ void LeMesh::deallocate()
 		if (texCoords) delete texCoords;
 		texCoords = NULL;
 		noTexCoords = 0;
-		if (vertexList) delete vertexList;
-		vertexList = NULL;
+		if (vertexesList) delete vertexesList;
+		vertexesList = NULL;
 		if (texCoordsList) delete texCoordsList;
 		texCoordsList = NULL;
 		if (texSlotList) delete texSlotList;
@@ -152,7 +156,7 @@ void LeMesh::shadowCopy(LeMesh * copy) const
 	copy->noVertexes = noVertexes;
 	copy->texCoords = texCoords;
 	copy->noTexCoords = noTexCoords;
-	copy->vertexList = vertexList;
+	copy->vertexesList = vertexesList;
 	copy->texCoordsList = texCoordsList;
 	copy->texSlotList = texSlotList;
 	copy->colors = colors;
@@ -182,7 +186,7 @@ void LeMesh::copy(LeMesh * copy) const
 
 	memcpy(copy->vertexes, vertexes, noVertexes * sizeof(LeVertex));
 	memcpy(copy->texCoords, texCoords, noTexCoords * sizeof(float) * 2);
-	memcpy(copy->vertexList, vertexList, noTriangles * sizeof(int) * 3);
+	memcpy(copy->vertexesList, vertexesList, noTriangles * sizeof(int) * 3);
 	memcpy(copy->texCoordsList, texCoordsList, noTriangles * sizeof(int) * 3);
 	memcpy(copy->texSlotList, texSlotList, noTriangles * sizeof(int));
 	memcpy(copy->colors, colors, noTriangles * sizeof(uint32_t));
@@ -240,9 +244,9 @@ void LeMesh::computeNormals()
 {
 	if (!normals) allocateNormals();
 	for (int i = 0; i < noTriangles; i++) {
-		LeVertex v1 = vertexes[vertexList[i*3]];
-		LeVertex v2 = vertexes[vertexList[i*3+1]];
-		LeVertex v3 = vertexes[vertexList[i*3+2]];
+		LeVertex v1 = vertexes[vertexesList[i*3]];
+		LeVertex v2 = vertexes[vertexesList[i*3+1]];
+		LeVertex v3 = vertexes[vertexesList[i*3+2]];
 		LeVertex a = v2 - v1;
 		LeVertex b = v3 - v1;
 		LeVertex c = a.cross(b);
