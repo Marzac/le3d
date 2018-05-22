@@ -50,17 +50,41 @@ typedef enum {
 }LE_WINDOW_MOUSE_BUTTONS;
 
 /**
-	\enum LE_WINDOW_KEYBOARD_STATE
+	\enum LE_WINDOW_KEY_STATE
 	\brief keyboard keys state and modifiers
 */
 typedef enum {
-	LE_WINDOW_KEY_UP			= 0x0,
-	LE_WINDOW_KEY_DOWN			= 0x1,
-	LE_WINDOW_KEY_SHIFT			= 0x2,
-	LE_WINDOW_KEY_CTRL			= 0x4,
-	LE_WINDOW_KEY_ALT			= 0x8,
-}LE_WINDOW_KEYBOARD_STATE;
+	LE_WINDOW_KEYSTATE_PRESSED		= 0x01,
+	LE_WINDOW_KEYSTATE_RELEASED		= 0x02,
+	LE_WINDOW_KEYSTATE_SHIFT		= 0x10,
+	LE_WINDOW_KEYSTATE_CTRL			= 0x20,
+	LE_WINDOW_KEYSTATE_ALT			= 0x40,
+}LE_WINDOW_KEY_STATES;
 
+typedef enum {
+	LE_WINDOW_KEYCODE_NONE			= 0,
+	LE_WINDOW_KEYCODE_UP			= 1,
+	LE_WINDOW_KEYCODE_DOWN			= 2,
+	LE_WINDOW_KEYCODE_LEFT			= 3,
+	LE_WINDOW_KEYCODE_RIGHT			= 4,
+	LE_WINDOW_KEYCODE_SHIFT			= 5,
+	LE_WINDOW_KEYCODE_CTRL			= 6,
+	LE_WINDOW_KEYCODE_ALT			= 7,
+	LE_WINDOW_KEYCODE_TAB			= 8,
+	LE_WINDOW_KEYCODE_ESC			= 9,
+	LE_WINDOW_KEYCODE_BACKSPACE		= 10,
+	LE_WINDOW_KEYCODE_ENTER			= 11,
+
+#if LE_WINDOW_EXTENDED_KEYS == 1
+	LE_WINDOW_KEYCODE_INSERT		= 12,
+	LE_WINDOW_KEYCODE_DELETE		= 13,
+	LE_WINDOW_KEYCODE_HOME			= 14,
+	LE_WINDOW_KEYCODE_END			= 15,
+	LE_WINDOW_KEYCODE_PAGEUP		= 16,
+	LE_WINDOW_KEYCODE_PAGEDOWN		= 17,
+#endif
+
+}LE_WINDOW_KEY_CODES;
 
 /*****************************************************************************/
 /**
@@ -81,7 +105,7 @@ typedef struct {
 class LeWindow
 {
 public:
-	LeWindow(const char * name, int width = LE_RESOX_DEFAULT, int height = LE_RESOY_DEFAULT);
+	LeWindow(const char * name, int width = LE_RESOX_DEFAULT, int height = LE_RESOY_DEFAULT, bool fullscreen = false);
 	~LeWindow();
 
 	void update();
@@ -101,15 +125,15 @@ public:
 	void sendKeyEvent(int code, int state);
 	void sendMouseEvent(int x, int y, int buttons);
 
-	bool visible;					/**< Is the window open or closed */
-
-private:
-	LeHandle handle;				/**< OS native window handle */
-	LeDrawingContext dc;			/**< OS native drawing context handle */
-
 	int width;						/**< Width of window client region (in pixels) */
 	int height;						/**< Height of window client region (in pixels) */
 	bool fullScreen;				/**< Fullscreen state of window */
+	bool visible;					/**< Is the window open or closed */
+
+private:
+	char * title;					/**< Window title in title bar */
+	LeHandle handle;				/**< OS native window handle */
+	LeDrawingContext dc;			/**< OS native drawing context handle */
 	
 	KeyCallback keyCallback;		/**< Registrated callback for keyboard events */
 	MouseCallback mouseCallback;	/**< Registrated callback for mouse events */

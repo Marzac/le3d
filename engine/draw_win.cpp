@@ -59,6 +59,16 @@ LeDraw::~LeDraw()
 
 /*****************************************************************************/
 /**
+	\fn void LeDraw::setContext(LeDrawingContext context)
+	\brief Set the graphic context where to draw
+	\param[in] context graphic context
+*/
+void LeDraw::setContext(LeDrawingContext context)
+{
+	frontContext = context;
+}
+
+/**
 	\fn void LeDraw::setPixels(void * data)
 	\brief Set the graphic content of the context
 	\param[in] data pointer to an array of pixels

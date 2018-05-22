@@ -47,11 +47,13 @@
 #include <stdio.h>
 
 /*****************************************************************************/
-LeWindow::LeWindow(const char * name, int width, int height) :
-	handle(0),
+LeWindow::LeWindow(const char * name, int width, int height, bool fullscreen) :
 	width(width),
 	height(height),
 	fullScreen(false),
+	visible(false),
+	name(NULL),
+	handle(0),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {

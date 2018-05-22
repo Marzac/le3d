@@ -50,6 +50,7 @@ public:
 	LeDraw(LeDrawingContext context, int width = LE_RESOX_DEFAULT, int heigth = LE_RESOY_DEFAULT);
 	~LeDraw();
 
+	void setContext(LeDrawingContext context);
 	void setPixels(const void * data);
 
 	int width;		/**< Width of context (in pixels) */
@@ -58,7 +59,6 @@ public:
 private:
 	LeDrawingContext frontContext;
 	LeHandle bitmap;
-
 };
 
 #endif	//LE_DRAW_H

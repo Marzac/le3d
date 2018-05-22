@@ -49,12 +49,13 @@ static int usedXDisplayCount = 0;
 static const int xEventMask = KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | PointerMotionMask;
 
 /*****************************************************************************/
-LeWindow::LeWindow(const char * name, int width, int height) :
-	visible(false),
-	handle(0),
+LeWindow::LeWindow(const char * name, int width, int height, bool fullscreen) :
 	width(width),
 	height(height),
 	fullScreen(false),
+	visible(false),
+	name(NULL),
+	handle(0),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {
@@ -107,8 +108,8 @@ void LeWindow::update()
 
 			int uniState = 0;
 			if (event.type == KeyPress)
-				uniState = LE_WINDOW_KEY_DOWN;
-			else uniState = LE_WINDOW_KEY_UP;
+				uniState = LE_WINDOW_KEY_PRESSED;
+			else uniState = LE_WINDOW_KEY_RELEASED;
 
 			if (event.xkey.state & ShiftMask) uniState |= LE_WINDOW_KEY_SHIFT;
 			if (event.xkey.state & ControlMask) uniState |= LE_WINDOW_KEY_CTRL;
@@ -241,4 +242,3 @@ void LeWindow::setWindowed()
 {
 	if (!fullScreen) return;
 }
-

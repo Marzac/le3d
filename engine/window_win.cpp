@@ -46,25 +46,32 @@
 
 /*****************************************************************************/
 LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+static void decodeMouseButton(LeWindow * window, uint32_t wParam, uint32_t lParam);
+static void decodeKey(LeWindow * window, uint32_t wParam, uint32_t lParam);
+static void createWindow(LeWindow * window, LeHandle & handle, const char * title, bool fullscreen);
+static void destroyWindow(LeWindow * window, LeHandle & handle);
+
+static const char * windowClassName = "LightEngine";
 
 /*****************************************************************************/
-LeWindow::LeWindow(const char * name, int width, int height) :
-	visible(false),
-	handle(0),
+LeWindow::LeWindow(const char * name, int width, int height, bool fullscreen) :
 	width(width),
 	height(height),
 	fullScreen(false),
+	visible(false),
+	title(NULL),
+	handle(0),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {
-	static const char * className = "LightEngine";
 	memset(&dc, 0, sizeof(LeDrawingContext));
+	if (name) title = _strdup(name);
 
 // Create the window class
 	WNDCLASSEXA wincl;
 	memset(&wincl, 0, sizeof(WNDCLASSEXA));
 	wincl.hInstance = NULL;
-	wincl.lpszClassName = className;
+	wincl.lpszClassName = windowClassName;
 	wincl.lpfnWndProc = windowProcedure;
 	wincl.style = CS_DBLCLKS;
 	wincl.cbSize = sizeof(WNDCLASSEXA);
@@ -77,44 +84,53 @@ LeWindow::LeWindow(const char * name, int width, int height) :
 	wincl.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
 	if (!RegisterClassExA(&wincl)) return;
 
-// Compute the client size
-	RECT size;
-	size.top	= 0;
-	size.left	= 0;
-	size.right	= width;
-	size.bottom = height;
-	AdjustWindowRect(&size, WS_OVERLAPPEDWINDOW, 0);
-	//AdjustWindowRect(&size, WS_POPUP | WS_VISIBLE | WS_SYSMENU, 0);
-// Create and display window
-	if ((handle = (LeHandle) CreateWindowExA(
-		   0,
-		   wincl.lpszClassName,
-		   name,
-		   WS_OVERLAPPEDWINDOW,
-		   //WS_POPUP | WS_VISIBLE | WS_SYSMENU,
-		   CW_USEDEFAULT,
-		   CW_USEDEFAULT,
-		   size.right - size.left,
-		   size.bottom - size.top,
-		   HWND_DESKTOP,
-		   NULL,
-		   NULL,
-		   NULL
-	)) == 0) return;
-
-	SetWindowLongPtrA((HWND) handle, 0, (long long) this);
-
-	dc.display = 0;
-	dc.window = handle;
-	dc.gc = (LeHandle) GetDC((HWND) handle);
-	
-	ShowWindow((HWND) handle, SW_SHOW);
-	visible = true;
+// Open the window
+	if (fullscreen) setFullScreen();
+	else setWindowed();
 }
 
 LeWindow::~LeWindow()
 {
-	if (handle) DestroyWindow((HWND) handle);
+	if (title) free(title);
+	destroyWindow(this, handle);
+}
+
+/*****************************************************************************/
+void createWindow(LeWindow * window, LeHandle & handle, const char * title, bool fullscreen)
+{
+// Compute the client size
+	RECT size;
+	size.top = 0;
+	size.left = 0;
+	size.right = window->width;
+	size.bottom = window->height;
+
+	DWORD style = WS_CAPTION | WS_SYSMENU | WS_BORDER | WS_MINIMIZEBOX;
+	if (fullscreen) style = WS_POPUP | WS_VISIBLE | WS_SYSMENU;
+	AdjustWindowRect(&size, style, 0);
+
+// Create and display window
+	if ((handle = (LeHandle) CreateWindowExA(
+		0,
+		windowClassName,
+		title, style,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		size.right - size.left,
+		size.bottom - size.top,
+		HWND_DESKTOP,
+		NULL, NULL,	NULL
+	)) == 0) return;
+	SetWindowLongPtrA((HWND) handle, 0, (long long) window);
+}
+
+void destroyWindow(LeWindow * window, LeHandle & handle)
+{
+	if (!handle) return;
+	DestroyWindow((HWND) handle);
+	handle = 0;
+	window->fullScreen = false;
+	window->visible = false;
 }
 
 /*****************************************************************************/
@@ -209,20 +225,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	case WM_SYSKEYUP:
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
-		{
-			int uniState = 0;
-			int uniCode = wParam;
-
-			if (lParam & 0x80000000)
-				uniState = LE_WINDOW_KEY_UP;
-			else uniState = LE_WINDOW_KEY_DOWN;
-
-			if (GetKeyState(VK_SHIFT) & 0x8000) uniState |= LE_WINDOW_KEY_SHIFT;
-			if (GetKeyState(VK_CONTROL) & 0x8000) uniState |= LE_WINDOW_KEY_CTRL;
-			if (GetKeyState(VK_MENU) & 0x8000) uniState |= LE_WINDOW_KEY_ALT;
-
-			window->sendKeyEvent(uniCode, uniState);
-		}
+		decodeKey(window, wParam, lParam);
 		break;
 
 	case WM_MOUSEMOVE:
@@ -232,17 +235,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	case WM_RBUTTONUP:
 	case WM_MBUTTONDOWN:
 	case WM_MBUTTONUP:
-		{
-			int uniButtons = 0;
-			int uniX = lParam & 0xFFFF;
-			int uniY = lParam >> 16;
-
-			if (wParam & MK_LBUTTON) uniButtons |= LE_WINDOW_MOUSE_LEFT;
-			if (wParam & MK_RBUTTON) uniButtons |= LE_WINDOW_MOUSE_RIGHT;
-			if (wParam & MK_MBUTTON) uniButtons |= LE_WINDOW_MOUSE_MIDDLE;
-
-			window->sendMouseEvent(uniX, uniY, uniButtons);
-		}
+		decodeMouseButton(window, wParam, lParam);
 		break;
 	}
 
@@ -250,30 +243,97 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 }
 
 /*****************************************************************************/
+void decodeMouseButton(LeWindow * window, uint32_t wParam, uint32_t lParam)
+{
+	int uniButtons = 0;
+	int uniX = lParam & 0xFFFF;
+	int uniY = lParam >> 16;
+
+	if (wParam & MK_LBUTTON) uniButtons |= LE_WINDOW_MOUSE_LEFT;
+	if (wParam & MK_RBUTTON) uniButtons |= LE_WINDOW_MOUSE_RIGHT;
+	if (wParam & MK_MBUTTON) uniButtons |= LE_WINDOW_MOUSE_MIDDLE;
+
+	window->sendMouseEvent(uniX, uniY, uniButtons);
+}
+
+void decodeKey(LeWindow * window, uint32_t wParam, uint32_t lParam)
+{
+	int uniState = 0;
+	int uniCode = wParam;
+
+	switch (uniCode) {
+		case VK_UP:	uniCode = LE_WINDOW_KEYCODE_UP; break;
+		case VK_DOWN: uniCode = LE_WINDOW_KEYCODE_DOWN; break;
+		case VK_LEFT: uniCode = LE_WINDOW_KEYCODE_LEFT; break;
+		case VK_RIGHT: uniCode = LE_WINDOW_KEYCODE_RIGHT; break;
+		case VK_SHIFT: uniCode = LE_WINDOW_KEYCODE_SHIFT; break;
+		case VK_CONTROL: uniCode = LE_WINDOW_KEYCODE_CTRL; break;
+		case VK_MENU: uniCode = LE_WINDOW_KEYCODE_ALT; break;
+		case VK_TAB: uniCode = LE_WINDOW_KEYCODE_TAB; break;
+		case VK_ESCAPE: uniCode = LE_WINDOW_KEYCODE_ESC; break;
+		case VK_BACK: uniCode = LE_WINDOW_KEYCODE_BACKSPACE; break;
+		case VK_RETURN: uniCode = LE_WINDOW_KEYCODE_ENTER; break;
+	#if LE_WINDOW_EXTENDED_KEYS == 1
+		case VK_INSERT: uniCode = LE_WINDOW_KEYCODE_INSERT; break;
+		case VK_DELETE: uniCode = LE_WINDOW_KEYCODE_DELETE; break;
+		case VK_HOME: uniCode = LE_WINDOW_KEYCODE_HOME; break;
+		case VK_END: uniCode = LE_WINDOW_KEYCODE_END; break;
+		case VK_PRIOR: uniCode = LE_WINDOW_KEYCODE_PAGEUP; break;
+		case VK_NEXT: uniCode = LE_WINDOW_KEYCODE_PAGEDOWN; break;
+	#endif
+		default: break;
+	}
+
+	if (lParam & 0x80000000)
+		uniState = LE_WINDOW_KEYSTATE_RELEASED;
+	else 
+		uniState = LE_WINDOW_KEYSTATE_PRESSED;
+
+	if (GetKeyState(VK_SHIFT) & 0x8000)
+		uniState |= LE_WINDOW_KEYSTATE_SHIFT;
+	if (GetKeyState(VK_CONTROL) & 0x8000)
+		uniState |= LE_WINDOW_KEYSTATE_CTRL;
+	if (GetKeyState(VK_MENU) & 0x8000)
+		uniState |= LE_WINDOW_KEYSTATE_ALT;
+
+	window->sendKeyEvent(uniCode, uniState);
+}
+
+/*****************************************************************************/
 /**
 	\fn void LeWindow::setFullScreen()
 	\brief Set the window to fullscreen mode
 */
-static DEVMODE devMode;
+static DEVMODE previousDevMode;
+static bool previousDevModeValid = false;
+
 void LeWindow::setFullScreen()
 {
-	DEVMODE newMode;
-	if (fullScreen) return;
-
-// Retrieve display characteristics
-	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devMode);
-	memcpy(&newMode, &devMode, sizeof(DEVMODE));
-	newMode.dmPelsWidth = width;
-	newMode.dmPelsHeight = height;
-	newMode.dmFields = DM_PELSHEIGHT | DM_PELSWIDTH;
-
-// Change window state
-	SetWindowPos((HWND) handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
-	ShowWindow((HWND) handle, SW_MAXIMIZE);
-
 // Change display mode
-	ChangeDisplaySettings (&newMode, CDS_FULLSCREEN);
+	if (!previousDevModeValid) {
+		EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &previousDevMode);
+		previousDevModeValid = true;
+
+		DEVMODE newDevMode;
+		memcpy(&newDevMode, &previousDevMode, sizeof(DEVMODE));
+		newDevMode.dmPelsWidth = width;
+		newDevMode.dmPelsHeight = height;
+		newDevMode.dmFields = DM_PELSHEIGHT | DM_PELSWIDTH;
+		ChangeDisplaySettings(&newDevMode, CDS_FULLSCREEN);
+	}
+
+// Create a new window
+	destroyWindow(this, handle);
+	createWindow(this, handle, title, true);
+	dc.display = 0;
+	dc.window = handle;
+	dc.gc = (LeHandle) GetDC((HWND) handle);
+
+// Display the window
+	SetWindowPos((HWND) handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+	ShowWindow((HWND) handle, SW_MAXIMIZE);
 	fullScreen = true;
+	visible = true;
 }
 
 /**
@@ -282,15 +342,24 @@ void LeWindow::setFullScreen()
 */
 void LeWindow::setWindowed()
 {
-	if (!fullScreen) return;
-
-// Revert window state
-	SetWindowPos((HWND) handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-	ShowWindow((HWND) handle, SW_NORMAL);
-
 // Revert display mode
-	ChangeDisplaySettings (&devMode, CDS_RESET);
+	if (previousDevModeValid) {
+		ChangeDisplaySettings(&previousDevMode, CDS_RESET);
+		previousDevModeValid = false;
+	}
+
+// Create a new window
+	destroyWindow(this, handle);
+	createWindow(this, handle, title, false);
+	dc.display = 0;
+	dc.window = handle;
+	dc.gc = (LeHandle) GetDC((HWND) handle);
+
+// Display the window
+	SetWindowPos((HWND) handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
+	ShowWindow((HWND) handle, SW_NORMAL);
 	fullScreen = false;
+	visible = true;
 }
 
 #endif
