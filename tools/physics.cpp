@@ -155,7 +155,7 @@ int LePhysics::collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex
 // Touching a side
 	if (dx > dstSize.x) {
 		if (dy <= dstSize.y && dz <= dstSize.z) {
-			float sx = csgn(pos.x);
+			float sx = cmsgn(pos.x);
 			ans.x = (lx - dx) * sx;
 			contact = pos;
 			contact.x = dstSize.x * sx;
@@ -165,7 +165,7 @@ int LePhysics::collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex
 
 	if (dy > dstSize.y) {
 		if (dx <= dstSize.x && dz <= dstSize.z) {
-			float sy = csgn(pos.y);
+			float sy = cmsgn(pos.y);
 			ans.y = (ly - dy) * sy;
 			contact = pos;
 			contact.y = dstSize.y * sy;
@@ -175,7 +175,7 @@ int LePhysics::collideSphereBox(LeVertex &ans, LeVertex &contact, const LeVertex
 
 	if (dz > dstSize.z) {
 		if (dx <= dstSize.x && dy <= dstSize.y) {
-			float sz = csgn(pos.z);
+			float sz = cmsgn(pos.z);
 			ans.z = (lz - dz) * sz;
 			contact.z = dstSize.y * sz;
 			return PHYSICS_BOX_SIDE;
@@ -381,9 +381,9 @@ int collideCircleSegment(LeVertex &ans, LeVertex &contact, const LeVertex &v1, c
 	float sd = sqrtf(delta);
 
 	float t1 = 0.5f * (-b - sd) / a;
-	t1 = cbound(t1, 0.0f, 1.0f);
+	t1 = cmbound(t1, 0.0f, 1.0f);
 	float t2 = 0.5f * (-b + sd) / a;
-	t2 = cbound(t2, 0.0f, 1.0f);
+	t2 = cmbound(t2, 0.0f, 1.0f);
 	if (t1 == t2) return 0;
 
 	LeVertex h = v1 + d * ((t1 + t2) * 0.5f);
