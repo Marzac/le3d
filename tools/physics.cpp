@@ -326,14 +326,14 @@ int LePhysics::collideSphereMesh(LeVertex &ans, LeVertex &contact, const LeVerte
 	for (int t = 0; t < dstMesh->noTriangles; t++) {
 	// 1: Compute distance to plan
 		LeVertex n = dstMesh->normals[t];
-		LeVertex v1 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3]];
+		LeVertex v1 = mt * dstMesh->vertexes[dstMesh->vertexesList[t*3]];
 		float d = n.dot(pos - v1);
 		if (d > srcRadius || d < 0.0f) continue;
 
 	// 2: Check intersection in triangle
 		LeVertex h = pos - n * d;
-		LeVertex v2 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3+1]];
-		LeVertex v3 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3+2]];
+		LeVertex v2 = mt * dstMesh->vertexes[dstMesh->vertexesList[t*3+1]];
+		LeVertex v3 = mt * dstMesh->vertexes[dstMesh->vertexesList[t*3+2]];
 		float n1 = n.dot((v1 - h).cross(v2 - h));
 		if (n1 < 0.0f) continue;
 		float n2 = n.dot((v2 - h).cross(v3 - h));
@@ -348,9 +348,9 @@ int LePhysics::collideSphereMesh(LeVertex &ans, LeVertex &contact, const LeVerte
 
 	for (int t = 0; t < dstMesh->noTriangles; t++) {
 	// 3: Compute intersection with edges
-		LeVertex v1 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3]];
-		LeVertex v2 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3+1]];
-		LeVertex v3 = mt * dstMesh->vertexes[dstMesh->vertexList[t*3+2]];
+		LeVertex v1 = mt * dstMesh->vertexes[dstMesh->vertexesList[t*3]];
+		LeVertex v2 = mt * dstMesh->vertexes[dstMesh->vertexesList[t*3+1]];
+		LeVertex v3 = mt * dstMesh->vertexes[dstMesh->vertexesList[t*3+2]];
 
 		LeVertex localContact, localAns;
 		int n = collideCircleSegment(localAns, localContact, v1, v2, pos, srcRadius);
@@ -417,14 +417,14 @@ int LePhysics::traceMesh(const LeMesh * mesh, const LeAxis &axis, float &distanc
 		if (a >= 0.0f) continue;
 
 	// 2: Check distance to plan
-		LeVertex v1 = mesh->vertexes[mesh->vertexList[t*3]];
+		LeVertex v1 = mesh->vertexes[mesh->vertexesList[t*3]];
 		float d = n.dot(v1 - axis.origin) / a;
 		if (d >= dMin) continue;
 
 	// 3: Check if intersection in triangle
 		LeVertex h = axis.origin + axis.axis * d;
-		LeVertex v2 = mesh->vertexes[mesh->vertexList[t*3+1]];
-		LeVertex v3 = mesh->vertexes[mesh->vertexList[t*3+2]];
+		LeVertex v2 = mesh->vertexes[mesh->vertexesList[t*3+1]];
+		LeVertex v3 = mesh->vertexes[mesh->vertexesList[t*3+2]];
 
 		float n1 = n.dot((v1 - h).cross(v2 - h));
 		if (n1 < 0.0f) continue;
