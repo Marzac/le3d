@@ -48,11 +48,7 @@ LeObjFile::LeObjFile(const char * filename) :
 	normals(NULL), noNormals(0)
 {
 	memset(line, 0, LE_OBJ_MAX_LINE+1);
-#ifdef _MSC_VER
-	if (filename) path = _strdup(filename);
-#else
 	if (filename) path = strdup(filename);
-#endif
 }
 
 LeObjFile::~LeObjFile()
@@ -439,8 +435,9 @@ void LeObjFile::importMeshData(FILE * file, LeMesh * mesh)
 			c.b = (uint8_t) cbound(curMaterial->diffuse[2] * 255.0f, 0.0f, 255.0f);
 			c.a = 0;
 			int slot = 0;
-			if (curMaterial->texture[0]) {
-				slot = bmpCache.getFromName(curMaterial->texture);
+
+			if (curMaterial->texture[0) {
+				slot = bmpCache.getSlotFromName(curMaterial->texture);
 				if (!slot) printf("objFile: using default texture (instead of %s)!\n", curMaterial->texture);
 			}
 			mesh->texSlotList[trianglesIndex ++] = slot;

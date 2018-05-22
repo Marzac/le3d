@@ -322,6 +322,7 @@ int LePhysics::collideSphereMesh(LeVertex &ans, LeVertex &contact, const LeVerte
 	mt.scale(dstMesh->scale);
 	mt.rotate(dstMesh->angle * d2r);
 
+	if (!dstMesh->normals) return PHYSICS_MESH_NO_COL;
 	for (int t = 0; t < dstMesh->noTriangles; t++) {
 	// 1: Compute distance to plan
 		LeVertex n = dstMesh->normals[t];
@@ -408,6 +409,7 @@ int LePhysics::traceMesh(const LeMesh * mesh, const LeAxis &axis, float &distanc
 	int result = -1;
 	float dMin = FLT_MAX;
 
+	if (!mesh->normals) return -1;
 	for (int t = 0; t < mesh->noTriangles; t++) {
 	// 1: Check if intersection with plan
 		LeVertex n = mesh->normals[t];

@@ -37,14 +37,14 @@
 
 #include <stdlib.h>
 #include <string.h>
-
+	
 /*****************************************************************************/
 #pragma pack(push, 1)
 typedef struct {
 	uint16_t bfType;
 	uint32_t bfSize;
-	int16_t	 bfReserved1;
-	int16_t	 bfReserved2;
+	int16_t  bfReserved1;
+	int16_t  bfReserved2;
 	uint32_t bfOffBits;
 } BMPFILEHEADER;
 #pragma pack(pop)
@@ -52,14 +52,14 @@ typedef struct {
 #pragma pack(push, 1)
 typedef struct {
 	uint32_t biSize;
-	int32_t	 biWidth;
-	int32_t	 biHeight;
-	int16_t	 biPlanes;
-	int16_t	 biBitCount;
+	int32_t  biWidth;
+	int32_t  biHeight;
+	uint16_t biPlanes;
+	uint16_t biBitCount;
 	uint32_t biCompression;
 	uint32_t biSizeImage;
-	int32_t	 biXPelsPerMeter;
-	int32_t	 biYPelsPerMeter;
+	int32_t  biXPelsPerMeter;
+	int32_t  biYPelsPerMeter;
 	uint32_t biClrUsed;
 	uint32_t biClrImportant;
 } BMPINFOHEADER;
@@ -92,11 +92,7 @@ typedef struct {
 LeBmpFile::LeBmpFile(const char * filename) :
 	path(NULL)
 {
-#ifdef _MSC_VER
-	if (filename) path = _strdup(filename);
-#else
 	if (filename) path = strdup(filename);
-#endif
 }
 
 LeBmpFile::~LeBmpFile()
@@ -149,28 +145,44 @@ void LeBmpFile::save(const LeBitmap * bitmap)
 /*****************************************************************************/
 int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 {
-	BMPFILEHEADER header;
-	BMPINFOHEADER info;
+	BMPFILEHEADER fileHeader;
+	BMPINFOHEADER infoHeader;
 	BMPCOLORMASK  mask = {
 		0x00FF0000,
 		0x0000FF00,
 		0x000000FF,
 		0xFF000000
 	};
-// Read the headers
-	fread(&header, sizeof(BMPFILEHEADER), 1, file);
-	fread(&info, sizeof(BMPINFOHEADER), 1, file);
 
-// Check bitmap format
-	if (strncmp((char *) &header.bfType, "BM", 2)){
+// Read the headers
+	fread(&fileHeader, sizeof(BMPFILEHEADER), 1, file);
+	fread(&infoHeader, sizeof(BMPINFOHEADER), 1, file);
+	
+// Format the data (little-endianness)
+	FROM_LEU32(fileHeader.bfSize);
+	FROM_LEU32(fileHeader.bfOffBits);
+	FROM_LEU32(infoHeader.biSize);
+	FROM_LES32(infoHeader.biWidth);
+	FROM_LES32(infoHeader.biHeight);
+	FROM_LEU16(infoHeader.biPlanes);
+	FROM_LEU16(infoHeader.biBitCount);
+	FROM_LEU32(infoHeader.biCompression);
+	FROM_LEU32(infoHeader.biSizeImage);
+	FROM_LES32(infoHeader.biXPelsPerMeter);
+	FROM_LES32(infoHeader.biYPelsPerMeter);
+	FROM_LEU32(infoHeader.biClrUsed);
+	FROM_LEU32(infoHeader.biClrImportant);
+	
+// Check the headers
+	if (strncmp((char *) &fileHeader.bfType, "BM", 2)){
 		printf("bmpFile: file not a bitmap!\n");
 		return 0;
 	}
-	if (info.biBitCount != 24 && info.biBitCount != 32) {
-		printf("bmpFile: only 24bit or 32bit bitmaps are supported!\n");
+	if (infoHeader.biBitCount != 24 && infoHeader.biBitCount != 32) {
+		printf("bmpFile: only 24bit or 32bit bitmaps are supported %d!\n", infoHeader.biBitCount);
 		return 0;
 	}
-	if (info.biCompression != BI_RGB && info.biCompression != BI_BITFIELDS){
+	if (infoHeader.biCompression != BI_RGB && infoHeader.biCompression != BI_BITFIELDS){
 		printf("bmpFile: only uncompressed formats are supported!\n");
 		return 0;
 	}
@@ -180,8 +192,12 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	int shiftR = 16;
 	int shiftG = 8;
 	int shiftB = 0;
-	if (info.biCompression == BI_BITFIELDS) {
+	if (infoHeader.biCompression == BI_BITFIELDS) {
 		fread(&mask, sizeof(BMPCOLORMASK), 1, file);
+		FROM_LEU32(mask.mR);
+		FROM_LEU32(mask.mG);
+		FROM_LEU32(mask.mB);
+		FROM_LEU32(mask.mA);
 		shiftR = __builtin_ffs(mask.mR) - 1;
 		shiftG = __builtin_ffs(mask.mG) - 1;
 		shiftB = __builtin_ffs(mask.mB) - 1;
@@ -189,8 +205,8 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	}
 
 // Retrieve bitmap size
-	bitmap->tx = info.biWidth;
-	bitmap->ty = info.biHeight;
+	bitmap->tx = infoHeader.biWidth;
+	bitmap->ty = infoHeader.biHeight;
 	bitmap->txP2 = LeGlobal::log2i32(bitmap->tx);
 	bitmap->tyP2 = LeGlobal::log2i32(bitmap->ty);
 
@@ -202,31 +218,27 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 
 // Set bitmap flags
 	bitmap->flags = LE_BITMAP_RGB;
-	if (info.biBitCount == 32)
+	if (infoHeader.biBitCount == 32)
 		bitmap->flags |= LE_BITMAP_RGBA;
 
 // Allocate bitmap memory
 	int srcScan;
-	srcScan = bitmap->tx * (info.biBitCount >> 3);
+	srcScan = bitmap->tx * (infoHeader.biBitCount >> 3);
 	srcScan = (srcScan + 0x3) & ~0x3;
 
 	bitmap->data = new LeColor[bitmap->tx * bitmap->ty];
 	bitmap->dataAllocated = true;
 
 // Load bitmap data
-#if _MSC_VER && !defined(__MINGW32__)
 	uint8_t * buffer = (uint8_t *) alloca(srcScan);
-#else
-	uint8_t buffer[srcScan];
-#endif
 	uint8_t * data = (uint8_t *) bitmap->data;
 
 	int dstScan = bitmap->tx * sizeof(uint32_t);
-	fseek(file, header.bfOffBits, SEEK_SET);
+	fseek(file, fileHeader.bfOffBits, SEEK_SET);
 	if (upsidedown)
 		data += dstScan * (bitmap->ty - 1);
 
-	if (info.biBitCount == 32) {
+	if (infoHeader.biBitCount == 32) {
 	// Parse a 32 bits image
 		for (int y = 0; y < bitmap->ty; y ++) {
 			fread(buffer, srcScan, 1, file);
@@ -264,32 +276,31 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	return 1;
 }
 
-
 /*****************************************************************************/
 #define HEAD_LEN sizeof(BMPFILEHEADER) + sizeof(BMPINFOHEADER) + sizeof(BMPCOLORMASK)
 int LeBmpFile::writeBitmap(FILE * file, const LeBitmap * bitmap)
 {
 // Prepare the headers
 	size_t size = bitmap->tx * bitmap->ty * sizeof(uint32_t);
-	BMPFILEHEADER header;
-	header.bfType = 0x4D42;
-	header.bfSize = HEAD_LEN + size;
-	header.bfReserved1 = 0;
-	header.bfReserved2 = 0;
-	header.bfOffBits = HEAD_LEN;
+	BMPFILEHEADER fileHeader;
+	fileHeader.bfType = 0x4D42;
+	fileHeader.bfSize = HEAD_LEN + size;
+	fileHeader.bfReserved1 = 0;
+	fileHeader.bfReserved2 = 0;
+	fileHeader.bfOffBits = HEAD_LEN;
 
-	BMPINFOHEADER info;
-	info.biSize = sizeof(BMPINFOHEADER) + sizeof(BMPCOLORMASK);
-	info.biWidth = bitmap->tx;
-	info.biHeight = bitmap->ty;
-	info.biPlanes = 1;
-	info.biBitCount = 32;
-	info.biCompression = BI_BITFIELDS;
-	info.biSizeImage = 0;
-	info.biXPelsPerMeter = 96;
-	info.biYPelsPerMeter = 96;
-	info.biClrUsed = 0;
-	info.biClrImportant = 0;
+	BMPINFOHEADER infoHeader;
+	infoHeader.biSize = sizeof(BMPINFOHEADER) + sizeof(BMPCOLORMASK);
+	infoHeader.biWidth = bitmap->tx;
+	infoHeader.biHeight = bitmap->ty;
+	infoHeader.biPlanes = 1;
+	infoHeader.biBitCount = 32;
+	infoHeader.biCompression = BI_BITFIELDS;
+	infoHeader.biSizeImage = 0;
+	infoHeader.biXPelsPerMeter = 96;
+	infoHeader.biYPelsPerMeter = 96;
+	infoHeader.biClrUsed = 0;
+	infoHeader.biClrImportant = 0;
 
 	BMPCOLORMASK mask = {
 		0x00FF0000,
@@ -297,10 +308,30 @@ int LeBmpFile::writeBitmap(FILE * file, const LeBitmap * bitmap)
 		0x000000FF,
 		0xFF000000
 	};
-
+	
+// Format the data (little-endianness)
+	TO_LEU16(fileHeader.bfType);
+	TO_LEU32(fileHeader.bfSize);
+	TO_LEU32(fileHeader.bfOffBits);
+	TO_LEU32(infoHeader.biSize);
+	TO_LES32(infoHeader.biWidth);
+	TO_LES32(infoHeader.biHeight);
+	TO_LEU16(infoHeader.biPlanes);
+	TO_LEU16(infoHeader.biBitCount);
+	TO_LEU32(infoHeader.biCompression);
+	TO_LEU32(infoHeader.biSizeImage);
+	TO_LES32(infoHeader.biXPelsPerMeter);
+	TO_LES32(infoHeader.biYPelsPerMeter);
+	TO_LEU32(infoHeader.biClrUsed);
+	TO_LEU32(infoHeader.biClrImportant);
+	//TO_LEU32(mask[0]);
+	//TO_LEU32(mask[1]);
+	//TO_LEU32(mask[2]);
+	//TO_LEU32(mask[3]);
+	
 // Write the headers
-	fwrite(&header, sizeof(BMPFILEHEADER), 1, file);
-	fwrite(&info, sizeof(BMPINFOHEADER), 1, file);
+	fwrite(&fileHeader, sizeof(BMPFILEHEADER), 1, file);
+	fwrite(&infoHeader, sizeof(BMPINFOHEADER), 1, file);
 	fwrite(&mask, sizeof(BMPCOLORMASK), 1, file);
 
 // Save the picture

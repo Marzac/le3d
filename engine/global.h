@@ -99,10 +99,43 @@
 	#endif
 	
 /*****************************************************************************/
-/** Intrinsic equivalent functions */
+/** VC missing / renamed functions */
 #ifdef _MSC_VER
 	#include <intrin.h>
 	int __builtin_ffs(int x);
+	#ifndef strdup 
+		#define strdup _strdup
+	#endif
 #endif
 
+/*****************************************************************************/
+/** Endianness conversion macros */
+#define FROM_LEU16(x) (x = ((uint8_t *) &(x))[0] + (((uint8_t *) &(x))[1] << 8))
+#define FROM_LES16(x) FROM_LEU16(x)
+#define FROM_LEU32(x) (x = ((uint8_t *) &x)[0] + (((uint8_t *) &x)[1] << 8) + (((uint8_t *) &x)[2] << 16) + (((uint8_t *) &x)[3] << 24))
+#define FROM_LES32(x) FROM_LEU32(x)
+
+#define TO_LEU16(x) (\
+	((uint8_t *) &(x))[0] = ((uint16_t) (x)) & 0xFF, \
+	((uint8_t *) &(x))[1] = ((uint16_t) (x)) >> 8 \
+	)
+
+#define TO_LES16(x) (\
+	((uint8_t *) &(x))[0] = ((int16_t) (x)) & 0xFF, \
+	((uint8_t *) &(x))[1] = ((int16_t) (x)) >> 8 \
+	)
+	
+#define TO_LEU32(x) (\
+	((uint8_t *) &(x))[0] = ((uint32_t) (x)) & 0xFF, \
+	((uint8_t *) &(x))[1] = ((uint32_t) (x)) >> 8, \
+	((uint8_t *) &(x))[2] = ((uint32_t) (x)) >> 16, \
+	((uint8_t *) &(x))[3] = ((uint32_t) (x)) >> 24 \
+	)
+
+#define TO_LES32(x) (\
+	((uint8_t *) &(x))[0] = ((int32_t) (x)) & 0xFF, \
+	((uint8_t *) &(x))[1] = ((int32_t) (x)) >> 8, \
+	((uint8_t *) &(x))[2] = ((int32_t) (x)) >> 16, \
+	((uint8_t *) &(x))[3] = ((int32_t) (x)) >> 24 \
+	)
 #endif // LE_GLOBAL_H

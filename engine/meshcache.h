@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,9 @@ public:
 
 	void loadDirectory(const char * path);
 	LeMesh * loadOBJ(const char * path);
-	int getFromName(const char * name);
+
+	int getSlotFromName(const char * name);
+	LeMesh * getMeshFromName(const char * path);
 
 public:
 	/**

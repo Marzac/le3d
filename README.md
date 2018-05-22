@@ -10,14 +10,15 @@ Currently supported platforms:
 - Microsoft Windows XP, 7, 8 and 10
 - Linux based operating systems
 - MacOS X
+- AmigaOS 3.x (m68k)
 
 Source code / examples / documentation  
-Copyright (c) 2015 - 2018 Frédéric Meslin  
+Copyright (c) 2015 - 2018 FrÃ©dÃ©ric Meslin  
 **Twitter:** @marzacdev  
 **Email:** fred@fredslab.net  
 
-CMake scripts / MacOS support  
-Andreas Streichard  
+CMake scripts / Amiga+MacOS support  
+Andreas Streichardt  
 **Twitter:** @m0ppers  
 **Email:** andreas@mop.koeln  
 
@@ -93,11 +94,21 @@ The backend - Linux version:
   (with evdev interface)
 - Supports virtually all Linux based OS
 
-The backend - MacOS version:  
+The backend - MacOS version:
 - Similar to Linux version
 - Needs X11 (XQuartz) for MacOS
 - No native COCOA support
-- No joysticks support yet (soon)
+- No joystick support yet (soon)
+
+The backend - Amiga version:
+- Similar to Linux version
+- Needs cybergraphics installed
+- No joystick support yet
+- AmigaOS 3.x
+- Too slow on old m68k hardware (use vampire)
+- PowerPC support unclear/untested
+- AmigaOS 4.x support unclear/untested
+
 
 # File formats  
 Supported bitmap / texture formats:
@@ -119,3 +130,7 @@ Supported 3D model formats:
 
 # Comparison  
 It renders graphics a bit better than a Sony Playstation one.  
+
+# Building
+
+Please refer to BUILDING.md

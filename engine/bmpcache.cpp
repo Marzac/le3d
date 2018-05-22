@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -139,7 +139,7 @@ void LeBmpCache::loadDirectory(const char * path)
 
 	while ((dd = readdir(dir))) {
 		if (dd->d_name[0] == '.') continue;
-		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, dd->d_name);
+		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, (const char*) dd->d_name);
 
 		if (strcmp(ext, "bmp") == 0) {
 		// Load a Windows bmp file
@@ -202,9 +202,9 @@ void LeBmpCache::deleteSlot(int index)
 	\fn int LeBmpCache::getFromName(const char * path)
 	\brief Retrieve a bitmap slot index from a bitmap name or path
 	\param[in] path bitmap path or name
-	\return cache slot number or -1 if no space available
+	\return cache slot number or 0 (default slot) if not found
 */
-int LeBmpCache::getFromName(const char * path)
+int LeBmpCache::getSlotFromName(const char * path)
 {
 	char name[LE_MAX_FILE_NAME+1];
 	LeGlobal::getFileName(name, LE_MAX_FILE_NAME, path);
@@ -220,4 +220,16 @@ int LeBmpCache::getFromName(const char * path)
 // Resource not found
 	printf("bmpCache: %s not found!\n", path);
 	return 0;
+}
+
+/**
+	\fn LeBitmap * LeBmpCache::getBitmapFromName(const char * path)
+	\brief Retrieve a bitmap object from its name or path
+	\param[in] path bitmap path or name
+	\return bitmap object or default bitmap if not found
+*/
+LeBitmap * LeBmpCache::getBitmapFromName(const char * path)
+{
+	int slot = getSlotFromName(path);
+	return cacheSlots[slot].bitmap;
 }

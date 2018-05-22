@@ -1,11 +1,11 @@
 /**
-	\file trilist.h
-	\brief LightEngine 3D: Triangle lists
-	\brief All platforms implementation
-	\author Frederic Meslin (fred@fredslab.net)
-	\twitter @marzacdev
-	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2018
+	\file draw_unix.cpp
+	\brief LightEngine 3D: Native OS graphic context
+	\brief Amiga OS implementation
+	\author Andreas Streichardt (andreas@mop.koeln)
+	\twitter @m0ppers
+	\website https://mop.koeln
+	\copyright Frédéric Meslin 2015 - 2018
 	\version 1.6
 
 	The MIT License (MIT)
@@ -30,57 +30,50 @@
 	SOFTWARE.
 */
 
-#ifndef LE_TRILIST_H
-#define LE_TRILIST_H
+/*****************************************************************************/
+#include "draw.h"
 
 #include "global.h"
 #include "config.h"
 
-#include "color.h"
+#include <stdio.h>
+
+#include <cybergraphx/cybergraphics.h>
+#include <proto/cybergraphics.h>
+#include <proto/intuition.h>
+#include <proto/exec.h>
+
+struct Library *CyberGfxBase = NULL;
+
+/*****************************************************************************/
+LeDraw::LeDraw(LeDrawingContext context, int width, int height) :
+	width(width), height(height),
+	frontContext(context),
+	bitmap(0)
+{
+	CyberGfxBase = OpenLibrary("cybergraphics.library", 41);
+	if (!CyberGfxBase) {
+		printf("ERROR: can`t open cybergraphics.library V41.\n");	
+	}
+
+	// TODO check that the display supports our depth/resolution requirements
+}
+
+LeDraw::~LeDraw()
+{
+	if (CyberGfxBase) {
+		CloseLibrary(CyberGfxBase);
+	}
+}
 
 /*****************************************************************************/
 /**
-	\class LeTriangle
-	\brief Represent a rasterizable triangle 
+	\fn void LeDraw::setPixels(void * data)
+	\brief Set the graphic content of the context
+	\param[in] data pointer to an array of pixels
 */
-struct LeTriangle
+void LeDraw::setPixels(const void * data)
 {
-	float xs[4];		/**< x coordinate of vertexes */
-	float ys[4];		/**< y coordinate of vertexes */
-	float zs[4];		/**< z coordinate of vertexes */
-	float us[4];		/**< u texture coordinate of vertexes */
-	float vs[4];		/**< v texture coordinate of vertexes */
-	float vd;			/**< average view distance */
-	LeColor color;		/**< solid color */
-	int tex;			/**< texture slot */
-};
-
-/*****************************************************************************/
-/**
-	\class LeTriList
-	\brief Contain and manage triangle lists
-*/
-class LeTriList
-{
-public:
-	LeTriList();
-	LeTriList(int noTrangles);
-	~LeTriList();
-
-	void allocate(int noTriangles);
-	void zSort();
-
-public:
-	int * srcIndices;
-	int * dstIndices;
-	LeTriangle * triangles;
-
-	int noAllocated;
-	int noUsed;
-	int noValid;
-
-private:
-	void zMergeSort(int indices[], int tmp[], int nb);
-};
-
-#endif // LE_TRILIST_H
+	Window* window = (Window*) frontContext.window;
+	WritePixelArray((APTR) data, 0, 0, 4 * width, window->RPort, window->BorderLeft, window->BorderTop, width, height, RECTFMT_RGBA);
+}

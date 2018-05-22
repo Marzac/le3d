@@ -5,11 +5,11 @@
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
-	\copyright Frederic Meslin 2015 - 2018
+	\copyright Frédéric Meslin 2015 - 2018
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Fr�d�ric Meslin
+	Copyright (c) 2015-2018 Frédéric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -122,7 +122,7 @@ void LeMeshCache::loadDirectory(const char * path)
 
 	while ((dd = readdir(dir))) {
 		if (dd->d_name[0] == '.') continue;
-		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, dd->d_name);
+		LeGlobal::getFileExtention(ext, LE_MAX_FILE_EXTENSION, (const char*) dd->d_name);
 
 		if (strcmp(ext, "obj") == 0) {
 		// Load a Wavefront obj file
@@ -179,12 +179,12 @@ void LeMeshCache::deleteSlot(int index)
 
 /*****************************************************************************/
 /**
-	\fn int LeMeshCache::getFromName(const char * path)
+	\fn int LeMeshCache::getSlotFromName(const char * path)
 	\brief Retrieve a mesh slot index from a mesh name or path
 	\param[in] path mesh path or name
-	\return cache slot number or -1 if no space available
+	\return cache slot number or 0 (default slot) if not found
 */
-int LeMeshCache::getFromName(const char * path)
+int LeMeshCache::getSlotFromName(const char * path)
 {
 	char name[LE_MAX_FILE_NAME+1];
 	LeGlobal::getFileName(name, LE_MAX_FILE_NAME, path);
@@ -200,4 +200,16 @@ int LeMeshCache::getFromName(const char * path)
 // Resource not found
 	printf("meshCache: %s not found!\n", path);
 	return 0;
+}
+
+/**
+	\fn LeMesh * LeMeshCache::getMeshFromName(const char * path)
+	\brief Retrieve a mesh object from its name or path
+	\param[in] path mesh path or name
+	\return mesh object or default mesh if not found
+*/
+LeMesh * LeMeshCache::getMeshFromName(const char * path)
+{
+	int slot = getSlotFromName(path);
+	return cacheSlots[slot].mesh;
 }

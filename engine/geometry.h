@@ -9,7 +9,7 @@
 	\version 1.6
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -35,12 +35,6 @@
 
 #include "global.h"
 #include "config.h"
-
-/*****************************************************************************/
-#ifndef LE_USE_SIMD
-	#error LE_USE_SIMD undefined.
-	#error Use LE_USE_SIMD in (config.h) to enable or disable SIMD acceleration for calculations.
-#endif // LE_USE_SIMD
 
 /*****************************************************************************/
 #if LE_USE_SIMD == 1

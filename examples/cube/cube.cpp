@@ -17,7 +17,7 @@
 int main()
 {
 	sys.initialize();
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(AMIGA)
 	LeGamePad::setup();
 #endif
 /** Create application objects */
@@ -31,8 +31,7 @@ int main()
 	meshCache.loadDirectory("assets");
 
 /** Retrieve the 3D model */
-	int crateSlot = meshCache.getFromName("crate.obj");
-	LeMesh * crate = meshCache.cacheSlots[crateSlot].mesh;
+	LeMesh * crate = meshCache.getMeshFromName("crate.obj");
 
 /** Create three lights */
 	LeLight light1(LE_LIGHT_DIRECTIONAL, LeColor::rgb(0xFF4040));
@@ -83,8 +82,12 @@ int main()
 		renderer.flush();
 	}
 
+/** Make a screenshot */
+	LeBmpFile screenshot("screenshot.bmp");
+	screenshot.save(&rasterizer.frame);
+
 	timing.lastFrame();
-#ifndef __APPLE__	
+#if !defined(__APPLE__) && !defined(AMIGA)
 	LeGamePad::release();
 #endif
 	sys.terminate();
