@@ -83,6 +83,10 @@ public:
 
 	int buttons;			/**< buttons pressed */
 	int toggled;			/**< buttons toggled (since last update) */
+	int pressed;			/**< buttons pressed (since last update) */
+	int released;			/**< buttons released (since last update) */
+
+	bool detected;			/**< gamepad is detected (state can change) */
 
 	static void setup();
 	static void release();

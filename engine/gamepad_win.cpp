@@ -96,7 +96,9 @@ static DLLXInputSetState * XInputSetState = XInputSetStateFB;
 LeGamePad::LeGamePad(int pad) :
 	stickLeftX(0.0f), stickLeftY(0.0f),
 	stickRightX(0.0f), stickRightY(0.0f),
-	buttons(0), toggled(), pad(pad)
+	buttons(0), toggled(0), pressed(0), released(0),
+	detected(false),
+	pad(pad)
 {
 }
 
@@ -115,9 +117,17 @@ void LeGamePad::init()
 	stickLeftY = 0.0f;
 	stickRightX = 0.0f;
 	stickRightY = 0.0f;
+
 	buttons = 0;
+	toggled = 0;
+	pressed = 0;
+	released = 0;
 
 	feedback(0.0f, 0.0f);
+
+	XInputState dummy;
+	DWORD result = XInputGetState(pad, &dummy);
+	detected = result == ERROR_SUCCESS;
 }
 
 /*****************************************************************************/
@@ -129,7 +139,8 @@ void LeGamePad::update()
 {
 	XInputState state;
 	memset(&state, 0, sizeof(XInputState));
-	XInputGetState(pad, &state);
+	DWORD result = XInputGetState(pad, &state);
+	detected = result == ERROR_SUCCESS;
 
 	stickLeftX = normalize(state.gamepad.thumbLX);
 	stickLeftY = normalize(state.gamepad.thumbLY);
@@ -138,6 +149,8 @@ void LeGamePad::update()
 
 	toggled = buttons ^ state.gamepad.buttons;
 	buttons = state.gamepad.buttons;
+	pressed = toggled & buttons;
+	released = toggled & ~buttons;
 }
 
 /*****************************************************************************/
