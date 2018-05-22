@@ -8,5 +8,5 @@
 # CMakeLists.txt - examples directory 
 ############################################################################### 
 
-add_subdirectory(cube)   
-
+add_subdirectory(cube)
+add_subdirectory(destroyer)
