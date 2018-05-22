@@ -6,12 +6,12 @@
 	\brief Destroyer example (code and assets)
 	\brief All rights reserved to Frédéric Meslin
 	
-	\brief This software = code and assets is provided
-	\brief for educational purpose only and is not
-	\brief licensed under the MIT license.
+	\brief This specific software (= code and assets) is
+	\brief provided for educational purposes only and is
+	\brief not licensed under the MIT license.
 	
 	\brief Reuse of the code and assets without the explicit
-	\brief contentment of the original author is prohibited.
+	\brief content of the original author is prohibited.
 
 	\twitter @marzacdev
 	\website http://fredslab.net
