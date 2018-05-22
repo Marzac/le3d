@@ -52,6 +52,9 @@
 /** Bitmap manipulator */
 	#define LE_BMP_MIPMAPS				32						/** Maximum number of mipmaps per bitmap */
 
+/** Windows and events */
+	#define LE_WINDOW_EXTENDED_KEYS		1						/** Uses extended key events /
+
 /** Renderer configuration */
 	#define LE_RENDERER_FRONT			-1.0f					/** Front clipping plane */
 	#define LE_RENDERER_BACK			-32768.0f				/** Back clipping plane */
@@ -67,8 +70,8 @@
 
 /** Performance optimizations */
 #ifndef AMIGA
-	#define LE_USE_SIMD					1						/** Use SIMD instructions & vectors */
-	#define LE_USE_SSE2					1						/** Use Intel SSE2 instructions */
+	#define LE_USE_SIMD					0						/** Use SIMD instructions & vectors */
+	#define LE_USE_SSE2					0						/** Use Intel SSE2 instructions */
 #endif // AMIGA
 
 #endif // LE_CONFIG_H

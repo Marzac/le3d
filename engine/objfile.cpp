@@ -67,7 +67,7 @@ LeObjFile::LeObjFile(const char * filename) :
 	materials(NULL), curMaterial(&defMaterial), noMaterials(0)
 {
 	memset(line, 0, LE_OBJ_MAX_LINE+1);
-	if (filename) path = strdup(filename);
+	if (filename) path = _strdup(filename);
 }
 
 LeObjFile::~LeObjFile()
@@ -487,9 +487,9 @@ void LeObjFile::importTriangles(FILE * file, LeMesh * mesh)
 	while (len) {
 		if (strncmp(line, objFace, 2) == 0) {
 			readTriangle(line, mesh, index);
-			mesh->colors[index].r = (uint8_t) cbound(curMaterial->diffuse[0] * 255.0f, 0.0f, 255.0f);
-			mesh->colors[index].g = (uint8_t) cbound(curMaterial->diffuse[1] * 255.0f, 0.0f, 255.0f);
-			mesh->colors[index].b = (uint8_t) cbound(curMaterial->diffuse[2] * 255.0f, 0.0f, 255.0f);
+			mesh->colors[index].r = (uint8_t) cmbound(curMaterial->diffuse[0] * 255.0f, 0.0f, 255.0f);
+			mesh->colors[index].g = (uint8_t) cmbound(curMaterial->diffuse[1] * 255.0f, 0.0f, 255.0f);
+			mesh->colors[index].b = (uint8_t) cmbound(curMaterial->diffuse[2] * 255.0f, 0.0f, 255.0f);
 			mesh->colors[index].a = 0;
 			int slot = 0;
 			const char * texName = curMaterial->texture;

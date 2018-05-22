@@ -103,7 +103,7 @@ inline void LeLight::shinePoint(LeMesh * mesh)
 		float p = n.dot(m);
 		if (p > 0.0f) continue;
 		float d = m.dot(m);
-		float e = cmax((1.0f - d * rolloff), 0.0f);
+		float e = cmmax((1.0f - d * rolloff), 0.0f);
 		blendColors(mesh->colors[j], color, e, mesh->shades[j]);
 	}
 }
@@ -138,8 +138,8 @@ inline void LeLight::shineAmbient(LeMesh * mesh)
 void LeLight::blendColors(LeColor color1, LeColor color2, float factor, LeColor &result)
 {
 	uint32_t f = (uint32_t) (factor * 65536.0f);
-	result.r = cbound(result.r + ((color1.r * color2.r * f) >> 24), 0, 255);
-	result.g = cbound(result.g + ((color1.g * color2.g * f) >> 24), 0, 255);
-	result.b = cbound(result.b + ((color1.b * color2.b * f) >> 24), 0, 255);
+	result.r = cmbound(result.r + ((color1.r * color2.r * f) >> 24), 0, 255);
+	result.g = cmbound(result.g + ((color1.g * color2.g * f) >> 24), 0, 255);
+	result.b = cmbound(result.b + ((color1.b * color2.b * f) >> 24), 0, 255);
 	result.a = 0;
 }

@@ -142,11 +142,11 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 			float ubot = tri->us[vb] / tri->zs[vb];
 			float vtop = tri->vs[vt] / tri->zs[vt];
 			float vbot = tri->vs[vb] / tri->zs[vb];
-			float d = cmax(fabsf(utop - ubot), fabsf(vtop - vbot));
+			float d = cmmax(fabsf(utop - ubot), fabsf(vtop - vbot));
 
 			int r = (int) ((d * bmp->ty + dy * 0.5f) / dy);
 			int l = LeGlobal::log2i32(r);
-			l = cmin(l, bmp->mmLevels - 1);
+			l = cmmin(l, bmp->mmLevels - 1);
 			bmp = bmp->mipmaps[l];
 		}
 	#endif

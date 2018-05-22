@@ -37,7 +37,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-	
+
 /*****************************************************************************/
 #pragma pack(push, 1)
 typedef struct {
@@ -92,7 +92,7 @@ typedef struct {
 LeBmpFile::LeBmpFile(const char * filename) :
 	path(NULL)
 {
-	if (filename) path = strdup(filename);
+	if (filename) path = _strdup(filename);
 }
 
 LeBmpFile::~LeBmpFile()

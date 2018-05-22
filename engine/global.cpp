@@ -37,7 +37,6 @@
 #include <string.h>
 
 /*****************************************************************************/
-
 #if __APPLE__
 void * _aligned_malloc(size_t size, size_t alignment) {
 	void * buffer;
@@ -46,6 +45,7 @@ void * _aligned_malloc(size_t size, size_t alignment) {
 }
 #endif
 
+/*****************************************************************************/
 void LeGlobal::toLower(char * txt)
 {
 	int len = strlen(txt);
@@ -129,5 +129,11 @@ int __builtin_ffs(int x) {
 	unsigned long index;
 	_BitScanForward(&index, x);
 	return (int) index + 1;
+}
+#endif
+
+#ifdef __WATCOMC__
+int __builtin_ffs(int x) {
+	return 0;
 }
 #endif

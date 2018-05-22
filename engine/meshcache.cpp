@@ -37,10 +37,13 @@
 #include "config.h"
 
 #include <string.h>
+
 #ifdef _MSC_VER
-#include "vs-dirent.h"
+	#include "vs-dirent.h"
+#elif defined __WATCOMC__
+	#include <direct.h>
 #else
-#include <dirent.h>
+	#include <dirent.h>
 #endif
 
 /*****************************************************************************/

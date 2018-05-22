@@ -40,6 +40,8 @@
 
 #ifdef _MSC_VER
 	#include "vs-dirent.h"
+#elif defined __WATCOMC__
+	#include <direct.h>
 #else
 	#include <dirent.h>
 #endif

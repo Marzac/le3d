@@ -41,14 +41,14 @@
 	typedef unsigned long long		LeHandle;												/** Native OS handle / pointer holder type */
 
 /** Handful macros */
-	#define cmax(a,b)				((a)>(b)?(a):(b))										/** Return the maximum of two values */
-	#define cmin(a,b)				((a)<(b)?(a):(b))										/** Return the minimum of two values */
-	#define cabs(a)					((a)<0.0f?(-(a)):(a))									/** Return the absolute value */
-	#define cbound(v, vmin, vmax)	((v)>(vmax)?(vmax):((v)<(vmin)?(vmin):(v)))				/** Limit a value between two bounds (included) */
-	#define csgn(a)					((a)<0.0f?-1.0f:1.0f)									/** Return the sign (+1.0 or -1.0) of a value */
-	#define cthr(a, t)				((a)<(-t)?-1.0f:((a)>(t)?1.0f:0.0f))					/** Compare a value to a threshold and return +1.0 (above), -1.0 (below) or 0.0f (inside) */
-	#define cmod(a, m)				(((a) % (m) + (m)) % (m))								/** Perform a non-signed modulo (integer) */
-	#define cmodf(a, m)				(fmodf((fmodf((a), (m)) + (m)), (m)))					/** Perform a non-signed modulo (float) */
+	#define cmmax(a,b)				((a)>(b)?(a):(b))										/** Return the maximum of two values */
+	#define cmmin(a,b)				((a)<(b)?(a):(b))										/** Return the minimum of two values */
+	#define cmabs(a)				((a)<0.0f?(-(a)):(a))									/** Return the absolute value */
+	#define cmbound(v, vmin, vmax)	((v)>(vmax)?(vmax):((v)<(vmin)?(vmin):(v)))				/** Limit a value between two bounds (included) */
+	#define cmsgn(a)				((a)<0.0f?-1.0f:1.0f)									/** Return the sign (+1.0 or -1.0) of a value */
+	#define cmthr(a, t)				((a)<(-t)?-1.0f:((a)>(t)?1.0f:0.0f))					/** Compare a value to a threshold and return +1.0 (above), -1.0 (below) or 0.0f (inside) */
+	#define cmmod(a, m)				(((a) % (m) + (m)) % (m))								/** Perform a non-signed modulo (integer) */
+	#define cmmodf(a, m)			(fmodf((fmodf((a), (m)) + (m)), (m)))					/** Perform a non-signed modulo (float) */
 
 	#define randf()					(((float) rand() / (float) (RAND_MAX >> 1)) - 1.0f)		/** Compute a float random pseudo number */
 	#define d2r						(const float) (M_PI / 180.0f)							/** Mutiply constant to convert degrees in radiants */
@@ -79,8 +79,16 @@
 			#define _aligned_free(p) free(p)
 		#endif
 	#elif __APPLE__
+		#include <malloc.h>
 		void * _aligned_malloc(size_t size, size_t alignment);
-		#define _aligned_free  free
+		#ifndef _aligned_free
+			#define _aligned_free  free
+		#endif
+	#elif defined(_MSC_VER)
+		#include <malloc.h>
+		#ifndef alloca
+			#define alloca(s) _malloca(s)
+		#endif
 	#endif
 	
 	#if LE_USE_SIMD == 1
@@ -103,13 +111,32 @@
 #ifdef _MSC_VER
 	#include <intrin.h>
 	int __builtin_ffs(int x);
-	#ifndef strdup 
-		#define strdup _strdup
+	#ifndef _strdup 
+		#define _strdup strdup
 	#endif
+#elif defined __WATCOMC__
+	int __builtin_ffs(int x);
+	#define copysign(x, y)	(cmabs(x) * cmsgn(y))
+	#define copysignf(x, y)	((float) copysign(x, y))
+	
+	#define sinf(n)		((float)std::sin(n))
+	#define asinf(n)	((float)std::asin(n))
+	#define cosf(n)		((float)std::cos(n))
+	#define acosf(n)	((float)std::acos(n))
+	#define tanf(n)		((float)std::tan(n))
+	#define atanf(n)	((float)std::atan(n))
+	#define floorf(n)	((float)std::floor(n))
+	#define ceilf(n)	((float)std::ceil(n))
+	#define sqrtf(n)	((float)std::sqrt(n))
+	#define fabsf(n)	((float)std::fabs(n))
+	#define atan2f(n,m)	((float)std::atan2(n,m))
+		
+	#define M_PI		3.14159265358979323846
 #endif
 
 /*****************************************************************************/
 /** Endianness conversion macros */
+
 #define FROM_LEU16(x) (x = ((uint8_t *) &(x))[0] + (((uint8_t *) &(x))[1] << 8))
 #define FROM_LES16(x) FROM_LEU16(x)
 #define FROM_LEU32(x) (x = ((uint8_t *) &x)[0] + (((uint8_t *) &x)[1] << 8) + (((uint8_t *) &x)[2] << 16) + (((uint8_t *) &x)[3] << 24))
