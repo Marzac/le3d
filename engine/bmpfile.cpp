@@ -159,7 +159,6 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	fread(&infoHeader, sizeof(BMPINFOHEADER), 1, file);
 	
 // Format the data (little-endianness)
-	FROM_LEU16(fileHeader.bfType);
 	FROM_LEU32(fileHeader.bfSize);
 	FROM_LEU32(fileHeader.bfOffBits);
 	FROM_LEU32(infoHeader.biSize);

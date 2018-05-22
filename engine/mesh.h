@@ -49,7 +49,7 @@ class LeMesh
 public:
 	LeMesh();
 	LeMesh(LeVertex vertexes[], int noVertexes, float texCoords[], int noTexCoords,
-		 int vertexList[], int texCoordsList[],
+		 int vertexesList[], int texCoordsList[],
 		 LeColor colors[], int noTriangles);
 	virtual ~LeMesh();
 
@@ -79,7 +79,7 @@ public:
 	int noVertexes;						/**< Number of vertexes in the mesh */
 	float * texCoords;					/**< Texture coordinates (u, v) of the mesh */
 	int noTexCoords;					/**< Number of texture coordinates in the mesh */
-	int * vertexList;					/**< Triangles - vertex indexes tripplets */
+	int * vertexesList;					/**< Triangles - vertex indexes tripplets */
 	int * texCoordsList;				/**< Triangles - texture coordinate indexes tripplets */
 	int * texSlotList;					/**< Triangles - texture slots */
 	LeColor * colors;					/**< Triangles - colors */

@@ -44,6 +44,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if LE_USE_AMMX == 1
+#include "ammx/ammx.h"
+#endif
+
 /*****************************************************************************/
 LeRasterizer::LeRasterizer(int width, int height) :
 	frame(),
@@ -101,6 +105,9 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		else bmp = slot->bitmap;
 		
 		color = tri->color;
+#if LE_USE_AMMX == 1
+		prepare_fill_texel(&color);
+#endif
 
 	// Convert position coordinates
 		xs[0] = (int32_t) (tri->xs[0]) << 16;
@@ -365,6 +372,54 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int 
 		w1 += aw;
 	}
 }
+#elif LE_USE_AMMX == 1
+inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2)
+{
+	uint8_t * c = (uint8_t *) &color;
+
+	short d = x2 - x1;
+	if (d == 0) return;
+
+	int au = (u2 - u1) / d;
+	int av = (v2 - v1) / d;
+	int aw = (w2 - w1) / d;
+	
+
+	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + pixels);
+	fill_flat_texel(p, d, u1, v1, w1, au, av, aw, texMaskU, texMaskV, texSizeU, (uint32_t *) texPixels, c);
+}
+
+inline void LeRasterizer::fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2)
+{
+	uint8_t * c = (uint8_t *) &color;
+
+	int d = x2 - x1;
+	if (d == 0) return;
+
+	int au = (u2 - u1) / d;
+	int av = (v2 - v1) / d;
+	int aw = (w2 - w1) / d;
+
+	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + pixels);
+
+	for (int x = x1; x <= x2; x++) {
+		int32_t z = (1 << (24 + 4)) / (w1 >> (12 - 4));
+		uint32_t tu = (((int64_t) u1 * z) >> 24) & texMaskU;
+		uint32_t tv = (((int64_t) v1 * z) >> 24) & texMaskV;
+		uint8_t * t = (uint8_t *) &texPixels[tu + (tv << texSizeU)];
+
+		uint16_t a = 256 - t[3];
+		p[0] = (p[0] * a + t[0] * c[0]) >> 8;
+		p[1] = (p[1] * a + t[1] * c[1]) >> 8;
+		p[2] = (p[2] * a + t[2] * c[2]) >> 8;
+		p += 4;
+
+		u1 += au;
+		v1 += av;
+		w1 += aw;
+	}
+}
+
 #else
 inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2)
 {

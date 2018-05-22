@@ -35,7 +35,11 @@
 #include "global.h"
 #include "config.h"
 
+#if LE_USE_AMMX == 1
+#include "ammx/ammx.h"
+#else
 #include "simd.h"
+#endif
 
 /*****************************************************************************/
 LeBitmap::LeBitmap() :
@@ -94,8 +98,13 @@ void LeBitmap::clear(LeColor color)
 	if (r == 2) return;
 	*p++ = color;
 }
-#else
+#elif LE_USE_AMMX == 1
+void LeBitmap::clear(LeColor color)
+{
+	set_ammx_pixels(data, tx * ty * 4, color);
+}
 
+#else
 void LeBitmap::clear(LeColor color)
 {
 	size_t size = tx * ty;
