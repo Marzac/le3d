@@ -2,6 +2,8 @@
 **LightEngine 3D**  
 **Version 1.6 - 09/05/2018**
 
+[![Build Status](https://travis-ci.org/Marzac/le3d.svg?branch=master)](https://travis-ci.org/Marzac/le3d)
+
 A straightforward C++ 3D software engine for real-time graphics.  
 The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
 Code has been designed for resource constrained platforms.  

@@ -1,0 +1,48 @@
+sudo: required
+
+services:
+  - docker
+
+language: cpp
+matrix:
+  include:
+    # works on Precise and Trusty
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+      env:
+         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+    - os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+    # works on Trusty
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+      env:
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+    # clang is default on osx
+    - os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="CC=clang && CXX=clang++"
+    # AMIGAAAAAA
+    - os: linux
+      before_script:
+        - docker build -t le3d-build -f support/Dockerfile.amiga support
+      script:
+        - docker run -v $(pwd):/le3d le3d-build /le3d/support/build-amiga.sh
+
+before_script:
+    - eval "${MATRIX_EVAL}"
+
+script: support/build.sh
