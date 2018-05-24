@@ -76,14 +76,13 @@
 	#elif defined(__GNUC__)
 		#include <string.h>
 		#define _strdup	strdup
-		#ifndef _aligned_malloc
-			#define _aligned_malloc(s, a) aligned_alloc(a, s)
+		#if defined(__APPLE__)
+			void * _aligned_malloc(size_t size, size_t alignment);
+		#else
+			#ifndef _aligned_malloc
+				#define _aligned_malloc(s, a) aligned_alloc(a, s)
+			#endif
 		#endif
-		#ifndef _aligned_free
-			#define _aligned_free(p) free(p)
-		#endif
-	#elif defined(__APPLE__)
-		void * _aligned_malloc(size_t size, size_t alignment);
 		#ifndef _aligned_free
 			#define _aligned_free  free
 		#endif
