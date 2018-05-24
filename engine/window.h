@@ -89,12 +89,12 @@ typedef enum {
 /*****************************************************************************/
 /**
 	\struct LeDrawingContext
-	\brief represent a complete OS specific drawing context
+	\brief Represent an OS specific drawing context
 */
 typedef struct {
-	LeHandle display;
-	LeHandle window;
-	LeHandle gc;
+	LeHandle display;		/**< Handle to a native display resource */
+	LeHandle window;		/**< Handle to a native window resource */
+	LeHandle gc;			/**< Handle to a native graphic context resource */
 }LeDrawingContext;
 
 /*****************************************************************************/

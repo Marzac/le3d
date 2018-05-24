@@ -2,10 +2,10 @@
 	\file gamepad_amiga.cpp
 	\brief LightEngine 3D: Native OS gamepad manager
 	\brief Amiga implementation
-	\author
-	\twitter 
-	\website
-	\copyright
+	\author todo
+	\twitter todo 
+	\website todo
+	\copyright todo
 	\version 1.6
 
 	The MIT License (MIT)

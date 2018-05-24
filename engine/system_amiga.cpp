@@ -30,6 +30,9 @@
 	SOFTWARE.
 */
 
+/*****************************************************************************/
+#if defined(AMIGA)
+
 #include "system.h"
 
 #include "global.h"
@@ -111,3 +114,5 @@ void SignalHandler(int signal)
 	}
 	sys.running = false;
 }  
+
+#endif

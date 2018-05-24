@@ -2,10 +2,10 @@
 	\file gamepad_mac.cpp
 	\brief LightEngine 3D: Native OS gamepad manager
 	\brief MacOS implementation
-	\author
-	\twitter
-	\website
-	\copyright
+	\author todo
+	\twitter todo
+	\website todo
+	\copyright todo
 	\version 1.6
 
 	The MIT License (MIT)

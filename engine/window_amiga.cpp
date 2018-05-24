@@ -1,5 +1,5 @@
 /**
-	\file window_unix.cpp
+	\file window_amiga.cpp
 	\brief LightEngine 3D: Native OS window manager
 	\brief Amiga OS implementation
 	\author Andreas Streichardt (andreas@mop.koeln)
@@ -31,6 +31,8 @@
 */
 
 /*****************************************************************************/
+#if defined(AMIGA)
+
 #include "window.h"
 
 #include "global.h"
@@ -201,3 +203,4 @@ void LeWindow::setWindowed()
 	if (!fullScreen) return;
 }
 
+#endif

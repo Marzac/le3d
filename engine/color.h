@@ -35,6 +35,10 @@
 
 #include <stdint.h>
 
+/**
+	\class LeColor
+	\brief Represent an RGBA color
+*/
 class LeColor {
 public:
 	LeColor& operator=(LeColor const& color) {

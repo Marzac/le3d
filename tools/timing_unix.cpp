@@ -62,7 +62,8 @@ LeTiming::~LeTiming()
 /*****************************************************************************/
 /**
 	\fn void LeTiming::setup(int targetFPS)
-	\brief targetFPS desired application FPS
+	\brief Configure the frame timing system
+	\param[in] targetFPS desired application FPS
 */
 void LeTiming::setup(int targetFPS)
 {
@@ -85,7 +86,7 @@ void LeTiming::setup(int targetFPS)
 /*****************************************************************************/
 /**
 	\fn void LeTiming::firstFrame()
-	\brief mark the first frame
+	\brief Mark the time of the first frame
 */
 void LeTiming::firstFrame()
 {
@@ -96,7 +97,7 @@ void LeTiming::firstFrame()
 
 /**
 	\fn void LeTiming::lastFrame()
-	\brief mark the last frame
+	\brief Mark the time of the last frame
 */
 void LeTiming::lastFrame()
 {
@@ -105,7 +106,7 @@ void LeTiming::lastFrame()
 /*****************************************************************************/
 /**
 	\fn bool LeTiming::isNextFrame()
-	\brief is it the time to display the next frame?
+	\brief Is it the time to display the next frame?
 	\return true if it is time, false else
 */
 bool LeTiming::isNextFrame()
@@ -125,7 +126,7 @@ bool LeTiming::isNextFrame()
 
 /**
 	\fn void LeTiming::waitNextFrame()
-	\brief wait until it is time to display the next frame
+	\brief Wait until it is time to display the next frame
 */
 void LeTiming::waitNextFrame()
 {
@@ -158,7 +159,7 @@ void LeTiming::waitNextFrame()
 /*****************************************************************************/
 /**
 	\fn void LeTiming::display()
-	\brief display the current application FPS in the console
+	\brief Display the current application FPS in the console
 */
 void LeTiming::display()
 {

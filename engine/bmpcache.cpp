@@ -201,7 +201,7 @@ void LeBmpCache::deleteSlot(int index)
 
 /*****************************************************************************/
 /**
-	\fn int LeBmpCache::getFromName(const char * path)
+	\fn int LeBmpCache::getSlotFromName(const char * path)
 	\brief Retrieve a bitmap slot index from a bitmap name or path
 	\param[in] path bitmap path or name
 	\return cache slot number or 0 (default slot) if not found

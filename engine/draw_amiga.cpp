@@ -1,5 +1,5 @@
 /**
-	\file draw_unix.cpp
+	\file draw_amiga.cpp
 	\brief LightEngine 3D: Native OS graphic context
 	\brief Amiga OS implementation
 	\author Andreas Streichardt (andreas@mop.koeln)
@@ -31,6 +31,8 @@
 */
 
 /*****************************************************************************/
+#if defined(AMIGA)
+
 #include "draw.h"
 
 #include "global.h"
@@ -87,3 +89,5 @@ void LeDraw::setPixels(const void * data)
 	Window* window = (Window*) frontContext.window;
 	WritePixelArray((APTR) data, 0, 0, 4 * width, window->RPort, window->BorderLeft, window->BorderTop, width, height, RECTFMT_RGBA);
 }
+
+#endif
