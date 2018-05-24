@@ -65,8 +65,8 @@ if (WIN32)
         winmm
     )
     list(APPEND ENGINE_FILES
-		engine/system_win.cpp
-		engine/draw_win.cpp
+        engine/system_win.cpp
+        engine/draw_win.cpp
         engine/gamepad_win.cpp
         engine/window_win.cpp
         tools/timing_win.cpp
@@ -80,7 +80,7 @@ elseif (UNIX AND NOT APPLE)
         ${X11_INCLUDE_DIR}
     )
     list(APPEND ENGINE_FILES
-		engine/system_unix.cpp
+        engine/system_unix.cpp
         engine/draw_unix.cpp
         engine/gamepad_unix.cpp
         engine/window_unix.cpp
@@ -95,7 +95,7 @@ elseif (UNIX AND APPLE)
         ${X11_INCLUDE_DIR}
     )
     list(APPEND ENGINE_FILES
-		engine/system_unix.cpp
+        engine/system_unix.cpp
         engine/draw_unix.cpp
         engine/gamepad_mac.cpp
         engine/window_unix.cpp
@@ -106,7 +106,7 @@ elseif (AMIGA)
         engine/system_amiga.cpp
         engine/draw_amiga.cpp
         engine/window_amiga.cpp
-		engine/gamepad_amiga.cpp
+        engine/gamepad_amiga.cpp
         tools/timing_amiga.cpp
     )
     if(LE3D_USE_AMMX)
@@ -143,8 +143,8 @@ if (NOT(AMIGA))
         set_target_properties(le3d PROPERTIES LINK_FLAGS "-s -Wl,--gc-sections")
         # we always want these...not user configurable
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-value -Wno-unused-result")
-		if (LE3D_USE_SIMD)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=pentium4 -mfpmath=sse")
+        if (LE3D_USE_SIMD)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmmx -msse -msse2 -mfpmath=sse")
         endif()
         set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -ffast-math -fno-exceptions")
         set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -fno-rtti -fno-stack-protector -fno-math-errno")
