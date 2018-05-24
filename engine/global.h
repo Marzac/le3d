@@ -75,7 +75,6 @@
 		#define _strdup	strdup
 	#elif defined(__GNUC__)
 		#include <string.h>
-		#include <malloc.h>
 		#define _strdup	strdup
 		#ifndef _aligned_malloc
 			#define _aligned_malloc(s, a) aligned_alloc(a, s)

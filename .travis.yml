@@ -35,7 +35,7 @@ matrix:
       osx_image: xcode8
       env:
         - MATRIX_EVAL="CC=clang && CXX=clang++"
-    # AMIGAAAAAA
+    # AMIGAAAAAAA
     - os: linux
       before_script:
         - docker build -t le3d-build -f support/Dockerfile.amiga support
