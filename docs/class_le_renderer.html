@@ -109,6 +109,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a52c68276fadb65d7071eadd76c45ba25"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_renderer.html#a52c68276fadb65d7071eadd76c45ba25">render</a> (const <a class="el" href="class_le_b_set.html">LeBSet</a> *bset)</td></tr>
 <tr class="memdesc:a52c68276fadb65d7071eadd76c45ba25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render a billboard set.  <a href="#a52c68276fadb65d7071eadd76c45ba25">More...</a><br /></td></tr>
 <tr class="separator:a52c68276fadb65d7071eadd76c45ba25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c48459d898369a30e9829262af5a6b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_renderer.html#a4c48459d898369a30e9829262af5a6b8">getViewportCoordinates</a> (const <a class="el" href="struct_le_vertex.html">LeVertex</a> &amp;pos, <a class="el" href="struct_le_vertex.html">LeVertex</a> &amp;viewCoords)</td></tr>
+<tr class="memdesc:a4c48459d898369a30e9829262af5a6b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the viewport coordinates of a 3D vertex.  <a href="#a4c48459d898369a30e9829262af5a6b8">More...</a><br /></td></tr>
+<tr class="separator:a4c48459d898369a30e9829262af5a6b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b830efbbae48c74103dc68be2c68c39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_renderer.html#a1b830efbbae48c74103dc68be2c68c39">flush</a> ()</td></tr>
 <tr class="memdesc:a1b830efbbae48c74103dc68be2c68c39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flush the currently selected triangle list.  <a href="#a1b830efbbae48c74103dc68be2c68c39">More...</a><br /></td></tr>
 <tr class="separator:a1b830efbbae48c74103dc68be2c68c39"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -220,6 +223,42 @@ Public Member Functions</h2></td></tr>
 
 <p>Retrieve the associated triangle list. </p>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a triangle list </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4c48459d898369a30e9829262af5a6b8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LeRenderer::getViewportCoordinates </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_le_vertex.html">LeVertex</a> &amp;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_le_vertex.html">LeVertex</a> &amp;&#160;</td>
+          <td class="paramname"><em>viewCoords</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the viewport coordinates of a 3D vertex. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>vertex position in 3D space </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">viewCoords</td><td>viewport coordinates (if within viewport) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if vertex inside viewport, 0 otherwise </dd></dl>
 
 </div>
 </div>

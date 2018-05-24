@@ -120,9 +120,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac8e12639dcf865621377995c0b570f6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_le_bitmap.html">LeBitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bmp_cache.html#ac8e12639dcf865621377995c0b570f6e">loadBMP</a> (const char *path)</td></tr>
 <tr class="memdesc:ac8e12639dcf865621377995c0b570f6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a BMP file of given path and apply transforms.  <a href="#ac8e12639dcf865621377995c0b570f6e">More...</a><br /></td></tr>
 <tr class="separator:ac8e12639dcf865621377995c0b570f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2bdc5e78ba43e68d609c0d1fe66d11a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bmp_cache.html#ab2bdc5e78ba43e68d609c0d1fe66d11a">getFromName</a> (const char *name)</td></tr>
-<tr class="memdesc:ab2bdc5e78ba43e68d609c0d1fe66d11a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a bitmap slot index from a bitmap name or path.  <a href="#ab2bdc5e78ba43e68d609c0d1fe66d11a">More...</a><br /></td></tr>
-<tr class="separator:ab2bdc5e78ba43e68d609c0d1fe66d11a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9896d405415ac70656177d34bc71da61"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bmp_cache.html#a9896d405415ac70656177d34bc71da61">getSlotFromName</a> (const char *name)</td></tr>
+<tr class="memdesc:a9896d405415ac70656177d34bc71da61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a bitmap slot index from a bitmap name or path.  <a href="#a9896d405415ac70656177d34bc71da61">More...</a><br /></td></tr>
+<tr class="separator:a9896d405415ac70656177d34bc71da61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af01ec1a850caeb17d31945be18af55d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_le_bitmap.html">LeBitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_bmp_cache.html#af01ec1a850caeb17d31945be18af55d1">getBitmapFromName</a> (const char *name)</td></tr>
+<tr class="memdesc:af01ec1a850caeb17d31945be18af55d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a bitmap object from its name or path.  <a href="#af01ec1a850caeb17d31945be18af55d1">More...</a><br /></td></tr>
+<tr class="separator:af01ec1a850caeb17d31945be18af55d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -182,12 +185,37 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab2bdc5e78ba43e68d609c0d1fe66d11a"></a>
+<a class="anchor" id="af01ec1a850caeb17d31945be18af55d1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LeBmpCache::getFromName </td>
+          <td class="memname"><a class="el" href="class_le_bitmap.html">LeBitmap</a> * LeBmpCache::getBitmapFromName </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve a bitmap object from its name or path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>bitmap path or name </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bitmap object or default bitmap if not found </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9896d405415ac70656177d34bc71da61"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LeBmpCache::getSlotFromName </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>path</em></td><td>)</td>
@@ -203,7 +231,7 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>cache slot number or -1 if no space available </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>cache slot number or 0 (default slot) if not found </dd></dl>
 
 </div>
 </div>

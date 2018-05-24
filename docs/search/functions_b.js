@@ -1,10 +1,6 @@
 var searchData=
 [
-  ['operator_20delete',['operator delete',['../geometry__simd_8h.html#a3d97a7e2a0208075b4b37328c96ed390',1,'geometry_simd.h']]],
-  ['operator_20delete_5b_5d',['operator delete[]',['../geometry__simd_8h.html#a1d8b2d6f17242ae0d182b0f7a98ba54f',1,'geometry_simd.h']]],
   ['operator_20int',['operator int',['../class_le_color.html#a6148174b7646909a7e0f403384ebfa86',1,'LeColor']]],
-  ['operator_20new',['operator new',['../geometry__simd_8h.html#a205ed048fdf5259c2e8e0cb60ee8f719',1,'geometry_simd.h']]],
-  ['operator_20new_5b_5d',['operator new[]',['../geometry__simd_8h.html#a63ce4f64887b9307317aee5baae6b18f',1,'geometry_simd.h']]],
   ['operator_2a',['operator*',['../struct_le_vertex.html#a9f5d57008f5d72de5707cd81d56413a0',1,'LeVertex::operator*(LeVertex v) const '],['../struct_le_vertex.html#aed7638f9204645d68217402ea9c890f6',1,'LeVertex::operator*(float v) const '],['../struct_le_matrix.html#a5c4be703a36c64e1dff8173040aa16c7',1,'LeMatrix::operator*(LeVertex v) const '],['../struct_le_matrix.html#a66d0c47f1f893cd904e558ae33a1d8bf',1,'LeMatrix::operator*(LeMatrix m) const ']]],
   ['operator_2a_3d',['operator*=',['../struct_le_vertex.html#af2b87dceb9bd9da39e2ec5cd8c0126a9',1,'LeVertex::operator*=(LeVertex v)'],['../struct_le_vertex.html#a6b31c3c31cee4936c89490f9fba9b280',1,'LeVertex::operator*=(float v)']]],
   ['operator_2b',['operator+',['../struct_le_vertex.html#a63e35939f7c71716c0ff5b1ca9831b9b',1,'LeVertex::operator+()'],['../struct_le_matrix.html#adda00f9d390cdf3c84aa7cebdd65ab47',1,'LeMatrix::operator+()']]],

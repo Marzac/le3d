@@ -4,7 +4,7 @@ var searchData=
   ['rect',['rect',['../class_le_bitmap.html#a9927d3bd96158bf054e228c8434835db',1,'LeBitmap']]],
   ['registerkeycallback',['registerKeyCallback',['../class_le_window.html#adbe9652ddc22578197bac2f1e2da2815',1,'LeWindow']]],
   ['registermousecallback',['registerMouseCallback',['../class_le_window.html#a05552601d16ebdd3199dc3ca74dc7560',1,'LeWindow']]],
-  ['release',['release',['../class_le_game_pad.html#a9eddaf600c66bb6904d20c4300d7235a',1,'LeGamePad']]],
+  ['release',['release',['../class_le_game_pad.html#a4df64a9e07e4b587ba919e799d75e4be',1,'LeGamePad']]],
   ['render',['render',['../class_le_renderer.html#add621bf9daf5d90f5714e2aea0d65dec',1,'LeRenderer::render(const LeMesh *mesh)'],['../class_le_renderer.html#a52c68276fadb65d7071eadd76c45ba25',1,'LeRenderer::render(const LeBSet *bset)']]],
   ['rgb',['rgb',['../class_le_color.html#ad0b855693ce6d3bfcd69567fdf1b1ad9',1,'LeColor']]],
   ['rgba',['rgba',['../class_le_color.html#abda01c6f767c6e2fd23064ef0e5996c4',1,'LeColor']]],

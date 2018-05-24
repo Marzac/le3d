@@ -9,7 +9,8 @@ var searchData=
   ['allocateshades',['allocateShades',['../class_le_mesh.html#aaecf0d2fb802fe435fa552c7ab0207ed',1,'LeMesh']]],
   ['alphablit',['alphaBlit',['../class_le_bitmap.html#a0998f0432e767c917e107b2c3b3360cf',1,'LeBitmap']]],
   ['alphascaleblit',['alphaScaleBlit',['../class_le_bitmap.html#a44a88881e16ec1bac32ffc2a33c102aa',1,'LeBitmap']]],
-  ['ambient',['ambient',['../struct_le_obj_material.html#a739af8f61a650ef7bdb8018acbca241d',1,'LeObjMaterial']]],
+  ['ambient',['ambient',['../struct_le_obj_material.html#ab2f97cb306ae6b9395337beb92ab1ea7',1,'LeObjMaterial']]],
+  ['ammx_2eh',['ammx.h',['../ammx_8h.html',1,'']]],
   ['angle',['angle',['../class_le_b_set.html#afeed2e89500de13538e5903ded906d0c',1,'LeBSet::angle()'],['../class_le_mesh.html#a65d9a511c06b77e5566355e8c0df0e52',1,'LeMesh::angle()']]],
   ['axis',['axis',['../struct_le_axis.html#a8a564410ccb4c7522ce9de0b0bf8cb3c',1,'LeAxis::axis()'],['../class_le_light.html#a71efd51595ea946729406039bcdc9cd4',1,'LeLight::axis()']]]
 ];

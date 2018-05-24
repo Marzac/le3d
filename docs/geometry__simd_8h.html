@@ -101,7 +101,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="config_8h_source.html">config.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="simd_8h_source.html">simd.h</a>&quot;</code><br />
 <code>#include &lt;math.h&gt;</code><br />
-<code>#include &lt;malloc.h&gt;</code><br />
 </div>
 <p><a href="geometry__simd_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -112,15 +111,6 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a205ed048fdf5259c2e8e0cb60ee8f719"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry__simd_8h.html#a205ed048fdf5259c2e8e0cb60ee8f719">operator new</a> (size_t size)</td></tr>
-<tr class="memdesc:a205ed048fdf5259c2e8e0cb60ee8f719"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aligned memory allocator.  <a href="#a205ed048fdf5259c2e8e0cb60ee8f719">More...</a><br /></td></tr>
-<tr class="separator:a205ed048fdf5259c2e8e0cb60ee8f719"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63ce4f64887b9307317aee5baae6b18f"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry__simd_8h.html#a63ce4f64887b9307317aee5baae6b18f">operator new[]</a> (size_t size)</td></tr>
-<tr class="separator:a63ce4f64887b9307317aee5baae6b18f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d97a7e2a0208075b4b37328c96ed390"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry__simd_8h.html#a3d97a7e2a0208075b4b37328c96ed390">operator delete</a> (void *ptr)</td></tr>
-<tr class="separator:a3d97a7e2a0208075b4b37328c96ed390"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d8b2d6f17242ae0d182b0f7a98ba54f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry__simd_8h.html#a1d8b2d6f17242ae0d182b0f7a98ba54f">operator delete[]</a> (void *ptr)</td></tr>
-<tr class="separator:a1d8b2d6f17242ae0d182b0f7a98ba54f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e8bafc85405bbf1d6c3d2806c2c3bd8"><td class="memItemLeft" align="right" valign="top">struct&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geometry__simd_8h.html#a8e8bafc85405bbf1d6c3d2806c2c3bd8">__attribute__</a> ((aligned(16))) <a class="el" href="struct_le_vertex.html">LeVertex</a></td></tr>
 <tr class="separator:a8e8bafc85405bbf1d6c3d2806c2c3bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -150,72 +140,6 @@ Functions</h2></td></tr>
 <p>&lt; Origin of the axis</p>
 <p>&lt; Direction of the axis (normalized)</p>
 <p>&lt; Length of the axis </p>
-
-</div>
-</div>
-<a class="anchor" id="a3d97a7e2a0208075b4b37328c96ed390"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void operator delete </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>ptr</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a1d8b2d6f17242ae0d182b0f7a98ba54f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void operator delete[] </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>ptr</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a205ed048fdf5259c2e8e0cb60ee8f719"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void* operator new </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Aligned memory allocator. </p>
-
-</div>
-</div>
-<a class="anchor" id="a63ce4f64887b9307317aee5baae6b18f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void* operator new[] </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>

@@ -6,7 +6,7 @@ var searchData=
   ['texslotlist',['texSlotList',['../class_le_mesh.html#a94487b1afa91e4651150fb40e4806656',1,'LeMesh']]],
   ['texslots',['texSlots',['../class_le_b_set.html#a2fc612a38e9a66145a252a814d5ab39a',1,'LeBSet']]],
   ['texture',['texture',['../struct_le_obj_material.html#a41cd3e2e9ae12902c2d3fea2e1326c3f',1,'LeObjMaterial']]],
-  ['timing',['timing',['../timing_8h.html#af99cbd72f7e589165ed81405139fbffa',1,'timing():&#160;timing_unix.cpp'],['../timing__unix_8cpp.html#af99cbd72f7e589165ed81405139fbffa',1,'timing():&#160;timing_unix.cpp']]],
+  ['timing',['timing',['../timing_8h.html#af99cbd72f7e589165ed81405139fbffa',1,'timing():&#160;timing_unix.cpp'],['../timing__unix_8cpp.html#af99cbd72f7e589165ed81405139fbffa',1,'timing():&#160;timing_unix.cpp'],['../timing__win_8cpp.html#af99cbd72f7e589165ed81405139fbffa',1,'timing():&#160;timing_win.cpp']]],
   ['toggled',['toggled',['../class_le_game_pad.html#a20f43344ed569760f8eb0b92ac4bd75e',1,'LeGamePad']]],
   ['transparency',['transparency',['../struct_le_obj_material.html#a2ee5b33ba1623a6f5f5797019e37f028',1,'LeObjMaterial']]],
   ['triangles',['triangles',['../class_le_tri_list.html#accbcd542e687408e032dd5ea3d493d26',1,'LeTriList']]],

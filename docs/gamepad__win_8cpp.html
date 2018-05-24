@@ -87,6 +87,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gamepad_win.cpp File Reference</div>  </div>
 </div><!--header-->
@@ -94,16 +97,197 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>LightEngine 3D: Native OS gamepad manager.  
 <a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="gamepad_8h_source.html">gamepad.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="global_8h_source.html">global.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="config_8h_source.html">config.h</a>&quot;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;math.h&gt;</code><br />
+<code>#include &lt;windows.h&gt;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:aaf3c8ca91a5ef3df9330cd3d10c21c5c"><td class="memItemLeft" align="right" valign="top">typedef void __stdcall&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gamepad__win_8cpp.html#aaf3c8ca91a5ef3df9330cd3d10c21c5c">DLLXInputEnable</a>(bool enable)</td></tr>
+<tr class="separator:aaf3c8ca91a5ef3df9330cd3d10c21c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1052932961ee39541fddcf8009809dc"><td class="memItemLeft" align="right" valign="top">typedef uint32_t __stdcall&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gamepad__win_8cpp.html#af1052932961ee39541fddcf8009809dc">DLLXInputGetCapabilities</a>(uint32_t userIndex, uint32_t flags, XInputCaps *capabilities)</td></tr>
+<tr class="separator:af1052932961ee39541fddcf8009809dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee57762224928f282b0e542f53c0cd9c"><td class="memItemLeft" align="right" valign="top">typedef uint32_t __stdcall&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gamepad__win_8cpp.html#aee57762224928f282b0e542f53c0cd9c">DLLXInputGetState</a>(uint32_t userIndex, XInputState *state)</td></tr>
+<tr class="separator:aee57762224928f282b0e542f53c0cd9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51b923ef03bf663e6e15c34f54c45d53"><td class="memItemLeft" align="right" valign="top">typedef uint32_t __stdcall&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gamepad__win_8cpp.html#a51b923ef03bf663e6e15c34f54c45d53">DLLXInputSetState</a>(uint32_t userIndex, XInputVibration *vibration)</td></tr>
+<tr class="separator:a51b923ef03bf663e6e15c34f54c45d53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:aba1fac2b914e72766f5fd66f2f6d01db"><td class="memItemLeft" align="right" valign="top">void __stdcall&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gamepad__win_8cpp.html#aba1fac2b914e72766f5fd66f2f6d01db">XInputEnableFB</a> (bool enable)</td></tr>
+<tr class="separator:aba1fac2b914e72766f5fd66f2f6d01db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab563bf5a86658475d3b61a0af8d76e4e"><td class="memItemLeft" align="right" valign="top">uint32_t __stdcall&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gamepad__win_8cpp.html#ab563bf5a86658475d3b61a0af8d76e4e">XInputGetCapabilitiesFB</a> (uint32_t userIndex, uint32_t flags, XInputCaps *capabilities)</td></tr>
+<tr class="separator:ab563bf5a86658475d3b61a0af8d76e4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a84c62c016961a82cdbc343179f58cf"><td class="memItemLeft" align="right" valign="top">uint32_t __stdcall&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gamepad__win_8cpp.html#a8a84c62c016961a82cdbc343179f58cf">XInputGetStateFB</a> (uint32_t userIndex, XInputState *state)</td></tr>
+<tr class="separator:a8a84c62c016961a82cdbc343179f58cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a37dd58ec7d54175a5f6a13a8991c9"><td class="memItemLeft" align="right" valign="top">uint32_t __stdcall&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gamepad__win_8cpp.html#a78a37dd58ec7d54175a5f6a13a8991c9">XInputSetStateFB</a> (uint32_t userIndex, XInputVibration *vibration)</td></tr>
+<tr class="separator:a78a37dd58ec7d54175a5f6a13a8991c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>LightEngine 3D: Native OS gamepad manager. </p>
 <p>Windows OS implementation (with XInput V1.3) </p><dl class="section author"><dt>Author</dt><dd>Frederic Meslin (<a href="#" onclick="location.href='mai'+'lto:'+'fre'+'d@'+'fre'+'ds'+'lab'+'.n'+'et'; return false;">fred@<span style="display: none;">.nosp@m.</span>fred<span style="display: none;">.nosp@m.</span>slab.<span style="display: none;">.nosp@m.</span>net</a>)    <a href="http://fredslab.net">http://fredslab.net</a> </dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Frederic Meslin 2015 - 2018 </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.6</dd></dl>
-<p>The MIT License (MIT) Copyright (c) 2015-2018 Frédéric Meslin</p>
+<p>The MIT License (MIT) Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="aaf3c8ca91a5ef3df9330cd3d10c21c5c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void __stdcall DLLXInputEnable(bool enable)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>XInput driver function types </p>
+
+</div>
+</div>
+<a class="anchor" id="af1052932961ee39541fddcf8009809dc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef uint32_t __stdcall DLLXInputGetCapabilities(uint32_t userIndex, uint32_t flags, XInputCaps *capabilities)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aee57762224928f282b0e542f53c0cd9c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef uint32_t __stdcall DLLXInputGetState(uint32_t userIndex, XInputState *state)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a51b923ef03bf663e6e15c34f54c45d53"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef uint32_t __stdcall DLLXInputSetState(uint32_t userIndex, XInputVibration *vibration)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="aba1fac2b914e72766f5fd66f2f6d01db"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void __stdcall XInputEnableFB </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>XInput driver fallback functions </p>
+
+</div>
+</div>
+<a class="anchor" id="ab563bf5a86658475d3b61a0af8d76e4e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t __stdcall XInputGetCapabilitiesFB </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>userIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">XInputCaps *&#160;</td>
+          <td class="paramname"><em>capabilities</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8a84c62c016961a82cdbc343179f58cf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t __stdcall XInputGetStateFB </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>userIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">XInputState *&#160;</td>
+          <td class="paramname"><em>state</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a78a37dd58ec7d54175a5f6a13a8991c9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t __stdcall XInputSetStateFB </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>userIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">XInputVibration *&#160;</td>
+          <td class="paramname"><em>vibration</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

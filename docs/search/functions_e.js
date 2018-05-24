@@ -4,12 +4,14 @@ var searchData=
   ['scale',['scale',['../struct_le_matrix.html#adea418f216933767e724825ccbee1b79',1,'LeMatrix']]],
   ['sendkeyevent',['sendKeyEvent',['../class_le_window.html#aa5bf9afc1549356a00bc5e90e6b15a7b',1,'LeWindow']]],
   ['sendmouseevent',['sendMouseEvent',['../class_le_window.html#aeafa5196abff2be2e3d4ba46c9c5575d',1,'LeWindow']]],
+  ['set_5fammx_5fpixels',['set_ammx_pixels',['../ammx_8h.html#a51397bf6c084796dd79e36337757a1d8',1,'ammx.h']]],
   ['setbackculling',['setBackculling',['../class_le_renderer.html#ac98320d92cca91eb5e0f9b8644e4266d',1,'LeRenderer']]],
+  ['setcontext',['setContext',['../class_le_draw.html#af1ba3e4d10b941bdcc4716f4c6269200',1,'LeDraw']]],
   ['setfullscreen',['setFullScreen',['../class_le_window.html#afaa9a096c4f470fd871e0fa8b9cc325f',1,'LeWindow']]],
   ['setmatrix',['setMatrix',['../class_le_b_set.html#a5267d923e5484276fd606ca2e23c1f4f',1,'LeBSet::setMatrix()'],['../class_le_mesh.html#ac6ac3e63d089454802f1f88484d76048',1,'LeMesh::setMatrix()']]],
   ['setpixels',['setPixels',['../class_le_draw.html#adad1ff3d55c69eee513c7c6a833aabae',1,'LeDraw']]],
   ['settrianglelist',['setTriangleList',['../class_le_renderer.html#a7973c0c57b37a3b8a8cdd6e67ae57e55',1,'LeRenderer']]],
-  ['setup',['setup',['../class_le_game_pad.html#a171246d7c67d981d91d2f52e4bfc0ec5',1,'LeGamePad::setup()'],['../class_le_timing.html#ae27ea6918b8c8dc4c94cf097d0840f69',1,'LeTiming::setup()']]],
+  ['setup',['setup',['../class_le_game_pad.html#a0588962fee41867c9f0dcf308cc81f2b',1,'LeGamePad::setup()'],['../class_le_timing.html#ae27ea6918b8c8dc4c94cf097d0840f69',1,'LeTiming::setup()']]],
   ['setviewangle',['setViewAngle',['../class_le_renderer.html#aed57a0744a286f0a13ad386d9a9b10ab',1,'LeRenderer']]],
   ['setviewmatrix',['setViewMatrix',['../class_le_renderer.html#a2852939175bc350affe9f230b462a869',1,'LeRenderer']]],
   ['setviewoffset',['setViewOffset',['../class_le_renderer.html#ab43468ee1ce9a634188b188d9afa80eb',1,'LeRenderer']]],
@@ -20,6 +22,6 @@ var searchData=
   ['shadowcopy',['shadowCopy',['../class_le_b_set.html#aca431f1923b1465de6aab721e6c2862e',1,'LeBSet::shadowCopy()'],['../class_le_mesh.html#af0542894eda55eb6f4266f54839dd781',1,'LeMesh::shadowCopy()']]],
   ['shine',['shine',['../class_le_light.html#ad979379889c66408e36c2fd6a2ed1787',1,'LeLight']]],
   ['sign',['sign',['../struct_le_vertex.html#a71dcaf4bbd51e4b3abc3d1d7023f319f',1,'LeVertex']]],
-  ['signalhandler',['SignalHandler',['../system__unix_8cpp.html#a01af5df9d4270d594f2a4391b5a775ec',1,'system_unix.cpp']]],
+  ['signalhandler',['SignalHandler',['../system__win_8cpp.html#a01af5df9d4270d594f2a4391b5a775ec',1,'system_win.cpp']]],
   ['spherical',['spherical',['../struct_le_vertex.html#a89bac5adf384b1ec0c7c24c31f16090b',1,'LeVertex']]]
 ];

@@ -105,7 +105,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_le_drawing_context.html">LeDrawingContext</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">represent a complete OS specific drawing context  <a href="struct_le_drawing_context.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent an OS specific drawing context.  <a href="struct_le_drawing_context.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html">LeWindow</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create and handle an OS native window.  <a href="class_le_window.html#details">More...</a><br /></td></tr>
@@ -124,16 +124,33 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:a060a40584f334a4643339613fd85d115"><td class="mdescLeft">&#160;</td><td class="mdescRight">mouse buttons identifiers  <a href="window_8h.html#a060a40584f334a4643339613fd85d115">More...</a><br /></td></tr>
 <tr class="separator:a060a40584f334a4643339613fd85d115"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </td></tr>
-<tr class="memitem:a0ce1f8c099850a00457c5dbb9731d7e8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a0ce1f8c099850a00457c5dbb9731d7e8">LE_WINDOW_KEYBOARD_STATE</a> { <br />
-&#160;&#160;<a class="el" href="window_8h.html#a0ce1f8c099850a00457c5dbb9731d7e8ae09918eb101b049cae91e927a2365cbc">LE_WINDOW_KEY_UP</a> = 0x0, 
-<a class="el" href="window_8h.html#a0ce1f8c099850a00457c5dbb9731d7e8ad362c8e58f15c3343fe628416c7528f1">LE_WINDOW_KEY_DOWN</a> = 0x1, 
-<a class="el" href="window_8h.html#a0ce1f8c099850a00457c5dbb9731d7e8a55855b28154b6b3a39810c93cb3d59d4">LE_WINDOW_KEY_SHIFT</a> = 0x2, 
-<a class="el" href="window_8h.html#a0ce1f8c099850a00457c5dbb9731d7e8a40080956a8bdb9d9a25e0b90c716b988">LE_WINDOW_KEY_CTRL</a> = 0x4, 
+<tr class="memitem:acd76f62528a3bdfbf848e60c8eb53109"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#acd76f62528a3bdfbf848e60c8eb53109">LE_WINDOW_KEY_STATES</a> { <br />
+&#160;&#160;<a class="el" href="window_8h.html#acd76f62528a3bdfbf848e60c8eb53109a42db961d9ba70b0e64e1e1d0e9582f12">LE_WINDOW_KEYSTATE_PRESSED</a> = 0x01, 
+<a class="el" href="window_8h.html#acd76f62528a3bdfbf848e60c8eb53109acf0ae1a2720db09ac465ab3cc852b3a5">LE_WINDOW_KEYSTATE_RELEASED</a> = 0x02, 
+<a class="el" href="window_8h.html#acd76f62528a3bdfbf848e60c8eb53109ae08317e37df4f3817a4608c89865c580">LE_WINDOW_KEYSTATE_SHIFT</a> = 0x10, 
+<a class="el" href="window_8h.html#acd76f62528a3bdfbf848e60c8eb53109a97455cef73e590cbc11403b12caa58e9">LE_WINDOW_KEYSTATE_CTRL</a> = 0x20, 
 <br />
-&#160;&#160;<a class="el" href="window_8h.html#a0ce1f8c099850a00457c5dbb9731d7e8a7717ee3ff5228cd01f1c6f1154a98077">LE_WINDOW_KEY_ALT</a> = 0x8
+&#160;&#160;<a class="el" href="window_8h.html#acd76f62528a3bdfbf848e60c8eb53109a75d8319e48f4db560babebc05e95b199">LE_WINDOW_KEYSTATE_ALT</a> = 0x40
 <br />
- }<tr class="memdesc:a0ce1f8c099850a00457c5dbb9731d7e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">keyboard keys state and modifiers  <a href="window_8h.html#a0ce1f8c099850a00457c5dbb9731d7e8">More...</a><br /></td></tr>
-<tr class="separator:a0ce1f8c099850a00457c5dbb9731d7e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+ }<tr class="separator:acd76f62528a3bdfbf848e60c8eb53109"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</td></tr>
+<tr class="memitem:afd1c02531603a939e1f8921cb4daceff"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceff">LE_WINDOW_KEY_CODES</a> { <br />
+&#160;&#160;<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffae0f55bc339b736fa3f6eb069d7f25233">LE_WINDOW_KEYCODE_NONE</a> = 0, 
+<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffa4c4d9e2fb6db7c81dcd62857e7580959">LE_WINDOW_KEYCODE_UP</a> = 1, 
+<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffad09ba73dfcbffb585386a076506e85ee">LE_WINDOW_KEYCODE_DOWN</a> = 2, 
+<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffaf6ae1e2a81634406b61aa3ca35a7b6cc">LE_WINDOW_KEYCODE_LEFT</a> = 3, 
+<br />
+&#160;&#160;<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffaf9a9eaeb22206599dca4719caf29ba07">LE_WINDOW_KEYCODE_RIGHT</a> = 4, 
+<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffa97b3880b7f274900fc08c28940387d19">LE_WINDOW_KEYCODE_SHIFT</a> = 5, 
+<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffa2ab4ffc20f03c85efd8fbd2910877113">LE_WINDOW_KEYCODE_CTRL</a> = 6, 
+<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffabfecb2a361290b6488cfd2640bf171a3">LE_WINDOW_KEYCODE_ALT</a> = 7, 
+<br />
+&#160;&#160;<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffad81e65a66c76abd0e8737772195c44b5">LE_WINDOW_KEYCODE_TAB</a> = 8, 
+<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffaed4d5a2b5f1fdcee4d105e028e7f7387">LE_WINDOW_KEYCODE_ESC</a> = 9, 
+<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffa1ad5bdfadd7c094a6fc83fd424b83897">LE_WINDOW_KEYCODE_BACKSPACE</a> = 10, 
+<a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceffa48a6aeb384fdcc51ac822d85b92a11ff">LE_WINDOW_KEYCODE_ENTER</a> = 11
+<br />
+ }<tr class="separator:afd1c02531603a939e1f8921cb4daceff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -141,32 +158,68 @@ Enumerations</h2></td></tr>
 <p>All platforms implementation </p><dl class="section author"><dt>Author</dt><dd>Frederic Meslin (<a href="#" onclick="location.href='mai'+'lto:'+'fre'+'d@'+'fre'+'ds'+'lab'+'.n'+'et'; return false;">fred@<span style="display: none;">.nosp@m.</span>fred<span style="display: none;">.nosp@m.</span>slab.<span style="display: none;">.nosp@m.</span>net</a>)    <a href="http://fredslab.net">http://fredslab.net</a> </dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Frederic Meslin 2015 - 2018 </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.6</dd></dl>
-<p>The MIT License (MIT) Copyright (c) 2015-2018 Frédéric Meslin</p>
+<p>The MIT License (MIT) Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
-<a class="anchor" id="a0ce1f8c099850a00457c5dbb9731d7e8"></a>
+<a class="anchor" id="afd1c02531603a939e1f8921cb4daceff"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="window_8h.html#a0ce1f8c099850a00457c5dbb9731d7e8">LE_WINDOW_KEYBOARD_STATE</a></td>
+          <td class="memname">enum <a class="el" href="window_8h.html#afd1c02531603a939e1f8921cb4daceff">LE_WINDOW_KEY_CODES</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>keyboard keys state and modifiers </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a0ce1f8c099850a00457c5dbb9731d7e8ae09918eb101b049cae91e927a2365cbc"></a>LE_WINDOW_KEY_UP&#160;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffae0f55bc339b736fa3f6eb069d7f25233"></a>LE_WINDOW_KEYCODE_NONE&#160;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a0ce1f8c099850a00457c5dbb9731d7e8ad362c8e58f15c3343fe628416c7528f1"></a>LE_WINDOW_KEY_DOWN&#160;</td><td class="fielddoc">
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffa4c4d9e2fb6db7c81dcd62857e7580959"></a>LE_WINDOW_KEYCODE_UP&#160;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a0ce1f8c099850a00457c5dbb9731d7e8a55855b28154b6b3a39810c93cb3d59d4"></a>LE_WINDOW_KEY_SHIFT&#160;</td><td class="fielddoc">
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffad09ba73dfcbffb585386a076506e85ee"></a>LE_WINDOW_KEYCODE_DOWN&#160;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a0ce1f8c099850a00457c5dbb9731d7e8a40080956a8bdb9d9a25e0b90c716b988"></a>LE_WINDOW_KEY_CTRL&#160;</td><td class="fielddoc">
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffaf6ae1e2a81634406b61aa3ca35a7b6cc"></a>LE_WINDOW_KEYCODE_LEFT&#160;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a0ce1f8c099850a00457c5dbb9731d7e8a7717ee3ff5228cd01f1c6f1154a98077"></a>LE_WINDOW_KEY_ALT&#160;</td><td class="fielddoc">
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffaf9a9eaeb22206599dca4719caf29ba07"></a>LE_WINDOW_KEYCODE_RIGHT&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffa97b3880b7f274900fc08c28940387d19"></a>LE_WINDOW_KEYCODE_SHIFT&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffa2ab4ffc20f03c85efd8fbd2910877113"></a>LE_WINDOW_KEYCODE_CTRL&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffabfecb2a361290b6488cfd2640bf171a3"></a>LE_WINDOW_KEYCODE_ALT&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffad81e65a66c76abd0e8737772195c44b5"></a>LE_WINDOW_KEYCODE_TAB&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffaed4d5a2b5f1fdcee4d105e028e7f7387"></a>LE_WINDOW_KEYCODE_ESC&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffa1ad5bdfadd7c094a6fc83fd424b83897"></a>LE_WINDOW_KEYCODE_BACKSPACE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="afd1c02531603a939e1f8921cb4daceffa48a6aeb384fdcc51ac822d85b92a11ff"></a>LE_WINDOW_KEYCODE_ENTER&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="acd76f62528a3bdfbf848e60c8eb53109"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="window_8h.html#acd76f62528a3bdfbf848e60c8eb53109">LE_WINDOW_KEY_STATES</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="acd76f62528a3bdfbf848e60c8eb53109a42db961d9ba70b0e64e1e1d0e9582f12"></a>LE_WINDOW_KEYSTATE_PRESSED&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="acd76f62528a3bdfbf848e60c8eb53109acf0ae1a2720db09ac465ab3cc852b3a5"></a>LE_WINDOW_KEYSTATE_RELEASED&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="acd76f62528a3bdfbf848e60c8eb53109ae08317e37df4f3817a4608c89865c580"></a>LE_WINDOW_KEYSTATE_SHIFT&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="acd76f62528a3bdfbf848e60c8eb53109a97455cef73e590cbc11403b12caa58e9"></a>LE_WINDOW_KEYSTATE_CTRL&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="acd76f62528a3bdfbf848e60c8eb53109a75d8319e48f4db560babebc05e95b199"></a>LE_WINDOW_KEYSTATE_ALT&#160;</td><td class="fielddoc">
 </td></tr>
 </table>
 

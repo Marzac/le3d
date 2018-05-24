@@ -112,28 +112,44 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a649fa829150452ab472d2b363023f5bc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a649fa829150452ab472d2b363023f5bc">cmax</a>(a,  b)&#160;&#160;&#160;((a)&gt;(b)?(a):(b))										/** Return the maximum of two values */</td></tr>
-<tr class="separator:a649fa829150452ab472d2b363023f5bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd7dee0dcac629c3ec841df47d3582c2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#abd7dee0dcac629c3ec841df47d3582c2">cmin</a>(a,  b)&#160;&#160;&#160;((a)&lt;(b)?(a):(b))										/** Return the minimum of two values */</td></tr>
-<tr class="separator:abd7dee0dcac629c3ec841df47d3582c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45d7016a0bcd659a45e21b437b64ac5d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a45d7016a0bcd659a45e21b437b64ac5d">cabs</a>(a)&#160;&#160;&#160;((a)&lt;0.0f?(-(a)):(a))									/** Return the absolute value */</td></tr>
-<tr class="separator:a45d7016a0bcd659a45e21b437b64ac5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb39d8cfe7f9e656ac0904d2ea23e0b5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#acb39d8cfe7f9e656ac0904d2ea23e0b5">cbound</a>(v,  vmin,  vmax)&#160;&#160;&#160;((v)&gt;(vmax)?(vmax):((v)&lt;(vmin)?(vmin):(v)))				/** Limit a value between two bounds (included) */</td></tr>
-<tr class="separator:acb39d8cfe7f9e656ac0904d2ea23e0b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6781e046b44b9470f7ea04c539037e35"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a6781e046b44b9470f7ea04c539037e35">csgn</a>(a)&#160;&#160;&#160;((a)&lt;0.0f?-1.0f:1.0f)									/** Return the sign (+1.0 or -1.0) of a value */</td></tr>
-<tr class="separator:a6781e046b44b9470f7ea04c539037e35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc5250d67da014607a0076c2de697846"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#abc5250d67da014607a0076c2de697846">cthr</a>(a,  t)&#160;&#160;&#160;((a)&lt;(-t)?-1.0f:((a)&gt;(t)?1.0f:0.0f))					/** Compare a value to a threshold and return +1.0 (above), -1.0 (below) or 0.0f (inside) */</td></tr>
-<tr class="separator:abc5250d67da014607a0076c2de697846"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac45aae3a4b60c5b0f5f32063f8ca24c1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#ac45aae3a4b60c5b0f5f32063f8ca24c1">cmod</a>(a,  m)&#160;&#160;&#160;(((a) % (m) + (m)) % (m))								/** Perform a non-signed modulo (integer) */</td></tr>
-<tr class="separator:ac45aae3a4b60c5b0f5f32063f8ca24c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dcdd3faf6a313ced7a980f9469961ec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a1dcdd3faf6a313ced7a980f9469961ec">cmodf</a>(a,  m)&#160;&#160;&#160;(fmodf((fmodf((a), (m)) + (m)), (m)))					/** Perform a non-signed modulo (float) */</td></tr>
-<tr class="separator:a1dcdd3faf6a313ced7a980f9469961ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a798f47422e5f4ed85edc8004a74c47d3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a798f47422e5f4ed85edc8004a74c47d3">cmmax</a>(a,  b)&#160;&#160;&#160;((a)&gt;(b)?(a):(b))										/** Return the maximum of two values */</td></tr>
+<tr class="separator:a798f47422e5f4ed85edc8004a74c47d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d72c193c388369e57aea16eb768e560"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a9d72c193c388369e57aea16eb768e560">cmmin</a>(a,  b)&#160;&#160;&#160;((a)&lt;(b)?(a):(b))										/** Return the minimum of two values */</td></tr>
+<tr class="separator:a9d72c193c388369e57aea16eb768e560"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f3de6b88000c00a588cf02052fd13a8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a9f3de6b88000c00a588cf02052fd13a8">cmabs</a>(a)&#160;&#160;&#160;((a)&lt;0.0f?(-(a)):(a))									/** Return the absolute value */</td></tr>
+<tr class="separator:a9f3de6b88000c00a588cf02052fd13a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad1d4bd35144b3d66de39d9feac6a72f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#aad1d4bd35144b3d66de39d9feac6a72f">cmbound</a>(v,  vmin,  vmax)&#160;&#160;&#160;((v)&gt;(vmax)?(vmax):((v)&lt;(vmin)?(vmin):(v)))				/** Limit a value between two bounds (included) */</td></tr>
+<tr class="separator:aad1d4bd35144b3d66de39d9feac6a72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa84c9365232e338853494b355ec1d488"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#aa84c9365232e338853494b355ec1d488">cmsgn</a>(a)&#160;&#160;&#160;((a)&lt;0.0f?-1.0f:1.0f)									/** Return the sign (+1.0 or -1.0) of a value */</td></tr>
+<tr class="separator:aa84c9365232e338853494b355ec1d488"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3610cbdb2648700939054f82148ffeff"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a3610cbdb2648700939054f82148ffeff">cmthr</a>(a,  t)&#160;&#160;&#160;((a)&lt;(-t)?-1.0f:((a)&gt;(t)?1.0f:0.0f))					/** Compare a value to a threshold and return +1.0 (above), -1.0 (below) or 0.0f (inside) */</td></tr>
+<tr class="separator:a3610cbdb2648700939054f82148ffeff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add7a8c075092e6ea05d13f3f24ed5b10"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#add7a8c075092e6ea05d13f3f24ed5b10">cmmod</a>(a,  m)&#160;&#160;&#160;(((a) % (m) + (m)) % (m))								/** Perform a non-signed modulo (integer) */</td></tr>
+<tr class="separator:add7a8c075092e6ea05d13f3f24ed5b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23be0bf1d67a832d4a6b363e85e76398"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a23be0bf1d67a832d4a6b363e85e76398">cmmodf</a>(a,  m)&#160;&#160;&#160;(fmodf((fmodf((a), (m)) + (m)), (m)))					/** Perform a non-signed modulo (float) */</td></tr>
+<tr class="separator:a23be0bf1d67a832d4a6b363e85e76398"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f2a9f9c0c8dd36ef969a08b2c6fbb65"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a9f2a9f9c0c8dd36ef969a08b2c6fbb65">randf</a>()&#160;&#160;&#160;(((float) rand() / (float) (RAND_MAX &gt;&gt; 1)) - 1.0f)		/** Compute a float random pseudo number */</td></tr>
 <tr class="separator:a9f2a9f9c0c8dd36ef969a08b2c6fbb65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cfe4a0f54b45744fdcf84a09347f15f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a9cfe4a0f54b45744fdcf84a09347f15f">d2r</a>&#160;&#160;&#160;(const float) (M_PI / 180.0f)							/** Mutiply constant to convert degrees in radiants */</td></tr>
 <tr class="separator:a9cfe4a0f54b45744fdcf84a09347f15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11764bd1cb7ac5771c49048e43d401a1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a11764bd1cb7ac5771c49048e43d401a1">r2d</a>&#160;&#160;&#160;(const float) (180.0f / M_PI)							/** Mutiply constant to convert radiants in degrees */</td></tr>
 <tr class="separator:a11764bd1cb7ac5771c49048e43d401a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32b921183977a9c2f8b832f6ffab43b0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a32b921183977a9c2f8b832f6ffab43b0">FROM_LEU16</a>(x)&#160;&#160;&#160;(x = ((uint8_t *) &amp;(x))[0] + (((uint8_t *) &amp;(x))[1] &lt;&lt; 8))</td></tr>
+<tr class="separator:a32b921183977a9c2f8b832f6ffab43b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20bd9cecbb965645aa761c37e8fb6331"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a20bd9cecbb965645aa761c37e8fb6331">FROM_LES16</a>(x)&#160;&#160;&#160;<a class="el" href="global_8h.html#a32b921183977a9c2f8b832f6ffab43b0">FROM_LEU16</a>(x)</td></tr>
+<tr class="separator:a20bd9cecbb965645aa761c37e8fb6331"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a682ca2b39a2a31d6099017ea3921d63a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a682ca2b39a2a31d6099017ea3921d63a">FROM_LEU32</a>(x)&#160;&#160;&#160;(x = ((uint8_t *) &amp;x)[0] + (((uint8_t *) &amp;x)[1] &lt;&lt; 8) + (((uint8_t *) &amp;x)[2] &lt;&lt; 16) + (((uint8_t *) &amp;x)[3] &lt;&lt; 24))</td></tr>
+<tr class="separator:a682ca2b39a2a31d6099017ea3921d63a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9f6fa58c07b43e5bb9ab5026e0a077b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#ae9f6fa58c07b43e5bb9ab5026e0a077b">FROM_LES32</a>(x)&#160;&#160;&#160;<a class="el" href="global_8h.html#a682ca2b39a2a31d6099017ea3921d63a">FROM_LEU32</a>(x)</td></tr>
+<tr class="separator:ae9f6fa58c07b43e5bb9ab5026e0a077b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4d5fa1abab9dff399a3556718063a47"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#ad4d5fa1abab9dff399a3556718063a47">TO_LEU16</a>(x)</td></tr>
+<tr class="separator:ad4d5fa1abab9dff399a3556718063a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6c527a0c1653762e5e34dee57c3e473"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#ac6c527a0c1653762e5e34dee57c3e473">TO_LES16</a>(x)</td></tr>
+<tr class="separator:ac6c527a0c1653762e5e34dee57c3e473"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acebffb7c3e3af246ff3c15f71934f814"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#acebffb7c3e3af246ff3c15f71934f814">TO_LEU32</a>(x)</td></tr>
+<tr class="separator:acebffb7c3e3af246ff3c15f71934f814"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89e44b658d6902495a18ac744ecbeb4f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global_8h.html#a89e44b658d6902495a18ac744ecbeb4f">TO_LES32</a>(x)</td></tr>
+<tr class="separator:a89e44b658d6902495a18ac744ecbeb4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -165,12 +181,12 @@ Functions</h2></td></tr>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="a45d7016a0bcd659a45e21b437b64ac5d"></a>
+<a class="anchor" id="a9f3de6b88000c00a588cf02052fd13a8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define cabs</td>
+          <td class="memname">#define cmabs</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">a</td><td>)</td>
@@ -181,12 +197,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acb39d8cfe7f9e656ac0904d2ea23e0b5"></a>
+<a class="anchor" id="aad1d4bd35144b3d66de39d9feac6a72f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define cbound</td>
+          <td class="memname">#define cmbound</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">v, </td>
@@ -213,12 +229,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a649fa829150452ab472d2b363023f5bc"></a>
+<a class="anchor" id="a798f47422e5f4ed85edc8004a74c47d3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define cmax</td>
+          <td class="memname">#define cmmax</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">a, </td>
@@ -240,12 +256,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abd7dee0dcac629c3ec841df47d3582c2"></a>
+<a class="anchor" id="a9d72c193c388369e57aea16eb768e560"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define cmin</td>
+          <td class="memname">#define cmmin</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">a, </td>
@@ -266,12 +282,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac45aae3a4b60c5b0f5f32063f8ca24c1"></a>
+<a class="anchor" id="add7a8c075092e6ea05d13f3f24ed5b10"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define cmod</td>
+          <td class="memname">#define cmmod</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">a, </td>
@@ -292,12 +308,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1dcdd3faf6a313ced7a980f9469961ec"></a>
+<a class="anchor" id="a23be0bf1d67a832d4a6b363e85e76398"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define cmodf</td>
+          <td class="memname">#define cmmodf</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">a, </td>
@@ -318,12 +334,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6781e046b44b9470f7ea04c539037e35"></a>
+<a class="anchor" id="aa84c9365232e338853494b355ec1d488"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define csgn</td>
+          <td class="memname">#define cmsgn</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">a</td><td>)</td>
@@ -334,12 +350,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abc5250d67da014607a0076c2de697846"></a>
+<a class="anchor" id="a3610cbdb2648700939054f82148ffeff"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define cthr</td>
+          <td class="memname">#define cmthr</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">a, </td>
@@ -372,6 +388,71 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a20bd9cecbb965645aa761c37e8fb6331"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FROM_LES16</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="global_8h.html#a32b921183977a9c2f8b832f6ffab43b0">FROM_LEU16</a>(x)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae9f6fa58c07b43e5bb9ab5026e0a077b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FROM_LES32</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="global_8h.html#a682ca2b39a2a31d6099017ea3921d63a">FROM_LEU32</a>(x)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a32b921183977a9c2f8b832f6ffab43b0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FROM_LEU16</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;(x = ((uint8_t *) &amp;(x))[0] + (((uint8_t *) &amp;(x))[1] &lt;&lt; 8))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Compilers missing - Memory aligned allocation functions Brute force 128bit memory alignement (for SIMD maths) Compilers missing - intrinsics and maths functions Endianness conversion macros </p>
+
+</div>
+</div>
+<a class="anchor" id="a682ca2b39a2a31d6099017ea3921d63a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FROM_LEU32</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;(x = ((uint8_t *) &amp;x)[0] + (((uint8_t *) &amp;x)[1] &lt;&lt; 8) + (((uint8_t *) &amp;x)[2] &lt;&lt; 16) + (((uint8_t *) &amp;x)[3] &lt;&lt; 24))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a11764bd1cb7ac5771c49048e43d401a1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -397,6 +478,90 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+</div>
+</div>
+<a class="anchor" id="ac6c527a0c1653762e5e34dee57c3e473"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TO_LES16</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">(\</div>
+<div class="line">    ((uint8_t *) &amp;(x))[0] = ((int16_t) (x)) &amp; 0xFF, \</div>
+<div class="line">    ((uint8_t *) &amp;(x))[1] = ((int16_t) (x)) &gt;&gt; 8 \</div>
+<div class="line">    )</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="a89e44b658d6902495a18ac744ecbeb4f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TO_LES32</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">(\</div>
+<div class="line">    ((uint8_t *) &amp;(x))[0] = ((int32_t) (x)) &amp; 0xFF, \</div>
+<div class="line">    ((uint8_t *) &amp;(x))[1] = ((int32_t) (x)) &gt;&gt; 8, \</div>
+<div class="line">    ((uint8_t *) &amp;(x))[2] = ((int32_t) (x)) &gt;&gt; 16, \</div>
+<div class="line">    ((uint8_t *) &amp;(x))[3] = ((int32_t) (x)) &gt;&gt; 24 \</div>
+<div class="line">    )</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="ad4d5fa1abab9dff399a3556718063a47"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TO_LEU16</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">(\</div>
+<div class="line">    ((uint8_t *) &amp;(x))[0] = ((uint16_t) (x)) &amp; 0xFF, \</div>
+<div class="line">    ((uint8_t *) &amp;(x))[1] = ((uint16_t) (x)) &gt;&gt; 8 \</div>
+<div class="line">    )</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="acebffb7c3e3af246ff3c15f71934f814"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TO_LEU32</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">(\</div>
+<div class="line">    ((uint8_t *) &amp;(x))[0] = ((uint32_t) (x)) &amp; 0xFF, \</div>
+<div class="line">    ((uint8_t *) &amp;(x))[1] = ((uint32_t) (x)) &gt;&gt; 8, \</div>
+<div class="line">    ((uint8_t *) &amp;(x))[2] = ((uint32_t) (x)) &gt;&gt; 16, \</div>
+<div class="line">    ((uint8_t *) &amp;(x))[3] = ((uint32_t) (x)) &gt;&gt; 24 \</div>
+<div class="line">    )</div>
+</div><!-- fragment -->
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>

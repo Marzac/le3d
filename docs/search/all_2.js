@@ -20,5 +20,7 @@ var searchData=
   ['bmpfile_2eh',['bmpfile.h',['../bmpfile_8h.html',1,'']]],
   ['bset_2ecpp',['bset.cpp',['../bset_8cpp.html',1,'']]],
   ['bset_2eh',['bset.h',['../bset_8h.html',1,'']]],
-  ['buttons',['buttons',['../class_le_game_pad.html#a94dd20e675b8400a415809af2fdf5e0d',1,'LeGamePad']]]
+  ['building_2emd',['BUILDING.md',['../_b_u_i_l_d_i_n_g_8md.html',1,'']]],
+  ['buttons',['buttons',['../class_le_game_pad.html#a94dd20e675b8400a415809af2fdf5e0d',1,'LeGamePad']]],
+  ['building_20le3d',['Building le3d',['../md__f_1_le3d__b_u_i_l_d_i_n_g.html',1,'']]]
 ];

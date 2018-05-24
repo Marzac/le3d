@@ -120,9 +120,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2b0dd9a9e040c6161e15298595d910b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_le_mesh.html">LeMesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#a2b0dd9a9e040c6161e15298595d910b0">loadOBJ</a> (const char *path)</td></tr>
 <tr class="memdesc:a2b0dd9a9e040c6161e15298595d910b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a OBJ file of given path and apply transforms.  <a href="#a2b0dd9a9e040c6161e15298595d910b0">More...</a><br /></td></tr>
 <tr class="separator:a2b0dd9a9e040c6161e15298595d910b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83a84683ff11bfcf420d9751836ddaa9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#a83a84683ff11bfcf420d9751836ddaa9">getFromName</a> (const char *name)</td></tr>
-<tr class="memdesc:a83a84683ff11bfcf420d9751836ddaa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a mesh slot index from a mesh name or path.  <a href="#a83a84683ff11bfcf420d9751836ddaa9">More...</a><br /></td></tr>
-<tr class="separator:a83a84683ff11bfcf420d9751836ddaa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f83729300ad65e40d366378fcbb1f63"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#a9f83729300ad65e40d366378fcbb1f63">getSlotFromName</a> (const char *name)</td></tr>
+<tr class="memdesc:a9f83729300ad65e40d366378fcbb1f63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a mesh slot index from a mesh name or path.  <a href="#a9f83729300ad65e40d366378fcbb1f63">More...</a><br /></td></tr>
+<tr class="separator:a9f83729300ad65e40d366378fcbb1f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade1fe4642c2630b65b53728a02bea7ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_le_mesh.html">LeMesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_mesh_cache.html#ade1fe4642c2630b65b53728a02bea7ad">getMeshFromName</a> (const char *path)</td></tr>
+<tr class="memdesc:ade1fe4642c2630b65b53728a02bea7ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a mesh object from its name or path.  <a href="#ade1fe4642c2630b65b53728a02bea7ad">More...</a><br /></td></tr>
+<tr class="separator:ade1fe4642c2630b65b53728a02bea7ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -182,12 +185,37 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a83a84683ff11bfcf420d9751836ddaa9"></a>
+<a class="anchor" id="ade1fe4642c2630b65b53728a02bea7ad"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LeMeshCache::getFromName </td>
+          <td class="memname"><a class="el" href="class_le_mesh.html">LeMesh</a> * LeMeshCache::getMeshFromName </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve a mesh object from its name or path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>mesh path or name </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>mesh object or default mesh if not found </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9f83729300ad65e40d366378fcbb1f63"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LeMeshCache::getSlotFromName </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>path</em></td><td>)</td>
@@ -203,7 +231,7 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>cache slot number or -1 if no space available </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>cache slot number or 0 (default slot) if not found </dd></dl>
 
 </div>
 </div>

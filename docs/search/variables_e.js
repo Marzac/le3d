@@ -6,11 +6,11 @@ var searchData=
   ['sizes',['sizes',['../class_le_b_set.html#a6f71b9e2d695eaa0ac180fb070f3c0df',1,'LeBSet']]],
   ['spacex',['spaceX',['../class_le_bmp_font.html#a15fd9939cce7d25f5bb4dff25e851722',1,'LeBmpFont']]],
   ['spacey',['spaceY',['../class_le_bmp_font.html#ab66008da6447b71f63966b10c26fb23f',1,'LeBmpFont']]],
-  ['specular',['specular',['../struct_le_obj_material.html#a3c7a456522ea2ba3dccc472bca729bea',1,'LeObjMaterial']]],
+  ['specular',['specular',['../struct_le_obj_material.html#af4ad236b3f41297e96ff4dc600eaaf03',1,'LeObjMaterial']]],
   ['srcindices',['srcIndices',['../class_le_tri_list.html#a5ed15e129be03a80f56cfe13695276ed',1,'LeTriList']]],
   ['stickleftx',['stickLeftX',['../class_le_game_pad.html#addf5e893817a5d38537c83ed28e20fa5',1,'LeGamePad']]],
   ['sticklefty',['stickLeftY',['../class_le_game_pad.html#a5a64a388b735684be806e488024ddd4b',1,'LeGamePad']]],
   ['stickrightx',['stickRightX',['../class_le_game_pad.html#a5fb2a8eee56dbe00900f998f610553f3',1,'LeGamePad']]],
   ['stickrighty',['stickRightY',['../class_le_game_pad.html#a1cf89a8afe6ff02b3560035da33a2b10',1,'LeGamePad']]],
-  ['sys',['sys',['../system_8h.html#a2f7a2d48359f0c86a7db7bdbd8da5cae',1,'sys():&#160;system_unix.cpp'],['../system__unix_8cpp.html#a2f7a2d48359f0c86a7db7bdbd8da5cae',1,'sys():&#160;system_unix.cpp']]]
+  ['sys',['sys',['../system_8h.html#a2f7a2d48359f0c86a7db7bdbd8da5cae',1,'sys():&#160;system_win.cpp'],['../system__win_8cpp.html#a2f7a2d48359f0c86a7db7bdbd8da5cae',1,'sys():&#160;system_win.cpp']]]
 ];

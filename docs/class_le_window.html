@@ -108,8 +108,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5dd6b140f5f3621f67ad5bf5e24e500a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#a5dd6b140f5f3621f67ad5bf5e24e500a">LeWindow</a> (const char *name, int width=<a class="el" href="config_8h.html#a0e23fe71df13725c6b696a54d264b252">LE_RESOX_DEFAULT</a>, int height=<a class="el" href="config_8h.html#a59236b29cfb5747fdce2159e7dfb14c3">LE_RESOY_DEFAULT</a>)</td></tr>
-<tr class="separator:a5dd6b140f5f3621f67ad5bf5e24e500a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad91cfb6a0810790aa70531a915a73feb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#ad91cfb6a0810790aa70531a915a73feb">LeWindow</a> (const char *name, int <a class="el" href="class_le_window.html#ac3d2ce1b7205ef31068ee174179f4698">width</a>=<a class="el" href="config_8h.html#a0e23fe71df13725c6b696a54d264b252">LE_RESOX_DEFAULT</a>, int <a class="el" href="class_le_window.html#a8521981bfbfd1e6aecf710ced27c4e8d">height</a>=<a class="el" href="config_8h.html#a59236b29cfb5747fdce2159e7dfb14c3">LE_RESOY_DEFAULT</a>, bool fullscreen=false)</td></tr>
+<tr class="separator:ad91cfb6a0810790aa70531a915a73feb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af52e6cfaf136042344916858a645127a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#af52e6cfaf136042344916858a645127a">~LeWindow</a> ()</td></tr>
 <tr class="separator:af52e6cfaf136042344916858a645127a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a559e5299af3ae3ce0ec6cd19d41bf2c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#a559e5299af3ae3ce0ec6cd19d41bf2c5">update</a> ()</td></tr>
@@ -122,10 +122,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a2ec7318284a0d16d43f84696bd848a48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the window to windowed mode.  <a href="#a2ec7318284a0d16d43f84696bd848a48">More...</a><br /></td></tr>
 <tr class="separator:a2ec7318284a0d16d43f84696bd848a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65b08dc591f5d31e735d5fe9617b5801"><td class="memItemLeft" align="right" valign="top"><a class="el" href="global_8h.html#a68874d437ae2bcb75bc28fd1b158340a">LeHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#a65b08dc591f5d31e735d5fe9617b5801">getHandle</a> ()</td></tr>
-<tr class="memdesc:a65b08dc591f5d31e735d5fe9617b5801"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the native OS window handle.  <a href="#a65b08dc591f5d31e735d5fe9617b5801">More...</a><br /></td></tr>
 <tr class="separator:a65b08dc591f5d31e735d5fe9617b5801"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a759d9f9e30f9031fab3ca57e0e382b3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_le_drawing_context.html">LeDrawingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#a759d9f9e30f9031fab3ca57e0e382b3f">getContext</a> ()</td></tr>
-<tr class="memdesc:a759d9f9e30f9031fab3ca57e0e382b3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the native OS window graphic context.  <a href="#a759d9f9e30f9031fab3ca57e0e382b3f">More...</a><br /></td></tr>
 <tr class="separator:a759d9f9e30f9031fab3ca57e0e382b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbe9652ddc22578197bac2f1e2da2815"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#adbe9652ddc22578197bac2f1e2da2815">registerKeyCallback</a> (<a class="el" href="class_le_window.html#ad18d4849344f15e98eaf6f6afe628e21">KeyCallback</a> callback)</td></tr>
 <tr class="memdesc:adbe9652ddc22578197bac2f1e2da2815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback to receive keyboard events associated to the window.  <a href="#adbe9652ddc22578197bac2f1e2da2815">More...</a><br /></td></tr>
@@ -142,6 +140,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:ac3d2ce1b7205ef31068ee174179f4698"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#ac3d2ce1b7205ef31068ee174179f4698">width</a></td></tr>
+<tr class="separator:ac3d2ce1b7205ef31068ee174179f4698"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8521981bfbfd1e6aecf710ced27c4e8d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#a8521981bfbfd1e6aecf710ced27c4e8d">height</a></td></tr>
+<tr class="separator:a8521981bfbfd1e6aecf710ced27c4e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a290b3f77a3ca913bc8da54eb21b52948"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#a290b3f77a3ca913bc8da54eb21b52948">fullScreen</a></td></tr>
+<tr class="separator:a290b3f77a3ca913bc8da54eb21b52948"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76910c3d3872e330e811149db50856c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_le_window.html#a76910c3d3872e330e811149db50856c3">visible</a></td></tr>
 <tr class="separator:a76910c3d3872e330e811149db50856c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -173,7 +177,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a5dd6b140f5f3621f67ad5bf5e24e500a"></a>
+<a class="anchor" id="ad91cfb6a0810790aa70531a915a73feb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -193,7 +197,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>height</em> = <code><a class="el" href="config_8h.html#a59236b29cfb5747fdce2159e7dfb14c3">LE_RESOY_DEFAULT</a></code>&#160;</td>
+          <td class="paramname"><em>height</em> = <code><a class="el" href="config_8h.html#a59236b29cfb5747fdce2159e7dfb14c3">LE_RESOY_DEFAULT</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>fullscreen</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -234,9 +244,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Retrieve the native OS window graphic context. </p>
-<dl class="section return"><dt>Returns</dt><dd>handle to an OS window handle </dd></dl>
-
 </div>
 </div>
 <a class="anchor" id="a65b08dc591f5d31e735d5fe9617b5801"></a>
@@ -251,9 +258,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Retrieve the native OS window handle. </p>
-<dl class="section return"><dt>Returns</dt><dd>handle to an OS window handle </dd></dl>
 
 </div>
 </div>
@@ -434,6 +438,32 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a290b3f77a3ca913bc8da54eb21b52948"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LeWindow::fullScreen</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Fullscreen state of window </p>
+
+</div>
+</div>
+<a class="anchor" id="a8521981bfbfd1e6aecf710ced27c4e8d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LeWindow::height</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Height of window client region (in pixels) </p>
+
+</div>
+</div>
 <a class="anchor" id="a76910c3d3872e330e811149db50856c3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -447,9 +477,22 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac3d2ce1b7205ef31068ee174179f4698"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LeWindow::width</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Width of window client region (in pixels) </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>F:/le3d/engine/<a class="el" href="window_8h_source.html">window.h</a></li>
-<li>F:/le3d/engine/<a class="el" href="window__unix_8cpp.html">window_unix.cpp</a></li>
+<li>F:/le3d/engine/<a class="el" href="window__win_8cpp.html">window_win.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
