@@ -68,10 +68,14 @@
 	};
 
 /*****************************************************************************/
-/** Memory aligned allocation functions */
+/** Compilers missing - Memory aligned allocation functions */
 	#ifdef __MINGW32__
-		#include <malloc.h>
-	#elif defined(__unix__) || defined(__unix)
+		#include <string.h>
+		#define _strdup		strdup
+	#elif defined(__GNUC__)
+		#include <string.h>
+		#define _strdup		strdup
+		#include <stdlib.h>
 		#ifndef _aligned_malloc
 			#define _aligned_malloc(s, a) aligned_alloc(a, s)
 		#endif
@@ -79,7 +83,7 @@
 			#define _aligned_free(p) free(p)
 		#endif
 	#elif defined(__APPLE__)
-		#include <malloc.h>
+		#include <stdlib.h>
 		void * _aligned_malloc(size_t size, size_t alignment);
 		#ifndef _aligned_free
 			#define _aligned_free  free
@@ -91,6 +95,8 @@
 		#endif
 	#endif
 	
+/*****************************************************************************/
+/** Brute force 128bit memory alignement (for SIMD maths) */
 	#if LE_USE_SIMD == 1
 		void * operator new(size_t size) {
 			return _aligned_malloc(size, 16);
@@ -107,7 +113,7 @@
 	#endif
 	
 /*****************************************************************************/
-/** VC missing / renamed functions */
+/** Compilers missing - intrinsics and maths functions */
 #ifdef _MSC_VER
 	#include <intrin.h>
 	int __builtin_ffs(int x);
@@ -116,6 +122,10 @@
 	//#endif
 #elif defined (__WATCOMC__)
 	int __builtin_ffs(int x);
+	
+// Watcom C++ is so outdated that it does not
+// come with floating point version of math.h
+// functions
 	#define copysign(x, y)	(cmabs(x) * cmsgn(y))
 	#define copysignf(x, y)	((float) copysign(x, y))
 	
@@ -136,7 +146,6 @@
 
 /*****************************************************************************/
 /** Endianness conversion macros */
-
 #define FROM_LEU16(x) (x = ((uint8_t *) &(x))[0] + (((uint8_t *) &(x))[1] << 8))
 #define FROM_LES16(x) FROM_LEU16(x)
 #define FROM_LEU32(x) (x = ((uint8_t *) &x)[0] + (((uint8_t *) &x)[1] << 8) + (((uint8_t *) &x)[2] << 16) + (((uint8_t *) &x)[3] << 24))

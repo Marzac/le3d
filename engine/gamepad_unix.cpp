@@ -31,8 +31,7 @@
 */
 
 /*****************************************************************************/
-#if defined(__unix__) || defined(__unix) || \
-    defined(__APPLE__) && defined(__MACH__)
+#if defined(__unix__) || defined(__unix)
 
 #include "gamepad.h"
 
@@ -101,6 +100,7 @@ void LeGamePad::update()
 	if (!unixJoyCount) return;
 	if (unixJoyFiles[pad] < 0) return;
 	int lastButtons = buttons;
+	
 	while (1) {
 		input_event event;
 		memset(&event, 0, sizeof(input_event));

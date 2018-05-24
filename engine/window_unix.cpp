@@ -57,13 +57,14 @@ LeWindow::LeWindow(const char * name, int width, int height, bool fullscreen) :
 	height(height),
 	fullScreen(false),
 	visible(false),
-	name(NULL),
+	title(NULL),
 	handle(0),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {
 	memset(&dc, 0, sizeof(LeDrawingContext));
-
+	if (name) title = _strdup(name);
+	
 	if (!usedXDisplay) {
 		usedXDisplay = XOpenDisplay(NULL);
 		if (!usedXDisplay) {
@@ -74,7 +75,7 @@ LeWindow::LeWindow(const char * name, int width, int height, bool fullscreen) :
 	usedXDisplayCount ++;
 
 	handle = (LeHandle) XCreateSimpleWindow(usedXDisplay, RootWindow(usedXDisplay, 0), 0, 0, width, height, 1, 0, 0);
-	XStoreName(usedXDisplay, (Window) handle, name);
+	XStoreName(usedXDisplay, (Window) handle, title);
 
 	XSelectInput(usedXDisplay, (Window) handle, ExposureMask | xEventMask);
 	XMapWindow(usedXDisplay, (Window) handle);
@@ -88,6 +89,7 @@ LeWindow::LeWindow(const char * name, int width, int height, bool fullscreen) :
 
 LeWindow::~LeWindow()
 {
+	if (title) free(title);
 	if (handle) XDestroyWindow(usedXDisplay, (Window) handle);
 
 	usedXDisplayCount --;
@@ -111,11 +113,11 @@ void LeWindow::update()
 
 			int uniState = 0;
 			if (event.type == KeyPress)
-				uniState = LE_WINDOW_KEY_PRESSED;
-			else uniState = LE_WINDOW_KEY_RELEASED;
+				uniState = LE_WINDOW_KEYSTATE_PRESSED;
+			else uniState = LE_WINDOW_KEYSTATE_RELEASED;
 
-			if (event.xkey.state & ShiftMask) uniState |= LE_WINDOW_KEY_SHIFT;
-			if (event.xkey.state & ControlMask) uniState |= LE_WINDOW_KEY_CTRL;
+			if (event.xkey.state & ShiftMask) uniState |= LE_WINDOW_KEYSTATE_SHIFT;
+			if (event.xkey.state & ControlMask) uniState |= LE_WINDOW_KEYSTATE_CTRL;
 
 			sendKeyEvent(event.xkey.keycode, uniState);
 		}else

@@ -70,9 +70,12 @@
 
 /** Performance optimizations */
 #ifndef AMIGA
-	#define LE_USE_SIMD					${LE3D_USE_SIMD}					/** Use SIMD instructions & vectors */
+	#define LE_USE_SIMD					${LE3D_USE_SIMD}					/** Use generic compiler support for SIMD instructions */
 	#define LE_USE_SSE2					${LE3D_USE_SSE2}					/** Use Intel SSE2 instructions */
+	#define LE_USE_AMMX					0									/** Use Apollo AMMX instructions */
 #else
+	#define LE_USE_SIMD					${LE3D_USE_SIMD}					/** Use generic compiler support for SIMD instructions */
+	#define LE_USE_SSE2					0									/** Use Intel SSE2 instructions */
 	#define LE_USE_AMMX					${LE3D_USE_AMMX}					/** Use Apollo AMMX instructions */
 #endif // AMIGA
 

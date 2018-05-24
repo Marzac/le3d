@@ -52,13 +52,14 @@ LeWindow::LeWindow(const char * name, int width, int height, bool fullscreen) :
 	height(height),
 	fullScreen(false),
 	visible(false),
-	name(NULL),
+	title(NULL),
 	handle(0),
 	keyCallback(NULL),
 	mouseCallback(NULL)
 {
 	memset(&dc, 0, sizeof(LeDrawingContext));
-
+	if (name) title = _strdup(name);
+	
 	struct TagItem win_tags[] = {
 		{WA_Left,			250},
 		{WA_Top,			40},
@@ -85,6 +86,7 @@ LeWindow::LeWindow(const char * name, int width, int height, bool fullscreen) :
 
 LeWindow::~LeWindow()
 {
+	if (title) free(title);
 	if (!handle) {
 		return;
 	}
