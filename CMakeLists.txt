@@ -140,10 +140,10 @@ target_include_directories(
 set(LE3D_CXX_FLAGS_SUGGESTION "")
 if (NOT(AMIGA))
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        set_target_properties(le3d PROPERTIES LINK_FLAGS "-s -Wl,--gc-sections")
+        # set_target_properties(le3d PROPERTIES LINK_FLAGS "-s -Wl,--gc-sections")
         # we always want these...not user configurable
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-value -Wno-unused-result")
-        if (LE3D_USE_SIMD)
+        if (LE3D_USE_SSE2)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmmx -msse -msse2 -mfpmath=sse")
         endif()
         set(LE3D_CXX_FLAGS_SUGGESTION "${LE3D_CXX_FLAGS_SUGGESTION} -ffast-math -fno-exceptions")
