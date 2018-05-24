@@ -40,7 +40,34 @@
 
 #include <unistd.h>
 #include <inttypes.h>
-#include <time.h>
+
+/*****************************************************************************/
+/** Dirty patch for MacOS */
+#ifdef __MACH__
+	#include <mach/mach_time.h>
+	#define CLOCK_MONOTONIC_RAW 0
+	int clock_getres(int clk_id, struct timespec *t)
+	{
+		mach_timebase_info_data_t timebase;
+		mach_timebase_info(&timebase);
+		t->tv_sec = 0;
+		t->tv_nsec = (double) timebase.numer / timebase.denom;
+		return 0;
+	}
+	
+	int clock_gettime(int clk_id, struct timespec *t)
+	{
+		mach_timebase_info_data_t timebase;
+		mach_timebase_info(&timebase);
+		uint64_t time = mach_absolute_time();
+		double r = ((double) time * timebase.numer) / timebase.denom;
+		t->tv_sec = (time_t) (r * 1e-9);
+		t->tv_nsec = (long) r;
+		return 0;
+	}
+#else
+	#include <time.h>
+#endif
 
 /*****************************************************************************/
 #define TIMING_SCHEDULER_GRANULARITY	1000
