@@ -11,7 +11,6 @@
 add_executable(cube cube.cpp)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set_target_properties(cube PROPERTIES LINK_FLAGS "-s -Wl,--gc-sections")
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")

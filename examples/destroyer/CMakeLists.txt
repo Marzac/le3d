@@ -11,10 +11,9 @@
 add_executable(destroyer destroyer.cpp)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set_target_properties(destroyer PROPERTIES LINK_FLAGS "-s -Wl,--gc-sections")
-#   target_compile_options(destroyer PUBLIC -m32) 
-	target_compile_options(le3d PRIVATE -Wall -Wno-unused-value -Wno-unused-result)
-    target_compile_options(destroyer PRIVATE -ffast-math -mfpmath=sse -fno-exceptions -fno-rtti -fno-stack-protector -fno-math-errno -fno-ident -ffunction-sections)
+	if (LE3D_USE_SSE2)
+		target_compile_options(destroyer PRIVATE -mmmx -msse -msse2 -mfpmath=sse -ffast-math)
+    endif()
     target_compile_options(destroyer PRIVATE -O2 -s)
     if (WIN32)
         target_compile_options(destroyer PRIVATE -D__MSVCRT_VERSION__=0x0700)
