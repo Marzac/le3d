@@ -234,13 +234,7 @@ void explosionsUpdate();
 void explosionsBoom(const LeVertex & pos, int strength);
 
 /*****************************************************************************/
-/** Get rid of the console please ... */
-#if defined(_WIN32)
-	#include <windows.h>
-	int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-#else
-	int main()
-#endif
+int main()
 {
 	sys.initialize();
 	LeGamePad::setup();
