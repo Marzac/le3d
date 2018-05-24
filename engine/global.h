@@ -142,7 +142,6 @@
 
 #if defined (AMIGA)
 // These are missing
-	#define copysign(x, y)	(cmabs(x) * cmsgn(y))
 	#define copysignf(x, y)	((float) copysign(x, y))
 #endif
 
