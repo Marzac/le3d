@@ -17,9 +17,8 @@
 int main()
 {
 	sys.initialize();
-#if !defined(__APPLE__) && !defined(AMIGA)
 	LeGamePad::setup();
-#endif
+
 /** Create application objects */
 	LeWindow	 window		= LeWindow("Le3d: cube example");
 	LeDraw		 draw		= LeDraw(window.getContext());
@@ -87,9 +86,7 @@ int main()
 	screenshot.save(&rasterizer.frame);
 
 	timing.lastFrame();
-#if !defined(__APPLE__) && !defined(AMIGA)
 	LeGamePad::release();
-#endif
 	sys.terminate();
 	return 0;
 }

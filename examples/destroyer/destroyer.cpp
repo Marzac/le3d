@@ -238,14 +238,13 @@ void explosionsBoom(const LeVertex & pos, int strength);
 #if defined(_WIN32)
 	#include <windows.h>
 	int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+#else
+	int main()
 #endif
-/*****************************************************************************/
-int main()
 {
 	sys.initialize();
-#ifndef __APPLE__
 	LeGamePad::setup();
-#endif
+
 // Create application objects
 	LeWindow window	= LeWindow("Destroy The Destroyer", resoX, resoY, true);
 	LeDraw draw	= LeDraw(window.getContext(), resoX, resoY);
@@ -346,9 +345,7 @@ int main()
 	}
 
 	timing.lastFrame();
-#ifndef __APPLE__	
 	LeGamePad::release();
-#endif
 	sys.terminate();
 	return 0;
 }
