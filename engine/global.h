@@ -115,9 +115,7 @@
 #ifdef _MSC_VER
 	#include <intrin.h>
 	int __builtin_ffs(int x);
-	//#ifndef _strdup 
-	//	#define _strdup strdup
-	//#endif
+
 #elif defined (__WATCOMC__)
 	int __builtin_ffs(int x);
 	
@@ -140,6 +138,12 @@
 	#define atan2f(n,m)	((float)std::atan2(n,m))
 		
 	#define M_PI		3.14159265358979323846
+#endif
+
+#if defined (AMIGA)
+// These are missing
+	#define copysign(x, y)	(cmabs(x) * cmsgn(y))
+	#define copysignf(x, y)	((float) copysign(x, y))
 #endif
 
 /*****************************************************************************/
