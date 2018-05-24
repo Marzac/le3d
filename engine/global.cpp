@@ -37,15 +37,6 @@
 #include <string.h>
 
 /*****************************************************************************/
-#ifdef __APPLE__
-void * _aligned_malloc(size_t size, size_t alignment) {
-	void * buffer;
-	posix_memalign(&buffer, alignment, size);
-	return buffer;
-}
-#endif
-
-/*****************************************************************************/
 void LeGlobal::toLower(char * txt)
 {
 	int len = strlen(txt);
@@ -135,5 +126,14 @@ int __builtin_ffs(int x) {
 #ifdef __WATCOMC__
 int __builtin_ffs(int x) {
 	return 0;
+}
+#endif
+
+/*****************************************************************************/
+#ifdef __APPLE__
+void * _aligned_malloc(size_t size, size_t alignment) {
+	void * buffer;
+	posix_memalign(&buffer, alignment, size);
+	return buffer;
 }
 #endif

@@ -1,9 +1,9 @@
 /**
-	\file gamepad_mac.cpp
+	\file gamepad_amiga.cpp
 	\brief LightEngine 3D: Native OS gamepad manager
-	\brief MacOS implementation
+	\brief Amiga implementation
 	\author
-	\twitter
+	\twitter 
 	\website
 	\copyright
 	\version 1.6
@@ -31,7 +31,7 @@
 */
 
 /*****************************************************************************/
-#if defined(__APPLE__) && defined(__MACH__)
+#if defined(AMIGA)
 
 #include "gamepad.h"
 

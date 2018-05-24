@@ -71,11 +71,12 @@
 /** Compilers missing - Memory aligned allocation functions */
 	#ifdef __MINGW32__
 		#include <string.h>
-		#define _strdup		strdup
+		#include <malloc.h>
+		#define _strdup	strdup
 	#elif defined(__GNUC__)
 		#include <string.h>
-		#define _strdup		strdup
-		#include <stdlib.h>
+		#include <malloc.h>
+		#define _strdup	strdup
 		#ifndef _aligned_malloc
 			#define _aligned_malloc(s, a) aligned_alloc(a, s)
 		#endif
@@ -83,7 +84,6 @@
 			#define _aligned_free(p) free(p)
 		#endif
 	#elif defined(__APPLE__)
-		#include <stdlib.h>
 		void * _aligned_malloc(size_t size, size_t alignment);
 		#ifndef _aligned_free
 			#define _aligned_free  free
@@ -94,7 +94,7 @@
 			#define alloca(s) _malloca(s)
 		#endif
 	#endif
-	
+
 /*****************************************************************************/
 /** Brute force 128bit memory alignement (for SIMD maths) */
 	#if LE_USE_SIMD == 1

@@ -38,20 +38,6 @@
 
 #include "simd.h"
 #include <math.h>
-#ifdef __APPLE__
-#include <stdlib.h>
-#else
-#include <malloc.h>
-#endif
-
-/*****************************************************************************/
-/**
-	\brief Aligned memory allocator
-*/
-void * operator new(size_t size);
-void * operator new[](size_t size);
-void operator delete(void * ptr);
-void operator delete[](void * ptr);
 	
 /*****************************************************************************/
 /**
