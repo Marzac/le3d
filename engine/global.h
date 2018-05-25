@@ -140,11 +140,6 @@
 	#define M_PI		3.14159265358979323846
 #endif
 
-#if defined (AMIGA)
-// These are missing
-	#define copysignf(x, y)	((float) copysign(x, y))
-#endif
-
 /*****************************************************************************/
 /** Endianness conversion macros */
 #define FROM_LEU16(x) (x = ((uint8_t *) &(x))[0] + (((uint8_t *) &(x))[1] << 8))
