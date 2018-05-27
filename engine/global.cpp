@@ -116,7 +116,7 @@ int LeGlobal::log2i32(int n)
 
 /*****************************************************************************/
 #ifdef _MSC_VER
-extern "c" int __builtin_ffs(int x) {
+extern "C" int __builtin_ffs(int x) {
 	unsigned long index;
 	_BitScanForward(&index, x);
 	return (int) index + 1;
@@ -124,14 +124,14 @@ extern "c" int __builtin_ffs(int x) {
 #endif
 
 #ifdef __WATCOMC__
-extern "c" int __builtin_ffs(int x) {
+extern "C" int __builtin_ffs(int x) {
 	return 0;
 }
 #endif
 
 /*****************************************************************************/
 #ifdef __APPLE__
-extern "c" void * _aligned_malloc(size_t size, size_t alignment) {
+extern "C" void * _aligned_malloc(size_t size, size_t alignment) {
 	void * buffer;
 	posix_memalign(&buffer, alignment, size);
 	return buffer;
@@ -139,7 +139,7 @@ extern "c" void * _aligned_malloc(size_t size, size_t alignment) {
 #endif
 
 #if defined(__WATCOMC__) || defined(AMIGA)
-extern "c" float copysignf(float x, float y)
+extern "C" float copysignf(float x, float y)
 {
 	uint32_t xi = *(uint32_t *)&x;
 	uint32_t yi = *(uint32_t *)&y;

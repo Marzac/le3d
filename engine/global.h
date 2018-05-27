@@ -114,15 +114,15 @@
 /** Compilers missing - intrinsics and maths functions */
 #ifdef _MSC_VER
 	#include <intrin.h>
-	extern "c" int __builtin_ffs(int x);
+	extern "C" int __builtin_ffs(int x);
 
 #elif defined (__WATCOMC__)
-	extern "c" int __builtin_ffs(int x);
+	extern "C" int __builtin_ffs(int x);
 	
 // Watcom C++ is so outdated that it does not
 // come with floating point version of math.h
 // functions
-	extern "c" float copysignf(float x, float y);
+	extern "C" float copysignf(float x, float y);
 	
 	#define sinf(n)		((float)std::sin(n))
 	#define asinf(n)	((float)std::asin(n))
@@ -139,7 +139,7 @@
 	#define M_PI		3.14159265358979323846
 
 #elif defined (AMIGA)
-	extern "c" float copysignf(float x, float y);
+	extern "C" float copysignf(float x, float y);
 #endif
 
 /*****************************************************************************/
