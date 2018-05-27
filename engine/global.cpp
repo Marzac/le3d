@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -135,5 +135,15 @@ void * _aligned_malloc(size_t size, size_t alignment) {
 	void * buffer;
 	posix_memalign(&buffer, alignment, size);
 	return buffer;
+}
+#endif
+
+#if defined(__WATCOMC__) || defined(AMIGA)
+float copysignf(float x, float y)
+{
+	uint32_t xi = *(uint32_t *)&x;
+	uint32_t yi = *(uint32_t *)&y;
+	uint32_t z = (xi & 0x7FFFFFFF) | (yi & 0x80000000);
+	return *(float *)&z;
 }
 #endif
