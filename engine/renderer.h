@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -64,10 +64,9 @@ public:
 
 	void render(const LeMesh * mesh);
 	void render(const LeBSet * bset);
+	void flush();
 
 	int getViewportCoordinates(const LeVertex & pos, LeVertex & viewCoords);
-
-	void flush();
 
 	void setViewPosition(const LeVertex & pos);
 	void setViewAngle(const LeVertex & angle);
@@ -76,10 +75,16 @@ public:
 	void setViewMatrix(const LeMatrix & view);
 
 	void setViewport(float left, float top, float right, float bottom);
+	void setViewClipping(float near, float far);
 	void setViewProjection(float fov);
 	void setViewOffset(float offset);
 
 	void setBackculling(bool enable);
+
+	void setFog(bool enable);
+	void setFogProperties(LeColor color, float near, float far);
+
+	void setMipmapping(bool enable);
 
 	void setTriangleList(LeTriList * trilist);
 	LeTriList * getTriangleList();
@@ -128,8 +133,11 @@ private:
 	float ztx;							/**< Horizontal projection factor */
 	float zty;							/**< Vertical projection factor */
 
-	bool enableBack;					/**< Backculling enable state */
 	float vOffset;						/**< Distance view offset */
+
+	bool backEnable;					/**< Backculling enable state */
+	bool mipmappingEnable;				/**< Mipmapping enable state */
+	bool fogEnable;						/**< Fog enable state */
 };
 
 #endif // LE_RENDERER_H
