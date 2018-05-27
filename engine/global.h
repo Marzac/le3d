@@ -77,7 +77,7 @@
 		#include <string.h>
 		#define _strdup	strdup
 		#if defined(__APPLE__)
-			void * _aligned_malloc(size_t size, size_t alignment);
+			extern "c" void * _aligned_malloc(size_t size, size_t alignment);
 		#else
 			#ifndef _aligned_malloc
 				#define _aligned_malloc(s, a) aligned_alloc(a, s)
@@ -114,15 +114,15 @@
 /** Compilers missing - intrinsics and maths functions */
 #ifdef _MSC_VER
 	#include <intrin.h>
-	int __builtin_ffs(int x);
+	extern "c" int __builtin_ffs(int x);
 
 #elif defined (__WATCOMC__)
-	int __builtin_ffs(int x);
+	extern "c" int __builtin_ffs(int x);
 	
 // Watcom C++ is so outdated that it does not
 // come with floating point version of math.h
 // functions
-	inline float copysignf(float x, float y);
+	extern "c" float copysignf(float x, float y);
 	
 	#define sinf(n)		((float)std::sin(n))
 	#define asinf(n)	((float)std::asin(n))
@@ -139,7 +139,7 @@
 	#define M_PI		3.14159265358979323846
 
 #elif defined (AMIGA)
-	inline float copysignf(float x, float y);
+	extern "c" float copysignf(float x, float y);
 #endif
 
 /*****************************************************************************/
