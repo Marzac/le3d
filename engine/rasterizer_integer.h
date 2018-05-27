@@ -62,9 +62,7 @@ public:
 	LeColor background;				/**< background color */ 
 	
 private:
-	void topTriangleZC(int vt, int vm1, int vm2);
-	void bottomTriangleZC(int vm1, int vm2, int vb);
-
+	inline void fillTriangleZC(int vi1, int vi2, int vi3, bool top);
 	inline void fillFlatTexZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
 	inline void fillFlatTexZCFog(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
 	inline void fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
