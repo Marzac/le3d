@@ -66,9 +66,9 @@ private:
 	void bottomTriangleZC(int vm1, int vm2, int vb);
 
 	inline void fillFlatTexZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
-	inline void fillFlatTexZCFog(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2);
+	inline void fillFlatTexZCFog(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
 	inline void fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
-	inline void fillFlatTexAlphaZCFog(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2);
+	inline void fillFlatTexAlphaZCFog(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
 
 	LeColor * pixels;				/**< frame pixel buffer */
 	LeColor * texDiffusePixels;		/**< diffuse texture pixel buffer */
