@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -39,21 +39,50 @@
 #include "color.h"
 
 /*****************************************************************************/
+	/**
+	\struct LeFog
+	\brief Represents a fog effect
+*/
+struct LeFog {
+	LeFog() :
+		color(),
+		near(-LE_RENDERER_NEAR_DEFAULT),
+		far(-100.0f)
+	{}
+
+	LeColor color;			/**< fog distance */
+	float near;				/**< fog start distance */
+	float far;				/**< fog end distance */
+};
+
+/*****************************************************************************/
+/**
+	\enum LE_TRIANGLE_FLAGS
+	\brief Rendering flags per triangle
+*/
+typedef enum {
+	LE_TRIANGLE_DEFAULT		= 0,
+	LE_TRIANGLE_TEXTURED	= 1,
+	LE_TRIANGLE_MIPMAPPED	= 2,
+	LE_TRIANGLE_FOGGED		= 4,
+	LE_TRIANGLE_BLENDED		= 8,
+}LE_TRIANGLE_FLAGS;
+
 /**
 	\class LeTriangle
 	\brief Represent a rasterizable triangle 
 */
-struct LeTriangle
-{
-	float xs[4];		/**< x coordinate of vertexes */
-	float ys[4];		/**< y coordinate of vertexes */
-	float zs[4];		/**< z coordinate of vertexes */
-	float us[4];		/**< u texture coordinate of vertexes */
-	float vs[4];		/**< v texture coordinate of vertexes */
-	float vd;			/**< average view distance */
-	LeColor color;		/**< solid color */
-	int tex;			/**< texture slot */
-};
+typedef struct {
+	float xs[4];			/**< x coordinate of vertexes */
+	float ys[4];			/**< y coordinate of vertexes */
+	float zs[4];			/**< z coordinate of vertexes */
+	float us[4];			/**< u texture coordinate of vertexes */
+	float vs[4];			/**< v texture coordinate of vertexes */
+	float vd;				/**< average view distance */
+	LeColor solidColor;		/**< solid color */
+	int diffuseTexture;		/**< diffuse texture slot */
+	int flags;				/**< extra flags */
+} LeTriangle;
 
 /*****************************************************************************/
 /**
@@ -69,6 +98,8 @@ public:
 
 	void allocate(int noTriangles);
 	void zSort();
+
+	LeFog fog;
 
 public:
 	int * srcIndices;

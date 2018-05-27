@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -37,6 +37,7 @@
 
 /*****************************************************************************/
 LeTriList::LeTriList() :
+	fog(),
 	srcIndices(NULL), dstIndices(NULL),
 	noAllocated(0), noUsed(0), noValid(0)
 {
