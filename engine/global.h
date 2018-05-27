@@ -77,7 +77,7 @@
 		#include <string.h>
 		#define _strdup	strdup
 		#if defined(__APPLE__)
-			extern "c" void * _aligned_malloc(size_t size, size_t alignment);
+			extern "C" void * _aligned_malloc(size_t size, size_t alignment);
 		#else
 			#ifndef _aligned_malloc
 				#define _aligned_malloc(s, a) aligned_alloc(a, s)
