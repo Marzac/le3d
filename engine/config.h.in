@@ -56,14 +56,13 @@
 	#define LE_BMP_MIPMAPS				${LE3D_BMP_MIPMAPS}					/** Maximum number of mipmaps per bitmap */
 
 /** Renderer configuration */
-	#define LE_RENDERER_FRONT			${LE3D_RENDERER_FRONT}				/** Front clipping plane */
-	#define LE_RENDERER_BACK			${LE3D_RENDERER_BACK}				/** Back clipping plane */
-	#define LE_RENDERER_FOV				${LE3D_RENDERER_FOV}				/** Default field of view */
+	#define LE_RENDERER_NEAR_DEFAULT	${LE3D_RENDERER_NEAR_DEFAULT}		/** Default near clipping distance */
+	#define LE_RENDERER_FAR_DEFAULT		${LE3D_RENDERER_FAR_DEFAULT}		/** Default far clipping distance */
+	#define LE_RENDERER_FOV_DEFAULT		${LE3D_RENDERER_FOV_DEFAULT}		/** Default field of view */
 	#define LE_RENDERER_3DFRUSTRUM		${LE3D_RENDERER_3DFRUSTRUM}			/** Use a 3D frustrum to clip triangles */
 	#define LE_RENDERER_2DFRAME			${LE3D_RENDERER_2DFRAME}			/** Use a 2D frame to clip triangles */
 
 	#define LE_RENDERER_INTRASTER		${LE3D_RENDERER_INTRASTER}			/** Enable fixed point or floating point rasterizing */
-	#define LE_RENDERER_MIPMAPS			${LE3D_RENDERER_MIPMAPS}			/** Enable mipmapping on textures */
 
 	#define LE_TRILIST_MAX				${LE3D_TRILIST_MAX}					/** Maximum number of triangles in display list */
 	#define LE_VERLIST_MAX				${LE3D_VERLIST_MAX}					/** Maximum number of vertexes in transformation buffer */
