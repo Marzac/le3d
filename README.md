@@ -1,6 +1,6 @@
 # le3d  
 **LightEngine 3D**  
-**Version 1.6 - 09/05/2018**
+**Version 1.7 - 28/05/2018**
 
 **Build status - Linux, MacOS, Amiga (GCC / CLang)**  
 [![Build Status](https://travis-ci.org/Marzac/le3d.svg?branch=master)](https://travis-ci.org/Marzac/le3d)  
@@ -18,12 +18,12 @@ Currently supported platforms:
 - MacOS X
 - AmigaOS 3.x (m68k)
 
-Source code / examples / documentation  
+**Source code / examples / documentation**  
 Copyright (c) 2015 - 2018 Frédéric Meslin  
 **Twitter:** @marzacdev  
 **Email:** fred@fredslab.net  
 
-CMake scripts / Amiga+MacOS support  
+**CMake scripts / Amiga + MacOS support**  
 Andreas Streichardt  
 **Twitter:** @m0ppers  
 **Email:** andreas@mop.koeln  
@@ -63,10 +63,11 @@ The renderer:
 
 The rasterizer:  
 - Draws textured triangles  
-- Handles mipmaping  
+- Handles mipmapping  
 - Handles alpha blending  
-- Performs perspective correction  
 - Applies solid color per triangle  
+- Applies quadratic fog per fragment  
+- Performs perspective correction  
 - Does not perform texture filtering  
 - Does not draw anti-aliased edges  
 - Align vertex coordinates to nearest pixel coordinates  
@@ -128,9 +129,6 @@ Supported 3D model formats:
 
 # Limitations  
 - No Z-buffer  
-- No multilayer texturing  
-- No shaders  
-- No fog
 - No antialiasing
 - Single core support
 
