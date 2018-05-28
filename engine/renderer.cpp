@@ -317,7 +317,7 @@ void LeRenderer::setViewport(float left, float top, float right, float bottom)
 }
 
 /**
-	\fn void setViewClipping(float near, float far)
+	\fn void LeRenderer::setViewClipping(float near, float far)
 	\brief Set the rendering near & far clipping distances
 	\param[in] near nearest distance where triangles are rendered
 	\param[in] far farest distance where triangles are rendered
@@ -377,7 +377,7 @@ void LeRenderer::setMipmapping(bool enable)
 
 /**
 	\fn void LeRenderer::setFog(bool enable)
-	\brief Enable or disable ambient fog
+	\brief Enable or disable quadratic ambient fog
 	\param[in] enable fog enable state
 */
 void LeRenderer::setFog(bool enable)
@@ -387,10 +387,10 @@ void LeRenderer::setFog(bool enable)
 
 /**
 	\fn void LeRenderer::setFogProperties(LeColor color, float near, float far)
-	\brief Configure ambient fog characteristics
+	\brief Configure quadratic ambient fog characteristics
 	\param[in] color fog color
 	\param[in] near fog start distance
-	\param[in] near fog end distance
+	\param[in] far fog end distance
 */
 void LeRenderer::setFogProperties(LeColor color, float near, float far)
 {

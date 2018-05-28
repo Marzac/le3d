@@ -59,6 +59,11 @@ LeTriList::~LeTriList()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeTriList::allocate(int noTriangles)
+	\brief Allocate memory to hold triangles
+	\param[in] noTriangles maximum number of triangles
+*/
 void LeTriList::allocate(int noTriangles)
 {
 	triangles = new LeTriangle[noTriangles];
@@ -67,6 +72,10 @@ void LeTriList::allocate(int noTriangles)
 	noAllocated = noTriangles;
 }
 
+/**
+	\fn void LeTriList::zSort()
+	\brief Sort triangles according to their view distance (descending order)
+*/
 void LeTriList::zSort()
 {
 	if (!noValid) return;

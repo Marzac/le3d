@@ -41,7 +41,7 @@
 /*****************************************************************************/
 	/**
 	\struct LeFog
-	\brief Represents a fog effect
+	\brief Represent a quadratic fog
 */
 struct LeFog {
 	LeFog() :
@@ -50,9 +50,9 @@ struct LeFog {
 		far(-100.0f)
 	{}
 
-	LeColor color;			/**< fog distance */
-	float near;				/**< fog start distance */
-	float far;				/**< fog end distance */
+	LeColor color;					/**< fog basic color */
+	float near;						/**< fog start distance */
+	float far;						/**< fog end distance */
 };
 
 /*****************************************************************************/
@@ -61,11 +61,11 @@ struct LeFog {
 	\brief Rendering flags per triangle
 */
 typedef enum {
-	LE_TRIANGLE_DEFAULT		= 0,
-	LE_TRIANGLE_TEXTURED	= 1,
-	LE_TRIANGLE_MIPMAPPED	= 2,
-	LE_TRIANGLE_FOGGED		= 4,
-	LE_TRIANGLE_BLENDED		= 8,
+	LE_TRIANGLE_DEFAULT		= 0,	/**< default triangle type */ 
+	LE_TRIANGLE_TEXTURED	= 1,	/**< apply single layer texturing */ 
+	LE_TRIANGLE_MIPMAPPED	= 2,	/**< apply mipmap filtering */ 
+	LE_TRIANGLE_FOGGED		= 4,	/**< apply per-fragment quadratic fog */
+	LE_TRIANGLE_BLENDED		= 8,	/**< apply alpha blending (for textures with alpha channel) */
 }LE_TRIANGLE_FLAGS;
 
 /**
@@ -73,15 +73,16 @@ typedef enum {
 	\brief Represent a rasterizable triangle 
 */
 typedef struct {
-	float xs[4];			/**< x coordinate of vertexes */
-	float ys[4];			/**< y coordinate of vertexes */
-	float zs[4];			/**< z coordinate of vertexes */
-	float us[4];			/**< u texture coordinate of vertexes */
-	float vs[4];			/**< v texture coordinate of vertexes */
-	float vd;				/**< average view distance */
-	LeColor solidColor;		/**< solid color */
-	int diffuseTexture;		/**< diffuse texture slot */
-	int flags;				/**< extra flags */
+	float xs[4];					/**< x coordinate of vertexes */
+	float ys[4];					/**< y coordinate of vertexes */
+	float zs[4];					/**< z coordinate of vertexes */
+	float us[4];					/**< u texture coordinate of vertexes */
+	float vs[4];					/**< v texture coordinate of vertexes */
+	float vd;						/**< average view distance */
+	
+	LeColor solidColor;				/**< solid color */
+	int diffuseTexture;				/**< diffuse texture slot */
+	int flags;						/**< extra flags */
 } LeTriangle;
 
 /*****************************************************************************/
@@ -99,16 +100,16 @@ public:
 	void allocate(int noTriangles);
 	void zSort();
 
-	LeFog fog;
+	LeFog fog;						/**< associated quadratic fog model */
 
 public:
-	int * srcIndices;
-	int * dstIndices;
-	LeTriangle * triangles;
+	int * srcIndices;				/**< array of triangle source indexes */
+	int * dstIndices;				/**< array of triangle destination indexes */
+	LeTriangle * triangles;			/**< array of triangles */
 
-	int noAllocated;
-	int noUsed;
-	int noValid;
+	int noAllocated;				/**< number of allocated triangles */
+	int noUsed;						/**< number of used triangles */
+	int noValid;					/**< number of valid triangles */
 
 private:
 	void zMergeSort(int indices[], int tmp[], int nb);
