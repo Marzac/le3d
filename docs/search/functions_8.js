@@ -9,6 +9,7 @@ var searchData=
   ['lebset',['LeBSet',['../class_le_b_set.html#a8fa5f9055b5b7d654d90493fb65d93f2',1,'LeBSet::LeBSet()'],['../class_le_b_set.html#a4384987f17db2c65660428a8f5e6382c',1,'LeBSet::LeBSet(int noBillboards)']]],
   ['lecolor',['LeColor',['../class_le_color.html#a19c1315e6ce49c8c2466778fe9a46a67',1,'LeColor::LeColor()'],['../class_le_color.html#ac8f87063fde34863f4ee97be69a89cce',1,'LeColor::LeColor(uint8_t const &amp;_r, uint8_t const &amp;_g, uint8_t const &amp;_b, uint8_t const &amp;_a)'],['../class_le_color.html#a1bb4cdb7f5d53de7d5c9e0fcf2e818d7',1,'LeColor::LeColor(int const &amp;color)']]],
   ['ledraw',['LeDraw',['../class_le_draw.html#af3b27a1b7cf6775ca94bb5c8207267e4',1,'LeDraw']]],
+  ['lefog',['LeFog',['../struct_le_fog.html#ab02cd483a9c678437322a3ee5d8c0004',1,'LeFog']]],
   ['legamepad',['LeGamePad',['../class_le_game_pad.html#a51376576aded1ffee96ff8d134953872',1,'LeGamePad']]],
   ['lelight',['LeLight',['../class_le_light.html#a1a40a1e1de551a9b664c3776e8998a30',1,'LeLight::LeLight()'],['../class_le_light.html#a8bec3d7162b8bd57078e5ebbcb9f69a1',1,'LeLight::LeLight(LE_LIGHT_TYPES type, LeColor color)']]],
   ['lematrix',['LeMatrix',['../struct_le_matrix.html#a52f28e805c7219826f6cb0d0ea667002',1,'LeMatrix']]],

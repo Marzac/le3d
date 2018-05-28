@@ -7,6 +7,7 @@ var searchData=
   ['defmaterial',['defMaterial',['../objfile_8cpp.html#ad496db78a8e8fdec5b9488b250f6b9d5',1,'objfile.cpp']]],
   ['detected',['detected',['../class_le_game_pad.html#a6a0f4dcad4d274af386bc19341db9775',1,'LeGamePad']]],
   ['diffuse',['diffuse',['../struct_le_obj_material.html#af348c47bdbb463ffb41d34fbd582433e',1,'LeObjMaterial']]],
+  ['diffusetexture',['diffuseTexture',['../struct_le_triangle.html#a9901813a0e015d3910a4be1b89387ea7',1,'LeTriangle']]],
   ['display',['display',['../struct_le_drawing_context.html#abd28ce2881f371e91d4d1a24adbbf99a',1,'LeDrawingContext']]],
   ['dllxinputenable',['DLLXInputEnable',['../gamepad__win_8cpp.html#aaf3c8ca91a5ef3df9330cd3d10c21c5c',1,'gamepad_win.cpp']]],
   ['dllxinputgetcapabilities',['DLLXInputGetCapabilities',['../gamepad__win_8cpp.html#af1052932961ee39541fddcf8009809dc',1,'gamepad_win.cpp']]],

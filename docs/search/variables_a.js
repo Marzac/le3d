@@ -1,6 +1,7 @@
 var searchData=
 [
   ['name',['name',['../struct_le_bmp_cache_1_1_slot.html#a5ce06c744ed699a311630154fe6a7059',1,'LeBmpCache::Slot::name()'],['../class_le_mesh.html#a7feec32285b3a462be3bf3f1d219ef1b',1,'LeMesh::name()'],['../struct_le_mesh_cache_1_1_slot.html#aaed08588912512c9eccc145cb9d750ec',1,'LeMeshCache::Slot::name()'],['../struct_le_obj_material.html#a9809929e7d2f1609b5a2e3e32621b26e',1,'LeObjMaterial::name()']]],
+  ['near',['near',['../struct_le_fog.html#a66065ed3c4cb584fa532181f0ac48b4c',1,'LeFog']]],
   ['noallocated',['noAllocated',['../class_le_tri_list.html#a87aaaac4f333b9aa081bbca212fad849',1,'LeTriList::noAllocated()'],['../class_le_ver_list.html#a22ee8658a4bc65718527d9b74fc1ac84',1,'LeVerList::noAllocated()']]],
   ['nobillboards',['noBillboards',['../class_le_b_set.html#afc66ec0196b1e7f60110cfb3c98cc5f3',1,'LeBSet']]],
   ['noextras',['noExtras',['../struct_le_bmp_cache_1_1_slot.html#a1f0ba4ae5d41795a5406004c8e8d015d',1,'LeBmpCache::Slot']]],

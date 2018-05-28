@@ -9,6 +9,7 @@ var searchData=
   ['lecolor',['LeColor',['../class_le_color.html',1,'']]],
   ['ledraw',['LeDraw',['../class_le_draw.html',1,'']]],
   ['ledrawingcontext',['LeDrawingContext',['../struct_le_drawing_context.html',1,'']]],
+  ['lefog',['LeFog',['../struct_le_fog.html',1,'']]],
   ['legamepad',['LeGamePad',['../class_le_game_pad.html',1,'']]],
   ['lelight',['LeLight',['../class_le_light.html',1,'']]],
   ['lematrix',['LeMatrix',['../struct_le_matrix.html',1,'']]],
