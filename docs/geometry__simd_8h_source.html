@@ -83,7 +83,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_996f45160da62e1a3d7f6046fad68f51.html">engine</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_8e8bd1e36b3c89c9e00a355371a6444d.html">engine</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -321,20 +321,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;};</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="keyword">struct </span><a class="code" href="geometry__simd_8h.html#a8e8bafc85405bbf1d6c3d2806c2c3bd8">__attribute__</a> ((aligned (16))) <a class="code" href="struct_le_plan.html">LePlan</a></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="keyword">struct </span><a class="code" href="geometry__simd_8h.html#a8e8bafc85405bbf1d6c3d2806c2c3bd8">__attribute__</a> ((aligned (16))) <a class="code" href="struct_le_plane.html">LePlane</a></div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;{</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <a class="code" href="struct_le_axis.html">LeAxis</a> xAxis;</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <a class="code" href="struct_le_axis.html">LeAxis</a> yAxis;</div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <a class="code" href="struct_le_axis.html">LeAxis</a> zAxis;</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <a class="code" href="struct_le_plan.html">LePlan</a>()</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <a class="code" href="struct_le_plane.html">LePlane</a>()</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    {</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        xAxis.axis = <a class="code" href="struct_le_vertex.html">LeVertex</a>(1.0f, 0.0f, 0.0f);</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        yAxis.<a class="code" href="struct_le_axis.html#a8a564410ccb4c7522ce9de0b0bf8cb3c">axis</a> = <a class="code" href="struct_le_vertex.html">LeVertex</a>(0.0f, 1.0f, 0.0f);</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        zAxis.<a class="code" href="struct_le_axis.html#a8a564410ccb4c7522ce9de0b0bf8cb3c">axis</a> = <a class="code" href="struct_le_vertex.html">LeVertex</a>(0.0f, 0.0f, 1.0f);</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    }</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <a class="code" href="struct_le_plan.html">LePlan</a>(<span class="keyword">const</span> <a class="code" href="struct_le_vertex.html">LeVertex</a> &amp; v1, <span class="keyword">const</span> <a class="code" href="struct_le_vertex.html">LeVertex</a> &amp; v2, <span class="keyword">const</span> <a class="code" href="struct_le_vertex.html">LeVertex</a> &amp; v3) :</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <a class="code" href="struct_le_plane.html">LePlane</a>(<span class="keyword">const</span> <a class="code" href="struct_le_vertex.html">LeVertex</a> &amp; v1, <span class="keyword">const</span> <a class="code" href="struct_le_vertex.html">LeVertex</a> &amp; v2, <span class="keyword">const</span> <a class="code" href="struct_le_vertex.html">LeVertex</a> &amp; v3) :</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        xAxis(<a class="code" href="struct_le_axis.html">LeAxis</a>(v1, v2)), yAxis(<a class="code" href="struct_le_axis.html">LeAxis</a>(v1, v3))</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    {</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        zAxis = <a class="code" href="struct_le_axis.html">LeAxis</a>(v1, v1 + xAxis.axis.<a class="code" href="struct_le_vertex.html#a6381b0b867a4ba95f5857099ab38a3cc">cross</a>(yAxis.<a class="code" href="struct_le_axis.html#a8a564410ccb4c7522ce9de0b0bf8cb3c">axis</a>));</div>
@@ -600,7 +600,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="namespace_le_primitives_html_a03509b59e7f26badc5eb599242427ab4"><div class="ttname"><a href="namespace_le_primitives.html#a03509b59e7f26badc5eb599242427ab4">LePrimitives::front</a></div><div class="ttdeci">const LeVertex front</div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:673</div></div>
 <div class="ttc" id="struct_le_vertex_html_a6381b0b867a4ba95f5857099ab38a3cc"><div class="ttname"><a href="struct_le_vertex.html#a6381b0b867a4ba95f5857099ab38a3cc">LeVertex::cross</a></div><div class="ttdeci">LeVertex cross(LeVertex v) const </div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:199</div></div>
 <div class="ttc" id="struct_le_vertex_html_a65a0d487b77a502142a3d72d7d90d934"><div class="ttname"><a href="struct_le_vertex.html#a65a0d487b77a502142a3d72d7d90d934">LeVertex::y</a></div><div class="ttdeci">float y</div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:48</div></div>
-<div class="ttc" id="struct_le_plan_html"><div class="ttname"><a href="struct_le_plan.html">LePlan</a></div><div class="ttdoc">Represent a plan in 3D space. </div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:303</div></div>
 <div class="ttc" id="struct_le_vertex_html_ac35713e27a5304e697c9887c6a4ad96f"><div class="ttname"><a href="struct_le_vertex.html#ac35713e27a5304e697c9887c6a4ad96f">LeVertex::normalize</a></div><div class="ttdeci">LeVertex normalize()</div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:238</div></div>
 <div class="ttc" id="struct_le_vertex_html"><div class="ttname"><a href="struct_le_vertex.html">LeVertex</a></div><div class="ttdoc">Represent a vertex in 3D space. </div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:46</div></div>
 <div class="ttc" id="struct_le_matrix_html"><div class="ttname"><a href="struct_le_matrix.html">LeMatrix</a></div><div class="ttdoc">Represent a 4x4 matrix to handle 3D transforms. </div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:347</div></div>
@@ -612,6 +611,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="namespace_le_primitives_html_a2135684d8bd81155c12782d4d18dd081"><div class="ttname"><a href="namespace_le_primitives.html#a2135684d8bd81155c12782d4d18dd081">LePrimitives::zero</a></div><div class="ttdeci">const LeVertex zero</div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:677</div></div>
 <div class="ttc" id="simd_8h_html"><div class="ttname"><a href="simd_8h.html">simd.h</a></div><div class="ttdoc">LightEngine 3D: SIMD constants / types and intrinsic definitions. </div></div>
 <div class="ttc" id="namespace_le_primitives_html_aebb4cd2087fb837fb8d00316376f5615"><div class="ttname"><a href="namespace_le_primitives.html#aebb4cd2087fb837fb8d00316376f5615">LePrimitives::right</a></div><div class="ttdeci">const LeVertex right</div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:676</div></div>
+<div class="ttc" id="struct_le_plane_html"><div class="ttname"><a href="struct_le_plane.html">LePlane</a></div><div class="ttdoc">Represent a plane in 3D space. </div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:303</div></div>
 <div class="ttc" id="struct_le_matrix_html_ad22fefba6e889c6d9932bad2277ba93b"><div class="ttname"><a href="struct_le_matrix.html#ad22fefba6e889c6d9932bad2277ba93b">LeMatrix::zero</a></div><div class="ttdeci">void zero()</div><div class="ttdef"><b>Definition:</b> geometry_scalar.h:379</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

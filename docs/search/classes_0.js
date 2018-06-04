@@ -17,7 +17,7 @@ var searchData=
   ['lemeshcache',['LeMeshCache',['../class_le_mesh_cache.html',1,'']]],
   ['leobjfile',['LeObjFile',['../class_le_obj_file.html',1,'']]],
   ['leobjmaterial',['LeObjMaterial',['../struct_le_obj_material.html',1,'']]],
-  ['leplan',['LePlan',['../struct_le_plan.html',1,'']]],
+  ['leplane',['LePlane',['../struct_le_plane.html',1,'']]],
   ['lerasterizer',['LeRasterizer',['../class_le_rasterizer.html',1,'']]],
   ['lerenderer',['LeRenderer',['../class_le_renderer.html',1,'']]],
   ['lesystem',['LeSystem',['../class_le_system.html',1,'']]],

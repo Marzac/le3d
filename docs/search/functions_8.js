@@ -17,7 +17,7 @@ var searchData=
   ['lemeshcache',['LeMeshCache',['../class_le_mesh_cache.html#ae6ca213847aa9f23c5e3eb06348442f5',1,'LeMeshCache']]],
   ['leobjfile',['LeObjFile',['../class_le_obj_file.html#a3f503c01e34a211c4d6738ce00663112',1,'LeObjFile']]],
   ['leobjmaterial',['LeObjMaterial',['../struct_le_obj_material.html#af5d3e049e76aa1ef8e08bf6859aeccd3',1,'LeObjMaterial']]],
-  ['leplan',['LePlan',['../struct_le_plan.html#a2cb4f9e1b1c40ebdd2d8ba0e818d5419',1,'LePlan::LePlan()'],['../struct_le_plan.html#aa34a30cc2be5acdfedecb7e828242924',1,'LePlan::LePlan(LeVertex v1, LeVertex v2, LeVertex v3)']]],
+  ['leplane',['LePlane',['../struct_le_plane.html#a6c95a9876cf86068853f2604cba026bb',1,'LePlane::LePlane()'],['../struct_le_plane.html#a8ceaa4e61acfc2342a37d68c58315d0e',1,'LePlane::LePlane(LeVertex v1, LeVertex v2, LeVertex v3)']]],
   ['lerasterizer',['LeRasterizer',['../class_le_rasterizer.html#a37ecfdab5eef457ae769ff345b042bb1',1,'LeRasterizer::LeRasterizer(int width=LE_RESOX_DEFAULT, int height=LE_RESOY_DEFAULT)'],['../class_le_rasterizer.html#a37ecfdab5eef457ae769ff345b042bb1',1,'LeRasterizer::LeRasterizer(int width=LE_RESOX_DEFAULT, int height=LE_RESOY_DEFAULT)']]],
   ['lerenderer',['LeRenderer',['../class_le_renderer.html#aa7e130c86b55b1e857f9bf6aeb33a55d',1,'LeRenderer']]],
   ['lesystem',['LeSystem',['../class_le_system.html#a3600be40e39fa5e0131bed4524e19788',1,'LeSystem']]],

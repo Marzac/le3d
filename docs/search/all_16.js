@@ -1,7 +1,7 @@
 var searchData=
 [
   ['x',['x',['../struct_le_vertex.html#ad36a63add87210b7964f794078bbeedb',1,'LeVertex']]],
-  ['xaxis',['xAxis',['../struct_le_plan.html#aea775374b290f2b12e0a12ab3d67ec7e',1,'LePlan']]],
+  ['xaxis',['xAxis',['../struct_le_plane.html#a1fead271937ba5d86bc6bb332d5462a9',1,'LePlane']]],
   ['xinputenablefb',['XInputEnableFB',['../gamepad__win_8cpp.html#aba1fac2b914e72766f5fd66f2f6d01db',1,'gamepad_win.cpp']]],
   ['xinputgetcapabilitiesfb',['XInputGetCapabilitiesFB',['../gamepad__win_8cpp.html#ab563bf5a86658475d3b61a0af8d76e4e',1,'gamepad_win.cpp']]],
   ['xinputgetstatefb',['XInputGetStateFB',['../gamepad__win_8cpp.html#a8a84c62c016961a82cdbc343179f58cf',1,'gamepad_win.cpp']]],
