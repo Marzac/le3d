@@ -1,6 +1,6 @@
 # le3d  
 **LightEngine 3D**  
-**Version 1.7 - 28/05/2018**
+**Version 1.7 - 04/06/2018**
 
 **Build status - Linux, MacOS, Amiga (GCC / CLang)**  
 [![Build Status](https://travis-ci.org/Marzac/le3d.svg?branch=master)](https://travis-ci.org/Marzac/le3d)  
