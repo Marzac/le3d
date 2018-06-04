@@ -145,7 +145,7 @@ void LeWindow::update()
 
 /*****************************************************************************/
 /**
-	\fn LeHandle LeWindow::getWindowHandle()
+	\fn LeHandle LeWindow::getHandle()
 	\brief Retrieve the native OS window handle
 	\return handle to an OS window handle
 */
@@ -155,7 +155,7 @@ LeHandle LeWindow::getHandle()
 }
 
 /**
-	\fn LeDrawingContext LeWindow::getWindowContext()
+	\fn LeDrawingContext LeWindow::getContext()
 	\brief Retrieve the native OS window graphic context
 	\return handle to an OS window handle
 */
