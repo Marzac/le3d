@@ -99,7 +99,7 @@ private:
 
 	void transform(const LeMatrix &matrix, const LeVertex srcVertexes[], LeVertex dstVertexes[], int nb);
 	int project(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb);
-	int clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlan &plan);
+	int clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlane &plane);
 	int clip2D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LeAxis &axis);
 	int backculling(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb);
 
@@ -117,13 +117,13 @@ private:
 	LeVertex viewAngle;					/**< View angle of renderer (in degrees) */
 	LeMatrix viewMatrix;				/**< View matrix of renderer */
 
-	LePlan viewFrontPlan;				/**< Front clipping plane */
-	LePlan viewBackPlan;				/**< Back clipping plane */
+	LePlane viewFrontPlan;				/**< Front clipping plane */
+	LePlane viewBackPlan;				/**< Back clipping plane */
 
-	LePlan viewLeftPlan;				/**< 3D frustrum left clipping plane */
-	LePlan viewRightPlan;				/**< 3D frustrum right clipping plane */
-	LePlan viewTopPlan;					/**< 3D frustrum top clipping plane */
-	LePlan viewBotPlan;					/**< 3D frustrum bot clipping plane */
+	LePlane viewLeftPlan;				/**< 3D frustrum left clipping plane */
+	LePlane viewRightPlan;				/**< 3D frustrum right clipping plane */
+	LePlane viewTopPlan;					/**< 3D frustrum top clipping plane */
+	LePlane viewBotPlan;					/**< 3D frustrum bot clipping plane */
 
 	LeAxis viewLeftAxis;				/**< 2D left clipping axis */
 	LeAxis viewRightAxis;				/**< 2D right clipping axis */

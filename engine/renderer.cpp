@@ -51,11 +51,11 @@ LeRenderer::LeRenderer(int width, int height) :
 	usedTrilist(&intTrilist),
 	extra(0), extraMax(0),
 	colors(NULL),
+	ztx(1.0f), zty(1.0f),
 	vOffset(0.0f),
 	backEnable(true),
-	fogEnable(false),
-	mipmappingEnable(true)
-
+	mipmappingEnable(true),
+	fogEnable(false)
 {
 // Configure viewport
 	setViewport(0.0f, 0.0f, (float) width, (float) height);
@@ -414,14 +414,14 @@ void LeRenderer::updateFrustrum()
 	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
 	float hf = height * 0.5f / -zty;
 	float hb = height * 0.5f / (zty * dr);
-	viewTopPlan = LePlan(LeVertex(0.0f, hb, far), LeVertex(1.0f, hb, far), LeVertex(0.0f, hf, near));
-	viewBotPlan = LePlan(LeVertex(0.0f, -hb, far), LeVertex(-1.0f, -hb, far), LeVertex(0.0f, -hf, near));
+	viewTopPlan = LePlane(LeVertex(0.0f, hb, far), LeVertex(1.0f, hb, far), LeVertex(0.0f, hf, near));
+	viewBotPlan = LePlane(LeVertex(0.0f, -hb, far), LeVertex(-1.0f, -hb, far), LeVertex(0.0f, -hf, near));
 
 	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
 	float wf = width * 0.5f / -ztx;
 	float wb = width * 0.5f / (ztx * dr);
-	viewLeftPlan = LePlan(LeVertex(-wf, 0.0f, near), LeVertex(-wb, 0.0f, far), LeVertex(-wf,  1.0f, near));
-	viewRightPlan = LePlan(LeVertex(wf, 0.0f, near), LeVertex(wb, 0.0f, far), LeVertex(wf, -1.0f, near));
+	viewLeftPlan = LePlane(LeVertex(-wf, 0.0f, near), LeVertex(-wb, 0.0f, far), LeVertex(-wf,  1.0f, near));
+	viewRightPlan = LePlane(LeVertex(wf, 0.0f, near), LeVertex(wb, 0.0f, far), LeVertex(wf, -1.0f, near));
 }
 
 /*****************************************************************************/
@@ -650,18 +650,18 @@ int LeRenderer::project(LeTriangle tris[], const int srcIndices[], int dstIndice
 }
 
 /*****************************************************************************/
-int LeRenderer::clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlan &plan)
+int LeRenderer::clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlane &plane)
 {
 	int k = 0;
 	for (int i = 0; i < nb; i++) {
 		int s = 0;
 		int j = srcIndices[i];
 
-	// Project against clipping plan
+	// Project against clipping plane
 		LeTriangle * tri = &tris[j];
-		float pj1 = (tri->xs[0] - plan.zAxis.origin.x) * plan.zAxis.axis.x + (tri->ys[0] - plan.zAxis.origin.y) * plan.zAxis.axis.y + (tri->zs[0] - plan.zAxis.origin.z) * plan.zAxis.axis.z;
-		float pj2 = (tri->xs[1] - plan.zAxis.origin.x) * plan.zAxis.axis.x + (tri->ys[1] - plan.zAxis.origin.y) * plan.zAxis.axis.y + (tri->zs[1] - plan.zAxis.origin.z) * plan.zAxis.axis.z;
-		float pj3 = (tri->xs[2] - plan.zAxis.origin.x) * plan.zAxis.axis.x + (tri->ys[2] - plan.zAxis.origin.y) * plan.zAxis.axis.y + (tri->zs[2] - plan.zAxis.origin.z) * plan.zAxis.axis.z;
+		float pj1 = (tri->xs[0] - plane.zAxis.origin.x) * plane.zAxis.axis.x + (tri->ys[0] - plane.zAxis.origin.y) * plane.zAxis.axis.y + (tri->zs[0] - plane.zAxis.origin.z) * plane.zAxis.axis.z;
+		float pj2 = (tri->xs[1] - plane.zAxis.origin.x) * plane.zAxis.axis.x + (tri->ys[1] - plane.zAxis.origin.y) * plane.zAxis.axis.y + (tri->zs[1] - plane.zAxis.origin.z) * plane.zAxis.axis.z;
+		float pj3 = (tri->xs[2] - plane.zAxis.origin.x) * plane.zAxis.axis.x + (tri->ys[2] - plane.zAxis.origin.y) * plane.zAxis.axis.y + (tri->zs[2] - plane.zAxis.origin.z) * plane.zAxis.axis.z;
 
 	// Compute triangle intersections
 		float nx[4], ny[4], nz[4];
