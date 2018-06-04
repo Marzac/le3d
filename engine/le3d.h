@@ -68,7 +68,7 @@
 /**
 * \mainpage le3d - LightEngine 3D
 * \section intro_sec C++ 3D software engine
-* **Version 1.7 - 28/05/2018**
+* **Version 1.7 - 04/06/2018**
 *
 * Currently supported platforms:
 * - Microsoft Windows XP, 7, 8 and 10
