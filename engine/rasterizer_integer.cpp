@@ -193,7 +193,7 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 	#endif	// LE_USE_SIMD && LE_USE_SSE2
 	
 	#if LE_USE_AMMX == 1
-		prepare_fill_texel(&color);
+		prepare_fill_texel(&curTriangle->solidColor);
 	#endif	// LE_USE_AMMX
 
 	// Convert texture coordinates
