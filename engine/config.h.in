@@ -75,6 +75,7 @@
 #else
 	#define LE_USE_SSE2					0									/** Use Intel SSE2 instructions */
 	#define LE_USE_AMMX					${LE3D_USE_AMMX}					/** Use Apollo AMMX instructions */
+	#define LE_USE_SAGA_FB				${LE3D_USE_SAGA_FB}
 #endif // AMIGA
 
 #endif // LE_CONFIG_H

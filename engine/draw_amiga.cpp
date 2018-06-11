@@ -45,7 +45,7 @@
 #include <proto/intuition.h>
 #include <proto/exec.h>
 
-struct Library *CyberGfxBase = NULL;
+#define SAGA_VIDEO_PLANEPTR 0xDFF1EC
 
 /*****************************************************************************/
 LeDraw::LeDraw(LeDrawingContext context, int width, int height) :
@@ -53,19 +53,11 @@ LeDraw::LeDraw(LeDrawingContext context, int width, int height) :
 	frontContext(context),
 	bitmap(0)
 {
-	CyberGfxBase = OpenLibrary("cybergraphics.library", 41);
-	if (!CyberGfxBase) {
-		printf("ERROR: can`t open cybergraphics.library V41.\n");	
-	}
-
 	// TODO check that the display supports our depth/resolution requirements
 }
 
 LeDraw::~LeDraw()
 {
-	if (CyberGfxBase) {
-		CloseLibrary(CyberGfxBase);
-	}
 }
 
 /*****************************************************************************/
@@ -86,8 +78,12 @@ void LeDraw::setContext(LeDrawingContext context)
 */
 void LeDraw::setPixels(const void * data)
 {
+#if LE_USE_SAGA_FB == 1
+	*(volatile ULONG *) SAGA_VIDEO_PLANEPTR = (ULONG) data;
+#else
 	Window* window = (Window*) frontContext.window;
 	WritePixelArray((APTR) data, 0, 0, 4 * width, window->RPort, window->BorderLeft, window->BorderTop, width, height, RECTFMT_ARGB);
+#endif
 }
 
 #endif

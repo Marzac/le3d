@@ -30,6 +30,7 @@ bool2int(LE3D_RENDERER_INTRASTER)
 bool2int(LE3D_USE_SIMD)
 bool2int(LE3D_USE_SSE2)
 bool2int(LE3D_USE_AMMX)
+bool2int(LE3D_USE_SAGA_FB)
 
 configure_file(engine/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
