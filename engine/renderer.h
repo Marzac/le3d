@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -64,10 +64,9 @@ public:
 
 	void render(const LeMesh * mesh);
 	void render(const LeBSet * bset);
+	void flush();
 
 	int getViewportCoordinates(const LeVertex & pos, LeVertex & viewCoords);
-
-	void flush();
 
 	void setViewPosition(const LeVertex & pos);
 	void setViewAngle(const LeVertex & angle);
@@ -76,10 +75,16 @@ public:
 	void setViewMatrix(const LeMatrix & view);
 
 	void setViewport(float left, float top, float right, float bottom);
+	void setViewClipping(float near, float far);
 	void setViewProjection(float fov);
 	void setViewOffset(float offset);
 
 	void setBackculling(bool enable);
+
+	void setFog(bool enable);
+	void setFogProperties(LeColor color, float near, float far);
+
+	void setMipmapping(bool enable);
 
 	void setTriangleList(LeTriList * trilist);
 	LeTriList * getTriangleList();
@@ -94,7 +99,7 @@ private:
 
 	void transform(const LeMatrix &matrix, const LeVertex srcVertexes[], LeVertex dstVertexes[], int nb);
 	int project(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb);
-	int clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlan &plan);
+	int clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlane &plane);
 	int clip2D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LeAxis &axis);
 	int backculling(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb);
 
@@ -112,13 +117,13 @@ private:
 	LeVertex viewAngle;					/**< View angle of renderer (in degrees) */
 	LeMatrix viewMatrix;				/**< View matrix of renderer */
 
-	LePlan viewFrontPlan;				/**< Front clipping plane */
-	LePlan viewBackPlan;				/**< Back clipping plane */
+	LePlane viewFrontPlan;				/**< Front clipping plane */
+	LePlane viewBackPlan;				/**< Back clipping plane */
 
-	LePlan viewLeftPlan;				/**< 3D frustrum left clipping plane */
-	LePlan viewRightPlan;				/**< 3D frustrum right clipping plane */
-	LePlan viewTopPlan;					/**< 3D frustrum top clipping plane */
-	LePlan viewBotPlan;					/**< 3D frustrum bot clipping plane */
+	LePlane viewLeftPlan;				/**< 3D frustrum left clipping plane */
+	LePlane viewRightPlan;				/**< 3D frustrum right clipping plane */
+	LePlane viewTopPlan;					/**< 3D frustrum top clipping plane */
+	LePlane viewBotPlan;					/**< 3D frustrum bot clipping plane */
 
 	LeAxis viewLeftAxis;				/**< 2D left clipping axis */
 	LeAxis viewRightAxis;				/**< 2D right clipping axis */
@@ -128,8 +133,11 @@ private:
 	float ztx;							/**< Horizontal projection factor */
 	float zty;							/**< Vertical projection factor */
 
-	bool enableBack;					/**< Backculling enable state */
 	float vOffset;						/**< Distance view offset */
+
+	bool backEnable;					/**< Backculling enable state */
+	bool mipmappingEnable;				/**< Mipmapping enable state */
+	bool fogEnable;						/**< Fog enable state */
 };
 
 #endif // LE_RENDERER_H

@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -53,10 +53,10 @@ public:
 	void allocate(int noVertexes);
 
 public:
-	LeVertex * vertexes;
+	LeVertex * vertexes;				/**< array of vertexes */
 
-	int noAllocated;
-	int noUsed;
+	int noAllocated;					/**< number of allocated vertexes */
+	int noUsed;							/**< number of used vertexes */
 };
 
 #endif // LE_VERLIST_H

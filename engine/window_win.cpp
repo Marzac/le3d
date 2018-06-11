@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -145,7 +145,7 @@ void LeWindow::update()
 
 /*****************************************************************************/
 /**
-	\fn LeHandle LeWindow::getWindowHandle()
+	\fn LeHandle LeWindow::getHandle()
 	\brief Retrieve the native OS window handle
 	\return handle to an OS window handle
 */
@@ -155,7 +155,7 @@ LeHandle LeWindow::getHandle()
 }
 
 /**
-	\fn LeDrawingContext LeWindow::getWindowContext()
+	\fn LeDrawingContext LeWindow::getContext()
 	\brief Retrieve the native OS window graphic context
 	\return handle to an OS window handle
 */

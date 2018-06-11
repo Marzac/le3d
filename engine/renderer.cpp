@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frédéric Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -34,6 +34,7 @@
 
 #include "global.h"
 #include "config.h"
+#include "bmpcache.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -50,15 +51,20 @@ LeRenderer::LeRenderer(int width, int height) :
 	usedTrilist(&intTrilist),
 	extra(0), extraMax(0),
 	colors(NULL),
-	enableBack(true), vOffset(0.0f)
+	ztx(1.0f), zty(1.0f),
+	vOffset(0.0f),
+	backEnable(true),
+	mipmappingEnable(true),
+	fogEnable(false)
 {
 // Configure viewport
 	setViewport(0.0f, 0.0f, (float) width, (float) height);
+	setViewClipping(LE_RENDERER_NEAR_DEFAULT, LE_RENDERER_FAR_DEFAULT);
 
 // Configure default camera
 	setViewPosition(LeVertex(0.0f, 0.0f, 0.0f));
 	setViewAngle(LeVertex(0.0f, 0.0f, 0.0f));
-	setViewProjection(LE_RENDERER_FOV);
+	setViewProjection(LE_RENDERER_FOV_DEFAULT);
 
 // Flush the lists
 	flush();
@@ -311,15 +317,30 @@ void LeRenderer::setViewport(float left, float top, float right, float bottom)
 }
 
 /**
+	\fn void LeRenderer::setViewClipping(float near, float far)
+	\brief Set the rendering near & far clipping distances
+	\param[in] near nearest distance where triangles are rendered
+	\param[in] far farest distance where triangles are rendered
+*/
+void LeRenderer::setViewClipping(float near, float far)
+{
+	viewFrontPlan.zAxis.origin.z = -near;
+	viewBackPlan.zAxis.origin.z = -far;
+	viewFrontPlan.zAxis.axis.z = -1.0f;
+	viewBackPlan.zAxis.axis.z = 1.0f;
+}
+
+/**
 	\fn void LeRenderer::setViewProjection(float fov)
 	\brief Set the rendering field of view angle (in degrees)
 */
 void LeRenderer::setViewProjection(float fov)
 {
 	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
-	float ratio = tanf(fov * d2r);
-	ztx = -width / ratio;
-	zty = -width / ratio;
+	float near = viewFrontPlan.zAxis.origin.z;
+	float ratio = tanf(fov * d2r) * near;
+	ztx = width / ratio;
+	zty = width / ratio;
 	updateFrustrum();
 }
 
@@ -341,7 +362,42 @@ void LeRenderer::setViewOffset(float offset)
 */
 void LeRenderer::setBackculling(bool enable)
 {
-	enableBack = enable;
+	backEnable = enable;
+}
+
+/**
+	\fn void LeRenderer::setMipmapping(bool enable)
+	\brief Enable or disable texture mipmapping
+	\param[in] enable mipmapping enable state
+*/
+void LeRenderer::setMipmapping(bool enable)
+{
+	mipmappingEnable = enable;
+}
+
+/**
+	\fn void LeRenderer::setFog(bool enable)
+	\brief Enable or disable quadratic ambient fog
+	\param[in] enable fog enable state
+*/
+void LeRenderer::setFog(bool enable)
+{
+	fogEnable = enable;
+}
+
+/**
+	\fn void LeRenderer::setFogProperties(LeColor color, float near, float far)
+	\brief Configure quadratic ambient fog characteristics
+	\param[in] color fog color
+	\param[in] near fog start distance
+	\param[in] far fog end distance
+*/
+void LeRenderer::setFogProperties(LeColor color, float near, float far)
+{
+	if (!usedTrilist) return;
+	usedTrilist->fog.color = color;
+	usedTrilist->fog.near = -near;
+	usedTrilist->fog.far = -far;
 }
 
 /*****************************************************************************/
@@ -351,22 +407,21 @@ void LeRenderer::setBackculling(bool enable)
 */
 void LeRenderer::updateFrustrum()
 {
-	viewFrontPlan.zAxis.origin.z = LE_RENDERER_FRONT;
-	viewBackPlan.zAxis.origin.z	 = LE_RENDERER_BACK;
-	viewFrontPlan.zAxis.axis.z = -1.0f;
-	viewBackPlan.zAxis.axis.z = 1.0f;
+	float near = viewFrontPlan.zAxis.origin.z;
+	float far = viewBackPlan.zAxis.origin.z;
+	float dr = -near / far;
 
 	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
-	float hf = height * 0.5f * LE_RENDERER_FRONT / zty;
-	float hb = height * 0.5f * LE_RENDERER_BACK / zty;
-	viewTopPlan = LePlan(LeVertex(0.0f,	 hf, LE_RENDERER_FRONT), LeVertex(1.0f,	 hb, LE_RENDERER_BACK), LeVertex(1.0f, hf, LE_RENDERER_FRONT));
-	viewBotPlan = LePlan(LeVertex(0.0f, -hf, LE_RENDERER_FRONT), LeVertex(1.0f, -hb, LE_RENDERER_BACK), LeVertex(-1.0f, -hf, LE_RENDERER_FRONT));
+	float hf = height * 0.5f / -zty;
+	float hb = height * 0.5f / (zty * dr);
+	viewTopPlan = LePlane(LeVertex(0.0f, hb, far), LeVertex(1.0f, hb, far), LeVertex(0.0f, hf, near));
+	viewBotPlan = LePlane(LeVertex(0.0f, -hb, far), LeVertex(-1.0f, -hb, far), LeVertex(0.0f, -hf, near));
 
 	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
-	float wf = width * 0.5f * LE_RENDERER_FRONT / ztx;
-	float wb = width * 0.5f * LE_RENDERER_BACK / ztx;
-	viewLeftPlan  = LePlan(LeVertex(-wf, 0.0f, LE_RENDERER_FRONT), LeVertex(-wb, 0.0f, LE_RENDERER_BACK), LeVertex(-wf,	 1.0f, LE_RENDERER_FRONT));
-	viewRightPlan = LePlan(LeVertex( wf, 0.0f, LE_RENDERER_FRONT), LeVertex( wb, 0.0f, LE_RENDERER_BACK), LeVertex( wf, -1.0f, LE_RENDERER_FRONT));
+	float wf = width * 0.5f / -ztx;
+	float wb = width * 0.5f / (ztx * dr);
+	viewLeftPlan = LePlane(LeVertex(-wf, 0.0f, near), LeVertex(-wb, 0.0f, far), LeVertex(-wf,  1.0f, near));
+	viewRightPlan = LePlane(LeVertex(wf, 0.0f, near), LeVertex(wb, 0.0f, far), LeVertex(wf, -1.0f, near));
 }
 
 /*****************************************************************************/
@@ -389,11 +444,15 @@ void LeRenderer::transform(const LeMatrix & matrix, const LeVertex srcVertexes[]
 int LeRenderer::build(const LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[], int indices[])
 {
 	int k = 0;
-	float frontZ = viewFrontPlan.zAxis.origin.z;
-	float backZ = viewBackPlan.zAxis.origin.z;
+	float near = viewFrontPlan.zAxis.origin.z;
+	float far = viewBackPlan.zAxis.origin.z;
 
 	if (mesh->shades) colors = mesh->shades;
 	else colors = mesh->colors;
+
+	int flags = LE_TRIANGLE_TEXTURED;
+	if (mipmappingEnable) flags |= LE_TRIANGLE_MIPMAPPED;
+	if (fogEnable) flags |= LE_TRIANGLE_FOGGED;
 
 	for (int i = 0; i < mesh->noTriangles; i++) {
 		LeVertex * v1 = &vertexes[mesh->vertexesList[i*3]];
@@ -401,8 +460,14 @@ int LeRenderer::build(const LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[
 		LeVertex * v3 = &vertexes[mesh->vertexesList[i*3+2]];
 
 	// Hard clip
-		if (v1->z > frontZ && v2->z > frontZ && v3->z > frontZ) continue;
-		if (v1->z < backZ && v2->z < backZ && v3->z < backZ) continue;
+		if (v1->z > near && v2->z > near && v3->z > near) continue;
+		if (v1->z < far && v2->z < far && v3->z < far) continue;
+
+	// Fetch triangle properties
+		int texSlot = mesh->texSlotList[i];
+		int subFlags = flags;
+		if (bmpCache.cacheSlots[texSlot].flags & LE_BITMAP_RGBA)
+			subFlags |= LE_TRIANGLE_BLENDED;
 
 	// Copy coordinates (for clipping)
 		LeTriangle * tri = &tris[k];
@@ -431,9 +496,10 @@ int LeRenderer::build(const LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[
 		float d3 = tri->xs[0] + tri->xs[1] + tri->xs[2];
 		tri->vd = d1 * d1 + d2 * d2 + d3 * d3 - vOffset;
 
-	// Set the material
-		tri->color = colors[i];
-		tri->tex = mesh->texSlotList[i];
+	// Set material properties
+		tri->solidColor = colors[i];
+		tri->diffuseTexture = texSlot;
+		tri->flags = subFlags;
 
 		indices[k] = k;
 		k++;
@@ -444,21 +510,34 @@ int LeRenderer::build(const LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[
 int LeRenderer::build(const LeBSet * bset, LeVertex vertexes[], LeTriangle tris[], int indices[])
 {
 	int k = 0;
-	float frontZ = viewFrontPlan.zAxis.origin.z;
-	float backZ = viewBackPlan.zAxis.origin.z;
+	float near = viewFrontPlan.zAxis.origin.z;
+	float far = viewBackPlan.zAxis.origin.z;
 
 	if (bset->shades) colors = bset->shades;
 	else colors = bset->colors;
 
+	int flags = LE_TRIANGLE_TEXTURED;
+	if (mipmappingEnable) flags |= LE_TRIANGLE_MIPMAPPED;
+	if (fogEnable) flags |= LE_TRIANGLE_FOGGED;
+
 	for (int i = 0; i < bset->noBillboards; i++) {
 		if (!bset->flags[i]) continue;
 		LeVertex * v = &vertexes[i];
-		if (v->z > frontZ && v->z < backZ) continue;
 
-		float sx = bset->sizes[i*2+0] * 0.5f;
-		float sy = bset->sizes[i*2+1] * 0.5f;
-
+	// Hard clip
+		if (v->z > near && v->z < far) continue;
+			
 	// Construct billboard
+		float sx = bset->sizes[i * 2 + 0] * 0.5f;
+		float sy = bset->sizes[i * 2 + 1] * 0.5f;
+		
+	// Fetch billboard properties
+		int texSlot = bset->texSlots[i];
+		int subFlags = flags;
+		if (bmpCache.cacheSlots[texSlot].flags & LE_BITMAP_RGBA)
+			subFlags |= LE_TRIANGLE_BLENDED;
+
+	// First triangle
 		LeTriangle * tri = &tris[k];
 		tri->xs[0] = v->x + sx;
 		tri->ys[0] = v->y + sy;
@@ -476,13 +555,18 @@ int LeRenderer::build(const LeBSet * bset, LeVertex vertexes[], LeTriangle tris[
 		tri->vs[1] = 0.0f;
 		tri->us[2] = 0.0f;
 		tri->vs[2] = 1.0f;
-
+	
+	// Compute view distance
 		tri->vd = v->x * v->x + v->y * v->y + v->z * v->z - vOffset;
-		tri->color = colors[i];
-		tri->tex = bset->texSlots[i];
+
+	// Set material properties
+		tri->solidColor = colors[i];
+		tri->diffuseTexture = texSlot;
+		tri->flags = subFlags;
 		indices[k] = k;
 		k++;
 
+	// Second triangle
 		tri = &tris[k];
 		tri->xs[0] = v->x + sx;
 		tri->ys[0] = v->y + sy;
@@ -501,9 +585,13 @@ int LeRenderer::build(const LeBSet * bset, LeVertex vertexes[], LeTriangle tris[
 		tri->us[2] = 1.0f;
 		tri->vs[2] = 1.0f;
 
+	// Compute view distance
 		tri->vd = v->x * v->x + v->y * v->y + v->z * v->z - vOffset;
-		tri->color = colors[i];
-		tri->tex = bset->texSlots[i];
+
+	// Set material properties
+		tri->solidColor = colors[i];
+		tri->diffuseTexture = texSlot;
+		tri->flags = subFlags;
 		indices[k] = k;
 		k++;
 	}
@@ -519,14 +607,17 @@ int LeRenderer::project(LeTriangle tris[], const int srcIndices[], int dstIndice
 	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
 	float centerX = width * 0.5f;
 	float centerY = height * 0.5f;
+	float near = -viewFrontPlan.zAxis.origin.z;
 
 	for (int i = 0; i < nb; i++) {
 		int j = srcIndices[i];
 
+	// Project coordinates on viewport
 		LeTriangle * tri = &tris[j];
-		float w0 = 1.0f / tri->zs[0];
-		float w1 = 1.0f / tri->zs[1];
-		float w2 = 1.0f / tri->zs[2];
+
+		float w0 = near / tri->zs[0];
+		float w1 = near / tri->zs[1];
+		float w2 = near / tri->zs[2];
 
 		tri->xs[0] = tri->xs[0] * ztx * w0 + centerX;
 		tri->xs[1] = tri->xs[1] * ztx * w1 + centerX;
@@ -542,6 +633,7 @@ int LeRenderer::project(LeTriangle tris[], const int srcIndices[], int dstIndice
 		if (tri->ys[0] <  viewTopAxis.origin.y	  && tri->ys[1] <  viewTopAxis.origin.y	   && tri->ys[2] <	viewTopAxis.origin.y)	 continue;
 		if (tri->ys[0] >= viewBottomAxis.origin.y && tri->ys[1] >= viewBottomAxis.origin.y && tri->ys[2] >= viewBottomAxis.origin.y) continue;
 
+	// Prepare texture coordinates
 		tri->zs[0] = w0;
 		tri->zs[1] = w1;
 		tri->zs[2] = w2;
@@ -558,18 +650,18 @@ int LeRenderer::project(LeTriangle tris[], const int srcIndices[], int dstIndice
 }
 
 /*****************************************************************************/
-int LeRenderer::clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlan &plan)
+int LeRenderer::clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb, LePlane &plane)
 {
 	int k = 0;
 	for (int i = 0; i < nb; i++) {
 		int s = 0;
 		int j = srcIndices[i];
 
-	// Project against clipping plan
+	// Project against clipping plane
 		LeTriangle * tri = &tris[j];
-		float pj1 = (tri->xs[0] - plan.zAxis.origin.x) * plan.zAxis.axis.x + (tri->ys[0] - plan.zAxis.origin.y) * plan.zAxis.axis.y + (tri->zs[0] - plan.zAxis.origin.z) * plan.zAxis.axis.z;
-		float pj2 = (tri->xs[1] - plan.zAxis.origin.x) * plan.zAxis.axis.x + (tri->ys[1] - plan.zAxis.origin.y) * plan.zAxis.axis.y + (tri->zs[1] - plan.zAxis.origin.z) * plan.zAxis.axis.z;
-		float pj3 = (tri->xs[2] - plan.zAxis.origin.x) * plan.zAxis.axis.x + (tri->ys[2] - plan.zAxis.origin.y) * plan.zAxis.axis.y + (tri->zs[2] - plan.zAxis.origin.z) * plan.zAxis.axis.z;
+		float pj1 = (tri->xs[0] - plane.zAxis.origin.x) * plane.zAxis.axis.x + (tri->ys[0] - plane.zAxis.origin.y) * plane.zAxis.axis.y + (tri->zs[0] - plane.zAxis.origin.z) * plane.zAxis.axis.z;
+		float pj2 = (tri->xs[1] - plane.zAxis.origin.x) * plane.zAxis.axis.x + (tri->ys[1] - plane.zAxis.origin.y) * plane.zAxis.axis.y + (tri->zs[1] - plane.zAxis.origin.z) * plane.zAxis.axis.z;
+		float pj3 = (tri->xs[2] - plane.zAxis.origin.x) * plane.zAxis.axis.x + (tri->ys[2] - plane.zAxis.origin.y) * plane.zAxis.axis.y + (tri->zs[2] - plane.zAxis.origin.z) * plane.zAxis.axis.z;
 
 	// Compute triangle intersections
 		float nx[4], ny[4], nz[4];
@@ -663,14 +755,18 @@ int LeRenderer::clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices
 			ntri->vs[0] = nv[0];
 			ntri->vs[1] = nv[2];
 			ntri->vs[2] = nv[3];
-			ntri->tex = tri->tex;
-
-		// Compute view distance
+			
+		// Compute new view distance
 			float dx = nx[0] + nx[2] + nx[3];
 			float dy = ny[0] + ny[2] + ny[3];
 			float dz = nz[0] + nz[2] + nz[3];
 			ntri->vd = dx * dx + dy * dy + dz * dz - vOffset;
-			ntri->color = tri->color;
+
+		// Copy other parameters
+			ntri->solidColor = tri->solidColor;
+			ntri->diffuseTexture = tri->diffuseTexture;
+			ntri->flags = tri->flags;
+
 			dstIndices[k++] = extra++;
 		}
 	}
@@ -778,10 +874,12 @@ int LeRenderer::clip2D(LeTriangle tris[], const int srcIndices[], int dstIndices
 			ntri->vs[0] = nv[0];
 			ntri->vs[1] = nv[2];
 			ntri->vs[2] = nv[3];
-
 			ntri->vd = tri->vd;
-			ntri->color = tri->color;
-			ntri->tex = tri->tex;
+
+		// Copy other parameters
+			ntri->solidColor = tri->solidColor;
+			ntri->diffuseTexture = tri->diffuseTexture;
+			ntri->flags = tri->flags;
 
 			dstIndices[k++] = extra++;
 		}
@@ -792,11 +890,12 @@ int LeRenderer::clip2D(LeTriangle tris[], const int srcIndices[], int dstIndices
 /*****************************************************************************/
 int LeRenderer::backculling(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb)
 {
-	int k = 0;
-	if (!enableBack) {
+	if (!backEnable) {
 		memcpy(dstIndices, srcIndices, nb * (sizeof(int)));
 		return nb;
 	}
+
+	int k = 0;
 	for (int i = 0; i < nb; i++) {
 		int j = srcIndices[i];
 		LeTriangle * tri = &tris[j];
@@ -806,4 +905,3 @@ int LeRenderer::backculling(LeTriangle tris[], const int srcIndices[], int dstIn
 	}
 	return k;
 }
-

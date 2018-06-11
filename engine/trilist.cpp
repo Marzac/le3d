@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -37,6 +37,7 @@
 
 /*****************************************************************************/
 LeTriList::LeTriList() :
+	fog(),
 	srcIndices(NULL), dstIndices(NULL),
 	noAllocated(0), noUsed(0), noValid(0)
 {
@@ -58,6 +59,11 @@ LeTriList::~LeTriList()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeTriList::allocate(int noTriangles)
+	\brief Allocate memory to hold triangles
+	\param[in] noTriangles maximum number of triangles
+*/
 void LeTriList::allocate(int noTriangles)
 {
 	triangles = new LeTriangle[noTriangles];
@@ -66,6 +72,10 @@ void LeTriList::allocate(int noTriangles)
 	noAllocated = noTriangles;
 }
 
+/**
+	\fn void LeTriList::zSort()
+	\brief Sort triangles according to their view distance (descending order)
+*/
 void LeTriList::zSort()
 {
 	if (!noValid) return;

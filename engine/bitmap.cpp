@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frédéric Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -95,7 +95,7 @@ void LeBitmap::clear(LeColor color)
 	if (r == 2) return;
 	*p++ = color;
 }
-#elif LE_USE_AMMX == 1
+#elif LE_USE_SIMD == 1 && LE_USE_AMMX == 1
 void LeBitmap::clear(LeColor color)
 {
 	set_ammx_pixels(data, tx * ty * 4, color);
@@ -324,7 +324,7 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 	\param[in] wSrc source width (pixels)
 	\param[in] hSrc source height (pixels)
 */
-#if LE_USE_SIMD == 1
+#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
 void LeBitmap::alphaScaleBlit(int32_t xDst, int32_t yDst, int32_t wDst, int32_t hDst, const LeBitmap * src, int32_t xSrc, int32_t ySrc, int32_t wSrc, int32_t hSrc)
 {
 	if (wDst <= 0) return;

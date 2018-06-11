@@ -6,7 +6,7 @@
 	\twitter @m0ppers
 	\website https://mop.koeln
 	\copyright Frédéric Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -87,7 +87,7 @@ void LeDraw::setContext(LeDrawingContext context)
 void LeDraw::setPixels(const void * data)
 {
 	Window* window = (Window*) frontContext.window;
-	WritePixelArray((APTR) data, 0, 0, 4 * width, window->RPort, window->BorderLeft, window->BorderTop, width, height, RECTFMT_RGBA);
+	WritePixelArray((APTR) data, 0, 0, 4 * width, window->RPort, window->BorderLeft, window->BorderTop, width, height, RECTFMT_ARGB);
 }
 
 #endif

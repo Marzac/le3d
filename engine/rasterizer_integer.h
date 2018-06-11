@@ -8,7 +8,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2017-2018 Frédéric Meslin
@@ -58,25 +58,25 @@ public:
 	const void * getPixels() {return pixels;}
 	void flush();
 
-	LeBitmap frame;				/**< Frame buffer */ 
-	LeColor background;		/**< Background color */ 
+	LeBitmap frame;					/**< frame buffer */ 
+	LeColor background;				/**< background color */ 
 	
 private:
-	void topTriangleZC(int vt, int vm1, int vm2);
-	void bottomTriangleZC(int vm1, int vm2, int vb);
-
+	inline void fillTriangleZC(int vi1, int vi2, int vi3, bool top);
 	inline void fillFlatTexZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
+	inline void fillFlatTexZCFog(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
 	inline void fillFlatTexAlphaZC(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
+	inline void fillFlatTexAlphaZCFog(int y, int x1, int x2, int w1, int w2, int u1, int u2, int v1, int v2);
 
-	LeColor color;
-	LeBitmap * bmp;
-
-	LeColor * pixels;
-	LeColor * texPixels;
-	uint32_t texSizeU;
-	uint32_t texSizeV;
-	uint32_t texMaskU;
-	uint32_t texMaskV;
+	LeColor * pixels;				/**< frame pixel buffer */
+	LeColor * texDiffusePixels;		/**< diffuse texture pixel buffer */
+	uint32_t texSizeU;				/**< textures horizontal size */	
+	uint32_t texSizeV;				/**< textures vertical size */
+	uint32_t texMaskU;				/**< textures horizontal mask */
+	uint32_t texMaskV;				/**< textures vertical mask */
+	
+	LeTriangle * curTriangle;		/**< current triangle */
+	LeTriList * curTrilist;			/**< current triangle list */
 
 #if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
 	__m128i color_4;

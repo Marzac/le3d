@@ -1,12 +1,12 @@
 /**
 	\file geometry.h
-	\brief LightEngine 3D: Vertex / axis / plan / matrix objects
+	\brief LightEngine 3D: Vertex / axis / plane / matrix objects
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin

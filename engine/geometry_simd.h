@@ -1,12 +1,12 @@
 /**
 	\file geometry_simd.h
-	\brief LightEngine 3D: Vertex / axis / plan structures
-	\brief All platforms implementation (with SIMD support)
+	\brief LightEngine 3D: Vertex / axis / plane / matrix objects
+	\brief All platforms implementation (with SIMD support = GCC vectors)
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -269,23 +269,23 @@ struct __attribute__ ((aligned (16))) LeAxis
 
 /*****************************************************************************/
 /**
-	\struct LePlan
-	\brief Represent a plan in 3D space
+	\struct LePlane
+	\brief Represent a plane in 3D space
 **/
-struct __attribute__ ((aligned (16))) LePlan
+struct __attribute__ ((aligned (16))) LePlane
 {
 	LeAxis xAxis;
 	LeAxis yAxis;
 	LeAxis zAxis;
 
-	LePlan()
+	LePlane()
 	{
 		xAxis.axis = LeVertex(1.0f, 0.0f, 0.0f);
 		yAxis.axis = LeVertex(0.0f, 1.0f, 0.0f);
 		zAxis.axis = LeVertex(0.0f, 0.0f, 1.0f);
 	}
 
-	LePlan(const LeVertex & v1, const LeVertex & v2, const LeVertex & v3) :
+	LePlane(const LeVertex & v1, const LeVertex & v2, const LeVertex & v3) :
 		xAxis(LeAxis(v1, v2)), yAxis(LeAxis(v1, v3))
 	{
 		zAxis = LeAxis(v1, v1 + xAxis.axis.cross(yAxis.axis));

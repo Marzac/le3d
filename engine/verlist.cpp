@@ -6,7 +6,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -54,6 +54,11 @@ LeVerList::~LeVerList()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeVerList::allocate(int noVertexes)
+	\brief Allocate memory to hold vertexes
+	\param[in] noVertexes maximum number of vertexes
+*/
 void LeVerList::allocate(int noVertexes)
 {
 	vertexes = new LeVertex[noVertexes];

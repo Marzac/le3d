@@ -26,22 +26,21 @@ set(LE3D_BMP_MIPMAPS				32			CACHE STRING "Maximum number of mipmaps per bitmap"
 mark_as_advanced(LE3D_BMP_MIPMAPS)
 
 # Renderer configuration
-set(LE3D_RENDERER_FRONT			    -1.0f		CACHE STRING "Front clipping plane")
-set(LE3D_RENDERER_BACK			    -32768.0f	CACHE STRING "Back clipping plane")
-set(LE3D_RENDERER_FOV				65.0f		CACHE STRING "Default field of view")
+set(LE3D_RENDERER_NEAR_DEFAULT		1.0f		CACHE STRING "Default near clipping distance")
+set(LE3D_RENDERER_FAR_DEFAULT		32768.0f	CACHE STRING "Default far clipping distance")
+set(LE3D_RENDERER_FOV_DEFAULT		65.0f		CACHE STRING "Default field of view")
 option(LE3D_RENDERER_3DFRUSTRUM		"Use a 3D frustrum to clip triangles" On)
 option(LE3D_RENDERER_2DFRAME		"Use a 2D frame to clip triangles" Off)
 
 option(LE3D_RENDERER_INTRASTER "Enable fixed point or floating point rasterizing" Off)
-option(LE3D_RENDERER_MIPMAPS "Enable mipmapping on textures" On)
 
 set(LE3D_TRILIST_MAX				50000		CACHE STRING "Maximum number of triangles in display list")
 set(LE3D_VERLIST_MAX				150000		CACHE STRING "Maximum number of vertexes in transformation buffer")
 mark_as_advanced(LE3D_TRILIST_MAX LE3D_VERLIST_MAX)
 
 # Performance optimizations
+option(LE3D_USE_SIMD "Use SIMD instructions & vectors" On)
 if(NOT(AMIGA))
-    option(LE3D_USE_SIMD "Use SIMD instructions & vectors" On)
     option(LE3D_USE_SSE2 "Use Intel SSE2 instructions" On)
 else()
     option(LE3D_USE_AMMX "Use Apollo AMMX instructions" Off)

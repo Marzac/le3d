@@ -8,7 +8,7 @@
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -43,16 +43,30 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <float.h>
+
+/*****************************************************************************/
+/** Platform specific or reference fillers */
+#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
+	#include "fillers/float/sse/flattexzc.inc"
+	#include "fillers/float/sse/flattexzcfog.inc"
+	#include "fillers/float/sse/flattexalphazc.inc"
+	#include "fillers/float/sse/flattexalphazcfog.inc"
+#else
+	#include "fillers/float/ref/flattexzc.inc"
+	#include "fillers/float/ref/flattexzcfog.inc"
+	#include "fillers/float/ref/flattexalphazc.inc"
+	#include "fillers/float/ref/flattexalphazcfog.inc"
+#endif
 
 /*****************************************************************************/
 LeRasterizer::LeRasterizer(int width, int height) :
 	frame(),
-	background(0),
-	color(0xFFFFFF),
-	bmp(NULL),
-	texPixels(NULL),
+	background(LeColor()),
+	texDiffusePixels(NULL),
 	texSizeU(0), texSizeV(0),
-	texMaskU(0), texMaskV(0)
+	texMaskU(0), texMaskV(0),
+	curTriangle(NULL), curTrilist(NULL)
 {
 	memset(xs, 0, sizeof(float) * 4);
 	memset(ys, 0, sizeof(float) * 4);
@@ -90,43 +104,51 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 {
 	trilist->zSort();
 
+#if defined(__i386__) || defined(_M_IX86) || defined(_X86_) || defined(__x86_64__) || defined(_M_X64)
+	//_controlfp(_MCW_RC, _RC_CHOP);
+	//_controlfp(_MCW_DN, _DN_FLUSH);
+#endif
+
+	curTrilist = trilist;
 	for (int i = 0; i < trilist->noValid; i++) {
-		LeTriangle * tri = &trilist->triangles[trilist->srcIndices[i]];
+		curTriangle = &trilist->triangles[trilist->srcIndices[i]];
 
 	// Retrieve the material
-		LeBmpCache::Slot * slot = &bmpCache.cacheSlots[tri->tex];
+		LeBmpCache::Slot * slot = &bmpCache.cacheSlots[curTriangle->diffuseTexture];
+		LeBitmap * bmp = slot->bitmap;
 		if (slot->flags & LE_BMPCACHE_ANIMATION)
 			bmp = &slot->extras[slot->cursor];
-		else bmp = slot->bitmap;
-		color = tri->color;
 
 	// Convert position coordinates
-		xs[0] = floorf(tri->xs[0]);
-		xs[1] = floorf(tri->xs[1]);
-		xs[2] = floorf(tri->xs[2]);
-		ys[0] = floorf(tri->ys[0]);
-		ys[1] = floorf(tri->ys[1]);
-		ys[2] = floorf(tri->ys[2]);
-		ws[0] = tri->zs[0];
-		ws[1] = tri->zs[1];
-		ws[2] = tri->zs[2];
+		xs[0] = floorf(curTriangle->xs[0]);
+		xs[1] = floorf(curTriangle->xs[1]);
+		xs[2] = floorf(curTriangle->xs[2]);
+		ys[0] = floorf(curTriangle->ys[0]);
+		ys[1] = floorf(curTriangle->ys[1]);
+		ys[2] = floorf(curTriangle->ys[2]);
+		ws[0] = curTriangle->zs[0];
+		ws[1] = curTriangle->zs[1];
+		ws[2] = curTriangle->zs[2];
 
 	// Sort vertexes vertically
 		int vt = 0, vb = 0, vm1 = 0, vm2 = 3;
 		if (ys[0] < ys[1]) {
 			if (ys[0] < ys[2]) {
 				vt = 0;
-				if (ys[1] < ys[2]) {vm1 = 1; vb = 2;}
-				else {vm1 = 2; vb = 1;}
-			}else{
+				if (ys[1] < ys[2]) { vm1 = 1; vb = 2; }
+				else { vm1 = 2; vb = 1; }
+			}
+			else {
 				vt = 2;	vm1 = 0; vb = 1;
 			}
-		}else{
+		}
+		else {
 			if (ys[1] < ys[2]) {
 				vt = 1;
-				if (ys[0] < ys[2]) {vm1 = 0; vb = 2;}
-				else {vm1 = 2; vb = 0;}
-			}else{
+				if (ys[0] < ys[2]) { vm1 = 0; vb = 2; }
+				else { vm1 = 2; vb = 0; }
+			}
+			else {
 				vt = 2; vm1 = 1; vb = 0;
 			}
 		}
@@ -136,50 +158,51 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		if (dy == 0.0f) continue;
 
 	// Choose the mipmap level
-	#if LE_RENDERER_MIPMAPS == 1
-		if (bmp->mmLevels) {
-			float utop = tri->us[vt] / tri->zs[vt];
-			float ubot = tri->us[vb] / tri->zs[vb];
-			float vtop = tri->vs[vt] / tri->zs[vt];
-			float vbot = tri->vs[vb] / tri->zs[vb];
-			float d = cmmax(fabsf(utop - ubot), fabsf(vtop - vbot));
+		if (curTriangle->flags & LE_TRIANGLE_MIPMAPPED) {
+			if (bmp->mmLevels) {
+				float utop = curTriangle->us[vt] / curTriangle->zs[vt];
+				float ubot = curTriangle->us[vb] / curTriangle->zs[vb];
+				float vtop = curTriangle->vs[vt] / curTriangle->zs[vt];
+				float vbot = curTriangle->vs[vb] / curTriangle->zs[vb];
+				float d = cmmax(fabsf(utop - ubot), fabsf(vtop - vbot));
 
-			int r = (int) ((d * bmp->ty + dy * 0.5f) / dy);
-			int l = LeGlobal::log2i32(r);
-			l = cmmin(l, bmp->mmLevels - 1);
-			bmp = bmp->mipmaps[l];
+				int r = (int)((d * bmp->ty + dy * 0.5f) / dy);
+				int l = LeGlobal::log2i32(r);
+				l = cmmin(l, bmp->mmLevels - 1);
+				bmp = bmp->mipmaps[l];
+			}
 		}
-	#endif
-
+	
 	// Retrieve texture information
-		texPixels = (LeColor *) bmp->data;
+		texDiffusePixels = (LeColor *) bmp->data;
 		texSizeU = bmp->txP2;
 		texSizeV = bmp->tyP2;
 		texMaskU = (1 << bmp->txP2) - 1;
 		texMaskV = (1 << bmp->tyP2) - 1;
 
+	// Architecture specific pre-calculations
 	#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
 		float texSizeUFloat = (float) (1 << texSizeU);
 		texScale_4 = _mm_set1_ps(texSizeUFloat);
 		texMaskU_4 = _mm_set1_epi32(texMaskU);
 		texMaskV_4 = _mm_set1_epi32(texMaskV << texSizeU);
+		
 		__m128i zv = _mm_set1_epi32(0);
-		color_1 = _mm_loadu_si128((__m128i *) &color);
-		color_1 = _mm_unpacklo_epi32(color_1,color_1);
-		//color_1 = _mm_unpacklo_epi8(color_1, zv);
-		color_1 = _mm_unpacklo_epi8(color_1, zv);
+		color_4 = _mm_loadu_si128((__m128i *) &curTriangle->solidColor);
+		color_4 = _mm_unpacklo_epi32(color_4,color_4);
+		color_4 = _mm_unpacklo_epi8(color_4, zv);
 	#endif	// LE_USE_SIMD && LE_USE_SSE2
 
 	// Convert texture coordinates
 		float sx = (float) (1 << bmp->txP2);
-		us[0] = tri->us[0] * sx;
-		us[1] = tri->us[1] * sx;
-		us[2] = tri->us[2] * sx;
+		us[0] = curTriangle->us[0] * sx;
+		us[1] = curTriangle->us[1] * sx;
+		us[2] = curTriangle->us[2] * sx;
 
 		float sy = (float) (1 << bmp->tyP2);
-		vs[0] = tri->vs[0] * sy;
-		vs[1] = tri->vs[1] * sy;
-		vs[2] = tri->vs[2] * sy;
+		vs[0] = curTriangle->vs[0] * sy;
+		vs[1] = curTriangle->vs[1] * sy;
+		vs[2] = curTriangle->vs[2] * sy;
 
 	// Compute the mean vertex
 		float n = (ys[vm1] - ys[vt]) / dy;
@@ -194,434 +217,115 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		if (dx < 0) {int t = vm1; vm1 = vm2; vm2 = t;}
 
 	// Render the triangle
-		topTriangleZC(vt, vm1, vm2);
-		bottomTriangleZC(vm1, vm2, vb);
+		fillTriangleZC(vt, vm1, vm2, true);
+		fillTriangleZC(vm1, vm2, vb, false);
 	}
 }
 
 /*****************************************************************************/
-void LeRasterizer::topTriangleZC(int vt, int vm1, int vm2)
+void LeRasterizer::fillTriangleZC(int vi1, int vi2, int vi3, bool top)
 {
-	float d = ys[vm1] - ys[vt];
-	if (d == 0.0f) return;
+	float ax1, aw1, au1, av1;
+	float ax2, aw2, au2, av2;
+	int y1, y2;
+	float x1, x2, w1, w2;
+	float u1, u2, v1, v2;
 
-	float id = 1.0f / d;
-	float ax1 = (xs[vm1] - xs[vt]) * id;
-	float aw1 = (ws[vm1] - ws[vt]) * id;
-	float au1 = (us[vm1] - us[vt]) * id;
-	float av1 = (vs[vm1] - vs[vt]) * id;
-	float ax2 = (xs[vm2] - xs[vt]) * id;
-	float aw2 = (ws[vm2] - ws[vt]) * id;
-	float au2 = (us[vm2] - us[vt]) * id;
-	float av2 = (vs[vm2] - vs[vt]) * id;
+	if (top) {
+	// Top triangle
+		float d = ys[vi2] - ys[vi1];
+		if (d == 0.0f) return;
 
-	float x1 = xs[vt];
-	float x2 = x1;
-	float w1 = ws[vt];
-	float w2 = w1;
-	float u1 = us[vt];
-	float u2 = u1;
-	float v1 = vs[vt];
-	float v2 = v1;
+		float id = 1.0f / d;
+		ax1 = (xs[vi2] - xs[vi1]) * id;
+		aw1 = (ws[vi2] - ws[vi1]) * id;
+		au1 = (us[vi2] - us[vi1]) * id;
+		av1 = (vs[vi2] - vs[vi1]) * id;
+		ax2 = (xs[vi3] - xs[vi1]) * id;
+		aw2 = (ws[vi3] - ws[vi1]) * id;
+		au2 = (us[vi3] - us[vi1]) * id;
+		av2 = (vs[vi3] - vs[vi1]) * id;
 
-	int y1 = (int) ys[vt];
-	int y2 = (int) ys[vm1];
-	if (bmp->flags & LE_BITMAP_RGBA) {
-		for (int y = y1; y < y2; y++) {
-			fillFlatTexAlphaZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
-			x1 += ax1; x2 += ax2;
-			u1 += au1; u2 += au2;
-			v1 += av1; v2 += av2;
-			w2 += aw2; w1 += aw1;
-		}
+		x1 = xs[vi1];
+		x2 = x1;
+		w1 = ws[vi1];
+		w2 = w1;
+		u1 = us[vi1];
+		u2 = u1;
+		v1 = vs[vi1];
+		v2 = v1;
+
+		y1 = (int) ys[vi1];
+		y2 = (int) ys[vi2];
 	}else{
-		for (int y = y1; y < y2; y++) {
-			fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
-			x1 += ax1; x2 += ax2;
-			u1 += au1; u2 += au2;
-			v1 += av1; v2 += av2;
-			w2 += aw2; w1 += aw1;
+	// Bottom triangle
+		float d = ys[vi3] - ys[vi1];
+		if (d == 0.0f) return;
+
+		float id = 1.0f / d;
+		ax1 = (xs[vi3] - xs[vi1]) * id;
+		aw1 = (ws[vi3] - ws[vi1]) * id;
+		au1 = (us[vi3] - us[vi1]) * id;
+		av1 = (vs[vi3] - vs[vi1]) * id;
+		ax2 = (xs[vi3] - xs[vi2]) * id;
+		aw2 = (ws[vi3] - ws[vi2]) * id;
+		au2 = (us[vi3] - us[vi2]) * id;
+		av2 = (vs[vi3] - vs[vi2]) * id;
+
+		x1 = xs[vi1];
+		w1 = ws[vi1];
+		u1 = us[vi1];
+		v1 = vs[vi1];
+
+		x2 = xs[vi2];
+		w2 = ws[vi2];
+		u2 = us[vi2];
+		v2 = vs[vi2];
+
+		y1 = (int) ys[vi1];
+		y2 = (int) ys[vi3];
+	}
+
+	if (curTriangle->flags & LE_TRIANGLE_BLENDED) {
+		if (curTriangle->flags & LE_TRIANGLE_FOGGED) {
+			for (int y = y1; y < y2; y++) {
+				fillFlatTexAlphaZCFog(y, x1, x2, w1, w2, u1, u2, v1, v2);
+				x1 += ax1; x2 += ax2;
+				u1 += au1; u2 += au2;
+				v1 += av1; v2 += av2;
+				w1 += aw1; w2 += aw2;
+			}
+		}
+		else {
+			for (int y = y1; y < y2; y++) {
+				fillFlatTexAlphaZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
+				x1 += ax1; x2 += ax2;
+				u1 += au1; u2 += au2;
+				v1 += av1; v2 += av2;
+				w1 += aw1; w2 += aw2;
+			}
+		}
+	}
+	else {
+		if (curTriangle->flags & LE_TRIANGLE_FOGGED) {
+			for (int y = y1; y < y2; y++) {
+				fillFlatTexZCFog(y, x1, x2, w1, w2, u1, u2, v1, v2);
+				x1 += ax1; x2 += ax2;
+				u1 += au1; u2 += au2;
+				v1 += av1; v2 += av2;
+				w1 += aw1; w2 += aw2;
+			}
+		}
+		else {
+			for (int y = y1; y < y2; y++) {
+				fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
+				x1 += ax1; x2 += ax2;
+				u1 += au1; u2 += au2;
+				v1 += av1; v2 += av2;
+				w1 += aw1; w2 += aw2;
+			}
 		}
 	}
 }
-
-void LeRasterizer::bottomTriangleZC(int vm1, int vm2, int vb)
-{
-	float d = ys[vb] - ys[vm1];
-	if (d == 0.0f) return;
-
-	float id = 1.0f / d;
-	float ax1 = (xs[vb] - xs[vm1]) * id;
-	float aw1 = (ws[vb] - ws[vm1]) * id;
-	float au1 = (us[vb] - us[vm1]) * id;
-	float av1 = (vs[vb] - vs[vm1]) * id;
-	float ax2 = (xs[vb] - xs[vm2]) * id;
-	float aw2 = (ws[vb] - ws[vm2]) * id;
-	float au2 = (us[vb] - us[vm2]) * id;
-	float av2 = (vs[vb] - vs[vm2]) * id;
-
-	float x1 = xs[vm1];
-	float w1 = ws[vm1];
-	float u1 = us[vm1];
-	float v1 = vs[vm1];
-
-	float x2 = xs[vm2];
-	float w2 = ws[vm2];
-	float u2 = us[vm2];
-	float v2 = vs[vm2];
-
-	int y1 = (int) ys[vm1];
-	int y2 = (int) ys[vb];
-
-	if (bmp->flags & LE_BITMAP_RGBA) {
-		for (int y = y1; y < y2; y++) {
-			fillFlatTexAlphaZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
-			x1 += ax1; x2 += ax2;
-			w1 += aw1; w2 += aw2;
-			u1 += au1; u2 += au2;
-			v1 += av1; v2 += av2;
-		}
-	}else{
-		for (int y = y1; y < y2; y++) {
-			fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
-			x1 += ax1; x2 += ax2;
-			w1 += aw1; w2 += aw2;
-			u1 += au1; u2 += au2;
-			v1 += av1; v2 += av2;
-		}
-	}
-}
-
-/*****************************************************************************/
-#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
-inline void LeRasterizer::fillFlatTexZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
-{
-	float d = x2 - x1;
-	if (d == 0.0f) return;
-
-	float id = 1.0f / d;
-	float au = (u2 - u1) * id;
-	float av = (v2 - v1) * id;
-	float aw = (w2 - w1) * id;
-
-	__m128 u_4 = _mm_set_ps(u1 + 3.0f * au, u1 + 2.0f * au, u1 + au, u1);
-	__m128 v_4 = _mm_set_ps(v1 + 3.0f * av, v1 + 2.0f * av, v1 + av, v1);
-	__m128 w_4 = _mm_set_ps(w1 + 3.0f * aw, w1 + 2.0f * aw, w1 + aw, w1);
-
-	__m128 au_4 = _mm_set1_ps(au * 4.0f);
-	__m128 av_4 = _mm_set1_ps(av * 4.0f);
-	__m128 aw_4 = _mm_set1_ps(aw * 4.0f);
-
-	int xb = (int) floorf(x1);
-	int xe = (int) ceilf(x2);
-	LeColor * p = xb + ((int) y) * frame.tx + pixels;
-	int b = (xe - xb) >> 2;
-	int r = (xe - xb) & 0x3;
-
-	for (int x = 0; x < b; x ++) {
-		__m128 z_4 = _mm_rcp_ps(w_4);
-
-		__m128 mu_4, mv_4;
-		mu_4 = _mm_mul_ps(u_4, z_4);
-		mv_4 = _mm_mul_ps(v_4, z_4);
-		mv_4 = _mm_mul_ps(mv_4, texScale_4);
-
-		__m128i mui_4, mvi_4;
-		mui_4 = _mm_cvtps_epi32(mu_4);
-		mvi_4 = _mm_cvtps_epi32(mv_4);
-		mui_4 = _mm_and_si128(mui_4, texMaskU_4);
-		mvi_4 = _mm_and_si128(mvi_4, texMaskV_4);
-		mui_4 = _mm_add_epi32(mui_4, mvi_4);
-
-		__m128i zv = _mm_set1_epi32(0);
-		__m128i tp, tq, t1, t2;
-		tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *) &mui_4)[0]]);
-		tq = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *) &mui_4)[1]]);
-		t1 = _mm_unpacklo_epi32(tp, tq);
-		t1 = _mm_unpacklo_epi8(t1, zv);
-		t1 = _mm_mullo_epi16(t1, color_1);
-		t1 = _mm_srli_epi16(t1, 8);
-
-		tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[2]]);
-		tq = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[3]]);
-		t2 = _mm_unpacklo_epi32(tp, tq);
-		t2 = _mm_unpacklo_epi8(t2, zv);
-		t2 = _mm_mullo_epi16(t2, color_1);
-		t2 = _mm_srli_epi16(t2, 8);
-
-		tp = _mm_packus_epi16(t1, t2);
-		_mm_storeu_si128((__m128i *) p,  tp);
-		p += 4;
-
-		w_4 = _mm_add_ps(w_4, aw_4);
-		u_4 = _mm_add_ps(u_4, au_4);
-		v_4 = _mm_add_ps(v_4, av_4);
-	}
-
-	if (r == 0) return;
-	__m128 z_4 = _mm_rcp_ps(w_4);
-
-	__m128 mu_4, mv_4;
-	mu_4 = _mm_mul_ps(u_4, z_4);
-	mv_4 = _mm_mul_ps(v_4, z_4);
-	mv_4 = _mm_mul_ps(mv_4, texScale_4);
-
-	__m128i mui_4, mvi_4;
-	mui_4 = _mm_cvtps_epi32(mu_4);
-	mvi_4 = _mm_cvtps_epi32(mv_4);
-	mui_4 = _mm_and_si128(mui_4, texMaskU_4);
-	mvi_4 = _mm_and_si128(mvi_4, texMaskV_4);
-	mui_4 = _mm_add_epi32(mui_4, mvi_4);
-
-	__m128i zv = _mm_set1_epi32(0);
-	__m128i tp;
-	tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[0]]);
-	tp = _mm_unpacklo_epi8(tp, zv);
-	tp = _mm_mullo_epi16(tp, color_1);
-	tp = _mm_srli_epi16(tp, 8);
-	tp = _mm_packus_epi16(tp, zv);
-	*p++ = _mm_cvtsi128_si32(tp);
-
-	if (r == 1) return;
-	tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[1]]);
-	tp = _mm_unpacklo_epi8(tp, zv);
-	tp = _mm_mullo_epi16(tp, color_1);
-	tp = _mm_srli_epi16(tp, 8);
-	tp = _mm_packus_epi16(tp, zv);
-	*p++ = _mm_cvtsi128_si32(tp);
-
-	if (r == 2) return;
-	tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[2]]);
-	tp = _mm_unpacklo_epi8(tp, zv);
-	tp = _mm_mullo_epi16(tp, color_1);
-	tp = _mm_srli_epi16(tp, 8);
-	tp = _mm_packus_epi16(tp, zv);
-	*p++ = _mm_cvtsi128_si32(tp);
-}
-
-inline void LeRasterizer::fillFlatTexAlphaZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
-{
-	float d = x2 - x1;
-	if (d == 0.0f) return;
-
-	float id = 1.0f / d;
-	float au = (u2 - u1) * id;
-	float av = (v2 - v1) * id;
-	float aw = (w2 - w1) * id;
-
-	__m128 u_4 = _mm_set_ps(u1 + 3.0f * au, u1 + 2.0f * au, u1 + au, u1);
-	__m128 v_4 = _mm_set_ps(v1 + 3.0f * av, v1 + 2.0f * av, v1 + av, v1);
-	__m128 w_4 = _mm_set_ps(w1 + 3.0f * aw, w1 + 2.0f * aw, w1 + aw, w1);
-
-	__m128 au_4 = _mm_set1_ps(au * 4.0f);
-	__m128 av_4 = _mm_set1_ps(av * 4.0f);
-	__m128 aw_4 = _mm_set1_ps(aw * 4.0f);
-
-	int xb = (int) floorf(x1);
-	int xe = (int) ceilf(x2);
-	LeColor * p = xb + ((int) y) * frame.tx + pixels;
-	int b = (xe - xb) >> 2;
-	int r = (xe - xb) & 0x3;
-
-	__m128i sc = _mm_set1_epi32(0x01000100);
-	for (int x = 0; x < b; x ++) {
-		__m128 z_4 = _mm_rcp_ps(w_4);
-
-		__m128 mu_4, mv_4;
-		mu_4 = _mm_mul_ps(u_4, z_4);
-		mv_4 = _mm_mul_ps(v_4, z_4);
-		mv_4 = _mm_mul_ps(mv_4, texScale_4);
-
-		__m128i mui_4, mvi_4;
-		mui_4 = _mm_cvtps_epi32(mu_4);
-		mvi_4 = _mm_cvtps_epi32(mv_4);
-		mui_4 = _mm_and_si128(mui_4, texMaskU_4);
-		mvi_4 = _mm_and_si128(mvi_4, texMaskV_4);
-		mui_4 = _mm_add_epi32(mui_4, mvi_4);
-
-		__m128i zv = _mm_set1_epi32(0);
-		__m128i tp, tq, fp, t1, t2;
-		__m128i ap, apl, aph;
-
-		fp = _mm_loadl_epi64((__m128i *) p);
-		tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[0]]);
-		tq = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[1]]);
-		t1 = _mm_unpacklo_epi32(tp, tq);
-		fp = _mm_unpacklo_epi8(fp, zv);
-		t1 = _mm_unpacklo_epi8(t1, zv);
-
-		apl = _mm_shufflelo_epi16(t1, 0xFF);
-		aph = _mm_shufflehi_epi16(t1, 0xFF);
-		ap = _mm_castpd_si128(_mm_move_sd(_mm_castsi128_pd(aph), _mm_castsi128_pd(apl)));
-		ap = _mm_sub_epi16(sc, ap);
-
-		t1 = _mm_mullo_epi16(t1, color_1);
-		fp = _mm_mullo_epi16(fp, ap);
-		t1 = _mm_adds_epu16(t1, fp);
-		t1 = _mm_srli_epi16(t1, 8);
-
-		fp = _mm_loadl_epi64((__m128i *) (p+2));
-		tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[2]]);
-		tq = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[3]]);
-		t2 = _mm_unpacklo_epi32(tp, tq);
-		fp = _mm_unpacklo_epi8(fp, zv);
-		t2 = _mm_unpacklo_epi8(t2, zv);
-
-		apl = _mm_shufflelo_epi16(t2, 0xFF);
-		aph = _mm_shufflehi_epi16(t2, 0xFF);
-		ap = _mm_castpd_si128(_mm_move_sd(_mm_castsi128_pd(aph), _mm_castsi128_pd(apl)));
-		ap = _mm_sub_epi16(sc, ap);
-
-		t2 = _mm_mullo_epi16(t2, color_1);
-		fp = _mm_mullo_epi16(fp, ap);
-		t2 = _mm_adds_epu16(t2, fp);
-		t2 = _mm_srli_epi16(t2, 8);
-		tp = _mm_packus_epi16(t1, t2);
-		_mm_storeu_si128((__m128i *) p,  tp);
-		p += 4;
-
-		w_4 = _mm_add_ps(w_4, aw_4);
-		u_4 = _mm_add_ps(u_4, au_4);
-		v_4 = _mm_add_ps(v_4, av_4);
-	}
-
-	if (r == 0) return;
-
-	__m128 z_4 = _mm_rcp_ps(w_4);
-	
-	__m128 mu_4, mv_4;
-	mu_4 = _mm_mul_ps(u_4, z_4);
-	mv_4 = _mm_mul_ps(v_4, z_4);
-	mv_4 = _mm_mul_ps(mv_4, texScale_4);
-
-	__m128i mui_4, mvi_4;
-	mui_4 = _mm_cvtps_epi32(mu_4);
-	mvi_4 = _mm_cvtps_epi32(mv_4);
-	mui_4 = _mm_and_si128( mui_4, texMaskU_4);
-	mvi_4 = _mm_and_si128( mvi_4, texMaskV_4);
-	mui_4 = _mm_add_epi32(mui_4, mvi_4);
-
-	__m128i zv = _mm_set1_epi32(0);
-	__m128i tp, fp;
-	fp = _mm_loadl_epi64((__m128i *) p);
-	tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[0]]);
-	fp = _mm_unpacklo_epi8(fp, zv);
-	tp = _mm_unpacklo_epi8(tp, zv);
-
-	__m128i ap;
-	ap = _mm_shufflelo_epi16(tp, 0xFF);
-	ap = _mm_sub_epi16(sc, ap);
-
-	tp = _mm_mullo_epi16(tp, color_1);
-	fp = _mm_mullo_epi16(fp, ap);
-	tp = _mm_adds_epu16(tp, fp);
-	tp = _mm_srli_epi16(tp, 8);
-
-	tp = _mm_packus_epi16(tp, zv);
-	*p++ = _mm_cvtsi128_si32(tp);
-
-	if (r == 1) return;
-	fp = _mm_loadl_epi64((__m128i *) p);
-	tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[1]]);
-	fp = _mm_unpacklo_epi8(fp, zv);
-	tp = _mm_unpacklo_epi8(tp, zv);
-
-	ap = _mm_shufflelo_epi16(tp, 0xFF);
-	ap = _mm_sub_epi16(sc, ap);
-
-	tp = _mm_mullo_epi16(tp, color_1);
-	fp = _mm_mullo_epi16(fp, ap);
-	tp = _mm_adds_epu16(tp, fp);
-	tp = _mm_srli_epi16(tp, 8);
-
-	tp = _mm_packus_epi16(tp, zv);
-	*p++ = _mm_cvtsi128_si32(tp);
-
-	if (r == 2) return;
-	fp = _mm_loadl_epi64((__m128i *) p);
-	tp = _mm_loadl_epi64((__m128i *) &texPixels[((uint32_t *)&mui_4)[2]]);
-	fp = _mm_unpacklo_epi8(fp, zv);
-	tp = _mm_unpacklo_epi8(tp, zv);
-
-	ap = _mm_shufflelo_epi16(tp, 0xFF);
-	ap = _mm_sub_epi16(sc, ap);
-
-	tp = _mm_mullo_epi16(tp, color_1);
-	fp = _mm_mullo_epi16(fp, ap);
-	tp = _mm_adds_epu16(tp, fp);
-	tp = _mm_srli_epi16(tp, 8);
-
-	tp = _mm_packus_epi16(tp, zv);
-	*p++ = _mm_cvtsi128_si32(tp);
-}
-
-#else
-
-inline void LeRasterizer::fillFlatTexZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
-{
-	uint8_t * c = (uint8_t *) &color;
-
-	float d = x2 - x1;
-	if (d == 0.0f) return;
-
-	float au = (u2 - u1) / d;
-	float av = (v2 - v1) / d;
-	float aw = (w2 - w1) / d;
-
-	int xb = (int) floorf(x1);
-	int xe = (int) ceilf(x2);
-	uint8_t * p = (uint8_t *) (xb + ((int) y) * frame.tx + pixels);
-
-	for (int x = xb; x <= xe; x++) {
-		float z = 1.0f / w1;
-		uint32_t tu = ((int32_t) (u1 * z)) & texMaskU;
-		uint32_t tv = ((int32_t) (v1 * z)) & texMaskV;
-		uint8_t * t = (uint8_t *) &texPixels[tu + (tv << texSizeU)];
-
-		p[0] = (t[0] * c[0]) >> 8;
-		p[1] = (t[1] * c[1]) >> 8;
-		p[2] = (t[2] * c[2]) >> 8;
-		p += 4;
-
-		u1 += au;
-		v1 += av;
-		w1 += aw;
-	}
-}
-
-inline void LeRasterizer::fillFlatTexAlphaZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
-{
-	uint8_t * c = (uint8_t *) &color;
-
-	float d = x2 - x1;
-	if (d == 0.0f) return;
-
-	float au = (u2 - u1) / d;
-	float av = (v2 - v1) / d;
-	float aw = (w2 - w1) / d;
-
-	int xb = (int) floorf(x1);
-	int xe = (int) ceilf(x2);
-	uint8_t * p = (uint8_t *) (xb + ((int) y) * frame.tx + pixels);
-
-	for (int x = xb; x <= xe; x++) {
-		float z = 1.0f / w1;
-		uint32_t tu = ((int32_t) (u1 * z)) & texMaskU;
-		uint32_t tv = ((int32_t) (v1 * z)) & texMaskV;
-		uint8_t * t = (uint8_t *) &texPixels[tu + (tv << texSizeU)];
-
-		uint8_t a = t[3] ^ 0xFF;
-		p[0] = (p[0] * a + t[0] * c[0]) >> 8;
-		p[1] = (p[1] * a + t[1] * c[1]) >> 8;
-		p[2] = (p[2] * a + t[2] * c[2]) >> 8;
-		p += 4;
-
-		u1 += au;
-		v1 += av;
-		w1 += aw;
-	}
-}
-
-#endif // LE_USE_SIMD && LE_USE_SSE2
 
 #endif // LE_RENDERER_INTRASTER == 0

@@ -1,12 +1,12 @@
 /**
 	\file geometry_scalar.h
-	\brief LightEngine 3D: Vertex / axis / plan / matrix objects
+	\brief LightEngine 3D: Vertex / axis / plane / matrix objects
 	\brief All platforms implementation (without SIMD support)
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev
 	\website http://fredslab.net
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.6
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -297,16 +297,16 @@ struct LeAxis
 
 /*****************************************************************************/
 /**
-	\struct LePlan
-	\brief Represent a plan in 3D space
+	\struct LePlane
+	\brief Represent a plane in 3D space
 **/
-struct LePlan
+struct LePlane
 {
 	LeAxis xAxis;
 	LeAxis yAxis;
 	LeAxis zAxis;
 
-	LePlan()
+	LePlane()
 	{
 		xAxis.axis.x = 1.0f;
 		xAxis.axis.y = 0.0f;
@@ -321,7 +321,7 @@ struct LePlan
 		zAxis.axis.z = 1.0f;
 	}
 
-	LePlan(LeVertex v1, LeVertex v2, LeVertex v3) :
+	LePlane(LeVertex v1, LeVertex v2, LeVertex v3) :
 		xAxis(LeAxis(v1, v2)), yAxis(LeAxis(v1, v3))
 	{
 
