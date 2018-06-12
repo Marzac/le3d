@@ -67,15 +67,15 @@
 	#define LE_TRILIST_MAX				${LE3D_TRILIST_MAX}					/** Maximum number of triangles in display list */
 	#define LE_VERLIST_MAX				${LE3D_VERLIST_MAX}					/** Maximum number of vertexes in transformation buffer */
 
+	#define LE_USE_SIMD					${LE3D_USE_SIMD}					/** Use generic compiler support for SIMD instructions */
 /** Performance optimizations */
 #ifndef AMIGA
-	#define LE_USE_SIMD					${LE3D_USE_SIMD}					/** Use generic compiler support for SIMD instructions */
 	#define LE_USE_SSE2					${LE3D_USE_SSE2}					/** Use Intel SSE2 instructions */
 	#define LE_USE_AMMX					0									/** Use Apollo AMMX instructions */
 #else
-	#define LE_USE_SIMD					${LE3D_USE_SIMD}					/** Use generic compiler support for SIMD instructions */
 	#define LE_USE_SSE2					0									/** Use Intel SSE2 instructions */
 	#define LE_USE_AMMX					${LE3D_USE_AMMX}					/** Use Apollo AMMX instructions */
+	#define LE_USE_SAGA_FB				${LE3D_USE_SAGA_FB}
 #endif // AMIGA
 
 #endif // LE_CONFIG_H

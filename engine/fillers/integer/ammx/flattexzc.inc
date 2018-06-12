@@ -9,7 +9,7 @@
 	\version 1.7
 
 	The MIT License (MIT)
-	Copyright (c) 2015-2018 Frédéric Meslin
+	Copyright (c) 2015-2018 FrÃ©dÃ©ric Meslin
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -42,5 +42,5 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 	int aw = (w2 - w1) / d;
 
 	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + pixels);
-	fill_flat_texel(p, d, u1, v1, w1, au, av, aw, texMaskU, texMaskV, texSizeU, (uint32_t *) texPixels, sc);
+	fill_flat_texel(p, d, u1, v1, w1, au, av, aw, texMaskU, texMaskV, texSizeU, texDiffusePixels, sc);
 }

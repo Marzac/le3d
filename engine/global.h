@@ -95,7 +95,7 @@
 
 /*****************************************************************************/
 /** Brute force 128bit memory alignement (for SIMD maths) */
-	#if LE_USE_SIMD == 1
+	#if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
 		void * operator new(size_t size) {
 			return _aligned_malloc(size, 16);
 		}

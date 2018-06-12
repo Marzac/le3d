@@ -39,9 +39,10 @@ set(LE3D_VERLIST_MAX				150000		CACHE STRING "Maximum number of vertexes in tran
 mark_as_advanced(LE3D_TRILIST_MAX LE3D_VERLIST_MAX)
 
 # Performance optimizations
+option(LE3D_USE_SIMD "Use SIMD instructions & vectors" On)
 if(NOT(AMIGA))
-    option(LE3D_USE_SIMD "Use SIMD instructions & vectors" On)
     option(LE3D_USE_SSE2 "Use Intel SSE2 instructions" On)
 else()
     option(LE3D_USE_AMMX "Use Apollo AMMX instructions" Off)
+    option(LE3D_USE_SAGA_FB "Use Vampire direct framebuffer access" Off)
 endif()
