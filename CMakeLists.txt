@@ -103,7 +103,6 @@ elseif (UNIX AND APPLE)
     )
 elseif (AMIGA)
     list(APPEND ENGINE_FILES
-        engine/amiga/missing-math-impl.cpp
         engine/system_amiga.cpp
         engine/draw_amiga.cpp
         engine/window_amiga.cpp
