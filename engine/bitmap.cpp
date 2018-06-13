@@ -189,8 +189,9 @@ void LeBitmap::blit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32_t xS
 	int stepSrc = src->tx - w;
 
 	for (int y = 0; y < h; y++){
-		for (int x = 0; x < w; x++)
+		for (int x = 0; x < w; x++) {
 			*d++ = *s++;
+		}
 		s += stepSrc;
 		d += stepDst;
 	}
@@ -295,13 +296,13 @@ void LeBitmap::alphaBlit(int32_t xDst, int32_t yDst, const LeBitmap * src, int32
 
 	for (int y = 0; y < h; y++){
 		for (int x = 0; x < w; x++){
-			uint8_t * dPix = (uint8_t *) d ++;
-			uint8_t * sPix = (uint8_t *) s ++;
-			uint16_t a = 256 - sPix[3];
-			dPix[0] = ((dPix[0] * a) >> 8) + sPix[0];
-			dPix[1] = ((dPix[1] * a) >> 8) + sPix[1];
-			dPix[2] = ((dPix[2] * a) >> 8) + sPix[2];
-			dPix[3] = ((dPix[3] * a) >> 8) + sPix[3];
+			LeColor * dPix = (LeColor *) d ++;
+			LeColor * sPix = (LeColor *) s ++;
+			uint16_t a = 256 - sPix->a;
+			dPix->r = ((dPix->r * a) >> 8) + sPix->r;
+			dPix->g = ((dPix->g * a) >> 8) + sPix->g;
+			dPix->b = ((dPix->b * a) >> 8) + sPix->b;
+			dPix->a = ((dPix->a * a) >> 8) + sPix->a;
 		}
 
 		s += stepSrc;
@@ -531,12 +532,12 @@ void LeBitmap::preMultiply()
 {
 	size_t noPixels = tx * ty;
 
-	uint8_t * c = (uint8_t *) data;
+	LeColor* c = (LeColor *) data;
 	for (size_t i = 0; i < noPixels; i++) {
-		c[0] = (c[0] * c[3]) >> 8;
-		c[1] = (c[1] * c[3]) >> 8;
-		c[2] = (c[2] * c[3]) >> 8;
-		c += 4;
+		c->r = (c->r * c->a) >> 8;
+		c->g = (c->g * c->a) >> 8;
+		c->b = (c->b * c->a) >> 8;
+		c++;
 	}
 
 	flags |= LE_BITMAP_RGBA | LE_BITMAP_PREMULTIPLIED;

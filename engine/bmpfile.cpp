@@ -189,10 +189,6 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	int shiftB = 0;
 	if (infoHeader.biCompression == BI_BITFIELDS) {
 		fread(&mask, sizeof(BMPCOLORMASK), 1, file);
-		FROM_LEU32(mask.mR);
-		FROM_LEU32(mask.mG);
-		FROM_LEU32(mask.mB);
-		FROM_LEU32(mask.mA);
 		shiftR = __builtin_ffs(mask.mR) - 1;
 		shiftG = __builtin_ffs(mask.mG) - 1;
 		shiftB = __builtin_ffs(mask.mB) - 1;
@@ -237,16 +233,15 @@ int LeBmpFile::readBitmap(FILE * file, LeBitmap * bitmap)
 	// Parse a 32 bits image
 		for (int y = 0; y < bitmap->ty; y ++) {
 			fread(buffer, srcScan, 1, file);
-			uint32_t * d = (uint32_t *) data;
+			LeColor * d = (LeColor *) data;
 			uint32_t * s = (uint32_t *) buffer;
 			for (int i = 0; i < bitmap->tx; i ++) {
 				uint32_t c = *s++;
-				uint32_t a, r, g, b;
-				a = (c & mask.mA) >> shiftA;
-				r = (c & mask.mR) >> shiftR;
-				g = (c & mask.mG) >> shiftG;
-				b = (c & mask.mB) >> shiftB;
-				*d++ = (a << 24) | (r << 16) | (g << 8) | b;
+				d->a = (uint8_t) ((c & mask.mA) >> shiftA);
+				d->r = (uint8_t) ((c & mask.mR) >> shiftR);
+				d->g = (uint8_t) ((c & mask.mG) >> shiftG);
+				d->b = (uint8_t) ((c & mask.mB) >> shiftB);
+				d++;
 			}
 			if (upsidedown) data -= dstScan;
 			else data += dstScan;
