@@ -25,7 +25,6 @@ Code has been designed for resource constrained platforms.
 
 ---
 
-**Fred's Lab:**  
 A project maintained by Fred's Lab  
 http://fredslab.net  
 
@@ -37,10 +36,9 @@ Currently supported platforms:
 - MacOS X
 - AmigaOS 3.x (m68k)
 
----
-
+# Core engine
 **Source code / examples / documentation**  
-Copyright (c) 2015 - 2018 Frédéric Meslin  
+Frédéric Meslin  
 **Twitter:** @marzacdev  
 **Email:** fred@fredslab.net  
 
@@ -49,7 +47,7 @@ Andreas Streichardt
 **Twitter:** @m0ppers  
 **Email:** andreas@mop.koeln  
 
-**Exceptions:**  
+# Exceptions
 __Mesh textures__  
 In the example folder, one or more textures on the 3D models have been created with photographs from Textures.com.  
 These photographs may not be redistributed by default;  
