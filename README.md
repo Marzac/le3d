@@ -20,6 +20,7 @@ Code has been designed for resource constrained platforms.
 <img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render3.jpg" width="256">
 <img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render4.jpg" width="256">
 <img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render5.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render6.jpg" width="256">
 </p>
 
 ---
