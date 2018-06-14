@@ -16,11 +16,11 @@ Code has been designed for resource constrained platforms.
 
 ---
 
-![Rendered picture 1](https://github.com/Marzac/le3d/blob/master/docs/pictures/render1.jpg "=128x")
-![Rendered picture 2](https://github.com/Marzac/le3d/blob/master/docs/pictures/render2.jpg "=128x")
-![Rendered picture 3](https://github.com/Marzac/le3d/blob/master/docs/pictures/render3.jpg "=128x")
-![Rendered picture 4](https://github.com/Marzac/le3d/blob/master/docs/pictures/render4.jpg "=128x")
-![Rendered picture 5](https://github.com/Marzac/le3d/blob/master/docs/pictures/render5.jpg "=128x")
+![Rendered picture 1](https://github.com/Marzac/le3d/blob/master/docs/pictures/render1.jpg | width=128)
+![Rendered picture 2](https://github.com/Marzac/le3d/blob/master/docs/pictures/render2.jpg | width=128)
+![Rendered picture 3](https://github.com/Marzac/le3d/blob/master/docs/pictures/render3.jpg | width=128)
+![Rendered picture 4](https://github.com/Marzac/le3d/blob/master/docs/pictures/render4.jpg | width=128)
+![Rendered picture 5](https://github.com/Marzac/le3d/blob/master/docs/pictures/render5.jpg | width=128)
 
 Currently supported platforms:
 - Microsoft Windows XP, 7, 8 and 10
