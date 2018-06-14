@@ -6,12 +6,6 @@ A straightforward C++ 3D software engine for real-time graphics.
 The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
 Code has been designed for resource constrained platforms.  
 
-Currently supported platforms:
-- Microsoft Windows XP, 7, 8 and 10
-- Linux based operating systems
-- MacOS X
-- AmigaOS 3.x (m68k)
-
 **Build status - Linux, MacOS, Amiga (GCC / CLang)**  
 [![Build Status](https://travis-ci.org/Marzac/le3d.svg?branch=master)](https://travis-ci.org/Marzac/le3d)  
 
@@ -36,6 +30,12 @@ A project maintained by Fred's Lab
 http://fredslab.net  
 
 This is open source software released under the MIT License, please refer to LICENCE file for more information.  
+
+Currently supported platforms:
+- Microsoft Windows XP, 7, 8 and 10
+- Linux based operating systems
+- MacOS X
+- AmigaOS 3.x (m68k)
 
 ---
 
