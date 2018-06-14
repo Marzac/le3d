@@ -2,6 +2,10 @@
 **LightEngine 3D**  
 **Version 1.7 - 04/06/2018**
 
+A straightforward C++ 3D software engine for real-time graphics.  
+The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
+Code has been designed for resource constrained platforms.  
+
 ---
 
 **Build status - Linux, MacOS, Amiga (GCC / CLang)**  
@@ -12,17 +16,11 @@
 
 ---
 
-A straightforward C++ 3D software engine for real-time graphics.  
-The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
-Code has been designed for resource constrained platforms.  
-
----
-
-![alt text](https://github.com/Marzac/le3d/blob/master/docs/pictures/render1.jpg "Rendered picture 1")
-![alt text](https://github.com/Marzac/le3d/blob/master/docs/pictures/render2.jpg "Rendered picture 2")
-![alt text](https://github.com/Marzac/le3d/blob/master/docs/pictures/render3.jpg "Rendered picture 3")
-![alt text](https://github.com/Marzac/le3d/blob/master/docs/pictures/render4.jpg "Rendered picture 4")
-![alt text](https://github.com/Marzac/le3d/blob/master/docs/pictures/render5.jpg "Rendered picture 5")
+![Rendered picture 1](https://github.com/Marzac/le3d/blob/master/docs/pictures/render1.jpg =128x)
+![Rendered picture 2](https://github.com/Marzac/le3d/blob/master/docs/pictures/render2.jpg =128x)
+![Rendered picture 3](https://github.com/Marzac/le3d/blob/master/docs/pictures/render3.jpg =128x)
+![Rendered picture 4](https://github.com/Marzac/le3d/blob/master/docs/pictures/render4.jpg =128x)
+![Rendered picture 5](https://github.com/Marzac/le3d/blob/master/docs/pictures/render5.jpg =128x)
 
 Currently supported platforms:
 - Microsoft Windows XP, 7, 8 and 10
