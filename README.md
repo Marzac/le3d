@@ -6,8 +6,6 @@ A straightforward C++ 3D software engine for real-time graphics.
 The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
 Code has been designed for resource constrained platforms.  
 
----
-
 **Build status - Linux, MacOS, Amiga (GCC / CLang)**  
 [![Build Status](https://travis-ci.org/Marzac/le3d.svg?branch=master)](https://travis-ci.org/Marzac/le3d)  
 
@@ -17,12 +15,14 @@ Code has been designed for resource constrained platforms.
 ---
 
 <p align="center">
-<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render1.jpg" width="128">
-<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render2.jpg" width="128">
-<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render3.jpg" width="128">
-<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render4.jpg" width="128">
-<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render5.jpg" width="128">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render1.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render2.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render3.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render4.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render5.jpg" width="256">
 </p>
+
+---
 
 Currently supported platforms:
 - Microsoft Windows XP, 7, 8 and 10
@@ -60,6 +60,8 @@ A project maintained by Fred's Lab
 http://fredslab.net  
 
 This is open source software released under the MIT License, please refer to LICENCE file for more information.  
+
+---
 
 # Renderer (Portable C++ / ASM (SSE2))  
 The renderer:  
