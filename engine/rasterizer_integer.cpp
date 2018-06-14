@@ -48,20 +48,20 @@
 /*****************************************************************************/
 /** Platform specific or reference fillers */
 #if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
-	#include "fillers/integer/sse/flattexzc.inc"
-	#include "fillers/integer/sse/flattexzcfog.inc"
-	#include "fillers/integer/sse/flattexalphazc.inc"
-	#include "fillers/integer/sse/flattexalphazcfog.inc"
+	#include "fillers/integer/sse/flattexzc.h"
+	#include "fillers/integer/sse/flattexzcfog.h"
+	#include "fillers/integer/sse/flattexalphazc.h"
+	#include "fillers/integer/sse/flattexalphazcfog.h"
 #elif LE_USE_SIMD == 1 && LE_USE_AMMX == 1
-	#include "fillers/integer/ammx/flattexzc.inc"
-	#include "fillers/integer/ref/flattexzcfog.inc"
-	#include "fillers/integer/ref/flattexalphazc.inc"
-	#include "fillers/integer/ref/flattexalphazcfog.inc"
+	#include "fillers/integer/ammx/flattexzc.h"
+	#include "fillers/integer/ref/flattexzcfog.h"
+	#include "fillers/integer/ref/flattexalphazc.h"
+	#include "fillers/integer/ref/flattexalphazcfog.h"
 #else
-	#include "fillers/integer/ref/flattexzc.inc"
-	#include "fillers/integer/ref/flattexzcfog.inc"
-	#include "fillers/integer/ref/flattexalphazc.inc"
-	#include "fillers/integer/ref/flattexalphazcfog.inc"
+	#include "fillers/integer/ref/flattexzc.h"
+	#include "fillers/integer/ref/flattexzcfog.h"
+	#include "fillers/integer/ref/flattexalphazc.h"
+	#include "fillers/integer/ref/flattexalphazcfog.h"
 #endif
 
 /*****************************************************************************/

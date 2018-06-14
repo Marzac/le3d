@@ -48,15 +48,15 @@
 /*****************************************************************************/
 /** Platform specific or reference fillers */
 #if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
-	#include "fillers/float/sse/flattexzc.inc"
-	#include "fillers/float/sse/flattexzcfog.inc"
-	#include "fillers/float/sse/flattexalphazc.inc"
-	#include "fillers/float/sse/flattexalphazcfog.inc"
+	#include "fillers/float/sse/flattexzc.h"
+	#include "fillers/float/sse/flattexzcfog.h"
+	#include "fillers/float/sse/flattexalphazc.h"
+	#include "fillers/float/sse/flattexalphazcfog.h"
 #else
-	#include "fillers/float/ref/flattexzc.inc"
-	#include "fillers/float/ref/flattexzcfog.inc"
-	#include "fillers/float/ref/flattexalphazc.inc"
-	#include "fillers/float/ref/flattexalphazcfog.inc"
+	#include "fillers/float/ref/flattexzc.h"
+	#include "fillers/float/ref/flattexzcfog.h"
+	#include "fillers/float/ref/flattexalphazc.h"
+	#include "fillers/float/ref/flattexalphazcfog.h"
 #endif
 
 /*****************************************************************************/
