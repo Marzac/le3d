@@ -51,6 +51,7 @@ LeRenderer::LeRenderer(int width, int height) :
 	usedTrilist(&intTrilist),
 	extra(0), extraMax(0),
 	colors(NULL),
+	viewFov(LE_RENDERER_FOV_DEFAULT),
 	vOffset(0.0f),
 	backEnable(true),
 	fogEnable(false),
@@ -64,7 +65,6 @@ LeRenderer::LeRenderer(int width, int height) :
 // Configure default camera
 	setViewPosition(LeVertex(0.0f, 0.0f, 0.0f));
 	setViewAngle(LeVertex(0.0f, 0.0f, 0.0f));
-	setViewProjection(LE_RENDERER_FOV_DEFAULT);
 
 // Flush the lists
 	flush();
@@ -314,6 +314,7 @@ void LeRenderer::setViewport(float left, float top, float right, float bottom)
 	viewRightAxis  = LeAxis(LeVertex(right, bottom, 0.0f), LeVertex(right, top,	   0.0f));
 	viewTopAxis	   = LeAxis(LeVertex(right, top,	0.0f), LeVertex(left,  top,	   0.0f));
 	viewBottomAxis = LeAxis(LeVertex(left,	bottom, 0.0f), LeVertex(right, bottom ,0.0f));
+	setViewProjection(viewFov);
 }
 
 /**
@@ -328,6 +329,7 @@ void LeRenderer::setViewClipping(float near, float far)
 	viewBackPlan.zAxis.origin.z = -far;
 	viewFrontPlan.zAxis.axis.z = -1.0f;
 	viewBackPlan.zAxis.axis.z = 1.0f;
+	setViewProjection(viewFov);
 }
 
 /**
@@ -605,8 +607,8 @@ int LeRenderer::project(LeTriangle tris[], const int srcIndices[], int dstIndice
 
 	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
 	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
-	float centerX = width * 0.5f;
-	float centerY = height * 0.5f;
+	float centerX = viewLeftAxis.origin.x + width * 0.5f;
+	float centerY = viewTopAxis.origin.y + height * 0.5f;
 	float near = -viewFrontPlan.zAxis.origin.z;
 
 	for (int i = 0; i < nb; i++) {

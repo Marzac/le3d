@@ -129,6 +129,7 @@ private:
 	LeAxis viewRightAxis;				/**< 2D right clipping axis */
 	LeAxis viewTopAxis;					/**< 2D top clipping axis */
 	LeAxis viewBottomAxis;				/**< 2D bottom clipping axis */
+	float viewFov;						/**< Viewport field-of-view */
 
 	float ztx;							/**< Horizontal projection factor */
 	float zty;							/**< Vertical projection factor */
