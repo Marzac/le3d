@@ -240,7 +240,7 @@ int main()
 	LeGamePad::setup();
 
 // Create application objects
-	LeWindow window	= LeWindow("Destroy The Destroyer", resoX, resoY, true);
+	LeWindow window	= LeWindow("Destroy The Destroyer", resoX, resoY, false);
 	LeDraw draw	= LeDraw(window.getContext(), resoX, resoY);
 	LeRenderer renderer	= LeRenderer(resoX, resoY);
 	LeRasterizer rasterizer = LeRasterizer(resoX, resoY);
@@ -460,7 +460,12 @@ void sceneRender(LeRenderer & renderer, LeRasterizer & rasterizer)
 
 // Layer 0: sky / destroyer / leuncher / bullets
 	renderer.flush();
+	
+	renderer.setMipmapping(false);
 	renderer.render(skyMesh);
+	renderer.setMipmapping(true);
+
+	//renderer.setFog(true);
 	renderer.render(destroyerMesh);
 	launchersRender(renderer);
 	
@@ -470,9 +475,9 @@ void sceneRender(LeRenderer & renderer, LeRasterizer & rasterizer)
 			if (!explosions[e].frame) continue;
 			renderer.render(&explosions[e].sparks);
 		}
-		renderer.render(&bulletsBSet);
 	}
 
+	//renderer.setFog(false);
 	rasterizer.rasterList(renderer.getTriangleList());
 
 // Layer 1: auto-target / UI / title
