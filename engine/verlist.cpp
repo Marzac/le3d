@@ -54,6 +54,11 @@ LeVerList::~LeVerList()
 }
 
 /*****************************************************************************/
+/**
+	\fn void LeVerList::allocate(int noVertexes)
+	\brief Allocate memory to hold vertexes
+	\param[in] noVertexes maximum number of vertexes
+*/
 void LeVerList::allocate(int noVertexes)
 {
 	vertexes = new LeVertex[noVertexes];

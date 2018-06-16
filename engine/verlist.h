@@ -53,10 +53,10 @@ public:
 	void allocate(int noVertexes);
 
 public:
-	LeVertex * vertexes;
+	LeVertex * vertexes;				/**< array of vertexes */
 
-	int noAllocated;
-	int noUsed;
+	int noAllocated;					/**< number of allocated vertexes */
+	int noUsed;							/**< number of used vertexes */
 };
 
 #endif // LE_VERLIST_H

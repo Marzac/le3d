@@ -1,6 +1,10 @@
 # le3d  
 **LightEngine 3D**  
-**Version 1.6 - 09/05/2018**
+**Version 1.7 - 04/06/2018**
+
+A straightforward C++ 3D software engine for real-time graphics.  
+The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
+Code has been designed for resource constrained platforms.  
 
 **Build status - Linux, MacOS, Amiga (GCC / CLang)**  
 [![Build Status](https://travis-ci.org/Marzac/le3d.svg?branch=master)](https://travis-ci.org/Marzac/le3d)  
@@ -8,9 +12,23 @@
 **Build status - Windows (MSVC)**  
 [![Build status](https://ci.appveyor.com/api/projects/status/wgilys64hn3wqqdu?svg=true)](https://ci.appveyor.com/project/Marzac/le3d)  
 
-A straightforward C++ 3D software engine for real-time graphics.  
-The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
-Code has been designed for resource constrained platforms.  
+---
+
+<p align="center">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render1.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render2.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render3.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render4.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render5.jpg" width="256">
+<img src="https://github.com/Marzac/le3d/blob/master/docs/pictures/render6.jpg" width="256">
+</p>
+
+---
+
+A project maintained by Fred's Lab  
+http://fredslab.net  
+
+This is open source software released under the MIT License, please refer to LICENCE file for more information.  
 
 Currently supported platforms:
 - Microsoft Windows XP, 7, 8 and 10
@@ -18,17 +36,18 @@ Currently supported platforms:
 - MacOS X
 - AmigaOS 3.x (m68k)
 
-Source code / examples / documentation  
-Copyright (c) 2015 - 2018 Frédéric Meslin  
+# Core engine
+**Source code / examples / documentation**  
+Frédéric Meslin  
 **Twitter:** @marzacdev  
 **Email:** fred@fredslab.net  
 
-CMake scripts / Amiga+MacOS support  
+**CMake scripts / Amiga + MacOS support**  
 Andreas Streichardt  
 **Twitter:** @m0ppers  
 **Email:** andreas@mop.koeln  
 
-**Exceptions:**  
+# Exceptions
 __Mesh textures__  
 In the example folder, one or more textures on the 3D models have been created with photographs from Textures.com.  
 These photographs may not be redistributed by default;  
@@ -43,11 +62,7 @@ Please visit:
 http://www.humus.name/index.php?page=Textures  
 for more information.  
 
-**Fred's Lab:**  
-A project maintained by Fred's Lab  
-http://fredslab.net  
-
-This is open source software released under the MIT License, please refer to LICENCE file for more information.  
+---
 
 # Renderer (Portable C++ / ASM (SSE2))  
 The renderer:  
@@ -63,10 +78,11 @@ The renderer:
 
 The rasterizer:  
 - Draws textured triangles  
-- Handles mipmaping  
+- Handles mipmapping  
 - Handles alpha blending  
-- Performs perspective correction  
 - Applies solid color per triangle  
+- Applies quadratic fog per fragment  
+- Performs perspective correction  
 - Does not perform texture filtering  
 - Does not draw anti-aliased edges  
 - Align vertex coordinates to nearest pixel coordinates  
@@ -128,9 +144,6 @@ Supported 3D model formats:
 
 # Limitations  
 - No Z-buffer  
-- No multilayer texturing  
-- No shaders  
-- No fog
 - No antialiasing
 - Single core support
 

@@ -68,7 +68,7 @@
 /**
 * \mainpage le3d - LightEngine 3D
 * \section intro_sec C++ 3D software engine
-* **Version 1.6 - 09/05/2018**
+* **Version 1.7 - 04/06/2018**
 *
 * Currently supported platforms:
 * - Microsoft Windows XP, 7, 8 and 10
@@ -120,8 +120,9 @@
 * - Draws textured triangles
 * - Handles mipmaping
 * - Handles alpha blending
-* - Performs perspective correction
 * - Applies solid color per triangle
+* - Applies quadratic fog per fragment
+* - Performs perspective correction
 * - Does not perform texture filtering
 * - Does not draw anti-aliased edges
 * - Align vertex coordinates to nearest pixel coordinates
@@ -174,9 +175,6 @@
 *
 * # Limitations
 * - No Z-buffer
-* - No multilayer texturing
-* - No shaders
-* - No fog
 * - No antialiasing
 * - Single core support
 *

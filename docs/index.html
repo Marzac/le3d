@@ -84,7 +84,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><p>Engine class includes</p>
 <h1><a class="anchor" id="intro_sec"></a>
 C++ 3D software engine</h1>
-<p><b>Version 1.6 - 09/05/2018</b></p>
+<p><b>Version 1.7 - 04/06/2018</b></p>
 <p>Currently supported platforms:</p><ul>
 <li>Microsoft Windows XP, 7, 8 and 10</li>
 <li>Linux based operating systems</li>
@@ -125,8 +125,9 @@ C++ 3D software engine</h1>
 <li>Draws textured triangles</li>
 <li>Handles mipmaping</li>
 <li>Handles alpha blending</li>
-<li>Performs perspective correction</li>
 <li>Applies solid color per triangle</li>
+<li>Applies quadratic fog per fragment</li>
+<li>Performs perspective correction</li>
 <li>Does not perform texture filtering</li>
 <li>Does not draw anti-aliased edges</li>
 <li>Align vertex coordinates to nearest pixel coordinates</li>
@@ -174,9 +175,6 @@ C++ 3D software engine</h1>
 <h1>Limitations</h1>
 <ul>
 <li>No Z-buffer</li>
-<li>No multilayer texturing</li>
-<li>No shaders</li>
-<li>No fog</li>
 <li>No antialiasing</li>
 <li>Single core support</li>
 </ul>

@@ -20,7 +20,7 @@ var searchData=
   ['collidespherebox',['collideSphereBox',['../namespace_le_physics.html#af39e17816f7773ad4361f7fad5e92ea2',1,'LePhysics']]],
   ['collidespheremesh',['collideSphereMesh',['../namespace_le_physics.html#ac9468f6731682ba7c21f8ad9e3da3fb9',1,'LePhysics']]],
   ['collidespheresphere',['collideSphereSphere',['../namespace_le_physics.html#ac1bd1be3d08dcbd0b9673079e926138d',1,'LePhysics']]],
-  ['color',['color',['../class_le_light.html#a579e6aa43f29304e05a7ff076478eded',1,'LeLight::color()'],['../struct_le_triangle.html#a02df5c56888994088c09b589a3e1f87a',1,'LeTriangle::color()']]],
+  ['color',['color',['../class_le_light.html#a579e6aa43f29304e05a7ff076478eded',1,'LeLight::color()'],['../struct_le_fog.html#a767c30ce79cf0d7febed005d37662b81',1,'LeFog::color()']]],
   ['color_2eh',['color.h',['../color_8h.html',1,'']]],
   ['colors',['colors',['../class_le_b_set.html#a6bf204d60d26534e195203b34ed5dce1',1,'LeBSet::colors()'],['../class_le_mesh.html#a8ac8e2e5064e0be80e9c352632245ae5',1,'LeMesh::colors()']]],
   ['computenormals',['computeNormals',['../class_le_mesh.html#ac2b2558d60fd8f16d1532a365a37aee7',1,'LeMesh']]],

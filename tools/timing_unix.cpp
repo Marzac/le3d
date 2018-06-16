@@ -31,12 +31,13 @@
 */
 
 /*****************************************************************************/
+#if defined(__unix__) || defined(__unix) || \
+    defined(__APPLE__) && defined(__MACH__)
+	
 #include "timing.h"
 
-#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 #include <unistd.h>
 #include <inttypes.h>
@@ -180,7 +181,6 @@ void LeTiming::waitNextFrame()
 
 	fps = (float) countsPerSec / dt;
 	if (enableDisplay) display();
-
 }
 
 /*****************************************************************************/
@@ -196,3 +196,5 @@ void LeTiming::display()
 		ttd = 0;
 	}
 }
+
+#endif

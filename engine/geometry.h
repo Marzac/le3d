@@ -1,6 +1,6 @@
 /**
 	\file geometry.h
-	\brief LightEngine 3D: Vertex / axis / plan / matrix objects
+	\brief LightEngine 3D: Vertex / axis / plane / matrix objects
 	\brief All platforms implementation
 	\author Frederic Meslin (fred@fredslab.net)
 	\twitter @marzacdev

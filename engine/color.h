@@ -50,24 +50,24 @@ public:
     }
 
 #ifdef AMIGA
-    LeColor(): r(0), g(0), b(0), a(0) {}
-	LeColor(uint8_t const& _r, uint8_t const& _g, uint8_t const& _b, uint8_t const& _a): r(_r), g(_g), b(_b), a(_a) {} 
-	explicit LeColor(int const& color): r(color >> 24), g(color >> 16), b(color >> 8), a(color) {};
+    LeColor(): a(0), r(0), g(0), b(0)  {}
+	LeColor(uint8_t const& _r, uint8_t const& _g, uint8_t const& _b, uint8_t const& _a): a(_a), r(_r), g(_g), b(_b)  {} 
+	explicit LeColor(int const& color): a(color >> 24), r(color >> 16), g(color >> 8), b(color) {};
 	LeColor& operator=(int const& color) {
-		r = color >> 24;
-		g = color >> 16;
-		b = color >> 8;
-		a = color;
+		a = color >> 24;
+		r = color >> 16;
+		g = color >> 8;
+		b = color;
 
 		return *this;
 	}
     operator int() {
-	    return (r << 24) | (g << 16) | (b << 8) | a;
+	    return (a << 24) | (r << 16) | (g << 8) | b;
 	}
 
 public:
     static LeColor rgba(uint32_t const& rgba) {
-		return LeColor(rgba >> 24, rgba >> 16, rgba >> 8, rgba);
+		return LeColor(rgba >> 16, rgba >> 8, rgba >> 0, rgba >> 24);
     }
     
 	static LeColor rgb(uint32_t const& rgb) {
@@ -75,10 +75,10 @@ public:
     }
 
 public:
+    uint8_t a;
     uint8_t r;
     uint8_t g;
     uint8_t b;
-    uint8_t a;
 
 #else
     LeColor(): b(0), g(0), r(0), a(0) {}

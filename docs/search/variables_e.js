@@ -4,6 +4,7 @@ var searchData=
   ['shades',['shades',['../class_le_b_set.html#a392c8e07bde2e4675424edab35250623',1,'LeBSet::shades()'],['../class_le_mesh.html#a55101b4a31c61efe2c03275cc3ac6bfb',1,'LeMesh::shades()']]],
   ['shininess',['shininess',['../struct_le_obj_material.html#add18634cd3664efb3e16f6d2e5dcc51b',1,'LeObjMaterial']]],
   ['sizes',['sizes',['../class_le_b_set.html#a6f71b9e2d695eaa0ac180fb070f3c0df',1,'LeBSet']]],
+  ['solidcolor',['solidColor',['../struct_le_triangle.html#a2fd024594ed3ea2c0f36601ac07f990d',1,'LeTriangle']]],
   ['spacex',['spaceX',['../class_le_bmp_font.html#a15fd9939cce7d25f5bb4dff25e851722',1,'LeBmpFont']]],
   ['spacey',['spaceY',['../class_le_bmp_font.html#ab66008da6447b71f63966b10c26fb23f',1,'LeBmpFont']]],
   ['specular',['specular',['../struct_le_obj_material.html#af4ad236b3f41297e96ff4dc600eaaf03',1,'LeObjMaterial']]],
