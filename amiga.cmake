@@ -11,8 +11,8 @@ SET(CMAKE_CXX_COMPILER "${AMIGA_TOOLCHAIN_PATH}/bin/m68k-amigaos-g++")
 # doesn't work due to linker errors :S
 set(CMAKE_C_COMPILER_WORKS 1)
 set(CMAKE_CXX_COMPILER_WORKS 1)
-SET(CMAKE_C_FLAGS "-noixemul -m68040" CACHE STRING "" FORCE)
-SET(CMAKE_CXX_FLAGS "-noixemul -m68040" CACHE STRING "" FORCE)
+SET(CMAKE_C_FLAGS "-noixemul -m68060 -fomit-frame-pointer -mhard-float" CACHE STRING "" FORCE)
+SET(CMAKE_CXX_FLAGS "-noixemul -m68060 -fomit-frame-pointer -mhard-float" CACHE STRING "" FORCE)
 
 SET(UNIX false)
 SET(AMIGA true)

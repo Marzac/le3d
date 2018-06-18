@@ -52,6 +52,11 @@
 	#include "fillers/float/sse/flattexzcfog.h"
 	#include "fillers/float/sse/flattexalphazc.h"
 	#include "fillers/float/sse/flattexalphazcfog.h"
+#elif LE_USE_SIMD == 1 && LE_USE_AMMX == 1
+	#include "fillers/float/ammx/flattexzc.h"
+	#include "fillers/float/ref/flattexzcfog.h"
+	#include "fillers/float/ref/flattexalphazc.h"
+	#include "fillers/float/ref/flattexalphazcfog.h"
 #else
 	#include "fillers/float/ref/flattexzc.h"
 	#include "fillers/float/ref/flattexzcfog.h"
@@ -191,6 +196,8 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		color_4 = _mm_loadu_si128((__m128i *) &curTriangle->solidColor);
 		color_4 = _mm_unpacklo_epi32(color_4,color_4);
 		color_4 = _mm_unpacklo_epi8(color_4, zv);
+	#elif LE_USE_SIMD == 1 && LE_USE_AMMX == 1
+		prepare_fill_texel(&curTriangle->solidColor);
 	#endif	// LE_USE_SIMD && LE_USE_SSE2
 
 	// Convert texture coordinates

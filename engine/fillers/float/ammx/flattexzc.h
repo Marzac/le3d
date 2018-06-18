@@ -1,13 +1,12 @@
 /**
-	\file ammx.h
-	\brief LightEngine 3D: Amiga ammx function declaration
+	\file flattexzc.inc
+	\brief LightEngine 3D: Filler (ammx/float) - flat textured z-corrected scans
 	\brief Amiga+Vampire only
-    \brief header files for asm functions (ammx.s)
 	\author Andreas Streichardt (andreas@mop.koeln)
 	\twitter @m0ppers
 	\website https://mop.koeln/
 	\copyright Andreas Streichardt 2018
-	\version 1.5
+	\version 1.7
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
@@ -30,35 +29,16 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
 */
+inline void LeRasterizer::fillFlatTexZC(int y, float x1, float x2, float w1, float w2, float u1, float u2, float v1, float v2)
+{
+	float floatd = x2 - x1;
+	if (floatd == 0.0f) return;
 
-#ifndef AMMX_H
-#define AMMX_H
+	int xb = (int) floorf(x1);
+	int xe = (int) ceilf(x2);
 
-#include "engine/color.h"
+	uint8_t * p = (uint8_t *) (xb + ((int) y) * frame.tx + pixels);
+	short shortd = xe - xb;
 
-#include <stdint.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void prepare_fill_texel(LeColor* c);
-
-void fill_flat_texel_float(
-	uint8_t* p, short d, float df, float u1, float v1, float w1,
-	float u2, float v2, float w2, uint32_t texMaskU,
-	uint32_t texMaskV, uint32_t texSizeU, LeColor* texPixels
-);
-
-void fill_flat_texel_int(
-    uint8_t* p, short d, int u1, int v1, int w1, int au, int av, int aw,
-    uint32_t texMaskU, uint32_t texMaskV, uint32_t texSizeU, LeColor* texPixels,
-	uint8_t* c
-);
-void set_ammx_pixels(void* data, size_t bytes, LeColor color);
-
-#ifdef __cplusplus
+	fill_flat_texel_float(p, shortd, floatd, u1, v1, w1, u2, v2, w2, texMaskU, texMaskV, texSizeU, texDiffusePixels);
 }
-#endif
-
-#endif
