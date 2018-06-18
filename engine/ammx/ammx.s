@@ -123,7 +123,7 @@ _fill_flat_texel_int:
 ; 48(a7) uint32_t texSizeU
 ; 52(a7) uint32_t* texPixels
 ;
-; additional offset because of saved registers: (fp2-fp7 => 480 bit) => 72 + d2-d6 => 20 = 92
+; additional offset because of saved registers: (fp2-fp7 => 576 bit) => 72 + d2-d6 => 20 = 92
 ;
 _fill_flat_texel_float:
     fmovem.x fp2-fp7,-(a7)
