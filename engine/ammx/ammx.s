@@ -103,7 +103,13 @@ _fill_flat_texel:
 .loopend:
     swap d0
     dbra d0,.loopstart
-    ; XXX no handling for odd d!
+    ; check if we still have to write a byte
+    btst.l #25,d0   ; 16 + 9
+    beq.s .end
+    ; probably case for storeilm 
+    vperm #$13579bdf,e5,e6,e3
+    moveq #$4,d0
+    storec e3,d0,(a1)+
 .end:
     movem.l (a7)+,d2-d7
     rts
