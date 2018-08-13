@@ -53,6 +53,19 @@
 
 /*****************************************************************************/
 /**
+	\enum LE_BACKCULLING_MODES
+	\brief Backculling modes
+*/
+typedef enum {
+	LE_BACKCULLING_NONE	= 0,			/**< Backculling is disabled */
+	LE_BACKCULLING_CCW,				/**< Backculling in counterclockwise mode (default) */
+	LE_BACKCULLING_CW,				/**< Backculling in clockwise mode */
+	LE_BACKCULLING_CCW_ALPHA	,		/**< Backculling in counterclockwise mode, transparent triangles are double sided */
+	LE_BACKCULLING_CW_ALPHA,			/**< Backculling in clockwise mode, transparent triangles are double sided */
+} LE_BACKCULLING_MODES;
+
+/*****************************************************************************/
+/**
 	\class LeRenderer
 	\brief Render meshes and billboard set to 2D triangle list
 */
@@ -69,17 +82,17 @@ public:
 	int getViewportCoordinates(const LeVertex & pos, LeVertex & viewCoords);
 
 	void setViewPosition(const LeVertex & pos);
-	void setViewAngle(const LeVertex & angle);
+	void setViewAngle(const LeVertex & angleYZX);
 	void updateViewMatrix();
 
 	void setViewMatrix(const LeMatrix & view);
 
-	void setViewport(float left, float top, float right, float bottom);
+	void setViewport(int left, int top, int right, int bottom);
 	void setViewClipping(float near, float far);
 	void setViewProjection(float fov);
 	void setViewOffset(float offset);
 
-	void setBackculling(bool enable);
+	void setBackcullingMode(LE_BACKCULLING_MODES mode);
 
 	void setFog(bool enable);
 	void setFogProperties(LeColor color, float near, float far);
@@ -136,7 +149,7 @@ private:
 
 	float vOffset;						/**< Distance view offset */
 
-	bool backEnable;					/**< Backculling enable state */
+	LE_BACKCULLING_MODES backMode;		/**< Backculling mode */
 	bool mipmappingEnable;				/**< Mipmapping enable state */
 	bool fogEnable;						/**< Fog enable state */
 };

@@ -54,12 +54,12 @@ LeRenderer::LeRenderer(int width, int height) :
 	viewFov(LE_RENDERER_FOV_DEFAULT),
 	ztx(1.0f), zty(1.0f),
 	vOffset(0.0f),
-	backEnable(true),
+	backMode(LE_BACKCULLING_CCW),
 	mipmappingEnable(true),
 	fogEnable(false)
 {
 // Configure viewport
-	setViewport(0.0f, 0.0f, (float) width, (float) height);
+	setViewport(0, 0, width - 1, height - 1);
 	setViewClipping(LE_RENDERER_NEAR_DEFAULT, LE_RENDERER_FAR_DEFAULT);
 
 // Configure default camera
@@ -179,7 +179,7 @@ void LeRenderer::render(const LeBSet * bset)
 
 /*****************************************************************************/
 /**
-	\fn int LeRenderer::getViewportCoordinates(const LeVertex & pos, float & x, float & y)
+	\fn int LeRenderer::getViewportCoordinates(const LeVertex & pos, LeVertex & viewCoords)
 	\brief Return the viewport coordinates of a 3D vertex
 	\param[in] pos vertex position in 3D space
 	\param[in] viewCoords viewport coordinates (if within viewport)
@@ -262,21 +262,23 @@ LeTriList * LeRenderer::getTriangleList()
 
 /*****************************************************************************/
 /**
-	\fn void LeRenderer::setViewPosition(const LeVertex &pos)
+	\fn void LeRenderer::setViewPosition(const LeVertex & pos)
 	\brief Set the rendering view position
+	\param[in] pos position of the camera
 */
-void LeRenderer::setViewPosition(const LeVertex &pos)
+void LeRenderer::setViewPosition(const LeVertex & pos)
 {
 	viewPosition = pos;
 }
 
 /**
-	\fn void LeRenderer::setViewAngle(const LeVertex &angle)
+	\fn void LeRenderer::setViewAngle(const LeVertex & angleYZX)
 	\brief Set the rendering view angle (in degrees)
+	\param[in] angleYZX orientation of the camera (Euler angles)
 */
-void LeRenderer::setViewAngle(const LeVertex &angle)
+void LeRenderer::setViewAngle(const LeVertex & angleYZX)
 {
-	viewAngle = angle * d2r;
+	viewAngle = angleYZX;
 }
 
 /**
@@ -287,7 +289,7 @@ void LeRenderer::updateViewMatrix()
 {
 	viewMatrix.identity();
 	viewMatrix.translate(-viewPosition);
-	viewMatrix.rotate(-viewAngle);
+	viewMatrix.rotateEulerYZX(-viewAngle * d2r);
 }
 
 /**
@@ -301,19 +303,24 @@ void LeRenderer::setViewMatrix(const LeMatrix &view)
 
 /*****************************************************************************/
 /**
-	\fn void LeRenderer::setViewport(float left, float top, float right, float bottom)
+	\fn void LeRenderer::setViewport(int left, int top, int right, int bottom)
 	\brief Set the rendering viewport
 	\param[in] left left viewport position (in pixels)
 	\param[in] top top viewport position (in pixels)
 	\param[in] right right viewport position (in pixels)
 	\param[in] bottom bottom viewport position (in pixels)
 */
-void LeRenderer::setViewport(float left, float top, float right, float bottom)
+void LeRenderer::setViewport(int left, int top, int right, int bottom)
 {
-	viewLeftAxis   = LeAxis(LeVertex(left,	top,	0.0f), LeVertex(left,  bottom, 0.0f));
-	viewRightAxis  = LeAxis(LeVertex(right, bottom, 0.0f), LeVertex(right, top,	   0.0f));
-	viewTopAxis	   = LeAxis(LeVertex(right, top,	0.0f), LeVertex(left,  top,	   0.0f));
-	viewBottomAxis = LeAxis(LeVertex(left,	bottom, 0.0f), LeVertex(right, bottom ,0.0f));
+	float leftFloat = (float) left;
+	float topFloat = (float) top;
+	float rightFloat = (float) right;
+	float bottomFloat = (float) bottom;
+
+	viewLeftAxis = LeAxis(LeVertex(leftFloat, topFloat, 0.0f), LeVertex(leftFloat, bottomFloat, 0.0f));
+	viewRightAxis = LeAxis(LeVertex(rightFloat, bottomFloat, 0.0f), LeVertex(rightFloat, topFloat, 0.0f));
+	viewTopAxis = LeAxis(LeVertex(rightFloat, topFloat, 0.0f), LeVertex(leftFloat, topFloat, 0.0f));
+	viewBottomAxis = LeAxis(LeVertex(leftFloat, bottomFloat, 0.0f), LeVertex(rightFloat, bottomFloat, 0.0f));
 	setViewProjection(viewFov);
 }
 
@@ -326,7 +333,7 @@ void LeRenderer::setViewport(float left, float top, float right, float bottom)
 void LeRenderer::setViewClipping(float near, float far)
 {
 	viewFrontPlan.zAxis.origin.z = -near;
-	viewBackPlan.zAxis.origin.z = -far;
+	viewBackPlan.zAxis.origin.z = -far + 1.0f;
 	viewFrontPlan.zAxis.axis.z = -1.0f;
 	viewBackPlan.zAxis.axis.z = 1.0f;
 	setViewProjection(viewFov);
@@ -338,7 +345,7 @@ void LeRenderer::setViewClipping(float near, float far)
 */
 void LeRenderer::setViewProjection(float fov)
 {
-	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
+	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x + 1.0f;
 	float near = viewFrontPlan.zAxis.origin.z;
 	float ratio = tanf(fov * d2r) * near;
 	ztx = width / ratio;
@@ -358,13 +365,13 @@ void LeRenderer::setViewOffset(float offset)
 
 /*****************************************************************************/
 /**
-	\fn void LeRenderer::setBackculling(bool enable)
-	\brief Enable or disable the backculling
-	\param[in] enable backculling enable state
+	\fn void LeRenderer::setBackcullingMode(LE_BACKCULLING_MODES mode)
+	\brief Set the backculling mode
+	\param[in] mode backculling mode
 */
-void LeRenderer::setBackculling(bool enable)
+void LeRenderer::setBackcullingMode(LE_BACKCULLING_MODES mode)
 {
-	backEnable = enable;
+	backMode = mode;
 }
 
 /**
@@ -410,20 +417,24 @@ void LeRenderer::setFogProperties(LeColor color, float near, float far)
 void LeRenderer::updateFrustrum()
 {
 	float near = viewFrontPlan.zAxis.origin.z;
-	float far = viewBackPlan.zAxis.origin.z;
-	float dr = -near / far;
+	float far = viewBackPlan.zAxis.origin.z + 1.0f;
+	float dr = far / near;
 
-	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
-	float hf = height * 0.5f / -zty;
-	float hb = height * 0.5f / (zty * dr);
-	viewTopPlan = LePlane(LeVertex(0.0f, hb, far), LeVertex(1.0f, hb, far), LeVertex(0.0f, hf, near));
-	viewBotPlan = LePlane(LeVertex(0.0f, -hb, far), LeVertex(-1.0f, -hb, far), LeVertex(0.0f, -hf, near));
+	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y + 1.0f;
+	float htf = height * 0.5f / zty;
+	float htb = htf * dr;
+	float hbf = (height * 0.5f - 1.0f) / zty;
+	float hbb = hbf * dr;
+	viewTopPlan = LePlane(LeVertex(0.0f, -htb, far), LeVertex(1.0f, -htb, far), LeVertex(0.0f, -htf, near));
+	viewBotPlan = LePlane(LeVertex(0.0f, hbb, far), LeVertex(-1.0f, hbb, far), LeVertex(0.0f, hbf, near));
 
-	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
-	float wf = width * 0.5f / -ztx;
-	float wb = width * 0.5f / (ztx * dr);
-	viewLeftPlan = LePlane(LeVertex(-wf, 0.0f, near), LeVertex(-wb, 0.0f, far), LeVertex(-wf,  1.0f, near));
-	viewRightPlan = LePlane(LeVertex(wf, 0.0f, near), LeVertex(wb, 0.0f, far), LeVertex(wf, -1.0f, near));
+	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x + 1.0f;
+	float wlf = width * 0.5f / ztx;
+	float wlb = wlf * dr;
+	float wrf = (width * 0.5f - 1.0f) / ztx;
+	float wrb = wrf * dr;
+	viewLeftPlan = LePlane(LeVertex(wlf, 0.0f, near), LeVertex(wlb, 0.0f, far), LeVertex(wlf,  1.0f, near));
+	viewRightPlan = LePlane(LeVertex(-wrf, 0.0f, near), LeVertex(-wrb, 0.0f, far), LeVertex(-wrf, -1.0f, near));
 }
 
 /*****************************************************************************/
@@ -463,7 +474,7 @@ int LeRenderer::build(const LeMesh * mesh, LeVertex vertexes[], LeTriangle tris[
 
 	// Hard clip
 		if (v1->z > near && v2->z > near && v3->z > near) continue;
-		if (v1->z < far && v2->z < far && v3->z < far) continue;
+		if (v1->z <= far && v2->z <= far && v3->z <= far) continue;
 
 	// Fetch triangle properties
 		int texSlot = mesh->texSlotList[i];
@@ -527,7 +538,7 @@ int LeRenderer::build(const LeBSet * bset, LeVertex vertexes[], LeTriangle tris[
 		LeVertex * v = &vertexes[i];
 
 	// Hard clip
-		if (v->z > near && v->z < far) continue;
+		if (v->z > near && v->z <= far) continue;
 			
 	// Construct billboard
 		float sx = bset->sizes[i * 2 + 0] * 0.5f;
@@ -605,8 +616,8 @@ int LeRenderer::project(LeTriangle tris[], const int srcIndices[], int dstIndice
 {
 	int k = 0;
 
-	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
-	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
+	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x + 1.0f;
+	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y + 1.0f;
 	float centerX = viewLeftAxis.origin.x + width * 0.5f;
 	float centerY = viewTopAxis.origin.y + height * 0.5f;
 	float near = -viewFrontPlan.zAxis.origin.z;
@@ -625,15 +636,15 @@ int LeRenderer::project(LeTriangle tris[], const int srcIndices[], int dstIndice
 		tri->xs[1] = tri->xs[1] * ztx * w1 + centerX;
 		tri->xs[2] = tri->xs[2] * ztx * w2 + centerX;
 
-		if (tri->xs[0] <  viewLeftAxis.origin.x	  && tri->xs[1] <  viewLeftAxis.origin.x   && tri->xs[2]  < viewLeftAxis.origin.x)	 continue;
-		if (tri->xs[0] >= viewRightAxis.origin.x  && tri->xs[1] >= viewRightAxis.origin.x  && tri->xs[2] >= viewRightAxis.origin.x)	 continue;
+		if (tri->xs[0] < viewLeftAxis.origin.x  && tri->xs[1] < viewLeftAxis.origin.x  && tri->xs[2] < viewLeftAxis.origin.x) continue;
+		if (tri->xs[0] > viewRightAxis.origin.x && tri->xs[1] > viewRightAxis.origin.x && tri->xs[2] > viewRightAxis.origin.x) continue;
 
 		tri->ys[0] = centerY - tri->ys[0] * zty * w0;
 		tri->ys[1] = centerY - tri->ys[1] * zty * w1;
 		tri->ys[2] = centerY - tri->ys[2] * zty * w2;
 
-		if (tri->ys[0] <  viewTopAxis.origin.y	  && tri->ys[1] <  viewTopAxis.origin.y	   && tri->ys[2] <	viewTopAxis.origin.y)	 continue;
-		if (tri->ys[0] >= viewBottomAxis.origin.y && tri->ys[1] >= viewBottomAxis.origin.y && tri->ys[2] >= viewBottomAxis.origin.y) continue;
+		if (tri->ys[0] < viewTopAxis.origin.y    && tri->ys[1] < viewTopAxis.origin.y    && tri->ys[2] < viewTopAxis.origin.y) continue;
+		if (tri->ys[0] > viewBottomAxis.origin.y && tri->ys[1] > viewBottomAxis.origin.y && tri->ys[2] > viewBottomAxis.origin.y) continue;
 
 	// Prepare texture coordinates
 		tri->zs[0] = w0;
@@ -668,7 +679,7 @@ int LeRenderer::clip3D(LeTriangle tris[], const int srcIndices[], int dstIndices
 	// Compute triangle intersections
 		float nx[4], ny[4], nz[4];
 		float nu[4], nv[4];
-		if (pj1 > 0.0f) {
+		if (pj1 >= 0.0f) {
 			nx[s]	= tri->xs[0];
 			ny[s]	= tri->ys[0];
 			nz[s]	= tri->zs[0];
@@ -892,18 +903,70 @@ int LeRenderer::clip2D(LeTriangle tris[], const int srcIndices[], int dstIndices
 /*****************************************************************************/
 int LeRenderer::backculling(LeTriangle tris[], const int srcIndices[], int dstIndices[], int nb)
 {
-	if (!backEnable) {
+	if (backMode == LE_BACKCULLING_NONE) {
 		memcpy(dstIndices, srcIndices, nb * (sizeof(int)));
 		return nb;
 	}
 
-	int k = 0;
-	for (int i = 0; i < nb; i++) {
-		int j = srcIndices[i];
-		LeTriangle * tri = &tris[j];
-		float back = (tri->xs[1] - tri->xs[0]) * (tri->ys[2] - tri->ys[0]);
-		back -= (tri->ys[1] - tri->ys[0]) * (tri->xs[2] - tri->xs[0]);
-		if (back <= 0.0f) dstIndices[k++] = j;
+	if (backMode == LE_BACKCULLING_CCW) {
+		int k = 0;
+		for (int i = 0; i < nb; i++) {
+			int j = srcIndices[i];
+			LeTriangle * tri = &tris[j];
+			float dir;
+			dir = (tri->xs[1] - tri->xs[0]) * (tri->ys[2] - tri->ys[0]);
+			dir -= (tri->ys[1] - tri->ys[0]) * (tri->xs[2] - tri->xs[0]);
+			if (dir > 0.0f) continue;
+			dstIndices[k++] = j;
+		}
+		return k;
 	}
-	return k;
+	
+	if (backMode == LE_BACKCULLING_CW) {
+		int k = 0;
+		for (int i = 0; i < nb; i++) {
+			int j = srcIndices[i];
+			LeTriangle * tri = &tris[j];
+			float dir;
+			dir = (tri->xs[1] - tri->xs[0]) * (tri->ys[2] - tri->ys[0]);
+			dir -= (tri->ys[1] - tri->ys[0]) * (tri->xs[2] - tri->xs[0]);
+			if (dir < 0.0f) continue;
+			dstIndices[k++] = j;
+		}
+		return k;
+	}
+
+	if (backMode == LE_BACKCULLING_CCW_ALPHA) {
+		int k = 0;
+		for (int i = 0; i < nb; i++) {
+			int j = srcIndices[i];
+			LeTriangle * tri = &tris[j];
+			if (!(tri->flags & LE_TRIANGLE_BLENDED)) {
+				float dir;
+				dir = (tri->xs[1] - tri->xs[0]) * (tri->ys[2] - tri->ys[0]);
+				dir -= (tri->ys[1] - tri->ys[0]) * (tri->xs[2] - tri->xs[0]);
+				if (dir > 0.0f) continue;
+			}
+			dstIndices[k++] = j;
+		}
+		return k;
+	}
+
+	if (backMode == LE_BACKCULLING_CW_ALPHA) {
+		int k = 0;
+		for (int i = 0; i < nb; i++) {
+			int j = srcIndices[i];
+			LeTriangle * tri = &tris[j];
+			if (!(tri->flags & LE_TRIANGLE_BLENDED)) {
+				float dir;
+				dir = (tri->xs[1] - tri->xs[0]) * (tri->ys[2] - tri->ys[0]);
+				dir -= (tri->ys[1] - tri->ys[0]) * (tri->xs[2] - tri->xs[0]);
+				if (dir < 0.0f) continue;
+			}
+			dstIndices[k++] = j;
+		}
+		return k;
+	}
+
+	return 0;
 }
