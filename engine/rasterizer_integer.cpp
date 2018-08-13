@@ -125,12 +125,12 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 			bmp = &slot->extras[slot->cursor];
 
 	// Convert position coordinates
-		xs[0] = (int32_t) (curTriangle->xs[0]) << 16;
-		xs[1] = (int32_t) (curTriangle->xs[1]) << 16;
-		xs[2] = (int32_t) (curTriangle->xs[2]) << 16;
-		ys[0] = (int32_t) (curTriangle->ys[0]);
-		ys[1] = (int32_t) (curTriangle->ys[1]);
-		ys[2] = (int32_t) (curTriangle->ys[2]);
+		xs[0] = (int32_t) (curTriangle->xs[0] + 0.5f) << 16;
+		xs[1] = (int32_t) (curTriangle->xs[1] + 0.5f) << 16;
+		xs[2] = (int32_t) (curTriangle->xs[2] + 0.5f) << 16;
+		ys[0] = (int32_t) (curTriangle->ys[0] + 0.5f);
+		ys[1] = (int32_t) (curTriangle->ys[1] + 0.5f);
+		ys[2] = (int32_t) (curTriangle->ys[2] + 0.5f);
 
 		const float sw = 0x1p30;
 		ws[0] = (int32_t) (curTriangle->zs[0] * sw);
@@ -294,7 +294,7 @@ void LeRasterizer::fillTriangleZC(int vi1, int vi2, int vi3, bool top)
 
 	if (curTriangle->flags & LE_TRIANGLE_BLENDED) {
 		if (curTriangle->flags & LE_TRIANGLE_FOGGED) {
-			for (int y = y1; y < y2; y++) {
+			for (int y = y1; y <= y2; y++) {
 				fillFlatTexAlphaZCFog(y, x1 >> 16, x2 >> 16, w1, w2, u1, u2, v1, v2);
 				x1 += ax1; x2 += ax2;
 				u1 += au1; u2 += au2;
@@ -303,7 +303,7 @@ void LeRasterizer::fillTriangleZC(int vi1, int vi2, int vi3, bool top)
 			}
 		}
 		else {
-			for (int y = y1; y < y2; y++) {
+			for (int y = y1; y <= y2; y++) {
 				fillFlatTexAlphaZC(y, x1 >> 16, x2 >> 16, w1, w2, u1, u2, v1, v2);
 				x1 += ax1; x2 += ax2;
 				u1 += au1; u2 += au2;
@@ -313,7 +313,7 @@ void LeRasterizer::fillTriangleZC(int vi1, int vi2, int vi3, bool top)
 		}
 	}else{
 		if (curTriangle->flags & LE_TRIANGLE_FOGGED) {
-			for (int y = y1; y < y2; y++) {
+			for (int y = y1; y <= y2; y++) {
 				fillFlatTexZCFog(y, x1 >> 16, x2 >> 16, w1, w2, u1, u2, v1, v2);
 				x1 += ax1; x2 += ax2;
 				u1 += au1; u2 += au2;
@@ -321,7 +321,7 @@ void LeRasterizer::fillTriangleZC(int vi1, int vi2, int vi3, bool top)
 				w1 += aw1; w2 += aw2;
 			}
 		}else {
-			for (int y = y1; y < y2; y++) {
+			for (int y = y1; y <= y2; y++) {
 				fillFlatTexZC(y, x1 >> 16, x2 >> 16, w1, w2, u1, u2, v1, v2);
 				x1 += ax1; x2 += ax2;
 				u1 += au1; u2 += au2;

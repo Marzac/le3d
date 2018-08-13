@@ -79,9 +79,9 @@ LeRasterizer::LeRasterizer(int width, int height) :
 	memset(us, 0, sizeof(float) * 4);
 	memset(vs, 0, sizeof(float) * 4);
 
-	frame.allocate(width, height + 2);
+	frame.allocate(width, height);
 	frame.clear(background);
-	pixels = ((LeColor *) frame.data) + frame.tx;
+	pixels = (LeColor *) frame.data;
 }
 
 LeRasterizer::~LeRasterizer()
@@ -125,15 +125,23 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 			bmp = &slot->extras[slot->cursor];
 
 	// Convert position coordinates
-		xs[0] = floorf(curTriangle->xs[0]);
-		xs[1] = floorf(curTriangle->xs[1]);
-		xs[2] = floorf(curTriangle->xs[2]);
-		ys[0] = floorf(curTriangle->ys[0]);
-		ys[1] = floorf(curTriangle->ys[1]);
-		ys[2] = floorf(curTriangle->ys[2]);
+		xs[0] = floorf(curTriangle->xs[0] + 0.5f);
+		xs[1] = floorf(curTriangle->xs[1] + 0.5f);
+		xs[2] = floorf(curTriangle->xs[2] + 0.5f);
+		ys[0] = floorf(curTriangle->ys[0] + 0.5f);
+		ys[1] = floorf(curTriangle->ys[1] + 0.5f);
+		ys[2] = floorf(curTriangle->ys[2] + 0.5f);
 		ws[0] = curTriangle->zs[0];
 		ws[1] = curTriangle->zs[1];
 		ws[2] = curTriangle->zs[2];
+
+		if (xs[0] < 0 || xs[0] > 1023 ||
+			xs[1] < 0 || xs[1] > 1023 ||
+			xs[2] < 0 || xs[2] > 1023 ||
+			ys[0] < 0 || ys[0] > 767 ||
+			ys[1] < 0 || ys[1] > 767 ||
+			ys[2] < 0 || ys[2] > 767)
+			xs[0] = 0;
 
 	// Sort vertexes vertically
 		int vt = 0, vb = 0, vm1 = 0, vm2 = 3;
@@ -295,7 +303,7 @@ void LeRasterizer::fillTriangleZC(int vi1, int vi2, int vi3, bool top)
 
 	if (curTriangle->flags & LE_TRIANGLE_BLENDED) {
 		if (curTriangle->flags & LE_TRIANGLE_FOGGED) {
-			for (int y = y1; y < y2; y++) {
+			for (int y = y1; y <= y2; y++) {
 				fillFlatTexAlphaZCFog(y, x1, x2, w1, w2, u1, u2, v1, v2);
 				x1 += ax1; x2 += ax2;
 				u1 += au1; u2 += au2;
@@ -304,7 +312,7 @@ void LeRasterizer::fillTriangleZC(int vi1, int vi2, int vi3, bool top)
 			}
 		}
 		else {
-			for (int y = y1; y < y2; y++) {
+			for (int y = y1; y <= y2; y++) {
 				fillFlatTexAlphaZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
 				x1 += ax1; x2 += ax2;
 				u1 += au1; u2 += au2;
@@ -315,7 +323,7 @@ void LeRasterizer::fillTriangleZC(int vi1, int vi2, int vi3, bool top)
 	}
 	else {
 		if (curTriangle->flags & LE_TRIANGLE_FOGGED) {
-			for (int y = y1; y < y2; y++) {
+			for (int y = y1; y <= y2; y++) {
 				fillFlatTexZCFog(y, x1, x2, w1, w2, u1, u2, v1, v2);
 				x1 += ax1; x2 += ax2;
 				u1 += au1; u2 += au2;
@@ -324,7 +332,7 @@ void LeRasterizer::fillTriangleZC(int vi1, int vi2, int vi3, bool top)
 			}
 		}
 		else {
-			for (int y = y1; y < y2; y++) {
+			for (int y = y1; y <= y2; y++) {
 				fillFlatTexZC(y, x1, x2, w1, w2, u1, u2, v1, v2);
 				x1 += ax1; x2 += ax2;
 				u1 += au1; u2 += au2;
