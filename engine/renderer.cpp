@@ -59,7 +59,7 @@ LeRenderer::LeRenderer(int width, int height) :
 	fogEnable(false)
 {
 // Configure viewport
-	setViewport(0, 0, width - 1, height - 1);
+	setViewport(0, 0, width, height);
 	setViewClipping(LE_RENDERER_NEAR_DEFAULT, LE_RENDERER_FAR_DEFAULT);
 
 // Configure default camera
@@ -333,7 +333,7 @@ void LeRenderer::setViewport(int left, int top, int right, int bottom)
 void LeRenderer::setViewClipping(float near, float far)
 {
 	viewFrontPlan.zAxis.origin.z = -near;
-	viewBackPlan.zAxis.origin.z = -far + 1.0f;
+	viewBackPlan.zAxis.origin.z = -far;
 	viewFrontPlan.zAxis.axis.z = -1.0f;
 	viewBackPlan.zAxis.axis.z = 1.0f;
 	setViewProjection(viewFov);
@@ -345,7 +345,7 @@ void LeRenderer::setViewClipping(float near, float far)
 */
 void LeRenderer::setViewProjection(float fov)
 {
-	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x + 1.0f;
+	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
 	float near = viewFrontPlan.zAxis.origin.z;
 	float ratio = tanf(fov * d2r) * near;
 	ztx = width / ratio;
@@ -417,24 +417,20 @@ void LeRenderer::setFogProperties(LeColor color, float near, float far)
 void LeRenderer::updateFrustrum()
 {
 	float near = viewFrontPlan.zAxis.origin.z;
-	float far = viewBackPlan.zAxis.origin.z + 1.0f;
+	float far = viewBackPlan.zAxis.origin.z;
 	float dr = far / near;
 
-	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y + 1.0f;
-	float htf = height * 0.5f / zty;
-	float htb = htf * dr;
-	float hbf = (height * 0.5f - 1.0f) / zty;
-	float hbb = hbf * dr;
-	viewTopPlan = LePlane(LeVertex(0.0f, -htb, far), LeVertex(1.0f, -htb, far), LeVertex(0.0f, -htf, near));
-	viewBotPlan = LePlane(LeVertex(0.0f, hbb, far), LeVertex(-1.0f, hbb, far), LeVertex(0.0f, hbf, near));
+	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
+	float hf = height * 0.5f / zty;
+	float hb = hf * dr;
+	viewTopPlan = LePlane(LeVertex(0.0f, -hb, far), LeVertex(1.0f, -hb, far), LeVertex(0.0f, -hf, near));
+	viewBotPlan = LePlane(LeVertex(0.0f, hb, far), LeVertex(-1.0f, hb, far), LeVertex(0.0f, hf, near));
 
-	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x + 1.0f;
-	float wlf = width * 0.5f / ztx;
-	float wlb = wlf * dr;
-	float wrf = (width * 0.5f - 1.0f) / ztx;
-	float wrb = wrf * dr;
-	viewLeftPlan = LePlane(LeVertex(wlf, 0.0f, near), LeVertex(wlb, 0.0f, far), LeVertex(wlf,  1.0f, near));
-	viewRightPlan = LePlane(LeVertex(-wrf, 0.0f, near), LeVertex(-wrb, 0.0f, far), LeVertex(-wrf, -1.0f, near));
+	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
+	float wf = width * 0.5f / ztx;
+	float wb = wf * dr;
+	viewLeftPlan = LePlane(LeVertex(wf, 0.0f, near), LeVertex(wb, 0.0f, far), LeVertex(wf,  1.0f, near));
+	viewRightPlan = LePlane(LeVertex(-wf, 0.0f, near), LeVertex(-wb, 0.0f, far), LeVertex(-wf, -1.0f, near));
 }
 
 /*****************************************************************************/
@@ -616,8 +612,8 @@ int LeRenderer::project(LeTriangle tris[], const int srcIndices[], int dstIndice
 {
 	int k = 0;
 
-	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x + 1.0f;
-	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y + 1.0f;
+	float width = viewRightAxis.origin.x - viewLeftAxis.origin.x;
+	float height = viewBottomAxis.origin.y - viewTopAxis.origin.y;
 	float centerX = viewLeftAxis.origin.x + width * 0.5f;
 	float centerY = viewTopAxis.origin.y + height * 0.5f;
 	float near = -viewFrontPlan.zAxis.origin.z;
