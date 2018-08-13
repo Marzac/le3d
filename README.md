@@ -1,6 +1,6 @@
 # le3d  
 **LightEngine 3D**  
-**Version 1.7 - 04/06/2018**
+**Version 1.75 - 13/08/2018**
 
 A straightforward C++ 3D software engine for real-time graphics.  
 The engine aims to be a minimal and clear implementation of a simplified fixed pipeline.  
