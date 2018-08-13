@@ -6,7 +6,7 @@
 	\twitter @m0ppers
 	\website https://mop.koeln
 	\copyright Frederic Meslin 2015 - 2018
-	\version 1.7
+	\version 1.75
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin

@@ -6,7 +6,7 @@
 	\twitter todo
 	\website todo
 	\copyright todo
-	\version 1.7
+	\version 1.75
 
 	The MIT License (MIT)
 	Copyright (c) 2015-2018 Frédéric Meslin
