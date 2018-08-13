@@ -110,8 +110,10 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 	trilist->zSort();
 
 #if defined(__i386__) || defined(_M_IX86) || defined(_X86_) || defined(__x86_64__) || defined(_M_X64)
+#if !defined(__APPLE__) || !defined(__MACH__)
 	_controlfp(_MCW_RC, _RC_CHOP);
 	_controlfp(_MCW_DN, _DN_FLUSH);
+#endif
 #endif
 
 	curTrilist = trilist;
