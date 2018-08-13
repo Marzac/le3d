@@ -190,7 +190,6 @@ struct LeVertex
 		return x == v.x && y == v.y && z == v.z;
 	}
 
-
 	float dot(LeVertex v) const
 	{
 		return x * v.x + y * v.y + z * v.z;
@@ -408,111 +407,136 @@ struct LeMatrix
 		*this = m * *this;
 	}
 
-	void rotate(LeVertex a)
+/*****************************************************************************/
+	void rotateEulerXYZ(LeVertex a)
+	{
+		rotateX(a.x);
+		rotateY(a.y);
+		rotateZ(a.z);
+	}
+
+	void rotateEulerXZY(LeVertex a)
+	{
+		rotateX(a.x);
+		rotateZ(a.z);
+		rotateY(a.y);
+	}
+	
+	void rotateEulerYZX(LeVertex a)
 	{
 		rotateY(a.y);
 		rotateZ(a.z);
 		rotateX(a.x);
 	}
 
-	void rotateBackUp(LeVertex back, LeVertex up, float a)
+	void rotateEulerYXZ(LeVertex a)
 	{
-		back.normalize();
-		up.normalize();
-		LeVertex right = up.cross(back);
-
-		LeMatrix m1;
-		m1.mat[0][0] = right.x;
-		m1.mat[0][1] = right.y;
-		m1.mat[0][2] = right.z;
-		m1.mat[0][3] = right.w;
-
-		m1.mat[1][0] = up.x;
-		m1.mat[1][1] = up.y;
-		m1.mat[1][2] = up.z;
-		m1.mat[1][3] = up.w;
-
-		m1.mat[2][0] = back.x;
-		m1.mat[2][1] = back.y;
-		m1.mat[2][2] = back.z;
-		m1.mat[2][3] = back.w;
-
-		LeMatrix m2;
-		m2.rotateY(a);
-
-		LeMatrix m3;
-		m3.mat[0][0] = right.x;
-		m3.mat[1][0] = right.y;
-		m3.mat[2][0] = right.z;
-		m3.mat[3][0] = 0.0f;
-
-		m3.mat[0][1] = up.x;
-		m3.mat[1][1] = up.y;
-		m3.mat[2][1] = up.z;
-		m3.mat[3][1] = 0.0f;
-
-		m3.mat[0][2] = back.x;
-		m3.mat[1][2] = back.y;
-		m3.mat[2][2] = back.z;
-		m3.mat[3][2] = 0.0f;
-
-		m3.mat[0][3] = 0.0f;
-		m3.mat[1][3] = 0.0f;
-		m3.mat[2][3] = 0.0f;
-		m3.mat[3][3] = 1.0f;
-
-		*this = m3 * m2 * m1 * *this;
+		rotateY(a.y);
+		rotateX(a.x);
+		rotateZ(a.z);
 	}
 
-	void rotateBackRight(LeVertex back, LeVertex right, float a)
+	void rotateEulerZXY(LeVertex a)
 	{
-		back.normalize();
-		right.normalize();
-		LeVertex up = back.cross(right);
-
-		LeMatrix m1;
-		m1.mat[0][0] = right.x;
-		m1.mat[0][1] = right.y;
-		m1.mat[0][2] = right.z;
-		m1.mat[0][3] = right.w;
-
-		m1.mat[1][0] = up.x;
-		m1.mat[1][1] = up.y;
-		m1.mat[1][2] = up.z;
-		m1.mat[1][3] = up.w;
-
-		m1.mat[2][0] = back.x;
-		m1.mat[2][1] = back.y;
-		m1.mat[2][2] = back.z;
-		m1.mat[2][3] = back.w;
-
-		LeMatrix m2;
-		m2.rotateY(a);
-
-		LeMatrix m3;
-		m3.mat[0][0] = right.x;
-		m3.mat[1][0] = right.y;
-		m3.mat[2][0] = right.z;
-		m3.mat[3][0] = 0.0f;
-
-		m3.mat[0][1] = up.x;
-		m3.mat[1][1] = up.y;
-		m3.mat[2][1] = up.z;
-		m3.mat[3][1] = 0.0f;
-
-		m3.mat[0][2] = back.x;
-		m3.mat[1][2] = back.y;
-		m3.mat[2][2] = back.z;
-		m3.mat[3][2] = 1.0f;
-
-		m3.mat[3][3] = 0.0f;
-		m3.mat[3][3] = 0.0f;
-		m3.mat[3][3] = 0.0f;
-		m3.mat[3][3] = 1.0f;
-
-		*this = m3 * m2 * m1 * *this;
+		rotateZ(a.z);
+		rotateX(a.x);
+		rotateY(a.y);
 	}
 
+	void rotateEulerZYX(LeVertex a)
+	{
+		rotateZ(a.z);
+		rotateY(a.y);
+		rotateX(a.x);
+	}
+
+	void rotateX(float a)
+	{
+		float c = cosf(a);
+		float s = sinf(a);
+
+		LeMatrix m;
+		m.mat[1][1] = c;
+		m.mat[1][2] = -s;
+		m.mat[2][1] = s;
+		m.mat[2][2] = c;
+
+		*this = m * *this;
+	}
+
+	void rotateY(float a)
+	{
+		float c = cosf(a);
+		float s = sinf(a);
+		
+		LeMatrix m;
+		m.mat[0][0] = c;
+		m.mat[0][2] = s;
+		m.mat[2][0] = -s;
+		m.mat[2][2] = c;
+
+		*this = m * *this;
+	}
+
+	void rotateZ(float a)
+	{
+		float c = cosf(a);
+		float s = sinf(a);
+
+		LeMatrix m;
+		m.mat[0][0] = c;
+		m.mat[0][1] = -s;
+		m.mat[1][0] = s;
+		m.mat[1][1] = c;
+
+		*this = m * *this;
+	}
+
+	void rotate(LeVertex axis, float angle)
+	{
+		float c = cosf(angle);
+		float s = sinf(angle);
+		float d = 1.0f - c;
+
+		LeMatrix m;
+		m.mat[0][0] = c + axis.x * axis.x * d;
+		m.mat[1][0] = axis.y * axis.x * d + axis.z * s;
+		m.mat[2][0] = axis.z * axis.x * d - axis.y * s;
+		m.mat[3][0] = 0.0f;
+
+		m.mat[0][1] = axis.x * axis.y * d - axis.z * s;
+		m.mat[1][1] = c + axis.y * axis.y * d;
+		m.mat[2][1] = axis.z * axis.y * d + axis.x * s;
+		m.mat[3][1] = 0.0f;
+
+		m.mat[0][2] = axis.x * axis.z * d + axis.y * s;
+		m.mat[1][2] = axis.y * axis.z * d - axis.x * s;
+		m.mat[2][2] = c + axis.z * axis.z * d;
+		m.mat[3][2] = 0.0f;
+
+		m.mat[0][3] = 0.0f;
+		m.mat[1][3] = 0.0f;
+		m.mat[2][3] = 0.0f;
+		m.mat[3][3] = 1.0f;
+		*this = m * *this;
+	}
+
+/*****************************************************************************/
+	void toEulerZYX(LeVertex & angle)
+	{
+		float l = sqrtf(mat[0][0] * mat[0][0] + mat[1][0] * mat[1][0]);
+		if (l > 1e-6) {
+			angle.x = atan2f(mat[2][1], mat[2][2]);
+			angle.y = atan2f(-mat[2][0], l);
+			angle.z = atan2f(mat[1][0], mat[0][0]);
+		}else{
+			angle.x = atan2f(-mat[1][2], mat[1][1]);
+			angle.y = atan2f(-mat[2][0], l);
+			angle.z = 0.0f;
+		}
+	}
+
+/*****************************************************************************/
 	void alignBackUp(LeVertex back, LeVertex up)
 	{
 		back.normalize();
@@ -572,42 +596,7 @@ struct LeMatrix
 		*this = m * *this;
 	}
 
-	void rotateX(float a)
-	{
-		LeMatrix m;
-		float c = cosf(a);
-		float s = sinf(a);
-		m.mat[1][1] = c;
-		m.mat[1][2] = -s;
-		m.mat[2][1] = s;
-		m.mat[2][2] = c;
-		*this = m * *this;
-	}
-
-	void rotateY(float a)
-	{
-		LeMatrix m;
-		float c = cosf(a);
-		float s = sinf(a);
-		m.mat[0][0] = c;
-		m.mat[0][2] = s;
-		m.mat[2][0] = -s;
-		m.mat[2][2] = c;
-		*this = m * *this;
-	}
-
-	void rotateZ(float a)
-	{
-		LeMatrix m;
-		float c = cosf(a);
-		float s = sinf(a);
-		m.mat[0][0] = c;
-		m.mat[0][1] = -s;
-		m.mat[1][0] = s;
-		m.mat[1][1] = c;
-		*this = m * *this;
-	}
-
+/*****************************************************************************/
 	LeMatrix inverse3x3()
 	{
 		float d = mat[0][0]*(mat[1][1]*mat[2][2]-mat[2][1]*mat[1][2])
@@ -633,6 +622,7 @@ struct LeMatrix
 		return m;
 	}
 
+/*****************************************************************************/
 	LeVertex operator * (LeVertex v) const
 	{
 		float x = v.x * mat[0][0] + v.y * mat[0][1] + v.z * mat[0][2] + mat[0][3];
@@ -678,3 +668,106 @@ namespace LePrimitives {
 }
 
 #endif	//LE_GEOMETRY_SCALAR_H
+
+
+/*
+
+void rotateBackUp(LeVertex back, LeVertex up, float a)
+{
+back.normalize();
+up.normalize();
+LeVertex right = up.cross(back);
+
+LeMatrix m1;
+m1.mat[0][0] = right.x;
+m1.mat[0][1] = right.y;
+m1.mat[0][2] = right.z;
+m1.mat[0][3] = right.w;
+
+m1.mat[1][0] = up.x;
+m1.mat[1][1] = up.y;
+m1.mat[1][2] = up.z;
+m1.mat[1][3] = up.w;
+
+m1.mat[2][0] = back.x;
+m1.mat[2][1] = back.y;
+m1.mat[2][2] = back.z;
+m1.mat[2][3] = back.w;
+
+LeMatrix m2;
+m2.rotateY(a);
+
+LeMatrix m3;
+m3.mat[0][0] = right.x;
+m3.mat[1][0] = right.y;
+m3.mat[2][0] = right.z;
+m3.mat[3][0] = 0.0f;
+
+m3.mat[0][1] = up.x;
+m3.mat[1][1] = up.y;
+m3.mat[2][1] = up.z;
+m3.mat[3][1] = 0.0f;
+
+m3.mat[0][2] = back.x;
+m3.mat[1][2] = back.y;
+m3.mat[2][2] = back.z;
+m3.mat[3][2] = 0.0f;
+
+m3.mat[0][3] = 0.0f;
+m3.mat[1][3] = 0.0f;
+m3.mat[2][3] = 0.0f;
+m3.mat[3][3] = 1.0f;
+
+*this = m3 * m2 * m1 * *this;
+}
+
+void rotateBackRight(LeVertex back, LeVertex right, float a)
+{
+back.normalize();
+right.normalize();
+LeVertex up = back.cross(right);
+
+LeMatrix m1;
+m1.mat[0][0] = right.x;
+m1.mat[0][1] = right.y;
+m1.mat[0][2] = right.z;
+m1.mat[0][3] = right.w;
+
+m1.mat[1][0] = up.x;
+m1.mat[1][1] = up.y;
+m1.mat[1][2] = up.z;
+m1.mat[1][3] = up.w;
+
+m1.mat[2][0] = back.x;
+m1.mat[2][1] = back.y;
+m1.mat[2][2] = back.z;
+m1.mat[2][3] = back.w;
+
+LeMatrix m2;
+m2.rotateY(a);
+
+LeMatrix m3;
+m3.mat[0][0] = right.x;
+m3.mat[1][0] = right.y;
+m3.mat[2][0] = right.z;
+m3.mat[3][0] = 0.0f;
+
+m3.mat[0][1] = up.x;
+m3.mat[1][1] = up.y;
+m3.mat[2][1] = up.z;
+m3.mat[3][1] = 0.0f;
+
+m3.mat[0][2] = back.x;
+m3.mat[1][2] = back.y;
+m3.mat[2][2] = back.z;
+m3.mat[3][2] = 1.0f;
+
+m3.mat[3][3] = 0.0f;
+m3.mat[3][3] = 0.0f;
+m3.mat[3][3] = 0.0f;
+m3.mat[3][3] = 1.0f;
+
+*this = m3 * m2 * m1 * *this;
+}
+
+*/

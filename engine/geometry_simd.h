@@ -248,7 +248,7 @@ struct __attribute__ ((aligned (16))) LeVertex
 **/
 struct __attribute__ ((aligned (16))) LeAxis
 {
-	LeVertex origin;	/**< Origin of the axis */
+	LeVertex origin;		/**< Origin of the axis */
 	LeVertex axis;		/**< Direction of the axis (normalized) */
 	float norm;			/**< Length of the axis */
 
@@ -349,59 +349,123 @@ struct __attribute__ ((aligned (16))) LeMatrix
 		*this = m * *this;
 	}
 
-	void rotate(LeVertex a)
+/*****************************************************************************/
+	void rotateEulerXYZ(LeVertex a)
+	{
+		rotateX(a.x);
+		rotateY(a.y);
+		rotateZ(a.z);
+	}
+
+	void rotateEulerXZY(LeVertex a)
+	{
+		rotateX(a.x);
+		rotateZ(a.z);
+		rotateY(a.y);
+	}
+
+	void rotateEulerYZX(LeVertex a)
 	{
 		rotateY(a.y);
 		rotateZ(a.z);
 		rotateX(a.x);
 	}
 
-	void rotateBackUp(LeVertex back, LeVertex up, float a)
+	void rotateEulerYXZ(LeVertex a)
 	{
-		back.normalize();
-		up.normalize();
-		LeVertex right = up.cross(back);
-
-		LeMatrix m1;
-		m1.lines[0] = right;
-		m1.lines[1] = up;
-		m1.lines[2] = back;
-
-		LeMatrix m2;
-		m2.rotateY(a);
-
-		LeMatrix m3;
-		m3.lines[0] = LeVertex(right.x, up.x, back.x, 0.0f);
-		m3.lines[1] = LeVertex(right.y, up.y, back.y, 0.0f);
-		m3.lines[2] = LeVertex(right.z, up.z, back.z, 0.0f);
-		m3.lines[3] = LeVertex(0.0f, 0.0f, 0.0f, 1.0f);
-
-		*this = m3 * m2 * m1 * *this;
+		rotateY(a.y);
+		rotateX(a.x);
+		rotateZ(a.z);
 	}
 
-	void rotateBackRight(LeVertex back, LeVertex right, float a)
+	void rotateEulerZXY(LeVertex a)
 	{
-		back.normalize();
-		right.normalize();
-		LeVertex up = back.cross(right);
-
-		LeMatrix m1;
-		m1.lines[0] = right;
-		m1.lines[1] = up;
-		m1.lines[2] = back;
-
-		LeMatrix m2;
-		m2.rotateY(a);
-
-		LeMatrix m3;
-		m3.lines[0] = LeVertex(right.x, up.x, back.x, 0.0f);
-		m3.lines[1] = LeVertex(right.y, up.y, back.y, 0.0f);
-		m3.lines[2] = LeVertex(right.z, up.z, back.z, 0.0f);
-		m3.lines[3] = LeVertex(0.0f, 0.0f, 0.0f, 1.0f);
-
-		*this = m3 * m2 * m1 * *this;
+		rotateZ(a.z);
+		rotateX(a.x);
+		rotateY(a.y);
 	}
 
+	void rotateEulerZYX(LeVertex a)
+	{
+		rotateZ(a.z);
+		rotateY(a.y);
+		rotateX(a.x);
+	}
+
+	void rotateX(float a)
+	{
+		float c = cosf(a);
+		float s = sinf(a);
+
+		LeMatrix m;
+		m.lines[1].y = c;
+		m.lines[1].z = -s;
+		m.lines[2].y = s;
+		m.lines[2].z = c;
+
+		*this = m * *this;
+	}
+
+	void rotateY(float a)
+	{
+		float c = cosf(a);
+		float s = sinf(a);
+		
+		LeMatrix m;
+		m.lines[0].x = c;
+		m.lines[0].z = s;
+		m.lines[2].x = -s;
+		m.lines[2].z = c;
+
+		*this = m * *this;
+	}
+
+	void rotateZ(float a)
+	{
+		float c = cosf(a);
+		float s = sinf(a);
+
+		LeMatrix m;
+		m.lines[0].x = c;
+		m.lines[0].y = -s;
+		m.lines[1].x = s;
+		m.lines[1].y = c;
+
+		*this = m * *this;
+	}
+
+	void rotate(LeVertex axis, float angle)
+	{
+		float c = cosf(angle);
+		float s = sinf(angle);
+		float d = 1.0f - c;
+
+		LeMatrix m;
+		m.lines[0] = LeVertex(c + axis.x * axis.x * d, axis.x * axis.y * d - axis.z * s, axis.x * axis.z * d + axis.y * s, 0.0f);
+		m.lines[1] = LeVertex(axis.y * axis.x * d + axis.z * s, c + axis.y * axis.y * d, axis.y * axis.z * d - axis.x * s, 0.0f);
+		m.lines[2] = LeVertex(axis.z * axis.x * d - axis.y * s, axis.z * axis.y * d + axis.x * s, c + axis.z * axis.z * d, 0.0f);
+		m.lines[3] = LeVertex(0.0f, 0.0f, 0.0f, 1.0f);
+
+		*this = m * *this;
+	}
+
+/*****************************************************************************/
+	void toEulerZYX(LeVertex & angle)
+	{
+		float l = sqrtf(lines[0].x * lines[0].x + lines[1].x * lines[1].x);
+		if (l > 1e-6) {
+			angle.x = atan2f(lines[2].y, lines[2].z);
+			angle.y = atan2f(-lines[2].x, l);
+			angle.z = atan2f(lines[1].x, lines[0].x);
+		}
+		else {
+			angle.x = atan2f(-lines[1].z, lines[1].y);
+			angle.y = atan2f(-lines[2].x, l);
+			angle.z = 0.0f;
+		}
+	}
+
+/*****************************************************************************/
 	void alignBackUp(LeVertex back, LeVertex up)
 	{
 		back.normalize();
@@ -432,42 +496,7 @@ struct __attribute__ ((aligned (16))) LeMatrix
 		*this = m * *this;
 	}
 
-	void rotateX(float a)
-	{
-		LeMatrix m;
-		float c = cosf(a);
-		float s = sinf(a);
-		m.lines[1].y = c;
-		m.lines[1].z = -s;
-		m.lines[2].y = s;
-		m.lines[2].z = c;
-		*this = m * *this;
-	}
-
-	void rotateY(float a)
-	{
-		LeMatrix m;
-		float c = cosf(a);
-		float s = sinf(a);
-		m.lines[0].x = c;
-		m.lines[0].z = s;
-		m.lines[2].x = -s;
-		m.lines[2].z = c;
-		*this = m * *this;
-	}
-
-	void rotateZ(float a)
-	{
-		LeMatrix m;
-		float c = cosf(a);
-		float s = sinf(a);
-		m.lines[0].x = c;
-		m.lines[0].y = -s;
-		m.lines[1].x = s;
-		m.lines[1].y = c;
-		*this = m * *this;
-	}
-
+/*****************************************************************************/
 	LeMatrix inverse3x3()
 	{
 		float d = lines[0].x*(lines[1].y*lines[2].z-lines[2].y*lines[1].z)
