@@ -19,7 +19,7 @@
 
 /*****************************************************************************/
 #include "engine/le3d.h"
-#include "tools/physics.h"
+#include "tools/collisions.h"
 #include "tools/timing.h"
 
 #include <stdlib.h>
@@ -246,7 +246,7 @@ int main()
 	LeRasterizer rasterizer = LeRasterizer(resoX, resoY);
 	LeGamePad pad = LeGamePad(0);
 
-	rasterizer.background = LeColor::rgb(0x000000);
+	rasterizer.background = LeColor::rgb(0xFF0000);
 
 // Register keyboard handler
 	window.registerKeyCallback(keyHandler);
@@ -600,7 +600,7 @@ void bulletsUpdate()
 		bulletsBSet.places[i] += bullets[i].speed;
 
 		LeVertex ans, contact;
-		int res = LePhysics::collideSphereMesh(ans, contact, bulletsBSet.places[i], 0.5f, destroyerMesh);
+		int res = LeCollisions::collideSphereMesh(ans, contact, bulletsBSet.places[i], 0.5f, destroyerMesh);
 		if (res) bulletsKill(i);
 
 		int src = bullets[i].source;
