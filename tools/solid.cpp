@@ -50,8 +50,8 @@ LeSolid::LeSolid() :
     rot(), rotSpeed(), rotAccel(),
 	rightVector(), upVector(), backVector()
 {
-    init(LeVertex());
-    configure(1.0f, 1.0f);
+	init(LeVertex());
+	configure(1.0f, 1.0f);
 }
 
 LeSolid::~LeSolid()
@@ -85,7 +85,7 @@ void LeSolid::configure(float mass, float radius)
 
 	this->radius = radius;
 	this->mass = mass;
-		
+
 	inertia = 2.0f / 5.0f * mass * radius * radius;
 	imass = 1.0f / mass;
 	iinertia = 1.0f / inertia;
@@ -102,7 +102,7 @@ void LeSolid::applyFriction(LeVertex normal, float coefficient)
 /*****************************************************************************/
 void LeSolid::applyForce(LeVertex force)
 {
-    posAccel += force * imass;
+	posAccel += force * imass;
 }
 
 void LeSolid::applyForceRight(float force)
@@ -123,14 +123,14 @@ void LeSolid::applyForceBack(float force)
 void LeSolid::applyForcePoint(LeVertex point, LeVertex force)
 {
 	posAccel += force * imass;
-	//LeVertex cv = point - pos;
-	//rotAccel += cv.cross(force) * (r2d * iinertia);
+	LeVertex cv = point - pos;
+	rotAccel += cv.cross(force) * (r2d * iinertia);
 }
 
 /*****************************************************************************/
 void LeSolid::applyTorque(LeVertex torque)
 {
-    rotAccel += torque * iinertia;
+	rotAccel += torque * iinertia;
 }
 
 void LeSolid::applyTorqueRight(float torque)
@@ -184,7 +184,7 @@ void LeSolid::computeFriction(float dt)
 		rotSpeedRelative.z = rotSpeed.dot(backVector);
 	}else rotSpeedRelative = rotSpeed;
 
-	printf("Speed %f %f %f\n", posSpeedRelative.x, posSpeedRelative.y, posSpeedRelative.z);
+	//printf("Speed %f %f %f\n", posSpeedRelative.x, posSpeedRelative.y, posSpeedRelative.z);
 
 	LeVertex rsn = rotSpeedRelative;
 	rsn.normalize();
@@ -216,11 +216,11 @@ void LeSolid::applyGround()
 {
 	float rl = groundLevel + radius;
 	if (pos.y > rl) return;
-    pos.y = rl;
+	pos.y = rl;
 	posSpeed.y = 0.0f;
 	posAccel.y = 0.0f;
 
-    //posAccel.y -= posAccel.y * (1.0f + rigidity);
+	//posAccel.y -= posAccel.y * (1.0f + rigidity);
 	//applyFriction(LePrimitives::up, groundFriction);
 }
 
@@ -251,28 +251,28 @@ void LeSolid::update(float dt)
 /*****************************************************************************/
 void LeSolid::collideSolid(LeVertex contact, LeSolid & collider)
 {
-    LeVertex contactForce = posSpeed * mass;
-    posAccel -= contactForce * (imass * rigidity);
-    collider.posAccel += contactForce * (collider.imass * collider.rigidity);
+	LeVertex contactForce = posSpeed * mass;
+	posAccel -= contactForce * (imass * rigidity);
+	collider.posAccel += contactForce * (collider.imass * collider.rigidity);
 
-    LeVertex cv = contact - collider.pos;
-    if (cv.dot(contactForce) < 0.0f)
-    {
-        float mc = r2d * collider.iinertia * collider.adhesion;
-        collider.rotAccel += cv.cross(contactForce) * mc;
-    }
+	LeVertex cv = contact - collider.pos;
+	if (cv.dot(contactForce) < 0.0f)
+	{
+		float mc = r2d * collider.iinertia * collider.adhesion;
+		collider.rotAccel += cv.cross(contactForce) * mc;
+	}
 }
 
 /******************************************** *********************************/
 void LeSolid::collideHard(LeVertex contact, LeVertex normal, float rigidity)
 {
 	LeVertex cv = contact - pos;
-    LeVertex pointForce = (posSpeed * mass + cv.cross(rotSpeed) * d2r * inertia) / lastdt;
+	LeVertex pointForce = (posSpeed * mass + cv.cross(rotSpeed) * d2r * inertia) / lastdt;
 	LeVertex normalForce = normal * normal.dot(pointForce);
-    
+
 	normalForce = normalForce * (1.0f + rigidity);
 
 /** Apply force on self */
-   // rotSpeed -= cv.cross(normalForce) * (r2d * iinertia * lastdt);
-    posSpeed -= normalForce * (imass * lastdt);
+	// rotSpeed -= cv.cross(normalForce) * (r2d * iinertia * lastdt);
+	posSpeed -= normalForce * (imass * lastdt);
 }

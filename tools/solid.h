@@ -70,8 +70,8 @@ public:
 	void glueMoveAxis(LeVertex axis);
 	void glueRotateAxis(LeVertex axis);
 
-    void collideSolid(LeVertex contact, LeSolid & collider);
-    void collideHard(LeVertex contact, LeVertex normal, float rigidity);
+	void collideSolid(LeVertex contact, LeSolid & collider);
+	void collideHard(LeVertex contact, LeVertex normal, float rigidity);
 
 	void applyFriction(LeVertex normal, float friction);
 
@@ -91,18 +91,18 @@ public:
 	void update(float dt);
 	
 private:
-    void applyGravity();
-    void applyGround();
+	void applyGravity();
+	void applyGround();
 
 	void computeVectors();
 	void computeFriction(float dt);
 
 public:
-    float adhesion;
-    float rigidity;
-    float gravity;
+	float adhesion;
+	float rigidity;
+	float gravity;
 
-    float groundLevel;
+	float groundLevel;
 	float groundFriction;
 	
 	LE_SOLID_SYSTEM fluidSystem;
@@ -114,25 +114,25 @@ public:
 	LeVertex glueMove;
 	LeVertex glueRotate;
 
-    LeVertex pos;
-    LeVertex posSpeed;
-    LeVertex posAccel;
+	LeVertex pos;
+	LeVertex posSpeed;
+	LeVertex posAccel;
 
-    LeVertex rot;
-    LeVertex rotSpeed;
-    LeVertex rotAccel;
+	LeVertex rot;
+	LeVertex rotSpeed;
+	LeVertex rotAccel;
 
-    LeVertex rightVector;
-    LeVertex upVector;
-    LeVertex backVector;
-		
+	LeVertex rightVector;
+	LeVertex upVector;
+	LeVertex backVector;
+
 private:
 	float lastdt;
 	LeVertex frictionAccel;
 
 	float mass, imass;
-    float inertia, iinertia;
-    float radius;
+	float inertia, iinertia;
+	float radius;
 };
 
 #endif
