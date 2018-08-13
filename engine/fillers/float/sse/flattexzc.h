@@ -48,8 +48,10 @@ inline void LeRasterizer::fillFlatTexZC(int y, float x1, float x2, float w1, flo
 	__m128 av_4 = _mm_set1_ps(av * 4.0f);
 	__m128 aw_4 = _mm_set1_ps(aw * 4.0f);
 
-	int xb = (int) floorf(x1);
-	int xe = (int) ceilf(x2);
+	int xb = (int)(x1);
+	int xe = (int)(x2 + 1.9999f);
+	if (xe > frame.tx) xe = frame.tx;
+
 	LeColor * p = xb + ((int) y) * frame.tx + pixels;
 	int b = (xe - xb) >> 2;
 	int r = (xe - xb) & 0x3;
@@ -133,4 +135,5 @@ inline void LeRasterizer::fillFlatTexZC(int y, float x1, float x2, float w1, flo
 	tp = _mm_srli_epi16(tp, 8);
 	tp = _mm_packus_epi16(tp, zv);
 	*p++ = _mm_cvtsi128_si32(tp);
+
 }

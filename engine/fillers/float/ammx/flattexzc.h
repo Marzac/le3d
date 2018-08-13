@@ -34,10 +34,11 @@ inline void LeRasterizer::fillFlatTexZC(int y, float x1, float x2, float w1, flo
 	float floatd = x2 - x1;
 	if (floatd == 0.0f) return;
 
-	int xb = (int) floorf(x1);
-	int xe = (int) ceilf(x2);
+	int xb = (int)(x1);
+	int xe = (int)(x2 + 1.9999f);
+	if (xe > frame.tx) xe = frame.tx;
 
-	uint8_t * p = (uint8_t *) (xb + ((int) y) * frame.tx + pixels);
+	uint8_t * p = (uint8_t *) (xb + y * frame.tx + pixels);
 	short shortd = xe - xb;
 
 	fill_flat_texel_float(p, shortd, floatd, u1, v1, w1, u2, v2, w2, texMaskU, texMaskV, texSizeU, texDiffusePixels);

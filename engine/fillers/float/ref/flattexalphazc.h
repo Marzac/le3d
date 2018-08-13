@@ -41,11 +41,14 @@ inline void LeRasterizer::fillFlatTexAlphaZC(int y, float x1, float x2, float w1
 	float av = (v2 - v1) / d;
 	float aw = (w2 - w1) / d;
 
-	int xb = (int) floorf(x1);
-	int xe = (int) ceilf(x2);
+	int xb = (int)(x1);
+	int xe = (int)(x2 + 1.9999f);
+	if (xe > frame.tx) xe = frame.tx;
+
 	uint8_t * p = (uint8_t *) (xb + ((int) y) * frame.tx + pixels);
 
-	for (int x = xb; x <= xe; x++) {
+	for (int x = xb; x < xe; x++) {
+
 		float z = 1.0f / w1;
 		uint32_t tu = ((int32_t) (u1 * z)) & texMaskU;
 		uint32_t tv = ((int32_t) (v1 * z)) & texMaskV;

@@ -47,9 +47,10 @@ inline void LeRasterizer::fillFlatTexAlphaZCFog(int y, int x1, int x2, int w1, i
 	int32_t zfar = (int32_t)(curTrilist->fog.far * sw);
 	int32_t zscale = (1 << 30) / (zfar - znear);
 
+	if (++x2 > frame.tx) x2 = frame.tx;
 	uint8_t * p = (uint8_t *)(x1 + y * frame.tx + pixels);
 
-	for (int x = x1; x <= x2; x++) {
+	for (int x = x1; x < x2; x++) {
 		int32_t z = (1 << 30) / (w1 >> 8);
 		uint32_t tu = (((int64_t)u1 * z) >> 24) & texMaskU;
 		uint32_t tv = (((int64_t)v1 * z) >> 24) & texMaskV;

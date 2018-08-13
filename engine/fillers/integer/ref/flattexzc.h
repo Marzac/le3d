@@ -41,9 +41,10 @@ inline void LeRasterizer::fillFlatTexZC(int y, int x1, int x2, int w1, int w2, i
 	int av = (v2 - v1) / d;
 	int aw = (w2 - w1) / d;
 	
+	if (++x2 > frame.tx) x2 = frame.tx;
 	uint8_t * p = (uint8_t *) (x1 + y * frame.tx + pixels);
 
-	for (int x = x1; x <= x2; x++) {
+	for (int x = x1; x < x2; x++) {
 		int32_t z = (1 << 30) / (w1 >> 8);
 		uint32_t tu = (((int64_t) u1 * z) >> 24) & texMaskU;
 		uint32_t tv = (((int64_t) v1 * z) >> 24) & texMaskV;
