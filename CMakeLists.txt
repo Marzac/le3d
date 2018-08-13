@@ -54,7 +54,8 @@ set(ENGINE_FILES
     engine/renderer.cpp
     engine/trilist.cpp
     engine/verlist.cpp
-    tools/physics.cpp
+    tools/collisions.cpp
+	tools/solid.cpp
 )
 
 set(LINK_LIBRARIES)
