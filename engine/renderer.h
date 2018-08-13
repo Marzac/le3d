@@ -57,17 +57,17 @@
 	\brief Backculling modes
 */
 typedef enum {
-	LE_BACKCULLING_NONE	= 0,			/**< Backculling is disabled */
+	LE_BACKCULLING_NONE = 0,		/**< Backculling is disabled */
 	LE_BACKCULLING_CCW,				/**< Backculling in counterclockwise mode (default) */
 	LE_BACKCULLING_CW,				/**< Backculling in clockwise mode */
-	LE_BACKCULLING_CCW_ALPHA	,		/**< Backculling in counterclockwise mode, transparent triangles are double sided */
-	LE_BACKCULLING_CW_ALPHA,			/**< Backculling in clockwise mode, transparent triangles are double sided */
+	LE_BACKCULLING_CCW_ALPHA,		/**< Backculling in counterclockwise mode, transparent triangles are double sided */
+	LE_BACKCULLING_CW_ALPHA,		/**< Backculling in clockwise mode, transparent triangles are double sided */
 } LE_BACKCULLING_MODES;
 
 /*****************************************************************************/
 /**
 	\class LeRenderer
-	\brief Render meshes and billboard set to 2D triangle list
+	\brief Render meshes and billboard sets to 2D triangle lista
 */
 class LeRenderer
 {
