@@ -494,12 +494,12 @@ void LeBitmap::text(int x, int y, const char * text, int length, const LeBmpFont
 */
 void LeBitmap::allocate(int tx, int ty)
 {
+	int size = tx * ty;
 #if LE_USE_SIMD == 1 && LE_USE_SSE2 == 1
-	data = new LeColor[tx*ty+4];
-#else
-	data = new LeColor[tx*ty];
+	size += 4;
 #endif
-	memset(data, 0, sizeof(data));
+	data = new LeColor[size];
+	memset(data, 0, sizeof(LeColor) * size);
 	dataAllocated = true;
 
 	this->tx = tx;
