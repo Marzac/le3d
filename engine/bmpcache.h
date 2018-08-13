@@ -45,7 +45,7 @@
 */
 typedef enum{
 	LE_BMPCACHE_RGB				= 0x00,		/**< Bitmap in 32bit RGB color format */
-	LE_BMPCACHE_RGBA			= 0x01,		/**< Bitmap in 32bit RGBA (alpha pre-multiplied) format */
+	LE_BMPCACHE_RGBA				= 0x01,		/**< Bitmap in 32bit RGBA (alpha pre-multiplied) format */
 	LE_BMPCACHE_ANIMATION		= 0x02,		/**< Bitmap with animation (uses cursor & extra bitmaps) */
 	LE_BMPCACHE_MIPMAPPED		= 0x04,		/**< Bitmap with computed mipmaps */
 }LE_BMPCACHE_FLAGS;
