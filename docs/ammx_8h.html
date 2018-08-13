@@ -105,8 +105,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Functions</h2></td></tr>
 <tr class="memitem:ae52d66dc62f976578823d42ae0e9f741"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ammx_8h.html#ae52d66dc62f976578823d42ae0e9f741">prepare_fill_texel</a> (<a class="el" href="class_le_color.html">LeColor</a> *c)</td></tr>
 <tr class="separator:ae52d66dc62f976578823d42ae0e9f741"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af25a43f69c275311b61ef9e1997889f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ammx_8h.html#af25a43f69c275311b61ef9e1997889f5">fill_flat_texel</a> (uint8_t *p, short d, int u1, int v1, int w1, int au, int av, int aw, uint32_t texMaskU, uint32_t texMaskV, uint32_t texSizeU, uint32_t *texPixels, uint8_t *c)</td></tr>
-<tr class="separator:af25a43f69c275311b61ef9e1997889f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa2b8dcab26db0aced7768008de8e18d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ammx_8h.html#afa2b8dcab26db0aced7768008de8e18d">fill_flat_texel_float</a> (uint8_t *p, short d, float df, float u1, float v1, float w1, float u2, float v2, float w2, uint32_t texMaskU, uint32_t texMaskV, uint32_t texSizeU, <a class="el" href="class_le_color.html">LeColor</a> *texPixels)</td></tr>
+<tr class="separator:afa2b8dcab26db0aced7768008de8e18d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7a6b790338a8ed957bea3895ace8ad5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ammx_8h.html#ae7a6b790338a8ed957bea3895ace8ad5">fill_flat_texel_int</a> (uint8_t *p, short d, int u1, int v1, int w1, int au, int av, int aw, uint32_t texMaskU, uint32_t texMaskV, uint32_t texSizeU, <a class="el" href="class_le_color.html">LeColor</a> *texPixels, uint8_t *c)</td></tr>
+<tr class="separator:ae7a6b790338a8ed957bea3895ace8ad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51397bf6c084796dd79e36337757a1d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ammx_8h.html#a51397bf6c084796dd79e36337757a1d8">set_ammx_pixels</a> (void *data, size_t bytes, <a class="el" href="class_le_color.html">LeColor</a> color)</td></tr>
 <tr class="separator:a51397bf6c084796dd79e36337757a1d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -120,12 +122,104 @@ Functions</h2></td></tr>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="af25a43f69c275311b61ef9e1997889f5"></a>
+<a class="anchor" id="afa2b8dcab26db0aced7768008de8e18d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void fill_flat_texel </td>
+          <td class="memname">void fill_flat_texel_float </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">short&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>df</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>u1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>v1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>w1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>u2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>v2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>w2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>texMaskU</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>texMaskV</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>texSizeU</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_le_color.html">LeColor</a> *&#160;</td>
+          <td class="paramname"><em>texPixels</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae7a6b790338a8ed957bea3895ace8ad5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fill_flat_texel_int </td>
           <td>(</td>
           <td class="paramtype">uint8_t *&#160;</td>
           <td class="paramname"><em>p</em>, </td>
@@ -193,7 +287,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint32_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="class_le_color.html">LeColor</a> *&#160;</td>
           <td class="paramname"><em>texPixels</em>, </td>
         </tr>
         <tr>

@@ -105,23 +105,30 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ammx_8h.html#ae52d66dc62f976578823d42ae0e9f741">prepare_fill_texel</a>(<a class="code" href="class_le_color.html">LeColor</a>* c);</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ammx_8h.html#af25a43f69c275311b61ef9e1997889f5">fill_flat_texel</a>(</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    uint8_t* p, <span class="keywordtype">short</span> d, <span class="keywordtype">int</span> u1, <span class="keywordtype">int</span> v1, <span class="keywordtype">int</span> w1, <span class="keywordtype">int</span> au, <span class="keywordtype">int</span> av, <span class="keywordtype">int</span> aw,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    uint32_t texMaskU, uint32_t texMaskV, uint32_t texSizeU, uint32_t* texPixels,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    uint8_t* c</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ammx_8h.html#afa2b8dcab26db0aced7768008de8e18d">fill_flat_texel_float</a>(</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    uint8_t* p, <span class="keywordtype">short</span> d, <span class="keywordtype">float</span> df, <span class="keywordtype">float</span> u1, <span class="keywordtype">float</span> v1, <span class="keywordtype">float</span> w1,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">float</span> u2, <span class="keywordtype">float</span> v2, <span class="keywordtype">float</span> w2, uint32_t texMaskU,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    uint32_t texMaskV, uint32_t texSizeU, <a class="code" href="class_le_color.html">LeColor</a>* texPixels</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ammx_8h.html#a51397bf6c084796dd79e36337757a1d8">set_ammx_pixels</a>(<span class="keywordtype">void</span>* data, <span class="keywordtype">size_t</span> bytes, <a class="code" href="class_le_color.html">LeColor</a> color);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="ammx_8h_html_af25a43f69c275311b61ef9e1997889f5"><div class="ttname"><a href="ammx_8h.html#af25a43f69c275311b61ef9e1997889f5">fill_flat_texel</a></div><div class="ttdeci">void fill_flat_texel(uint8_t *p, short d, int u1, int v1, int w1, int au, int av, int aw, uint32_t texMaskU, uint32_t texMaskV, uint32_t texSizeU, uint32_t *texPixels, uint8_t *c)</div></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ammx_8h.html#ae7a6b790338a8ed957bea3895ace8ad5">fill_flat_texel_int</a>(</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    uint8_t* p, <span class="keywordtype">short</span> d, <span class="keywordtype">int</span> u1, <span class="keywordtype">int</span> v1, <span class="keywordtype">int</span> w1, <span class="keywordtype">int</span> au, <span class="keywordtype">int</span> av, <span class="keywordtype">int</span> aw,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    uint32_t texMaskU, uint32_t texMaskV, uint32_t texSizeU, <a class="code" href="class_le_color.html">LeColor</a>* texPixels,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    uint8_t* c</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ammx_8h.html#a51397bf6c084796dd79e36337757a1d8">set_ammx_pixels</a>(<span class="keywordtype">void</span>* data, <span class="keywordtype">size_t</span> bytes, <a class="code" href="class_le_color.html">LeColor</a> color);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="class_le_color_html"><div class="ttname"><a href="class_le_color.html">LeColor</a></div><div class="ttdoc">Represent an RGBA color. </div><div class="ttdef"><b>Definition:</b> color.h:42</div></div>
 <div class="ttc" id="color_8h_html"><div class="ttname"><a href="color_8h.html">color.h</a></div><div class="ttdoc">LightEngine 3D: Color implementation. </div></div>
 <div class="ttc" id="ammx_8h_html_a51397bf6c084796dd79e36337757a1d8"><div class="ttname"><a href="ammx_8h.html#a51397bf6c084796dd79e36337757a1d8">set_ammx_pixels</a></div><div class="ttdeci">void set_ammx_pixels(void *data, size_t bytes, LeColor color)</div></div>
 <div class="ttc" id="ammx_8h_html_ae52d66dc62f976578823d42ae0e9f741"><div class="ttname"><a href="ammx_8h.html#ae52d66dc62f976578823d42ae0e9f741">prepare_fill_texel</a></div><div class="ttdeci">void prepare_fill_texel(LeColor *c)</div></div>
+<div class="ttc" id="ammx_8h_html_afa2b8dcab26db0aced7768008de8e18d"><div class="ttname"><a href="ammx_8h.html#afa2b8dcab26db0aced7768008de8e18d">fill_flat_texel_float</a></div><div class="ttdeci">void fill_flat_texel_float(uint8_t *p, short d, float df, float u1, float v1, float w1, float u2, float v2, float w2, uint32_t texMaskU, uint32_t texMaskV, uint32_t texSizeU, LeColor *texPixels)</div></div>
+<div class="ttc" id="ammx_8h_html_ae7a6b790338a8ed957bea3895ace8ad5"><div class="ttname"><a href="ammx_8h.html#ae7a6b790338a8ed957bea3895ace8ad5">fill_flat_texel_int</a></div><div class="ttdeci">void fill_flat_texel_int(uint8_t *p, short d, int u1, int v1, int w1, int au, int av, int aw, uint32_t texMaskU, uint32_t texMaskV, uint32_t texSizeU, LeColor *texPixels, uint8_t *c)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

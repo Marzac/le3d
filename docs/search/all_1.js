@@ -1,6 +1,7 @@
 var searchData=
 [
   ['a',['a',['../class_le_color.html#a950d8746acafaa5916c05f880169f486',1,'LeColor']]],
+  ['adhesion',['adhesion',['../class_le_solid.html#a0f3b971e5ee44053185aab7a049841cd',1,'LeSolid']]],
   ['alignbackright',['alignBackRight',['../struct_le_matrix.html#af7a1fafe286e094e1aa90b77934e2d83',1,'LeMatrix']]],
   ['alignbackup',['alignBackUp',['../struct_le_matrix.html#a38bca41b75180f6bb7d73dfd247167e3',1,'LeMatrix']]],
   ['allocate',['allocate',['../class_le_bitmap.html#aaa5001bd81a05fb262c9c193b5f0676b',1,'LeBitmap::allocate()'],['../class_le_b_set.html#ada4800d0a81e33fceba91ef51588bd8f',1,'LeBSet::allocate()'],['../class_le_mesh.html#ad178e6fa801a5eea624091025cb481d0',1,'LeMesh::allocate()'],['../class_le_tri_list.html#a1f92a99d7ed1e03d10bcaf69cdb74804',1,'LeTriList::allocate()'],['../class_le_ver_list.html#adab86605f9b0744e1ae56afe3cd2ca0c',1,'LeVerList::allocate()']]],
@@ -12,5 +13,16 @@ var searchData=
   ['ambient',['ambient',['../struct_le_obj_material.html#ab2f97cb306ae6b9395337beb92ab1ea7',1,'LeObjMaterial']]],
   ['ammx_2eh',['ammx.h',['../ammx_8h.html',1,'']]],
   ['angle',['angle',['../class_le_b_set.html#afeed2e89500de13538e5903ded906d0c',1,'LeBSet::angle()'],['../class_le_mesh.html#a65d9a511c06b77e5566355e8c0df0e52',1,'LeMesh::angle()']]],
+  ['applyforce',['applyForce',['../class_le_solid.html#a8b089e77af15aa3a9ff2bb77f6af3a4d',1,'LeSolid']]],
+  ['applyforceback',['applyForceBack',['../class_le_solid.html#a66df902fb0dce72a391e5ea9e94ad368',1,'LeSolid']]],
+  ['applyforcepoint',['applyForcePoint',['../class_le_solid.html#aea43c7ee5f14ae981b008ff7764c5c23',1,'LeSolid']]],
+  ['applyforceright',['applyForceRight',['../class_le_solid.html#a5633ef734454ddba525077d63c7bc532',1,'LeSolid']]],
+  ['applyforceup',['applyForceUp',['../class_le_solid.html#ad7f3cdbcccb4ee3a47e632adc598afe4',1,'LeSolid']]],
+  ['applyfriction',['applyFriction',['../class_le_solid.html#a474acda03f8c2e4ae52e83ea89207922',1,'LeSolid']]],
+  ['applytorque',['applyTorque',['../class_le_solid.html#a442f160bcbd7ef7c59d90a689db37bc0',1,'LeSolid']]],
+  ['applytorqueback',['applyTorqueBack',['../class_le_solid.html#ab4324293e4b5c945ab7bdd6870b51b17',1,'LeSolid']]],
+  ['applytorquepoint',['applyTorquePoint',['../class_le_solid.html#a244a58dafa273a0fbc13b47e84509424',1,'LeSolid']]],
+  ['applytorqueright',['applyTorqueRight',['../class_le_solid.html#a2d12a76ec92721e11959106c8697fd72',1,'LeSolid']]],
+  ['applytorqueup',['applyTorqueUp',['../class_le_solid.html#a367f4bf864b5ed873152ea4ecd72cfe4',1,'LeSolid']]],
   ['axis',['axis',['../struct_le_axis.html#a8a564410ccb4c7522ce9de0b0bf8cb3c',1,'LeAxis::axis()'],['../class_le_light.html#a71efd51595ea946729406039bcdc9cd4',1,'LeLight::axis()']]]
 ];

@@ -13,5 +13,7 @@ var searchData=
   ['getslotfromname',['getSlotFromName',['../class_le_bmp_cache.html#a9896d405415ac70656177d34bc71da61',1,'LeBmpCache::getSlotFromName()'],['../class_le_mesh_cache.html#a9f83729300ad65e40d366378fcbb1f63',1,'LeMeshCache::getSlotFromName()']]],
   ['getstatus',['getStatus',['../class_le_system.html#a168e5048c2078eb03ef234d1c711cbe9',1,'LeSystem']]],
   ['gettrianglelist',['getTriangleList',['../class_le_renderer.html#a31b7ac261ce850e503760ae35cf486d0',1,'LeRenderer']]],
-  ['getviewportcoordinates',['getViewportCoordinates',['../class_le_renderer.html#a4c48459d898369a30e9829262af5a6b8',1,'LeRenderer']]]
+  ['getviewportcoordinates',['getViewportCoordinates',['../class_le_renderer.html#a4c48459d898369a30e9829262af5a6b8',1,'LeRenderer']]],
+  ['gluemoveaxis',['glueMoveAxis',['../class_le_solid.html#ad752694c66b7ee6328022ffeaa614e4c',1,'LeSolid']]],
+  ['gluerotateaxis',['glueRotateAxis',['../class_le_solid.html#a193047634daa2ebd576da20ee5b72136',1,'LeSolid']]]
 ];

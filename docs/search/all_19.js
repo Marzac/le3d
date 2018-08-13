@@ -12,6 +12,7 @@ var searchData=
   ['_7eleobjfile',['~LeObjFile',['../class_le_obj_file.html#af0f58f2ada2b4717c3dc1ee086f3dcc1',1,'LeObjFile']]],
   ['_7elerasterizer',['~LeRasterizer',['../class_le_rasterizer.html#a862d10d67175f69219e530ea5830a873',1,'LeRasterizer::~LeRasterizer()'],['../class_le_rasterizer.html#a862d10d67175f69219e530ea5830a873',1,'LeRasterizer::~LeRasterizer()']]],
   ['_7elerenderer',['~LeRenderer',['../class_le_renderer.html#a8c238e6f32f2e5f58bce4da3de5ecfc2',1,'LeRenderer']]],
+  ['_7elesolid',['~LeSolid',['../class_le_solid.html#a60761cba8639ecfc734d6bff7ea2b90f',1,'LeSolid']]],
   ['_7elesystem',['~LeSystem',['../class_le_system.html#aed195e4788db7cd8e48d6962bcaa33b2',1,'LeSystem']]],
   ['_7eletiming',['~LeTiming',['../class_le_timing.html#a94096831b92bf7aa13d742bfabf97178',1,'LeTiming']]],
   ['_7eletrilist',['~LeTriList',['../class_le_tri_list.html#a2dd2daeb2111cee67c5349b7b969507b',1,'LeTriList']]],

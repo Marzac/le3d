@@ -3,6 +3,7 @@ var searchData=
   ['b',['b',['../class_le_color.html#ad293ab20eee13caa8986190e4731391f',1,'LeColor']]],
   ['back',['back',['../namespace_le_primitives.html#afaf849812a030b9d24bddb8b1277cf49',1,'LePrimitives']]],
   ['background',['background',['../class_le_rasterizer.html#ae4c8f3c01b5c68d68ba37c75aebaf906',1,'LeRasterizer']]],
+  ['backvector',['backVector',['../class_le_solid.html#a6a2ed92d5b1345ed8f49ccf391bec9bc',1,'LeSolid']]],
   ['basic',['basic',['../class_le_b_set.html#add139736208b936d46c695eee44490b4',1,'LeBSet']]],
   ['bi_5falphabitfields',['BI_ALPHABITFIELDS',['../bmpfile_8cpp.html#a8b1a6ded7f0e4e771669205bc668571a',1,'bmpfile.cpp']]],
   ['bi_5fbitfields',['BI_BITFIELDS',['../bmpfile_8cpp.html#a0e10b199170996b8388f8b86f4a6495e',1,'bmpfile.cpp']]],
