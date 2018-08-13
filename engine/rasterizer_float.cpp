@@ -135,14 +135,6 @@ void LeRasterizer::rasterList(LeTriList * trilist)
 		ws[1] = curTriangle->zs[1];
 		ws[2] = curTriangle->zs[2];
 
-		if (xs[0] < 0 || xs[0] > 1023 ||
-			xs[1] < 0 || xs[1] > 1023 ||
-			xs[2] < 0 || xs[2] > 1023 ||
-			ys[0] < 0 || ys[0] > 767 ||
-			ys[1] < 0 || ys[1] > 767 ||
-			ys[2] < 0 || ys[2] > 767)
-			xs[0] = 0;
-
 	// Sort vertexes vertically
 		int vt = 0, vb = 0, vm1 = 0, vm2 = 3;
 		if (ys[0] < ys[1]) {
