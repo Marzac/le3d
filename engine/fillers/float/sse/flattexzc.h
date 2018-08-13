@@ -49,7 +49,7 @@ inline void LeRasterizer::fillFlatTexZC(int y, float x1, float x2, float w1, flo
 	__m128 aw_4 = _mm_set1_ps(aw * 4.0f);
 
 	int xb = (int)(x1);
-	int xe = (int)(x2 + 1.9999f);
+	int xe = (int)(x2 + 0.9999f);
 	if (xe > frame.tx) xe = frame.tx;
 
 	LeColor * p = xb + ((int) y) * frame.tx + pixels;

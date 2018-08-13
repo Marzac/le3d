@@ -48,7 +48,7 @@ inline void LeRasterizer::fillFlatTexAlphaZCFog(int y, float x1, float x2, float
 	float zscale = -1.0f / (znear - zfar);
 
 	int xb = (int)(x1);
-	int xe = (int)(x2 + 1.9999f);
+	int xe = (int)(x2 + 0.9999f);
 	if (xe > frame.tx) xe = frame.tx;
 
 	uint8_t * p = (uint8_t *)(xb + ((int)y) * frame.tx + pixels);
