@@ -211,6 +211,6 @@ void LeBSet::updateMatrix()
 {
 	view.identity();
 	view.scale(scale);
-	view.rotate(angle * d2r);
+	view.rotateEulerYZX(angle * d2r);
 	view.translate(pos);
 }

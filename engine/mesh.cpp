@@ -231,7 +231,7 @@ void LeMesh::updateMatrix()
 {
 	view.identity();
 	view.scale(scale);
-	view.rotate(angle * d2r);
+	view.rotateEulerZYX(angle * d2r);
 	view.translate(pos);
 }
 
